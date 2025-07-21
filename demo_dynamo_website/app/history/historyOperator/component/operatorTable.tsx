@@ -86,6 +86,7 @@ const columns: ColumnDef<Operator3>[] = [
 
         // cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("tgd"))}</div>,
     },
+    //
     {
         accessorKey: "id_may",
         header: ({ column }) => (
