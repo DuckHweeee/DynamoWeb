@@ -89,7 +89,7 @@ export default function Dashboard() {
                 <ReportTime title={"Thống kê máy móc"} description={"12 máy"} />
                 <div className="my-5 grid grid-cols-2 gap-3">
                     {/* <MachineRunBarChart /> */}
-                    <MachineRunBarChart2 title="Tổng Giờ Chạy Trong Tháng Nhóm 1" description="Tổng thời gian hoạt động của nhóm này" />
+                    <MachineRunBarChart2 title="Tổng Giờ Chạy Trong Tháng Nhóm 1" description="Tổng thời gian hoạt động của nhóm này." />
                     <div className="grid grid-cols-2 gap-3">
                         {chartItems.map((item, index) => (
                             <MachinePieChart key={index} data={item} />
