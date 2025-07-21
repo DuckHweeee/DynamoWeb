@@ -12,6 +12,22 @@ import { ReportTime } from "./component/reporTime"
 import OperatorTable from "./component/operatorTable"
 import DrawingCodeTable from "./component/drawingTable"
 
+import { Calendar } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar as DatePicker } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { DateRange } from "react-day-picker"
+import { format } from "date-fns";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react"
 
 const chartItems = [
     { label: "Máy Đang Chạy", value: 12, fill: "#0ea5e9" },     // blue
@@ -21,12 +37,56 @@ const chartItems = [
 ]
 
 export default function Dashboard() {
-
+    const [date, setDate] = useState<DateRange | undefined>();
     return (
         <div>
             <div className="m-2 my-5 px-4 py-3 bg-white rounded-[10px] shadow" >
-                <ReportTime title={"Thống kê máy móc"} description={"12 máy"} />
+                <div className="flex flex-wrap items-center justify-between mb-4">
+                    {/* Vùng chọn ngày */}
+                    <div className="flex flex-wrap gap-4 items-center">
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <button
+                                    className={cn(
+                                        "flex items-center gap-2 bg-[#004799] text-white px-4 py-3 rounded-md hover:bg-[#003b80] transition"
+                                    )}
+                                >
+                                    <Calendar className="w-5 h-5" />
+                                    <span className="text-sm">
+                                        {date?.from ? format(date.from, "dd/MM/yyyy") : "Ngày bắt đầu"} -{" "}
+                                        {date?.to ? format(date.to, "dd/MM/yyyy") : "Ngày kết thúc"}
+                                    </span>
+                                </button>
+                            </PopoverTrigger>
+                            <PopoverContent className="flex gap-4 p-4 !w-full" align="start">
+                                <DatePicker
+                                    mode="range"
+                                    selected={date}
+                                    onSelect={setDate}
+                                    numberOfMonths={2}
+                                />
+                            </PopoverContent>
+                        </Popover>
 
+                        {/* Bộ lọc 1 */}
+                        <Select>
+                            <SelectTrigger className="w-[180px] bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
+                                <SelectValue placeholder="Nhóm" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    {/* <SelectLabel>Fruits</SelectLabel> */}
+                                    <SelectItem value="apple">Nhóm 1</SelectItem>
+                                    <SelectItem value="banana">Nhóm 2</SelectItem>
+                                    <SelectItem value="blueberry">Nhóm 3</SelectItem>
+                                    <SelectItem value="grapes">Nhóm 4</SelectItem>
+                                    <SelectItem value="pineapple">Nhóm 5</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+                <ReportTime title={"Thống kê máy móc"} description={"12 máy"} />
                 <div className="my-5 grid grid-cols-2 gap-3">
                     {/* <MachineRunBarChart /> */}
                     <MachineRunBarChart2 title="Tổng Giờ Chạy Trong Tháng Nhóm 1" description="Tổng thời gian hoạt động của nhóm này" />

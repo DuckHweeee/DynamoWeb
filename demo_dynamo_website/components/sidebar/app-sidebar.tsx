@@ -107,7 +107,7 @@ const data = {
                 },
                 {
                     title: "Machine Table",
-                    url: "machine",
+                    url: "/machine",
                 },
             ],
         },

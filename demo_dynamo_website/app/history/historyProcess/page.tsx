@@ -13,7 +13,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown } from "lucide-react"
+import { ArrowUpDown, Search } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -30,7 +30,21 @@ import {
 import { useState } from "react"
 import { HistoryProcess } from "@/lib/type"
 import { mockHistoryProcesses } from "@/lib/dataDemo"
-
+import { Calendar } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar as DatePicker } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { DateRange } from "react-day-picker"
+import { format } from "date-fns";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 function formatSeconds(seconds: number): string {
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
@@ -121,19 +135,91 @@ export default function HistoryProcessTable() {
             globalFilter,
         },
     })
-
+    const [date, setDate] = useState<DateRange | undefined>();
     return (
         <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
             <div className="flex flex-row items-center justify-between py-4">
                 <p className="text-2xl font-bold">Lịch Sử Quy Trình</p>
-                <Input
+                {/* <Input
                     placeholder="Tìm kiếm"
                     value={globalFilter}
                     onChange={(e) => setGlobalFilter(e.target.value)}
                     className="max-w-sm !text-[20px]"
-                />
+                /> */}
+                <div className="relative max-w-sm w-full">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <Input
+                        placeholder="Tìm kiếm"
+                        value={globalFilter}
+                        onChange={(e) => setGlobalFilter(e.target.value)}
+                        className="pl-10"
+                    />
+                </div>
             </div>
+            <div className="flex flex-wrap items-center justify-between mb-4">
+                {/* Vùng chọn ngày */}
+                <div className="flex flex-wrap gap-4 items-center">
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <button
+                                className={cn(
+                                    "flex items-center gap-2 bg-[#004799] text-white px-4 py-3 rounded-md hover:bg-[#003b80] transition"
+                                )}
+                            >
+                                <Calendar className="w-5 h-5" />
+                                <span className="text-sm">
+                                    {date?.from ? format(date.from, "dd/MM/yyyy") : "Ngày bắt đầu"} -{" "}
+                                    {date?.to ? format(date.to, "dd/MM/yyyy") : "Ngày kết thúc"}
+                                </span>
+                            </button>
+                        </PopoverTrigger>
+                        <PopoverContent className="flex gap-4 p-4 !w-full" align="start">
+                            <DatePicker
+                                mode="range"
+                                selected={date}
+                                onSelect={setDate}
+                                numberOfMonths={2}
+                            />
+                        </PopoverContent>
+                    </Popover>
 
+                    {/* Bộ lọc 1 */}
+                    <Select>
+                        <SelectTrigger className="w-[180px] bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
+                            <SelectValue placeholder="Nhóm" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                {/* <SelectLabel>Fruits</SelectLabel> */}
+                                <SelectItem value="apple">Nhóm 1</SelectItem>
+                                <SelectItem value="banana">Nhóm 2</SelectItem>
+                                <SelectItem value="blueberry">Nhóm 3</SelectItem>
+                                <SelectItem value="grapes">Nhóm 4</SelectItem>
+                                <SelectItem value="pineapple">Nhóm 5</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+
+                {/* Bộ lọc 2 */}
+                <div>
+                    <Select>
+                        <SelectTrigger className="w-[180px] bg-[#004799] px-4 py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
+                            <SelectValue placeholder="Lịch sử bản vẽ" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                {/* <SelectLabel>Fruits</SelectLabel> */}
+                                <SelectItem value="apple">AC001</SelectItem>
+                                <SelectItem value="banana">AC002</SelectItem>
+                                <SelectItem value="blueberry">AC003</SelectItem>
+                                <SelectItem value="grapes">AC004</SelectItem>
+                                <SelectItem value="pineapple">AC005</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
