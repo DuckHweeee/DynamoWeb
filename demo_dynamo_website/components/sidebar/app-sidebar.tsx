@@ -72,12 +72,20 @@ const data = {
                     url: "/dashboard",
                 },
                 {
-                    title: "Starred",
-                    url: "#",
+                    title: "Machine",
+                    url: "/dashboard/machine",
                 },
                 {
-                    title: "Settings",
-                    url: "#",
+                    title: "Operation",
+                    url: "/dashboard/operation",
+                },
+                {
+                    title: "Process",
+                    url: "/dashboard/process",
+                },
+                {
+                    title: "Drawing",
+                    url: "/dashboard/drawingCode",
                 },
             ],
         },
