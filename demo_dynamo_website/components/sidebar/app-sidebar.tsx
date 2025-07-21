@@ -66,20 +66,20 @@ const data = {
             url: "/dashboard",
             icon: LayoutGrid,
             isActive: true,
-            // items: [
-            //     {
-            //         title: "History",
-            //         url: "/dashboard",
-            //     },
-            //     {
-            //         title: "Starred",
-            //         url: "#",
-            //     },
-            //     {
-            //         title: "Settings",
-            //         url: "#",
-            //     },
-            // ],
+            items: [
+                {
+                    title: "Dashboard All",
+                    url: "/dashboard",
+                },
+                {
+                    title: "Starred",
+                    url: "#",
+                },
+                {
+                    title: "Settings",
+                    url: "#",
+                },
+            ],
         },
         {
             title: "Operator",
@@ -107,7 +107,7 @@ const data = {
                 },
                 {
                     title: "Machine Table",
-                    url: "machine",
+                    url: "/machine",
                 },
             ],
         },

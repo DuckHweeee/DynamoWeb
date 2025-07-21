@@ -13,7 +13,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Search } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -34,8 +34,8 @@ import {
 } from "@/components/ui/table"
 import { useState } from "react"
 
-import { HistoryProcess } from "@/lib/type"
-import { mockHistoryProcesses } from "@/lib/dataDemo"
+import { HistoryMachine } from "@/lib/type"
+import { mockHistoryMachines } from "@/lib/dataDemo"
 
 function formatSecondsToTime(seconds: number): string {
     const hours = Math.floor(seconds / 3600)
@@ -43,92 +43,102 @@ function formatSecondsToTime(seconds: number): string {
     return `${hours}h ${minutes}m`
 }
 
-const columns: ColumnDef<HistoryProcess>[] = [
+const columns: ColumnDef<HistoryMachine>[] = [
+    // {
+    //     id: "select",
+    //     header: ({ table }) => (
+    //         <Checkbox
+    //             checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+    //             onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+    //             aria-label="Select all"
+    //         />
+    //     ),
+    //     cell: ({ row }) => (
+    //         <Checkbox
+    //             checked={row.getIsSelected()}
+    //             onCheckedChange={(value) => row.toggleSelected(!!value)}
+    //             aria-label="Select row"
+    //         />
+    //     ),
+    //     enableSorting: false,
+    //     enableHiding: false,
+    // },
     {
-        id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
+        accessorKey: "ten_may",
+        header: ({ column }) => (
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-xl">Tên Máy <ArrowUpDown /></Button>
         ),
         cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
+            <div>
+                <div className="text-lg">{row.getValue("ten_may")}</div>
+                <div className="text-sm text-muted-foreground font-normal">#{row.original.id}</div>
+            </div>
         ),
-        enableSorting: false,
-        enableHiding: false,
     },
     {
-        accessorKey: "ma_ban_ve",
+        accessorKey: "tgc",
         header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Mã Bản Vẽ <ArrowUpDown /></Button>
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-xl">Tổng Giờ Chạy <ArrowUpDown /></Button>
         ),
-        cell: ({ row }) => <div>{row.getValue("ma_ban_ve")}</div>,
+        cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#E6FFE6] text-[#00A90B] px-4 py-1 rounded-md">{formatSecondsToTime(row.getValue("tgc"))}</span></div>,
+        // cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("tgc"))}</div>,
     },
     {
-        accessorKey: "tsnc",
+        accessorKey: "tgd",
         header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Tổng SNC <ArrowUpDown /></Button>
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-xl">Tổng Giờ Dừng <ArrowUpDown /></Button>
         ),
-        cell: ({ row }) => <div>{row.getValue("tsnc")}</div>,
-    },
-    {
-        accessorKey: "hoan_thanh",
-        header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Hoàn thành <ArrowUpDown /></Button>
-        ),
-        cell: ({ row }) => <div> <span className="bg-[#E7F7EF] text-[#0CAF60] px-4 py-1 rounded-md capitalize">{row.getValue("hoan_thanh")}</span></div>,
+        cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#FAFFAF] text-[#C3B300] px-4 py-1 rounded-md">{formatSecondsToTime(row.getValue("tgd"))}</span></div>,
 
+        // cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("tgd"))}</div>,
     },
     {
-        accessorKey: "chua_hoan_thanh",
+        accessorKey: "tgt",
         header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Chưa hoàn thành <ArrowUpDown /></Button>
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-xl">Thời Gian Tắt <ArrowUpDown /></Button>
         ),
-        cell: ({ row }) => <div> <span className="bg-[#FFE6E6] text-[#FE4A4A]  px-4 py-1 rounded-md capitalize">{row.getValue("chua_hoan_thanh")}</span></div>,
+        cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#B5B5B5] text-[#FFFFFF] px-4 py-1 rounded-md">{formatSecondsToTime(row.getValue("tgt"))}</span></div>,
+        // cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("tgt"))}</div>,
     },
     {
-        accessorKey: "tght",
+        accessorKey: "tgl",
         header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>TGHT <ArrowUpDown /></Button>
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-xl">Thời Gian Lỗi <ArrowUpDown /></Button>
         ),
-        cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("tght"))}</div>,
+        cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#FFE6E6] text-[#FE4A4A]  px-4 py-1 rounded-md">{formatSecondsToTime(row.getValue("tgl"))}</span></div>,
+
+        // cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("tgl"))}</div>,
     },
-    {
-        id: "actions",
-        enableHiding: false,
-        cell: ({ row }) => {
-            const item = row.original
-            return (
-                <div className="flex items-center justify-center">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => alert(`Xem chi tiết bản vẽ ${item.ma_ban_ve}`)}>
-                                Xem chi tiết
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => alert(`Xóa bản ghi ${item.ma_ban_ve}`)}>
-                                Xóa
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
-            )
-        },
-    },
+    // {
+    //     id: "actions",
+    //     enableHiding: false,
+    //     cell: ({ row }) => {
+    //         const item = row.original
+    //         return (
+    //             <div className="flex items-center justify-center">
+    //                 <DropdownMenu>
+    //                     <DropdownMenuTrigger asChild>
+    //                         <Button variant="ghost" className="h-8 w-8 p-0">
+    //                             <span className="sr-only">Open menu</span>
+    //                             <MoreHorizontal />
+    //                         </Button>
+    //                     </DropdownMenuTrigger>
+    //                     <DropdownMenuContent align="end">
+    //                         <DropdownMenuItem onClick={() => alert(`Xem chi tiết máy ${item.ten_may}`)}>
+    //                             Xem chi tiết
+    //                         </DropdownMenuItem>
+    //                         <DropdownMenuItem onClick={() => alert(`Xóa máy ${item.ten_may}`)}>
+    //                             Xóa
+    //                         </DropdownMenuItem>
+    //                     </DropdownMenuContent>
+    //                 </DropdownMenu>
+    //             </div>
+    //         )
+    //     },
+    // },
 ]
 
-export default function HistoryProcessTable() {
+export default function MachineTable({ title, description }: { title: string; description: string }) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -136,7 +146,7 @@ export default function HistoryProcessTable() {
     const [globalFilter, setGlobalFilter] = useState("")
 
     const table = useReactTable({
-        data: mockHistoryProcesses,
+        data: mockHistoryMachines,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -158,24 +168,17 @@ export default function HistoryProcessTable() {
     })
 
     return (
-        <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
+        <div className="px-4 py-2 bg-white rounded-[10px] shadow border">
             <div className="flex flex-row items-center justify-between py-4">
-                <p className="text-2xl font-bold">Thống kê quá trình</p>
+                {/* <p className="text-2xl font-bold">Thống kê thời gian máy</p> */}
+                <p className="text-2xl font-bold">{title}</p>
+                {/* <p className="text-xl">{description}</p> */}
                 {/* <Input
                     placeholder="Tìm kiếm"
                     value={globalFilter}
                     onChange={(e) => setGlobalFilter(e.target.value)}
                     className="max-w-sm !text-[20px]"
                 /> */}
-                <div className="relative max-w-sm w-full">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <Input
-                        placeholder="Tìm kiếm"
-                        value={globalFilter}
-                        onChange={(e) => setGlobalFilter(e.target.value)}
-                        className="pl-10"
-                    />
-                </div>
             </div>
 
             <div className="rounded-md border">
@@ -184,7 +187,7 @@ export default function HistoryProcessTable() {
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id} className="text-lg font-bold">
                                 {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id} className="text-center">
+                                    <TableHead key={header.id} className="text-center py-5">
                                         {!header.isPlaceholder && flexRender(header.column.columnDef.header, header.getContext())}
                                     </TableHead>
                                 ))}
@@ -214,9 +217,9 @@ export default function HistoryProcessTable() {
             </div>
 
             <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="text-muted-foreground flex-1 text-sm">
+                {/* <div className="text-muted-foreground flex-1 text-sm">
                     {table.getFilteredSelectedRowModel().rows.length} / {table.getFilteredRowModel().rows.length} dòng được chọn.
-                </div>
+                </div> */}
                 <div className="space-x-2">
                     <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
                         Trước

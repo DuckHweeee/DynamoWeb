@@ -49,4 +49,17 @@ export type HistoryMachine = {
 }
 
 
-
+// Demo data Dashboard
+export type Operator2 = {
+    id: string
+    name: string
+    gio_lam_viec: number
+    so_nguyen_cong: number
+    diem_nguyen_cong: number
+}
+export type DrawingCode2 = {
+    id: string
+    name: string
+    thoi_gian_du_kien: number
+    thoi_gian_thuc_te: number
+}

@@ -13,7 +13,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Plus } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, Plus, Search } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -204,12 +204,21 @@ export default function OperatorTable() {
                     <p className="text-2xl font-bold">Hiện Trạng Người Vận hành</p>
                 </div>
                 <div className="w-1/3 flex items-center gap-5">
-                    <Input
+                    {/* <Input
                         placeholder="Tìm kiếm"
                         value={globalFilter}
                         onChange={(e) => setGlobalFilter(e.target.value)}
                         className="max-w-sm !text-[20px]"
-                    />
+                    /> */}
+                    <div className="relative max-w-sm w-full">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <Input
+                            placeholder="Tìm kiếm"
+                            value={globalFilter}
+                            onChange={(e) => setGlobalFilter(e.target.value)}
+                            className="pl-10"
+                        />
+                    </div>
 
                     <Button
                         variant="secondary" size="icon" className="px-10 py-5 bg-[#074695] hover:bg-[#0754B4]"
