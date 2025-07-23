@@ -20,7 +20,7 @@ import OperatorTable from "./component/operatorTable";
 
 export default function DateRangePicker() {
     return (
-        <div className="mx-2 bg-white p-4 rounded-md shadow-sm">
+        <div className="m-2 my-1.5 bg-white p-4 rounded-md shadow-sm">
             <OperatorTable title={"Lịch sử vận hành"} description={""} />
         </div>
 

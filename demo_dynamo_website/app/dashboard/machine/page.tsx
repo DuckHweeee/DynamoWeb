@@ -31,7 +31,7 @@ export default function MachineChart() {
     const [date, setDate] = useState<DateRange | undefined>();
     return (
         <>
-            <div className="m-2 my-5 px-4 py-3 bg-white rounded-[10px] shadow" >
+            <div className="m-2 my-1.5 px-4 py-3 bg-white rounded-[10px] shadow" >
                 <div className="flex flex-wrap items-center justify-between mb-4">
                     {/* Vùng chọn ngày */}
                     <div className="flex flex-wrap gap-4 items-center">

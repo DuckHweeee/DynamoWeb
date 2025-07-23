@@ -61,14 +61,16 @@ export default function RootLayout({
                   <span className="absolute top-0 right-0 h-2.5 w-2.5 bg-red-500 rounded-full" />
                 </div>
 
-                <div className="flex items-center gap-3 px-3 py-2 bg-[#DDEEFF] rounded-md">
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                    <AvatarFallback>I4</AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col justify-center text-lg">
-                    <span className="text-black font-medium">Industry 4.0</span>
-                    <span className="text-blue-600">IIC 4.0</span>
+                <div className="flex items-center px-3 py-1 bg-[#DDEEFF] rounded-md">
+                  <div className="flex flex-row gap-2 items-center">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                      <AvatarFallback>I4</AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col text-lg">
+                      <span className="text-black font-medium">Industry 4.0</span>
+                      <span className="text-blue-600">IIC 4.0</span>
+                    </div>
                   </div>
                   <ChevronDown className="ml-2 text-gray-600" />
                 </div>
@@ -76,15 +78,6 @@ export default function RootLayout({
             </header>
 
             {children}
-            {/* <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-              <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                <div className="bg-muted/50 aspect-video rounded-xl" />
-                <div className="bg-muted/50 aspect-video rounded-xl" />
-                <div className="bg-muted/50 aspect-video rounded-xl" />
-                <p>ahihi</p>
-              </div>
-              <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
-            </div> */}
           </SidebarInset>
         </SidebarProvider>
       </body>

@@ -106,7 +106,7 @@ const data = {
         },
         {
             title: "Machine",
-            url: "#",
+            url: "/machine",
             icon: MonitorCog,
             items: [
                 {
@@ -132,7 +132,7 @@ const data = {
         },
         {
             title: "Process",
-            url: "#",
+            url: "/process",
             icon: SquarePen,
             items: [
                 {
@@ -142,26 +142,26 @@ const data = {
             ],
         },
         {
-            title: "Oder",
+            title: "Order",
             url: "#",
             icon: MessageCircleMore,
-            items: [
-                {
-                    title: "Introduction",
-                    url: "#",
-                },
-            ],
+            // items: [
+            //     {
+            //         title: "Introduction",
+            //         url: "#",
+            //     },
+            // ],
         },
         {
             title: "Group",
             url: "#",
             icon: FolderMinus,
-            items: [
-                {
-                    title: "Introduction",
-                    url: "#",
-                },
-            ],
+            // items: [
+            //     {
+            //         title: "Introduction",
+            //         url: "#",
+            //     },
+            // ],
         },
         {
             title: "History",
@@ -179,10 +179,6 @@ const data = {
                 {
                     title: "History Operator",
                     url: "/history/historyOperator",
-                },
-                {
-                    title: "Changelog",
-                    url: "#",
                 },
             ],
         },
