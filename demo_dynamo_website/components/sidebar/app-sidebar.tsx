@@ -91,12 +91,12 @@ const data = {
         },
         {
             title: "Operator",
-            url: "#",
+            url: "/operator",
             icon: UserCog,
             items: [
                 {
                     title: "OP Status",
-                    url: "#",
+                    url: "/operator/status",
                 },
                 {
                     title: "OP Table",
@@ -111,11 +111,11 @@ const data = {
             items: [
                 {
                     title: "MC Status",
-                    url: "#",
+                    url: "/machine/status",
                 },
                 {
                     title: "Machine Table",
-                    url: "/machine",
+                    url: "/machine/table",
                 },
             ],
         },

@@ -1,8 +1,10 @@
-import Image from "next/image";
+
+import Dashboard from "./dashboard/page";
 
 export default function Home() {
   return (
-    <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
-    </div>
+    <>
+      <Dashboard />
+    </>
   );
 }
