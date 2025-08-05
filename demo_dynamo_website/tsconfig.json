@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/operator"
+    "app/(main-layout)/operator"
   ],
   "exclude": [
     "node_modules"

@@ -49,6 +49,7 @@ export type HistoryMachine = {
 }
 
 
+
 // Demo data Dashboard
 export type Operator2 = {
     id: string
@@ -63,3 +64,82 @@ export type DrawingCode2 = {
     thoi_gian_du_kien: number
     thoi_gian_thuc_te: number
 }
+
+
+// Tablet
+export interface Process2 {
+    processId: string;
+    partNumber: number;
+    stepNumber: number;
+    manufacturingPoint: number;
+    pgTime: number;
+    processType: string;
+    processStatus: number;
+    startTime: string;       // ISO string, bạn có thể dùng Date nếu cần
+    endTime: string;
+    createdDate: string;
+    updatedDate: string;
+    isPlan: number;
+    status: number;
+    orderDetailDto: OrderDetailDto;
+    machineDto: Machine2 | null; // hoặc: `MachineDto | null` nếu bạn có định nghĩa `MachineDto`, nếu không thì để `any` hoặc `null`
+}
+export interface OrderDetailDto {
+    orderDetailId: string;
+    drawingCodeId: string;
+    orderId: string;
+    orderCode: string;
+    quantity: number;
+    orderType: string;
+    createdDate: string;
+    updatedDate: string;
+}
+export interface Machine2 {
+    machineId: number;
+    machineName: string;
+    machineType: string;
+    machineGroup: string;
+    machineOffice: string;
+    status: number;
+    createdDate: string;
+    updatedDate: string;
+    groupId: string;
+    machineKpiDtos: any; // Nếu bạn có định nghĩa KPI chi tiết thì thay thế `any` bằng kiểu cụ thể
+}
+export interface Staff {
+    staffId: number;
+    staffName: string;
+    staffOffice: string;
+    staffSection: string;
+    shortName: string;
+    status: number;
+    createdDate: string;
+    updatedDate: string;
+    groupId: string;
+    staffKpiDtos: StaffKpiDto; // Nếu có thể là mảng thì dùng: StaffKpiDto[]
+    id: string;
+}
+export interface StaffKpiDto {
+    year: number;
+    month: number;
+    pgTimeGoal: number;
+    machineTimeGoal: number;
+    manufacturingPoint: number;
+    oleGoal: number;
+    workGoal: number;
+    kpi: number;
+    createdDate: string;
+    updatedDate: string;
+    staffId: number;
+    id: number;
+}
+
+export interface CurrentStaff {
+    staffIdNumber: number
+    staffId: string
+    operatorName: string
+    machineId: number
+}
+
+
+

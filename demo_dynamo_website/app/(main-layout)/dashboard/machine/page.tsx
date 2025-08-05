@@ -1,17 +1,4 @@
 "use client"
-
-import { MonitorDot, TrendingDown, TrendingUp } from "lucide-react"
-import MachineRunBarChart from "./component/machineRunBarChart"
-import MachineRunBarChart2 from "./component/machineRunBarChart2"
-import { MachineRunPieChart } from "./component/machineRunPieChart"
-import { MachinePieChart } from "./component/machinePieChart"
-import { SumRealTime } from "./component/sumRealTime"
-import { MachineProcessBarChart } from "./component/machineProcessBarChart"
-import MachineTable from "./component/machineTable"
-import { ReportTime } from "./component/reporTime"
-import OperatorTable from "./component/operatorTable"
-import DrawingCodeTable from "./component/drawingTable"
-
 import { Calendar } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar as DatePicker } from "@/components/ui/calendar";
@@ -27,21 +14,25 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react"
-
+import { ReportTime } from "../component/reporTime";
+import MachineRunBarChart2 from "../component/machineRunBarChart2";
+import { MachinePieChart } from "../component/machinePieChart";
+import { SumRealTime } from "../component/sumRealTime";
+import { MachineProcessBarChart } from "../component/machineProcessBarChart";
+import MachineTable from "../component/machineTable";
+import { useState } from "react";
 const chartItems = [
     { label: "Máy Đang Chạy", value: 12, fill: "#0ea5e9" },     // blue
     { label: "Máy Dừng", value: 3, fill: "#facc15" },           // yellow
     { label: "Máy Lỗi", value: 1, fill: "#ef4444" },            // red
     { label: "Bảo Trì", value: 2, fill: "#8b5cf6" },            // purple
 ]
-
-export default function Dashboard() {
+export default function MachineChart() {
     const [date, setDate] = useState<DateRange | undefined>();
     return (
-        <div>
+        <>
             <div className="m-2 my-1.5 px-4 py-3 bg-white rounded-[10px] shadow" >
-                <div className="flex flex-wrap items-center justify-between mb-4">
+                <div className="flex flex-wrap items-center justify-end mb-4">
                     {/* Vùng chọn ngày */}
                     <div className="flex flex-wrap gap-4 items-center">
                         <Popover>
@@ -117,35 +108,7 @@ export default function Dashboard() {
                 </div>
                 <MachineTable title="Danh sách Thống kê Máy móc" description="Tất cả các máy" />
             </div >
-
-            {/* Thống kê vận hành */}
-            <div className="m-2 my-5 px-4 py-5 bg-white rounded-[10px] shadow" >
-                <ReportTime title={"Thống kê vận hành"} description={"12 người vận hành"} />
-
-                <div className="grid grid-cols-2 gap-5 my-5">
-                    {/* <MachineRunBarChart /> */}
-                    <MachineProcessBarChart title="Tổng giờ làm việc của từng người vận hành" description="Description" />
-                    <MachineProcessBarChart title="Tổng điểm của từng người vận hành" description="Description" />
-                    <MachineProcessBarChart title="Tổng số nguyên công của từng người vận hành" description="Description" />
-                    <MachineProcessBarChart title="KPI của từng người vận hành trong nhóm" description="Description" />
-                </div>
-                <OperatorTable title="Danh sách người vận hành" description="Tất cả các máy" />
-            </div >
-
-            {/* Thống kê bản vẽ */}
-            <div className="m-2 my-5 px-4 py-5 bg-white rounded-[10px] shadow" >
-                <ReportTime title={"Thống kê bản vẽ"} description={"12 bản vẽ"} />
-                <SumRealTime title="Tổng Thời Gian Thực / Dự kiến" description="PG Dự Kiến Của Từng Máy Trong Nhóm" />
-                <div className="mt-5">
-                    <DrawingCodeTable title="Danh sách bản vẽ" description="Tất cả các máy" />
-                </div>
-            </div >
-
-            {/* Thống kê Process */}
-            <div className="m-2 my-5 px-4 py-5 bg-white rounded-[10px] shadow" >
-                <ReportTime title={"Thống kê Process "} description={"12 nguyên công"} />
-                <OperatorTable title="Danh sách thống kê nhân viên" description="Tất cả các máy" />
-            </div >
-        </div >
+        </>
     )
+
 }
