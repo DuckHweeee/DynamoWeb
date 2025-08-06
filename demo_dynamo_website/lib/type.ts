@@ -5,6 +5,7 @@ export type Operator = {
     phong_ban: string
     nhom: string
     cong_viec: string
+    trang_thai: number
 }
 
 export type Machine = {
@@ -66,7 +67,9 @@ export type DrawingCode2 = {
 }
 
 
-// Tablet
+
+
+// Tablet - Dữ liệu thật
 export interface Process2 {
     processId: string;
     partNumber: number;
@@ -107,16 +110,15 @@ export interface Machine2 {
     machineKpiDtos: any; // Nếu bạn có định nghĩa KPI chi tiết thì thay thế `any` bằng kiểu cụ thể
 }
 export interface Staff {
-    staffId: number;
+    staffId: number | null;
     staffName: string;
     staffOffice: string;
     staffSection: string;
     shortName: string;
     status: number;
-    createdDate: string;
-    updatedDate: string;
     groupId: string;
-    staffKpiDtos: StaffKpiDto; // Nếu có thể là mảng thì dùng: StaffKpiDto[]
+    groupName?: string,
+    staffKpiDtos?: StaffKpiDto;
     id: string;
 }
 export interface StaffKpiDto {

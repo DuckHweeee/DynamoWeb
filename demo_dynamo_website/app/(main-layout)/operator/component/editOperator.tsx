@@ -4,55 +4,59 @@ import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Operator } from "@/lib/type"
+import { Staff } from "@/lib/type"
 
-type EditOperatorFormProps = {
-    initialData: Operator
-    onUpdate: (updated: Operator) => void
+type EditStaffFormProps = {
+    initialData: Staff
+    onUpdate: (updated: Staff) => void
     onCancel: () => void
 }
-const labelMap: Record<keyof Operator, string> = {
-    stt: "Số thứ tự",
-    id: "Mã nhân viên",
-    name: "Tên nhân viên",
-    phong_ban: "Phòng ban",
-    nhom: "Nhóm",
-    cong_viec: "Công việc",
+const labelMap: Record<keyof Staff, string> = {
+    staffId: "Mã nhân viên",
+    staffName: "Tên nhân viên",
+    staffOffice: "Phòng ban",
+    staffSection: "Công việc",
+    groupName: "Nhóm",
+    id: "",
+    shortName: "",
+    status: "",
+    groupId: "",
+    staffKpiDtos: ""
 }
 
-export default function EditOperatorForm({
+export default function EditStaffForm({
     initialData,
     onUpdate,
     onCancel,
-}: EditOperatorFormProps) {
-    const [operator, setOperator] = useState<Operator>(initialData)
+}: EditStaffFormProps) {
+    const [staff, setStaff] = useState<Staff>(initialData)
 
     const handleUpdate = () => {
-        if (!operator.stt || !operator.id || !operator.name) {
+        if (!staff.staffId || !staff.id || !staff.staffName) {
             alert("Vui lòng nhập đầy đủ thông tin.")
             return
         }
-        onUpdate(operator)
+        onUpdate(staff)
     }
 
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
-                {Object.keys(operator).map((field) => (
+                {Object.keys(staff).map((field) => (
                     <div key={field} className="space-y-1">
                         {/* <Label htmlFor={field}>{field.replace(/_/g, " ").toUpperCase()}</Label> */}
                         {/* <Label htmlFor={field}>
                             {field.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())}
                         </Label> */}
                         <Label htmlFor={field}>
-                            {labelMap[field as keyof Operator] || field}
+                            {labelMap[field as keyof Staff] || field}
                         </Label>
                         <Input
                             id={field}
                             type="text"
-                            value={(operator as any)[field]}
+                            value={(staff as any)[field]}
                             onChange={(e) =>
-                                setOperator((prev) => ({
+                                setStaff((prev) => ({
                                     ...prev,
                                     [field]: e.target.value,
                                 }))

@@ -102,7 +102,6 @@ export default function TabletProcess() {
             await refetch();
 
         } catch (error) {
-            // console.error("Error submitting process:", error);
             toast.error("Gửi thất bại. Vui lòng thử lại.");
         } finally {
             setLoading(false);

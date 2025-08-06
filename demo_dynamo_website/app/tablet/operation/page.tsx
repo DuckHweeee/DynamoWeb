@@ -456,7 +456,6 @@ export default function TabletOperation() {
                 onOpenChange={async (open) => {
                     setIsCreating(open);
                     if (!open) {
-
                         const response2 = await axios.get<Process2>(
                             `${urlLink}/api/drawing-code-process/machine/${selectedMachineId}`
                         );

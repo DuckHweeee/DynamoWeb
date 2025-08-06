@@ -2,7 +2,6 @@ import { Machine2, Process, Process2, Staff } from "@/lib/type"
 import { useEffect, useState } from "react"
 import axios from "axios"
 
-// const url = "http://10.70.166.119:8080";
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 // export function useFetchProcesses() {
