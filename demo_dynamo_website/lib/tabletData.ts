@@ -85,8 +85,8 @@ export const mockStaff: Staff[] = [
         staffSection: "Section B",
         shortName: "NVA",
         status: 1,
-        createdDate: new Date().toISOString(),
-        updatedDate: new Date().toISOString(),
+        // createdDate: new Date().toISOString(),
+        // updatedDate: new Date().toISOString(),
         groupId: "SG001",
         staffKpiDtos: {
             year: 2025,
@@ -111,8 +111,8 @@ export const mockStaff: Staff[] = [
         staffSection: "Section B",
         shortName: "NVA",
         status: 1,
-        createdDate: new Date().toISOString(),
-        updatedDate: new Date().toISOString(),
+        // createdDate: new Date().toISOString(),
+        // updatedDate: new Date().toISOString(),
         groupId: "SG001",
         staffKpiDtos: {
             year: 2025,

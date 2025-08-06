@@ -3,102 +3,114 @@
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Operator } from "@/lib/type"
+import { Staff } from "@/lib/type"
 import { toast } from "sonner"
 import { Label } from "@/components/ui/label"
 
-type AddOperatorFormProps = {
-    onAdd: (operator: Operator) => void
+type AddStaffFormProps = {
+    onAdd: (staff: Staff) => void
     onCancel: () => void
 }
 
-export default function AddOperatorForm({ onAdd, onCancel }: AddOperatorFormProps) {
-    const [newOperator, setNewOperator] = useState<Operator>({
-        stt: "",
+export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) {
+    const [newStaff, setNewStaff] = useState<Staff>({
         id: "",
-        name: "",
-        phong_ban: "",
-        nhom: "",
-        cong_viec: ""
+        staffId: null,
+        staffName: "",
+        staffOffice: "",
+        groupName: "",
+        staffSection: "",
+        shortName: "",
+        status: 1,
+        groupId: "",
     })
 
 
     const handleSubmit = () => {
-        if (!newOperator.stt || !newOperator.id || !newOperator.name) {
+        if (!newStaff.id || !newStaff.id || !newStaff.staffName) {
             toast.error("Vui lòng chọn đầy đủ thông tin.");
             return
         }
-        onAdd(newOperator)
-        setNewOperator({
-            stt: "",
+        onAdd(newStaff)
+        setNewStaff({
             id: "",
-            name: "",
-            phong_ban: "",
-            nhom: "",
-            cong_viec: ""
+            staffId: null,
+            staffName: "",
+            staffOffice: "",
+            groupName: "",
+            staffSection: "",
+            shortName: "",
+            status: 1,
+            groupId: "",
         })
     }
 
     return (
-        <div className="space-y-3">
-            <div className="grid  gap-4">
-                <div className="grid gap-2">
-                    <Label htmlFor="id">Mã nhân viên</Label>
-                    <Input
-                        id="id"
-                        placeholder="Mã nhân viên"
-                        value={newOperator.id}
-                        onChange={(e) => setNewOperator({ ...newOperator, id: e.target.value })}
-                    />
-                </div>
-                <div className="grid gap-2">
-                    <Label htmlFor="name">Tên nhân viên</Label>
-                    <Input
-                        id="name"
-                        placeholder="Tên nhân viên"
-                        value={newOperator.name}
-                        onChange={(e) => setNewOperator({ ...newOperator, name: e.target.value })}
-                    />
-                </div>
+        <div className=" w-full">
+            <div>
+                <div className="text-2xl">Thông tin nhân viên</div>
+                <div className="grid gap-4 grid-cols-2">
+                    <div className="grid gap-1">
+                        <Label htmlFor="id" className="text-xl">Mã nhân viên</Label>
+                        <Input
+                            id="id"
+                            placeholder="Mã nhân viên"
+                            value={newStaff.id}
+                            onChange={(e) => setNewStaff({ ...newStaff, id: e.target.value })}
+                        />
+                    </div>
+                    <div className="grid gap-1">
+                        <Label htmlFor="name" className="text-xl">Tên nhân viên</Label>
+                        <Input
+                            id="name"
+                            placeholder="Tên nhân viên"
+                            value={newStaff.staffName}
+                            onChange={(e) => setNewStaff({ ...newStaff, staffName: e.target.value })}
+                        />
+                    </div>
 
-                <div className="grid gap-2">
-                    <Label htmlFor="phong_ban">Phòng ban</Label>
-                    <Input
-                        id="phong_ban"
-                        placeholder="Phòng ban"
-                        value={newOperator.phong_ban}
-                        onChange={(e) => setNewOperator({ ...newOperator, phong_ban: e.target.value })}
-                    />
-                </div>
+                    <div className="grid gap-1">
+                        <Label htmlFor="phong_ban" className="text-xl">Phòng ban</Label>
+                        <Input
+                            id="phong_ban"
+                            placeholder="Phòng ban"
+                            value={newStaff.staffOffice}
+                            onChange={(e) => setNewStaff({ ...newStaff, staffOffice: e.target.value })}
+                        />
+                    </div>
 
-                <div className="grid gap-2">
-                    <Label htmlFor="nhom">Nhóm</Label>
-                    <Input
-                        id="nhom"
-                        placeholder="Nhóm"
-                        value={newOperator.nhom}
-                        onChange={(e) => setNewOperator({ ...newOperator, nhom: e.target.value })}
-                    />
-                </div>
+                    <div className="grid gap-1">
+                        <Label htmlFor="nhom" className="text-xl">Nhóm</Label>
+                        <Input
+                            id="nhom"
+                            placeholder="Nhóm"
+                            value={newStaff.groupName}
+                            onChange={(e) => setNewStaff({ ...newStaff, groupName: e.target.value })}
+                        />
+                    </div>
 
-                <div className="grid gap-2">
-                    <Label htmlFor="cong_viec">Công việc</Label>
-                    <Input
-                        id="cong_viec"
-                        placeholder="Công Việc"
-                        value={newOperator.cong_viec}
-                        onChange={(e) => setNewOperator({ ...newOperator, cong_viec: e.target.value })}
-                    />
+                    <div className="grid gap-1">
+                        <Label htmlFor="cong_viec" className="text-xl">Công việc</Label>
+                        <Input
+                            id="cong_viec"
+                            placeholder="Công Việc"
+                            value={newStaff.staffSection}
+                            onChange={(e) => setNewStaff({ ...newStaff, staffSection: e.target.value })}
+                        />
+                    </div>
                 </div>
-
             </div>
+
+
+
             <div className="flex gap-4 pt-2 justify-end">
-                <Button onClick={handleSubmit} className="bg-[#074695] hover:bg-[#0754B4]">
-                    Lưu
-                </Button>
                 <Button variant="outline" onClick={onCancel}>
                     Hủy
                 </Button>
+                <Button onClick={handleSubmit} className="bg-[#074695] hover:bg-[#0754B4]">
+                    Lưu
+                </Button>
+
             </div>
         </div>
     )
