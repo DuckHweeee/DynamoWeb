@@ -37,8 +37,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 
 import { Process } from "@/lib/type"
 import { mockProcesses } from "@/lib/dataDemo"
-import EditProcessForm from "./component/editProcess"
-import AddProcessForm from "./component/addNewProcess"
+import EditProcessForm from "./_components/editProcess"
+import AddProcessForm from "./_components/addNewProcess"
 
 function formatSeconds(seconds: string): string {
     const total = parseInt(seconds)
