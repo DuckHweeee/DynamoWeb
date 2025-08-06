@@ -1,4 +1,4 @@
-import { DrawingCode, HistoryMachine, HistoryProcess, Machine, Operator, Process } from "./type";
+import { DrawingCode, DrawingCode2, HistoryMachine, HistoryProcess, Machine, Operator, Operator2, Process } from "./type";
 
 export const mockOperators: Operator[] = [
     {
@@ -378,21 +378,112 @@ export const mockHistoryProcesses: HistoryProcess[] = [
 ]
 
 export const mockHistoryMachines: HistoryMachine[] = [
-    { ten_may: "DC 1", id: "123", tgc: 34600, tgd: 62700, tgt: 63300, tgl: 33400 },
-    { ten_may: "DC 2", id: "123", tgc: 57400, tgd: 32400, tgt: 89600, tgl: 44400 },
-    { ten_may: "DC 3", id: "123", tgc: 25400, tgd: 15900, tgt: 46400, tgl: 22200 },
-    { ten_may: "DC 4", id: "123", tgc: 76000, tgd: 34800, tgt: 10800, tgl: 66600 },
-    { ten_may: "DC 5", id: "123", tgc: 72200, tgd: 33000, tgt: 10200, tgl: 55500 },
-    { ten_may: "DC 6", id: "123", tgc: 38300, tgd: 27600, tgt: 64000, tgl: 33300 },
-    { ten_may: "DC 7", id: "123", tgc: 42200, tgd: 8800, tgt: 84000, tgl: 44400 },
-    { ten_may: "DC 8", id: "123", tgc: 34000, tgd: 33600, tgt: 66600, tgl: 22250 },
-    { ten_may: "Máy I", id: "123", tgc: 27700, tgd: 21300, tgt: 55000, tgl: 18880 },
-    { ten_may: "Máy J", id: "123", tgc: 42000, tgd: 24900, tgt: 67900, tgl: 32220 },
-    { ten_may: "Máy K", id: "123", tgc: 38800, tgd: 23600, tgt: 69400, tgl: 22210 },
-    { ten_may: "Máy L", id: "123", tgc: 44500, tgd: 36100, tgt: 76600, tgl: 28820 },
-    { ten_may: "Máy M", id: "123", tgc: 55200, tgd: 36400, tgt: 38600, tgl: 29950 },
-    { ten_may: "Máy N", id: "123", tgc: 29900, tgd: 28800, tgt: 54700, tgl: 35500 },
-    { ten_may: "Máy O", id: "123", tgc: 32100, tgd: 39200, tgt: 77000, tgl: 77100 },
+    { ten_may: "DC 1", id: "ID123456", tgc: 34600, tgd: 62700, tgt: 63300, tgl: 33400 },
+    { ten_may: "DC 2", id: "ID987654", tgc: 57400, tgd: 32400, tgt: 89600, tgl: 44400 },
+    { ten_may: "DC 3", id: "ID116794", tgc: 25400, tgd: 15900, tgt: 46400, tgl: 22200 },
+    { ten_may: "DC 4", id: "ID164895", tgc: 76000, tgd: 34800, tgt: 10800, tgl: 66600 },
+    { ten_may: "DC 5", id: "ID164879", tgc: 72200, tgd: 33000, tgt: 10200, tgl: 55500 },
+    { ten_may: "DC 6", id: "ID132468", tgc: 38300, tgd: 27600, tgt: 64000, tgl: 33300 },
+    { ten_may: "DC 7", id: "ID133468", tgc: 42200, tgd: 8800, tgt: 84000, tgl: 44400 },
+    { ten_may: "DC 8", id: "ID132468", tgc: 34000, tgd: 33600, tgt: 66600, tgl: 22250 },
+    { ten_may: "Máy I", id: "ID123548", tgc: 27700, tgd: 21300, tgt: 55000, tgl: 18880 },
+    { ten_may: "Máy J", id: "ID468923", tgc: 42000, tgd: 24900, tgt: 67900, tgl: 32220 },
+    { ten_may: "Máy K", id: "ID682035", tgc: 38800, tgd: 23600, tgt: 69400, tgl: 22210 },
+    { ten_may: "Máy L", id: "ID135487", tgc: 44500, tgd: 36100, tgt: 76600, tgl: 28820 },
+    { ten_may: "Máy M", id: "ID165792", tgc: 55200, tgd: 36400, tgt: 38600, tgl: 29950 },
+    { ten_may: "Máy N", id: "ID987962", tgc: 29900, tgd: 28800, tgt: 54700, tgl: 35500 },
+    { ten_may: "Máy O", id: "ID354687", tgc: 32100, tgd: 39200, tgt: 77000, tgl: 77100 },
 ]
 
+// Demo data Dashboard
+export const mockOperators2: Operator2[] = [
+    {
+        id: "op01",
+        name: "Nguyễn Văn A",
+        gio_lam_viec: 24590,
+        so_nguyen_cong: 22,
+        diem_nguyen_cong: 25,
+    },
+    {
+        id: "op02",
+        name: "Trần Thị B",
+        gio_lam_viec: 19665,
+        so_nguyen_cong: 93,
+        diem_nguyen_cong: 36,
+    },
+    {
+        id: "op03",
+        name: "Lê Văn C",
+        gio_lam_viec: 21780,
+        so_nguyen_cong: 90,
+        diem_nguyen_cong: 56,
+    },
+    {
+        id: "op04",
+        name: "Phạm Thị D",
+        gio_lam_viec: 16450,
+        so_nguyen_cong: 108,
+        diem_nguyen_cong: 59,
+    },
+    {
+        id: "op06",
+        name: "Hoàng Văn E",
+        gio_lam_viec: 20640,
+        so_nguyen_cong: 20,
+        diem_nguyen_cong: 35,
+    },
+    {
+        id: "op05",
+        name: "Hoàng Văn F",
+        gio_lam_viec: 2060,
+        so_nguyen_cong: 55,
+        diem_nguyen_cong: 75,
+    },
+    {
+        id: "op06",
+        name: "Hoàng Văn G",
+        gio_lam_viec: 2060,
+        so_nguyen_cong: 65,
+        diem_nguyen_cong: 75,
+    },
+    {
+        id: "op06",
+        name: "Hoàng Văn H",
+        gio_lam_viec: 2060,
+        so_nguyen_cong: 45,
+        diem_nguyen_cong: 35,
+    },
+]
 
+export const mockDrawingCodes2: DrawingCode2[] = [
+    {
+        id: "DC001",
+        name: "Bản vẽ A01",
+        thoi_gian_du_kien: 9640,
+        thoi_gian_thuc_te: 58655,
+    },
+    {
+        id: "DC002",
+        name: "Bản vẽ B02",
+        thoi_gian_du_kien: 14620,
+        thoi_gian_thuc_te: 14830,
+    },
+    {
+        id: "DC003",
+        name: "Bản vẽ C03",
+        thoi_gian_du_kien: 6640,
+        thoi_gian_thuc_te: 54535,
+    },
+    {
+        id: "DC004",
+        name: "Bản vẽ D04",
+        thoi_gian_du_kien: 74565,
+        thoi_gian_thuc_te: 95590,
+    },
+    {
+        id: "DC005",
+        name: "Bản vẽ E05",
+        thoi_gian_du_kien: 10490,
+        thoi_gian_thuc_te: 152590,
+    },
+]

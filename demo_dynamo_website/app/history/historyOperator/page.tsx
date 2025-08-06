@@ -6,44 +6,84 @@ import { Calendar as DatePicker } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { useState } from "react";
+import { DateRange } from "react-day-picker";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 export default function DateRangePicker() {
-    const [date, setDate] = useState<{ from: Date; to: Date } | undefined>({
-        from: new Date(2025, 5, 13), // tháng 6
-        to: new Date(2025, 6, 15),   // tháng 7
-    });
+    const [date, setDate] = useState<DateRange | undefined>();
 
     return (
-        <Popover>
-            <PopoverTrigger asChild>
-                <button
-                    className={cn(
-                        "flex items-center space-x-2 bg-[#004799] text-white px-4 py-2 rounded-full hover:bg-[#003b80] transition"
-                    )}
-                >
-                    <Calendar className="w-5 h-5" />
-                    {/* <Calendar
-                        mode="single"
-                        defaultMonth={date}
-                        numberOfMonths={2}
-                        selected={date}
-                        onSelect={setDate}
-                        className="rounded-lg border shadow-sm"
-                    /> */}
-                    <span>
-                        {date?.from ? format(date.from, "MMM dd, yyyy") : "Start"} -{" "}
-                        {date?.to ? format(date.to, "MMM dd, yyyy") : "End"}
-                    </span>
-                </button>
-            </PopoverTrigger>
-            <PopoverContent className="flex gap-4 p-4 !w-full" align="start">
-                <DatePicker
-                    mode="range"
-                    selected={date}
-                    onSelect={setDate}
-                    numberOfMonths={2}
-                />
-            </PopoverContent>
-        </Popover>
+        <div className="mx-2 flex flex-wrap gap-4 items-center justify-between bg-white p-4 rounded-md shadow-sm">
+            {/* Vùng chọn ngày */}
+            <div className="flex flex-wrap gap-4 items-center">
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <button
+                            className={cn(
+                                "flex items-center gap-2 bg-[#004799] text-white px-4 py-3 rounded-md hover:bg-[#003b80] transition"
+                            )}
+                        >
+                            <Calendar className="w-5 h-5" />
+                            <span className="text-sm">
+                                {date?.from ? format(date.from, "dd/MM/yyyy") : "Ngày bắt đầu"} -{" "}
+                                {date?.to ? format(date.to, "dd/MM/yyyy") : "Ngày kết thúc"}
+                            </span>
+                        </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="flex gap-4 p-4 !w-full" align="start">
+                        <DatePicker
+                            mode="range"
+                            selected={date}
+                            onSelect={setDate}
+                            numberOfMonths={2}
+                        />
+                    </PopoverContent>
+                </Popover>
+
+                {/* Bộ lọc 1 */}
+                <Select>
+                    <SelectTrigger className="w-[180px] bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
+                        <SelectValue placeholder="Nhóm" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            {/* <SelectLabel>Fruits</SelectLabel> */}
+                            <SelectItem value="apple">Nhóm 1</SelectItem>
+                            <SelectItem value="banana">Nhóm 2</SelectItem>
+                            <SelectItem value="blueberry">Nhóm 3</SelectItem>
+                            <SelectItem value="grapes">Nhóm 4</SelectItem>
+                            <SelectItem value="pineapple">Nhóm 5</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            {/* Bộ lọc 2 */}
+            <div>
+                <Select>
+                    <SelectTrigger className="w-[180px] bg-[#004799] px-4 py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
+                        <SelectValue placeholder="Lịch sử bản vẽ" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectLabel>Fruits</SelectLabel>
+                            <SelectItem value="apple">Apple</SelectItem>
+                            <SelectItem value="banana">Banana</SelectItem>
+                            <SelectItem value="blueberry">Blueberry</SelectItem>
+                            <SelectItem value="grapes">Grapes</SelectItem>
+                            <SelectItem value="pineapple">Pineapple</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
+        </div>
     );
 }
