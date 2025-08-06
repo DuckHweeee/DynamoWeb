@@ -13,7 +13,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Plus } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, Plus, Search } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -194,14 +194,26 @@ export default function DrawingCodeTable() {
     return (
         <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
             <div className="flex flex-row items-center justify-between py-4">
-                <p className="text-2xl font-bold">Danh Sách Bản Vẽ</p>
-                <div className="flex items-center gap-5">
-                    <Input
+                <div className="w-2/3">
+                    <p className="text-2xl font-bold">Danh Sách Bản Vẽ</p>
+                </div>
+
+                <div className="w-1/3 flex items-center gap-5">
+                    {/* <Input
                         placeholder="Tìm kiếm"
                         value={globalFilter}
                         onChange={(e) => setGlobalFilter(e.target.value)}
                         className="max-w-sm !text-[20px]"
-                    />
+                    /> */}
+                    <div className="relative max-w-sm w-full">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <Input
+                            placeholder="Tìm kiếm"
+                            value={globalFilter}
+                            onChange={(e) => setGlobalFilter(e.target.value)}
+                            className="pl-10"
+                        />
+                    </div>
                     <Button
                         variant="secondary"
                         size="icon"
