@@ -19,6 +19,7 @@ import {
     Settings2,
     SquarePen,
     SquareTerminal,
+    Tablet,
     UserCog,
 } from "lucide-react"
 
@@ -35,6 +36,7 @@ import { NavMain } from "./nav-main"
 import { Logo } from "./logo"
 import { useState } from "react"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { IIC } from "./iic"
 
 // This is sample data.
 const data = {
@@ -67,28 +69,36 @@ const data = {
             icon: LayoutGrid,
             isActive: true,
             items: [
+                // {
+                //     title: "Dashboard All",
+                //     url: "/dashboard",
+                // },
                 {
-                    title: "Dashboard All",
-                    url: "/dashboard",
+                    title: "Machine",
+                    url: "/dashboard/machine",
                 },
                 {
-                    title: "Starred",
-                    url: "#",
+                    title: "Operation",
+                    url: "/dashboard/operation",
                 },
                 {
-                    title: "Settings",
-                    url: "#",
+                    title: "Process",
+                    url: "/dashboard/process",
+                },
+                {
+                    title: "Drawing",
+                    url: "/dashboard/drawingCode",
                 },
             ],
         },
         {
             title: "Operator",
-            url: "#",
+            url: "/operator",
             icon: UserCog,
             items: [
                 {
                     title: "OP Status",
-                    url: "#",
+                    url: "/operator/status",
                 },
                 {
                     title: "OP Table",
@@ -98,16 +108,16 @@ const data = {
         },
         {
             title: "Machine",
-            url: "#",
+            url: "/machine",
             icon: MonitorCog,
             items: [
                 {
                     title: "MC Status",
-                    url: "#",
+                    url: "/machine/status",
                 },
                 {
                     title: "Machine Table",
-                    url: "/machine",
+                    url: "/machine/table",
                 },
             ],
         },
@@ -124,7 +134,7 @@ const data = {
         },
         {
             title: "Process",
-            url: "#",
+            url: "/process",
             icon: SquarePen,
             items: [
                 {
@@ -134,26 +144,26 @@ const data = {
             ],
         },
         {
-            title: "Oder",
+            title: "Order",
             url: "#",
             icon: MessageCircleMore,
-            items: [
-                {
-                    title: "Introduction",
-                    url: "#",
-                },
-            ],
+            // items: [
+            //     {
+            //         title: "Introduction",
+            //         url: "#",
+            //     },
+            // ],
         },
         {
             title: "Group",
             url: "#",
             icon: FolderMinus,
-            items: [
-                {
-                    title: "Introduction",
-                    url: "#",
-                },
-            ],
+            // items: [
+            //     {
+            //         title: "Introduction",
+            //         url: "#",
+            //     },
+            // ],
         },
         {
             title: "History",
@@ -172,35 +182,23 @@ const data = {
                     title: "History Operator",
                     url: "/history/historyOperator",
                 },
+            ],
+        },
+        {
+            title: "Tablet",
+            url: "/tablet",
+            icon: Tablet,
+            items: [
                 {
-                    title: "Changelog",
-                    url: "#",
+                    title: "Tablet Process",
+                    url: "/tablet/process",
+                },
+                {
+                    title: "Tablet Operation",
+                    url: "/tablet/operation",
                 },
             ],
         },
-        // {
-        //     title: "Settings",
-        //     url: "#",
-        //     icon: Settings2,
-        //     items: [
-        //         {
-        //             title: "General",
-        //             url: "#",
-        //         },
-        //         {
-        //             title: "Team",
-        //             url: "#",
-        //         },
-        //         {
-        //             title: "Billing",
-        //             url: "#",
-        //         },
-        //         {
-        //             title: "Limits",
-        //             url: "#",
-        //         },
-        //     ],
-        // },
     ],
     projects: [
         {
@@ -233,9 +231,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {/* <NavProjects projects={data.projects} /> */}
             </SidebarContent>
             {/* <SidebarFooter>
-                <NavUser user={data.user} />
+                <IIC />
             </SidebarFooter> */}
-            <SidebarRail />
+            {/* <SidebarRail /> */}
         </Sidebar>
     )
 }

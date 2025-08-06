@@ -487,3 +487,5 @@ export const mockDrawingCodes2: DrawingCode2[] = [
         thoi_gian_thuc_te: 152590,
     },
 ]
+
+// Tablet
