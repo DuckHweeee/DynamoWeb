@@ -40,12 +40,12 @@ export function ClientHeader() {
                 <div className="flex items-center px-3 py-1 bg-[#DDEEFF] rounded-md">
                     <div className="flex flex-row gap-2 items-center">
                         <Avatar className="h-10 w-10">
-                            <AvatarImage src="/avt.png" />
-                            <AvatarFallback>I4</AvatarFallback>
+                            <AvatarImage src="/dynamo.png" />
+                            <AvatarFallback>Dynamo</AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col text-lg">
-                            <span className="text-black font-medium">Industry 4.0</span>
-                            <span className="text-blue-600">IIC 4.0</span>
+                            <span className="text-black font-medium">Dynamo</span>
+                            <span className="text-blue-600">Admin</span>
                         </div>
                     </div>
                     <ChevronDown className="ml-2 text-gray-600" />
