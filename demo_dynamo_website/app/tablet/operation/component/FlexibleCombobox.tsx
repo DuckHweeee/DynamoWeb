@@ -16,6 +16,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface FlexibleComboboxProps<T> {
     options: T[]
@@ -83,52 +84,61 @@ export function FlexibleCombobox<T>({
                             ? `Không tìm thấy. Nhấn Enter để chọn: "${inputValue}"`
                             : "Không tìm thấy"}
                     </CommandEmpty>
-                    <CommandGroup>
-                        {filteredOptions.map((item) => {
-                            const itemValue = String(item[valueField])
-                            return (
-                                <CommandItem
-                                    key={itemValue}
-                                    value={itemValue}
-                                    onSelect={() => {
-                                        onChange(itemValue)
-                                        setOpen(false)
-                                        setInputValue("")
-                                    }}
-                                    className="text-2xl"
-                                >
-                                    <Check
-                                        className={cn(
-                                            "mr-2 h-4 w-4",
-                                            value === itemValue ? "opacity-100" : "opacity-0"
-                                        )}
-                                    />
-                                    {String(item[displayField])}
-                                </CommandItem>
-                            )
-                        })}
-                        {allowCustom &&
-                            inputValue &&
-                            !filteredOptions.some(
-                                (item) =>
-                                    String(item[displayField]).toLowerCase() ===
-                                    inputValue.toLowerCase()
-                            ) && (
-                                <CommandItem
-                                    onSelect={() => {
-                                        onChange(inputValue)
-                                        setOpen(false)
-                                        setInputValue("")
-                                    }}
-                                    className="text-lg"
-                                >
-                                    {/* <Check className="mr-2 h-4 w-4 opacity-100" /> */}
-                                    Thêm ngoài danh sách: {inputValue}
-                                </CommandItem>
-                            )}
-                    </CommandGroup>
+
+                    {/* Quan trọng: thêm overflow-y-auto + max-h */}
+                    <div
+                        className="max-h-60 overflow-y-auto"
+                        onWheel={(e) => e.stopPropagation()} // tránh Radix chặn cuộn
+                    >
+                        <CommandGroup>
+                            {filteredOptions.map((item) => {
+                                const itemValue = String(item[valueField])
+                                return (
+                                    <CommandItem
+                                        key={itemValue}
+                                        value={itemValue}
+                                        onSelect={() => {
+                                            onChange(itemValue)
+                                            setOpen(false)
+                                            setInputValue("")
+                                        }}
+                                        className="text-2xl"
+                                    >
+                                        <Check
+                                            className={cn(
+                                                "mr-2 h-4 w-4",
+                                                value === itemValue ? "opacity-100" : "opacity-0"
+                                            )}
+                                        />
+                                        {String(item[displayField])}
+                                    </CommandItem>
+                                )
+                            })}
+
+                            {allowCustom &&
+                                inputValue &&
+                                !filteredOptions.some(
+                                    (item) =>
+                                        String(item[displayField]).toLowerCase() ===
+                                        inputValue.toLowerCase()
+                                ) && (
+                                    <CommandItem
+                                        onSelect={() => {
+                                            onChange(inputValue)
+                                            setOpen(false)
+                                            setInputValue("")
+                                        }}
+                                        className="text-lg"
+                                    >
+                                        Thêm ngoài danh sách: {inputValue}
+                                    </CommandItem>
+                                )}
+                        </CommandGroup>
+                    </div>
                 </Command>
             </PopoverContent>
+
+
         </Popover>
     )
 }
