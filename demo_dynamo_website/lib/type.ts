@@ -103,11 +103,12 @@ export interface Machine2 {
     machineType: string;
     machineGroup: string;
     machineOffice: string;
+    machineStatus: number;
     status: number;
     createdDate: string;
     updatedDate: string;
     groupId: string;
-    machineKpiDtos: any; // Nếu bạn có định nghĩa KPI chi tiết thì thay thế `any` bằng kiểu cụ thể
+    machineKpiDtos: any; // Cần trao đổi thêm
 }
 export interface CurrentStaff {
     staffIdNumber: number

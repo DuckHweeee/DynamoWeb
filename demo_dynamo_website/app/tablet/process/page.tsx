@@ -121,7 +121,7 @@ export default function TabletProcess() {
             header: ({ column }) => {
                 return (
                     <Button
-                        className="cursor-pointer text-xl font-bold hover:bg-blue-950 hover:text-white"
+                        className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
@@ -137,7 +137,7 @@ export default function TabletProcess() {
             accessorFn: (row) => row.orderDetailDto?.orderCode ?? "",
             header: ({ column }) => (
                 <Button
-                    className="cursor-pointer text-xl font-bold hover:bg-blue-950 hover:text-white"
+                    className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
@@ -154,11 +154,11 @@ export default function TabletProcess() {
             header: ({ column }) => {
                 return (
                     <Button
-                        className="cursor-pointer text-xl font-bold hover:bg-blue-950 hover:text-white"
+                        className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
-                        Thứ tự sản phẩm
+                        Thứ Tự sản phẩm
                         <ArrowUpDown />
                     </Button>
                 )
@@ -170,11 +170,11 @@ export default function TabletProcess() {
             header: ({ column }) => {
                 return (
                     <Button
-                        className="cursor-pointer text-xl font-bold hover:bg-blue-950 hover:text-white"
+                        className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
-                        Thứ tự Gia Công
+                        Thứ Tự Gia Công
                         <ArrowUpDown />
                     </Button>
                 )
@@ -186,7 +186,7 @@ export default function TabletProcess() {
             header: ({ column }) => {
                 return (
                     <Button
-                        className="cursor-pointer text-xl font-bold hover:bg-blue-950 hover:text-white"
+                        className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
@@ -202,7 +202,7 @@ export default function TabletProcess() {
             header: ({ column }) => {
                 return (
                     <Button
-                        className="cursor-pointer text-xl font-bold hover:bg-blue-950 hover:text-white"
+                        className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
@@ -311,12 +311,12 @@ export default function TabletProcess() {
                                                             <div className="pb-3 max-2xl:pl-6 max-2xl:pr-3  min-2xl:pr-3 min-2xl:pl-10 flex items-center gap-3">
                                                                 <div className="flex gap-6 w-full">
                                                                     <div className="w-1/2 flex items-center gap-2">
-                                                                        <p className="font-bold text-xl whitespace-nowrap">Chọn máy:</p>
+                                                                        <p className="font-bold text-2xl whitespace-nowrap">Chọn máy:</p>
                                                                         <Select
                                                                             value={selectedMachineId}
                                                                             onValueChange={(value) => setSelectedMachineId(value)}
                                                                         >
-                                                                            <SelectTrigger className="w-full text-xl">
+                                                                            <SelectTrigger className="w-full text-2xl">
                                                                                 <SelectValue placeholder="Máy" />
                                                                             </SelectTrigger>
                                                                             <SelectContent>
@@ -324,7 +324,7 @@ export default function TabletProcess() {
                                                                                     {machine2
                                                                                         .filter((m) => m.status === 0)
                                                                                         .map((m) => (
-                                                                                            <SelectItem className="text-xl" key={m.machineId} value={m.machineId.toString()}>
+                                                                                            <SelectItem className="text-2xl" key={m.machineId} value={m.machineId.toString()}>
                                                                                                 {m.machineName}
                                                                                             </SelectItem>
                                                                                         ))}
@@ -334,18 +334,18 @@ export default function TabletProcess() {
                                                                     </div>
 
                                                                     <div className="w-1/2 flex items-center gap-2">
-                                                                        <p className="font-bold text-xl whitespace-nowrap">Chọn nhân viên:</p>
+                                                                        <p className="font-bold text-2xl whitespace-nowrap">Chọn nhân viên:</p>
                                                                         <Select
                                                                             value={selectedOperatorId}
                                                                             onValueChange={(value) => setSelectedOperatorId(value)}
                                                                         >
-                                                                            <SelectTrigger className="w-full text-xl">
+                                                                            <SelectTrigger className="w-full text-2xl">
                                                                                 <SelectValue placeholder="Nhân viên" />
                                                                             </SelectTrigger>
                                                                             <SelectContent>
                                                                                 <SelectGroup>
                                                                                     {operator2.map((staff) => (
-                                                                                        <SelectItem className="text-xl" key={staff.id} value={staff.id}>
+                                                                                        <SelectItem className="text-2xl" key={staff.id} value={staff.id}>
                                                                                             {staff.staffName} - {staff.staffId}
                                                                                         </SelectItem>
                                                                                     ))}

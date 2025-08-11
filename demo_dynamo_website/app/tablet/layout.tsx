@@ -68,7 +68,7 @@ export default function TbaletLayout({
                 <MachineStatusProvider>
                     {children}
                 </MachineStatusProvider>
-                <Toaster richColors position="top-right" />
+                <Toaster richColors position="top-left" />
             </body>
         </html>
     );
