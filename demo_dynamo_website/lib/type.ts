@@ -78,15 +78,25 @@ export interface Process2 {
     pgTime: number;
     processType: string;
     processStatus: number;
-    startTime: string;       // ISO string, bạn có thể dùng Date nếu cần
-    endTime: string;
-    createdDate: string;
-    updatedDate: string;
     isPlan: number;
     status: number;
     orderDetailDto: OrderDetailDto;
-    machineDto: Machine2 | null; // hoặc: `MachineDto | null` nếu bạn có định nghĩa `MachineDto`, nếu không thì để `any` hoặc `null`
+    machineDto: Machine2 | null;
+    planDto: PlanDto | null;
 }
+
+export interface PlanDto {
+    id: number | null;
+    inProgress: number | null;
+    machineId: number | null;
+    plannerId: string | null;
+    processId: string | null;
+    remark: number | null;
+    staffId: number | null;
+    status: number | null;
+}
+
+
 export interface OrderDetailDto {
     orderDetailId: string;
     drawingCodeId: string;

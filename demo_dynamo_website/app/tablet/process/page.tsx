@@ -61,6 +61,7 @@ export default function TabletProcess() {
     useEffect(() => {
         setProcessData2(fetchedProcesses)
     }, [fetchedProcesses])
+    console.log(processData2)
 
     // Handle Submit
     const [loading, setLoading] = useState(false);
@@ -121,7 +122,7 @@ export default function TabletProcess() {
             header: ({ column }) => {
                 return (
                     <Button
-                        className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
+                        className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
@@ -137,7 +138,7 @@ export default function TabletProcess() {
             accessorFn: (row) => row.orderDetailDto?.orderCode ?? "",
             header: ({ column }) => (
                 <Button
-                    className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
+                    className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
@@ -202,7 +203,7 @@ export default function TabletProcess() {
             header: ({ column }) => {
                 return (
                     <Button
-                        className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
+                        className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >

@@ -96,6 +96,7 @@ export default function TabletProcess() {
     const [rowSelection, setRowSelection] = useState({})
     const [globalFilter, setGlobalFilter] = useState("")
     const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
+
     const columns: ColumnDef<Process2>[] = [
         {
             accessorKey: "processType",
@@ -253,6 +254,7 @@ export default function TabletProcess() {
     return (
         <>
             <div className="w-full py-3 px-3 bg-white">
+                {/* Header */}
                 <div className="flex items-center justify-between pb-3">
                     <p className="text-3xl capitalize font-semibold">Danh sách mã bản vẽ trong quá trình</p>
                     <div className="flex flex-row justify-between items-center gap-3">
@@ -274,6 +276,8 @@ export default function TabletProcess() {
                         </Button>
                     </div>
                 </div>
+
+                {/* Table */}
                 <div className="border">
                     {
                         loading ? (
@@ -407,6 +411,8 @@ export default function TabletProcess() {
                         )
                     }
                 </div>
+
+                {/* Phân trang */}
                 <div className="flex items-center justify-end space-x-2 py-4">
                     <div className="text-lg text-muted-foreground flex-1">
                         Trang {table.getState().pagination.pageIndex + 1} /{" "}

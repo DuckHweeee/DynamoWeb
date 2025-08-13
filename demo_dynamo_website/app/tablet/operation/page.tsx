@@ -130,6 +130,7 @@ export default function TabletOperation() {
         };
         fetchProcess();
     }, [selectedMachineId]);
+    console.log(process)
 
     // Fetch current Staff
     const [currentStaff, setCurrentStaff] = useState<CurrentStaff[] | null>(null);
@@ -247,6 +248,7 @@ export default function TabletOperation() {
     const statusKey = currentMachineStatus?.status?.[0] as keyof typeof statusMap;
     const machineStatus = statusKey ? statusMap[statusKey] : null;
 
+    // Test okela
     const handleComplete = async () => {
         if (!process?.processId) return;
         setLoading(true);
@@ -283,6 +285,13 @@ export default function TabletOperation() {
         // console.log(updateInfor.updateProcessType)
         setIsEditing(true);
     };
+
+    // Đang Test
+    const data = Array.from({ length: 30 }).map((_, i) => ({
+        name: `111111111111111111111${i + 1}`,
+        email: `${i + 12}`,
+        role: `${i + 23}`,
+    }))
 
 
     return (
@@ -332,241 +341,276 @@ export default function TabletOperation() {
                             )}
                         </div>
 
-                        <Table className="table-fixed w-full">
-                            <TableHeader>
-                                <TableRow className="bg-blue-950 hover:bg-blue-950">
-                                    <TableHead className="w-1/2 text-4xl font-bold text-white text-center py-2 max-[1300px]:text-4xl">Thông tin</TableHead>
-                                    <TableHead className="w-1/2 text-4xl font-bold text-white text-center max-[1300px]:text-4xl">Chi tiết</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody className="border-x">
-                                {process && (
-                                    <>
-                                        <TableRow className="border-b-0 h-[50px] bg-gray-100">
-                                            {/*
+                        <div className="flex gap-1">
+                            {/* Table Kế Hoạch */}
+                            <div className="flex flex-[40%]">
+                                <div className="border-0 rounded w-full">
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow className="bg-blue-950 hover:bg-blue-950 sticky top-0 z-10">
+                                                <TableHead className="w-[21ch] text-left text-3xl font-bold text-white max-[1300px]:text-3xl py-2">ID Mã Hàng</TableHead>
+                                                <TableHead className=" text-center text-3xl font-bold text-white max-[1300px]:text-3xl">TTNC</TableHead>
+                                                <TableHead className=" text-center text-3xl font-bold text-white max-[1300px]:text-3xl min-2xl:pr-4">TTGC</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                    </Table>
+                                    <div className="max-h-94 overflow-y-auto">
+                                        <Table>
+                                            <TableBody>
+                                                {data.map((item, index) => (
+                                                    <TableRow key={index} className="odd:bg-gray-100 border-0 py-2 h-[50px]">
+                                                        <TableCell className="text-[26px] text-blue-950 font-bold text-left w-[26ch]">{item.name}</TableCell>
+                                                        <TableCell className="text-[26px] text-blue-950 font-bold text-center">{item.email}</TableCell>
+                                                        <TableCell className="text-[26px] text-blue-950 font-bold text-center">{item.role}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Table Chính */}
+                            <div className="flex flex-1/2">
+                                <Table className="!table-fixed !w-full">
+                                    <TableHeader>
+                                        <TableRow className="bg-blue-950 hover:bg-blue-950 h-[50px]">
+                                            <TableHead className="w-1/3 text-3xl  font-bold text-white text-left py-2">Thông tin</TableHead>
+                                            <TableHead className="w-2/3 text-3xl font-bold text-white text-center">Chi tiết</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {process && (
+                                            <>
+                                                <TableRow className="border-0 bg-gray-100 h-[50px]">
+                                                    {/*
                                     Tablet: Fully: max-[1300px]: ; Chorme: max-2xl
                                     Laptop-Screen: min-2xl
                                     */}
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left pl-3 text-blue-950 max-[1300px]:text-4xl max-[1300px]:!py-3">
-                                                Đối Tượng Gia Công
-                                            </TableCell>
-                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-4xl">
-                                                {(statusKey == 0 && isEditing) ? (
-                                                    <div className="flex w-full h-full items-center justify-center">
-                                                        <Select
-                                                            value={updateInfor.updateProcessType}
-                                                            onValueChange={(val) => setUpdateInfor(prev => ({ ...prev, updateProcessType: val }))}
-                                                        >
-                                                            {/* <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-4xl font-bold flex items-center justify-center border-black !shadow-none text-blue-950"> */}
-                                                            <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-4xl font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
-                                                                <SelectValue placeholder="Chọn đối tượng" className="!placeholder:text-blue-950" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                <SelectGroup>
-                                                                    {processingObjectList.map((obj) => (
-                                                                        <SelectItem key={obj.id} value={obj.name} className="text-2xl font-bold text-blue-950 max-[1300px]:text-4xl">
-                                                                            {obj.name}
-                                                                        </SelectItem>
-                                                                    ))}
-                                                                </SelectGroup>
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-                                                ) : (
-                                                    <span className="!text-3xl max-[1300px]:!text-4xl">{process.processType}</span>
-                                                )}
+                                                    <TableCell className="w-1/2 text-3xl font-bold text-left pl-3 text-blue-950">
+                                                        ĐTGC
+                                                    </TableCell>
+                                                    <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950">
+                                                        {(statusKey == 0 && isEditing) ? (
+                                                            <div className="flex w-full h-full items-center justify-center">
+                                                                <Select
+                                                                    value={updateInfor.updateProcessType}
+                                                                    onValueChange={(val) => setUpdateInfor(prev => ({ ...prev, updateProcessType: val }))}
+                                                                >
+                                                                    {/* <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-[32px] font-bold flex items-center justify-center border-black !shadow-none text-blue-950"> */}
+                                                                    <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-[32px] font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
+                                                                        <SelectValue placeholder="Chọn đối tượng" className="!placeholder:text-blue-950" />
+                                                                    </SelectTrigger>
+                                                                    <SelectContent>
+                                                                        <SelectGroup>
+                                                                            {processingObjectList.map((obj) => (
+                                                                                <SelectItem key={obj.id} value={obj.name} className="text-2xl font-bold text-blue-950 max-[1300px]:text-[32px]">
+                                                                                    {obj.name}
+                                                                                </SelectItem>
+                                                                            ))}
+                                                                        </SelectGroup>
+                                                                    </SelectContent>
+                                                                </Select>
+                                                            </div>
+                                                        ) : (
+                                                            <span className="!text-3xl">{process.processType}</span>
+                                                        )}
 
-                                            </TableCell>
-                                        </TableRow>
+                                                    </TableCell>
+                                                </TableRow>
 
-                                        <TableRow className="border-b-0 h-[50px]">
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-4xl max-[1300px]:!py-3">
-                                                ID Mã Hàng
-                                            </TableCell>
-                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-4xl">
-                                                {(statusKey == 0 && isEditing) ? (
-                                                    <div className="flex h-full items-stretch w-full justify-center">
-                                                        <div className="flex w-full h-full items-center justify-center">
-                                                            <Select
-                                                                value={updateInfor.updateOrderCode}
-                                                                onValueChange={(val) => setUpdateInfor(prev => ({ ...prev, updateOrderCode: val }))}
-                                                            >
-                                                                {/* <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-4xl font-bold flex items-center justify-center border-black !shadow-none text-blue-950"> */}
-                                                                <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-4xl font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
-                                                                    <SelectValue placeholder="Chọn đối tượng" className="!placeholder:text-blue-950" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    <SelectGroup>
-                                                                        {orderDetail?.map((obj) => (
-                                                                            <SelectItem key={obj.orderDetailId} value={obj.orderCode} className="text-2xl font-bold text-blue-950 max-[1300px]:text-4xl">
-                                                                                {obj.orderCode}
-                                                                            </SelectItem>
-                                                                        ))}
-                                                                    </SelectGroup>
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
-                                                    </div>
-                                                ) : (
-                                                    <span className="!text-3xl max-[1300px]:!text-4xl">{process.orderDetailDto?.orderCode}</span>
-                                                )}
-                                            </TableCell>
-                                        </TableRow>
+                                                <TableRow className="border-0 h-[50px]">
+                                                    <TableCell className="w-1/3 text-3xl font-bold text-left text-blue-950 pl-3">
+                                                        ID Mã Hàng
+                                                    </TableCell>
+                                                    <TableCell className="w-2/3 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-[32px] break-words ">
+                                                        {(statusKey == 0 && isEditing) ? (
+                                                            <div className="flex h-full items-stretch w-full justify-center">
+                                                                <div className="flex w-full h-full items-center justify-center">
+                                                                    <Select
+                                                                        value={updateInfor.updateOrderCode}
+                                                                        onValueChange={(val) => setUpdateInfor(prev => ({ ...prev, updateOrderCode: val }))}
+                                                                    >
+                                                                        {/* <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-[32px] font-bold flex items-center justify-center border-black !shadow-none text-blue-950"> */}
+                                                                        <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-[32px] font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
+                                                                            <SelectValue placeholder="Chọn đối tượng" className="!placeholder:text-blue-950" />
+                                                                        </SelectTrigger>
+                                                                        <SelectContent>
+                                                                            <SelectGroup>
+                                                                                {orderDetail?.map((obj) => (
+                                                                                    <SelectItem key={obj.orderDetailId} value={obj.orderCode} className="text-2xl font-bold text-blue-950 max-[1300px]:text-[32px]">
+                                                                                        {obj.orderCode}
+                                                                                    </SelectItem>
+                                                                                ))}
+                                                                            </SelectGroup>
+                                                                        </SelectContent>
+                                                                    </Select>
+                                                                </div>
+                                                            </div>
+                                                        ) : (
+                                                            <span className="text-3xl">{process.orderDetailDto?.orderCode}111111111111111111111</span>
+                                                        )}
+                                                    </TableCell>
+                                                </TableRow>
 
-                                        <TableRow className="border-b-0 bg-gray-100">
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-4xl max-[1300px]:!py-3">
-                                                Thứ Tự Sản Phẩm
-                                            </TableCell>
-                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-4xl">
-                                                {/* {process.partNumber} */}
-                                                {(statusKey == 0 && isEditing) ? (
-                                                    <div className="flex h-full items-stretch w-full justify-center">
-                                                        <Input
-                                                            inputMode="numeric"
-                                                            value={updateInfor.updatePartNumber}
-                                                            onChange={(e) => setUpdateInfor(prev => ({
-                                                                ...prev,
-                                                                updatePartNumber: Number(e.target.value)
-                                                            }))}
-                                                            // className="!text-3xl max-[1300px]:!text-4xl text-center w-sm border-black h-full"
-                                                            className="!text-3xl max-[1300px]:!text-4xl text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
-                                                        />
-                                                    </div>
-                                                ) : (
-                                                    <span className="!text-3xl max-[1300px]:!text-4xl">{process.partNumber}</span>
-                                                )}
-                                            </TableCell>
-                                        </TableRow>
+                                                <TableRow className="border-0 bg-gray-100 h-[50px]">
+                                                    <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3">
+                                                        TTSP
+                                                    </TableCell>
+                                                    <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950">
+                                                        {/* {process.partNumber} */}
+                                                        {(statusKey == 0 && isEditing) ? (
+                                                            <div className="flex h-full items-stretch w-full justify-center">
+                                                                <Input
+                                                                    inputMode="numeric"
+                                                                    value={updateInfor.updatePartNumber}
+                                                                    onChange={(e) => setUpdateInfor(prev => ({
+                                                                        ...prev,
+                                                                        updatePartNumber: Number(e.target.value)
+                                                                    }))}
+                                                                    // className="!text-3xl max-[1300px]:!text-[32px] text-center w-sm border-black h-full"
+                                                                    className="!text-3xl max-[1300px]:!text-[32px] text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
+                                                                />
+                                                            </div>
+                                                        ) : (
+                                                            <span className="!text-3xl">{process.partNumber}</span>
+                                                        )}
+                                                    </TableCell>
+                                                </TableRow>
 
-                                        <TableRow className="border-b-0">
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-4xl">
-                                                Thứ Tự Gia Công
-                                            </TableCell>
-                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-4xl">
-                                                {/* {process.stepNumber} */}
-                                                {(statusKey == 0 && isEditing) ? (
-                                                    <div className="flex h-full items-stretch w-full justify-center">
-                                                        <Input
-                                                            inputMode="numeric"
-                                                            value={updateInfor.updateStepNumber}
-                                                            onChange={(e) => setUpdateInfor(prev => ({
-                                                                ...prev,
-                                                                updateStepNumber: Number(e.target.value)
-                                                            }))}
-                                                            // className="!text-3xl max-[1300px]:!text-4xl text-center w-sm rounded-sm border-black h-full"
-                                                            className="!text-3xl max-[1300px]:!text-4xl text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
-                                                        />
-                                                    </div>
-                                                ) : (
-                                                    <span className="!text-3xl max-[1300px]:!text-4xl">{process.stepNumber}</span>
-                                                )}
-                                            </TableCell>
-                                        </TableRow>
+                                                <TableRow className="border-0 h-[50px]">
+                                                    <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-[32px]">
+                                                        TTGC
+                                                    </TableCell>
+                                                    <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-[32px]">
+                                                        {/* {process.stepNumber} */}
+                                                        {(statusKey == 0 && isEditing) ? (
+                                                            <div className="flex h-full items-stretch w-full justify-center">
+                                                                <Input
+                                                                    inputMode="numeric"
+                                                                    value={updateInfor.updateStepNumber}
+                                                                    onChange={(e) => setUpdateInfor(prev => ({
+                                                                        ...prev,
+                                                                        updateStepNumber: Number(e.target.value)
+                                                                    }))}
+                                                                    // className="!text-3xl max-[1300px]:!text-[32px] text-center w-sm rounded-sm border-black h-full"
+                                                                    className="!text-3xl max-[1300px]:!text-[32px] text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
+                                                                />
+                                                            </div>
+                                                        ) : (
+                                                            <span className="!text-3xl max-[1300px]:!text-[32px]">{process.stepNumber}</span>
+                                                        )}
+                                                    </TableCell>
+                                                </TableRow>
 
-                                        <TableRow className="border-b-0 bg-gray-100">
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-4xl">
-                                                Điểm Gia Công
-                                            </TableCell>
-                                            <TableCell className="p-0 w-1/2 font-bold text-center text-blue-950">
-                                                {isEditing ? (
-                                                    <div className="flex h-full items-stretch w-full justify-center">
-                                                        <Input
-                                                            inputMode="numeric"
-                                                            value={updateInfor.updateManufacturingPoint}
-                                                            onChange={(e) => {
-                                                                const newValue = Number(e.target.value);
-                                                                const oldValue = process?.manufacturingPoint;
-                                                                if (newValue > oldValue) {
-                                                                    toast.error(`Giá trị mới nhập (${newValue}) không được lớn hơn giá trị cũ (${oldValue})`);
-                                                                    return;
-                                                                }
+                                                <TableRow className="border-0 bg-gray-100 h-[50px]">
+                                                    <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-[32px] ">
+                                                        ĐGC
+                                                    </TableCell>
+                                                    <TableCell className="p-0 w-1/2 font-bold text-center text-blue-950">
+                                                        {isEditing ? (
+                                                            <div className="flex h-full items-stretch w-full justify-center">
+                                                                <Input
+                                                                    inputMode="numeric"
+                                                                    value={updateInfor.updateManufacturingPoint}
+                                                                    onChange={(e) => {
+                                                                        const newValue = Number(e.target.value);
+                                                                        const oldValue = process?.manufacturingPoint;
+                                                                        if (newValue > oldValue) {
+                                                                            toast.error(`Giá trị mới nhập (${newValue}) không được lớn hơn giá trị cũ (${oldValue})`);
+                                                                            return;
+                                                                        }
 
-                                                                setUpdateInfor(prev => ({
-                                                                    ...prev,
-                                                                    updateManufacturingPoint: newValue
-                                                                }));
-                                                            }}
-                                                            // className="!text-3xl max-[1300px]:!text-4xl text-center w-sm rounded-sm border-black h-full"
-                                                            className="!text-3xl max-[1300px]:!text-4xl text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
-                                                        />
-                                                    </div>
-                                                ) : (
-                                                    <span className="!text-3xl max-[1300px]:!text-4xl">{process?.manufacturingPoint}</span>
-                                                )}
-                                            </TableCell>
-                                        </TableRow>
+                                                                        setUpdateInfor(prev => ({
+                                                                            ...prev,
+                                                                            updateManufacturingPoint: newValue
+                                                                        }));
+                                                                    }}
+                                                                    // className="!text-3xl max-[1300px]:!text-[32px] text-center w-sm rounded-sm border-black h-full"
+                                                                    className="!text-3xl max-[1300px]:!text-[32px] text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
+                                                                />
+                                                            </div>
+                                                        ) : (
+                                                            <span className="!text-3xl max-[1300px]:!text-[32px] h-full">{process?.manufacturingPoint}</span>
+                                                        )}
+                                                    </TableCell>
+                                                </TableRow>
 
-                                        <TableRow className="border-b-0">
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-4xl">
-                                                Giờ PG
-                                            </TableCell>
-                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-4xl">
-                                                {(statusKey == 0 && isEditing) ? (
-                                                    <div className="flex h-full items-stretch w-full justify-center">
-                                                        <Input
-                                                            inputMode="numeric"
-                                                            value={updateInfor.updatePgTime}
-                                                            onChange={(e) => setUpdateInfor(prev => ({
-                                                                ...prev,
-                                                                updatePgTime: Number(e.target.value)
-                                                            }))}
-                                                            // className="!text-3xl max-[1300px]:!text-4xl text-center w-sm rounded-sm border-black h-full"
-                                                            className="!text-3xl max-[1300px]:!text-4xl text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
-                                                        />
-                                                    </div>
-                                                ) : (
-                                                    <span className="!text-3xl max-[1300px]:!text-4xl">{process.pgTime}</span>
-                                                )}
-                                            </TableCell>
-                                        </TableRow>
+                                                <TableRow className="border-0 h-[50px]">
+                                                    <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3">
+                                                        Giờ PG
+                                                    </TableCell>
+                                                    <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950">
+                                                        {(statusKey == 0 && isEditing) ? (
+                                                            <div className="flex h-full items-stretch w-full justify-center">
+                                                                <Input
+                                                                    inputMode="numeric"
+                                                                    value={updateInfor.updatePgTime}
+                                                                    onChange={(e) => setUpdateInfor(prev => ({
+                                                                        ...prev,
+                                                                        updatePgTime: Number(e.target.value)
+                                                                    }))}
+                                                                    // className="!text-3xl max-[1300px]:!text-[32px] text-center w-sm rounded-sm border-black h-full"
+                                                                    className="!text-3xl max-[1300px]:!text-[32px] text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
+                                                                />
+                                                            </div>
+                                                        ) : (
+                                                            <span className="!text-3xl">{process.pgTime}</span>
+                                                        )}
+                                                    </TableCell>
+                                                </TableRow>
 
-                                        <TableRow className="border-b-0 h-[50px] bg-gray-100">
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-4xl">
-                                                Nhân Viên
-                                            </TableCell>
-                                            <TableCell className="w-1/2 p-0 text-center text-3xl">
-                                                {(() => {
-                                                    let operatorName =
-                                                        staff.find((st) => st.staffId === currentStaffId)?.staffName || "Không xác định";
-                                                    return isEditing ? (
-                                                        <div className="flex w-full h-full items-center justify-center">
-                                                            <Select value={String(currentStaffId)} onValueChange={(val) => setUpdateInfor(prev => ({ ...prev, updateStaffId: Number(val) }))}>
-                                                                {/* <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-4xl font-bold flex items-center justify-center border-black !shadow-none text-blue-950"> */}
-                                                                <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-4xl font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
-                                                                    <SelectValue placeholder="Chọn nhân viên" className="!placeholder:text-blue-950" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    <SelectGroup>
-                                                                        {staff.map((st) => (
-                                                                            <SelectItem
-                                                                                className="text-2xl font-bold text-blue-950 max-[1300px]:text-4xl"
-                                                                                key={st.staffId}
-                                                                                value={String(st.staffId)}
-                                                                            >
-                                                                                {/* {st.staffName} */}
-                                                                                {st.shortName} - {st.staffId}
-                                                                            </SelectItem>
-                                                                        ))}
-                                                                    </SelectGroup>
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
-                                                    ) : (
-                                                        <div className="flex items-center justify-center text-3xl font-bold h-full text-blue-950 max-[1300px]:text-4xl">
-                                                            {operatorName}
-                                                        </div>
-                                                    );
-                                                })()}
-                                            </TableCell>
-                                        </TableRow>
-                                    </>
-                                )}
-                            </TableBody>
-                        </Table>
+                                                <TableRow className="border-0 bg-gray-100 h-[50px]">
+                                                    <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-[32px]">
+                                                        Nhân Viên
+                                                    </TableCell>
+                                                    <TableCell className="w-1/2 p-0 text-center text-3xl">
+                                                        {(() => {
+                                                            let operatorName =
+                                                                staff.find((st) => st.staffId === currentStaffId)?.staffName || "Không xác định";
+                                                            return isEditing ? (
+                                                                <div className="flex w-full h-full items-center justify-center">
+                                                                    <Select value={String(currentStaffId)} onValueChange={(val) => setUpdateInfor(prev => ({ ...prev, updateStaffId: Number(val) }))}>
+                                                                        {/* <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-[32px] font-bold flex items-center justify-center border-black !shadow-none text-blue-950"> */}
+                                                                        <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-[32px] font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
+                                                                            <SelectValue placeholder="Chọn nhân viên" className="!placeholder:text-blue-950" />
+                                                                        </SelectTrigger>
+                                                                        <SelectContent>
+                                                                            <SelectGroup>
+                                                                                {staff.map((st) => (
+                                                                                    <SelectItem
+                                                                                        className="text-2xl font-bold text-blue-950 max-[1300px]:text-[32px]"
+                                                                                        key={st.staffId}
+                                                                                        value={String(st.staffId)}
+                                                                                    >
+                                                                                        {/* {st.staffName} */}
+                                                                                        {st.shortName} - {st.staffId}
+                                                                                    </SelectItem>
+                                                                                ))}
+                                                                            </SelectGroup>
+                                                                        </SelectContent>
+                                                                    </Select>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="flex items-center justify-center text-3xl font-bold h-full text-blue-950 max-[1300px]:text-[32px]">
+                                                                    {operatorName}
+                                                                </div>
+                                                            );
+                                                        })()}
+                                                    </TableCell>
+                                                </TableRow>
+                                            </>
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </div>
+
                     </div>
                 )
             }
 
+            {/* Các nút bấm */}
             < div className="flex gap-3 items-center justify-end px-6">
                 <div className="flex gap-4">
                     {isEditing && (
@@ -587,7 +631,7 @@ export default function TabletOperation() {
                                     });
                                 }
                             }}
-                            className="px-10 py-8 text-4xl font-bold max-[1300px]:px-14 cursor-pointer text-gray-500"
+                            className="px-10 py-8 text-[32px] font-bold max-[1300px]:px-14 cursor-pointer text-gray-500"
                         >
                             Hủy
                         </Button>
@@ -595,7 +639,7 @@ export default function TabletOperation() {
                     {!isNull && !isEditing && (
                         <Button
                             onClick={() => startEditing()}
-                            className="cursor-pointer bg-blue-700 hover:bg-blue-600 px-10 py-8 text-4xl font-bold max-[1300px]:px-14"
+                            className="cursor-pointer bg-blue-700 hover:bg-blue-600 px-10 py-8 text-[32px] font-bold max-[1300px]:px-14"
                         >
                             Chỉnh sửa
                         </Button>
@@ -603,7 +647,7 @@ export default function TabletOperation() {
                     {isEditing && (
                         <Button
                             onClick={handleSave}
-                            className="cursor-pointer bg-green-700 hover:bg-green-600 px-14 py-8 text-4xl font-bold"
+                            className="cursor-pointer bg-green-700 hover:bg-green-600 px-14 py-8 text-[32px] font-bold"
                         >
                             Lưu
                         </Button>
@@ -611,7 +655,7 @@ export default function TabletOperation() {
                     {!isEditing && !isCreating && !isNull && statusKey === "S" && (
                         <Button
                             onClick={handleComplete}
-                            className="cursor-pointer bg-green-700 hover:bg-green-600 px-14 py-8 text-4xl font-bold"
+                            className="cursor-pointer bg-green-700 hover:bg-green-600 px-14 py-8 text-[32px] font-bold"
                         >
                             Hoàn thành
                         </Button>
@@ -626,6 +670,8 @@ export default function TabletOperation() {
                     )}
                 </div>
             </ div>
+
+            {/* Tạo mới */}
             <CreateProcessDialog
                 open={isCreating}
                 onOpenChange={async (open) => {
