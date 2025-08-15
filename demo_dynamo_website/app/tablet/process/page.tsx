@@ -40,13 +40,13 @@ export default function TabletProcess() {
 
     // Phần chọn máy và nhân viên
     const [selectedMachineId, setSelectedMachineId] = useState<string>("");
-    const [selectedOperatorId, setSelectedOperatorId] = useState<string>("");
+    const [selectedStaffId, setSelectedStaffId] = useState<string>("");
 
     // Fetch Data
     const fetchedOperator = useFetchOperators()
-    const [operator2, setOperator2] = useState<Staff[]>([])
+    const [staff, setStaff] = useState<Staff[]>([])
     useEffect(() => {
-        setOperator2(fetchedOperator)
+        setStaff(fetchedOperator)
     }, [fetchedOperator])
 
     const fetchedMachine = useFetchMachines()
@@ -61,42 +61,26 @@ export default function TabletProcess() {
     useEffect(() => {
         setProcessData2(fetchedProcesses)
     }, [fetchedProcesses])
+    console.log("processData2")
     console.log(processData2)
+
 
     // Handle Submit
     const [loading, setLoading] = useState(false);
-    // const handleSubmit = async (processId: string) => {
-    //     if (!selectedMachineId || !selectedOperatorId) {
-    //         toast.error("Vui lòng chọn đầy đủ thông tin.");
-    //         return;
-    //     }
-    //     setLoading(true);
-    //     try {
-    //         // await new Promise(resolve => setTimeout(resolve, 500));
-    //         console.log(processId)
-    //         console.log(selectedOperatorId)
-    //         console.log(selectedMachineId)
-    //         const url = `http://10.60.253.11:8080/api/drawing-code-process/receive?drawingCodeProcess_id=${processId}&&staffId=${selectedOperatorId}&&machineId=${selectedMachineId}`;
-    //         await axios.post(url);
-    //         toast.success("Gửi thành công!");
-    //         useEffect(() => {
-    //             setProcessData2(fetchedProcesses)
-    //         }, [fetchedProcesses])
-    //         setLoading(false);
-    //     } catch (error) {
-    //         console.error("Error submitting process:", error);
-    //         toast.error("Gửi thất bại. Vui lòng thử lại.");
-    //     }
-    // };
     const handleSubmit = async (processId: string) => {
-        if (!selectedMachineId || !selectedOperatorId) {
-            toast.error("Vui lòng chọn đầy đủ thông tin.");
-            return;
-        }
+        // if (!selectedStaffId) {
+        //     toast.error("Vui lòng chọn Nhân Viên");
+        //     return;
+        // }
+        // if (!selectedMachineId) {
+        //     toast.error("Vui lòng chọn Máy.");
+        //     return;
+        // }
+
 
         setLoading(true);
         try {
-            const url = `${URL}/api/drawing-code-process/receive?drawingCodeProcess_id=${processId}&&staffId=${selectedOperatorId}&&machineId=${selectedMachineId}`;
+            const url = `${URL}/api/drawing-code-process/receive?drawingCodeProcess_id=${processId}&&staffId=${selectedStaffId}&&machineId=${selectedMachineId}`;
             await axios.post(url);
             toast.success("Gửi thành công!");
             // Refetch lại dữ liệu
@@ -292,9 +276,18 @@ export default function TabletProcess() {
                                             <Fragment key={row.id}>
                                                 <TableRow
                                                     className={`${isOdd ? "bg-gray-100" : ""} text-2xl font-semibold !border-none`}
-                                                    onClick={() => setExpandedRowId(prev =>
-                                                        prev === row.original.processId ? null : row.original.processId
-                                                    )
+                                                    onClick={() => {
+                                                        setExpandedRowId(prev =>
+                                                            prev === row.original.processId ? null : row.original.processId
+                                                        )
+                                                        const may = machine2.find(m => m.machineId === row.original.planDto?.machineId)?.machineId;
+                                                        const nhanvien = staff.find(s => s.staffId === row.original.planDto?.staffId)?.id;
+
+                                                        setSelectedMachineId(may ? String(may) : "");
+                                                        setSelectedStaffId(nhanvien ? String(nhanvien) : "");
+                                                        console.log(may ? String(may) : "");
+                                                        console.log(nhanvien ? String(nhanvien) : "");
+                                                    }
                                                     }
                                                 >
                                                     {row.getVisibleCells().map((cell) => (
@@ -314,7 +307,7 @@ export default function TabletProcess() {
                                                                     <div className="w-1/2 flex items-center gap-2">
                                                                         <p className="font-bold text-2xl whitespace-nowrap">Chọn máy:</p>
                                                                         <Select
-                                                                            value={selectedMachineId}
+                                                                            value={selectedMachineId || row.original.planDto?.machineId?.toString()}
                                                                             onValueChange={(value) => setSelectedMachineId(value)}
                                                                         >
                                                                             <SelectTrigger className="w-full text-2xl">
@@ -323,7 +316,7 @@ export default function TabletProcess() {
                                                                             <SelectContent>
                                                                                 <SelectGroup>
                                                                                     {machine2
-                                                                                        .filter((m) => m.status === 0)
+                                                                                        .filter((m) => m.status === 0 || m.machineId === row.original.planDto?.machineId) // giữ máy cũ dù status khác 0
                                                                                         .map((m) => (
                                                                                             <SelectItem className="text-2xl" key={m.machineId} value={m.machineId.toString()}>
                                                                                                 {m.machineName}
@@ -337,17 +330,17 @@ export default function TabletProcess() {
                                                                     <div className="w-1/2 flex items-center gap-2">
                                                                         <p className="font-bold text-2xl whitespace-nowrap">Chọn nhân viên:</p>
                                                                         <Select
-                                                                            value={selectedOperatorId}
-                                                                            onValueChange={(value) => setSelectedOperatorId(value)}
+                                                                            value={selectedStaffId || staff.find(s => s.staffId === row.original.planDto?.staffId)?.id}
+                                                                            onValueChange={(value) => setSelectedStaffId(value)}
                                                                         >
                                                                             <SelectTrigger className="w-full text-2xl">
                                                                                 <SelectValue placeholder="Nhân viên" />
                                                                             </SelectTrigger>
                                                                             <SelectContent>
                                                                                 <SelectGroup>
-                                                                                    {operator2.map((staff) => (
-                                                                                        <SelectItem className="text-2xl" key={staff.id} value={staff.id}>
-                                                                                            {staff.staffName} - {staff.staffId}
+                                                                                    {staff.map((s) => (
+                                                                                        <SelectItem className="text-2xl" key={s.id} value={s.id}>
+                                                                                            {s.staffName} - {s.staffId}
                                                                                         </SelectItem>
                                                                                     ))}
                                                                                 </SelectGroup>

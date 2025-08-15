@@ -64,7 +64,7 @@ const data = {
     ],
     navMain: [
         {
-            title: "Dashboard",
+            title: "Thống kê",
             url: "/dashboard",
             icon: LayoutGrid,
             isActive: true,
@@ -92,7 +92,7 @@ const data = {
             ],
         },
         {
-            title: "Operator",
+            title: "Nhân viên",
             url: "/operator",
             icon: UserCog,
             items: [
@@ -101,13 +101,13 @@ const data = {
                     url: "/operator/status",
                 },
                 {
-                    title: "OP Table",
+                    title: "Danh sách nhân viên",
                     url: "/operator",
                 },
             ],
         },
         {
-            title: "Machine",
+            title: "Máy móc",
             url: "/machine",
             icon: MonitorCog,
             items: [
@@ -116,7 +116,7 @@ const data = {
                     url: "/machine/status",
                 },
                 {
-                    title: "Machine Table",
+                    title: "Danh sách máy móc",
                     url: "/machine/table",
                 },
             ],
@@ -190,12 +190,16 @@ const data = {
             icon: Tablet,
             items: [
                 {
-                    title: "Tablet Process",
+                    title: "Tablet Chu Trình",
                     url: "/tablet/process",
                 },
                 {
-                    title: "Tablet Operation",
+                    title: "Tablet Vận hành",
                     url: "/tablet/operation",
+                },
+                {
+                    title: "Tablet Khai Báo",
+                    url: "/tablet/newProcess",
                 },
             ],
         },

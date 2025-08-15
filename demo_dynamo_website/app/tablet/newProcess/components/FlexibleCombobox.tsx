@@ -87,7 +87,7 @@ export function FlexibleCombobox<T>({
 
                     {/* Quan trọng: thêm overflow-y-auto + max-h */}
                     <div
-                        className="max-h-60 overflow-y-auto"
+                        className="max-h-35 overflow-y-auto"
                         onWheel={(e) => e.stopPropagation()} // tránh Radix chặn cuộn
                     >
                         <CommandGroup>

@@ -101,11 +101,13 @@ export interface OrderDetailDto {
     orderDetailId: string;
     drawingCodeId: string;
     orderId: string;
+    poNumber: number;
     orderCode: string;
     quantity: number;
     orderType: string;
     createdDate: string;
     updatedDate: string;
+    pgTimeGoal: number;
 }
 export interface Machine2 {
     machineId: number;
