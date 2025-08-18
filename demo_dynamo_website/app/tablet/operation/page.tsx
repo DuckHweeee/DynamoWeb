@@ -78,6 +78,8 @@ export default function TabletOperation() {
     // const [selectedOperatorId, setSelectedOperatorId] = useState("");
     const [loading, setLoading] = useState(false);
     const [selectedMachineId, setSelectedMachineId] = useState<string>("");
+    console.log("selectedMachineId")
+    console.log(selectedMachineId)
     const [updateInfor, setUpdateInfor] = useState<UpdateInfor>({
         updateProcessType: "",
         updateOrderCode: "",
@@ -704,7 +706,7 @@ export default function TabletOperation() {
                             Lưu
                         </Button>
                     )}
-                    {!isEditing && !isCreating && !isNull && statusKey === "S" && (
+                    {!isEditing && !isCreating && !isNull && statusKey === "S" && Number(selectedMachineId) > 9 && (
                         <Button
                             onClick={handleComplete}
                             className="cursor-pointer bg-green-700 hover:bg-green-600  px-10 py-7 text-3xl font-bold max-[1300px]:px-10"

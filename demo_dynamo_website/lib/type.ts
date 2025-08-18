@@ -130,49 +130,59 @@ export interface CurrentStaff {
 }
 
 export interface Staff {
-    staffId: number | null;
+    staffId?: number | null;
     staffName: string;
     staffOffice: string;
     staffSection: string;
     shortName: string;
     status: number | null;
-    groupId: string;
-    // staffKpiDtos?: StaffKpiDto;
-    groupName?: string,
+    staffKpiDtos?: StaffKpiDto;
     id: string;
 }
-// export interface StaffKpiDto {
-//     year: number;
-//     month: number;
-//     pgTimeGoal: number;
-//     machineTimeGoal: number;
-//     manufacturingPoint: number;
-//     oleGoal: number;
-//     workGoal: number;
-//     kpi: number;
-//     createdDate: string;
-//     updatedDate: string;
-//     staffId: number;
-//     id: number;
+
+export interface StaffKpiDto {
+    kpiId?: number,
+    year: number;
+    month: number;
+    pgTimeGoal: number;
+    machineTimeGoal: number;
+    manufacturingPoint: number;
+    oleGoal: number;
+    workGoal: number;
+    kpi: number;
+    createdDate: string;
+    updatedDate: string;
+    staffId?: number;
+    staffName?: string,
+    groupId: string,
+    groupName?: string | null,
+    staffStatus?: number,
+    id: number;
+}
+
+// export interface StaffKPI {
+//     year: number | null,
+//     month: number | null,
+//     pgTimeGoal: number | null,
+//     machineTimeGoal: number | null,
+//     manufacturingPoint: number | null,
+//     oleGoal: number | null,
+//     workGoal: number | null,
+//     kpi: number | null,
+
 // }
 
-export interface StaffKPI {
-    kpiId?: number,
-    year: number | null,
-    month: number | null,
-    pgTimeGoal: number | null,
-    machineTimeGoal: number | null,
-    manufacturingPoint: number | null,
-    oleGoal: number | null,
-    workGoal: number | null,
-    kpi: number | null,
+// export interface StaffWithKPI extends Staff {
+//     staffKpiDtos: StaffKPI[] | null;
+// }
 
+export interface Group {
+    groupId: string,
+    groupName: string,
+    groupType: string,
+    // "staffGroups": [],
+    // "machineGroups": [],
 }
-
-export interface StaffWithKPI extends Staff {
-    staffKpiDtos: StaffKPI[] | null;
-}
-
 
 
 

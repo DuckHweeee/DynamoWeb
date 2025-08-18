@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { Staff } from "@/lib/type"
+import { Group, Staff } from "@/lib/type"
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 export function useStaff() {
@@ -25,11 +25,6 @@ export function useStaff() {
     return { data, loading, error }
 }
 
-export interface Group {
-    groupId: string
-    groupName: string
-    groupType: string
-}
 export function useGroup(groupType: string = "staff") {
     const [data, setData] = useState<Group[]>([])
     const [loading, setLoading] = useState(true)

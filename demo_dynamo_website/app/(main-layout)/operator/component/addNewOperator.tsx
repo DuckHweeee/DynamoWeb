@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Staff, StaffKPI } from "@/lib/type"
+import { Staff } from "@/lib/type"
 import { Label } from "@/components/ui/label"
 import { useGroup } from "../hook/useStaff"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -15,30 +15,51 @@ type AddStaffFormProps = {
     onAdd: (staff: Staff) => void
     onCancel: () => void
 }
+interface NewStaff {
+    staffId: number | null,
+    staffName: string,
+    shortName: string,
+    staffOffice: string,
+    staffSection: string,
+    kpi: number | null,
+    year: number | null,
+    month: number | null,
+    workGoal: number | null,
+    pgTimeGoal: number | null,
+    machineTimeGoal: number | null,
+    manufacturingPoint: number | null,
+    oleGoal: number | null,
+    groupId: string
+}
 
 export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) {
-    const [newStaff, setNewStaff] = useState<Staff>({
-        id: "",
+    const [newStaff, setNewStaff] = useState<NewStaff>({
         staffId: null,
         staffName: "",
-        staffOffice: "",
-        groupName: "",
-        staffSection: "",
         shortName: "",
-        status: 1, // bên server tự làm
-        groupId: "",
-    })
-
-    const [newStaffKPI, setNewStaffKPI] = useState<StaffKPI>({
+        staffOffice: "",
+        staffSection: "",
+        kpi: null,
         year: null,
         month: null,
+        workGoal: null,
         pgTimeGoal: null,
         machineTimeGoal: null,
         manufacturingPoint: null,
         oleGoal: null,
-        workGoal: null,
-        kpi: null,
+        groupId: ""
     })
+
+    // const [newStaffKPI, setNewStaffKPI] = useState<StaffKPI>({
+    //     year: null,
+    //     month: null,
+    //     pgTimeGoal: null,
+    //     machineTimeGoal: null,
+    //     manufacturingPoint: null,
+    //     oleGoal: null,
+    //     workGoal: null,
+    //     kpi: null,
+    // })
 
     const handleSubmit = async () => {
         // Kiểm tra thông tin bắt buộc của newStaff
@@ -55,14 +76,14 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
 
         // Kiểm tra thông tin bắt buộc của newStaffKPI
         if (
-            newStaffKPI.year === null ||
-            newStaffKPI.month === null ||
-            newStaffKPI.pgTimeGoal === null ||
-            newStaffKPI.machineTimeGoal === null ||
-            newStaffKPI.manufacturingPoint === null ||
-            newStaffKPI.oleGoal === null ||
-            newStaffKPI.workGoal === null ||
-            newStaffKPI.kpi === null
+            newStaff.year === null ||
+            newStaff.month === null ||
+            newStaff.pgTimeGoal === null ||
+            newStaff.machineTimeGoal === null ||
+            newStaff.manufacturingPoint === null ||
+            newStaff.oleGoal === null ||
+            newStaff.workGoal === null ||
+            newStaff.kpi === null
         ) {
             toast.error("Vui lòng nhập đầy đủ thông tin mục tiêu nhân viên.");
             return;
@@ -82,15 +103,15 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                         shortName: newStaff.shortName,
                         staffOffice: newStaff.staffOffice,
                         staffSection: newStaff.staffSection,
+                        kpi: newStaff.kpi,
+                        year: newStaff.year,
+                        month: newStaff.month,
+                        workGoal: newStaff.workGoal,
+                        pgTimeGoal: newStaff.pgTimeGoal,
+                        machineTimeGoal: newStaff.machineTimeGoal,
+                        manufacturingPoint: newStaff.manufacturingPoint,
+                        oleGoal: newStaff.oleGoal,
                         groupId: newStaff.groupId,
-                        kpi: newStaffKPI.kpi,
-                        year: newStaffKPI.year,
-                        month: newStaffKPI.month,
-                        workGoal: newStaffKPI.workGoal,
-                        pgTimeGoal: newStaffKPI.pgTimeGoal,
-                        machineTimeGoal: newStaffKPI.machineTimeGoal,
-                        manufacturingPoint: newStaffKPI.manufacturingPoint,
-                        oleGoal: newStaffKPI.oleGoal,
                     }),
                 }
             );
@@ -103,29 +124,22 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
             location.reload()
             onCancel();
             setNewStaff({
-                id: "",
                 staffId: null,
                 staffName: "",
-                staffOffice: "",
-                groupName: "",
-                staffSection: "",
                 shortName: "",
-                status: 1,
-                groupId: "",
-            });
-
-            setNewStaffKPI({
+                staffOffice: "",
+                staffSection: "",
+                kpi: null,
                 year: null,
                 month: null,
+                workGoal: null,
                 pgTimeGoal: null,
                 machineTimeGoal: null,
                 manufacturingPoint: null,
                 oleGoal: null,
-                workGoal: null,
-                kpi: null,
+                groupId: "",
             });
         } catch (error) {
-            // console.error("Lỗi khi cập gửi:", error);
             toast.error("Đã xảy ra lỗi khi gửi.");
         }
     };
@@ -256,9 +270,9 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                         <div className="grid">
                             <Label htmlFor="year" className="text-lg !font-normal">Năm</Label>
                             <SelectYear
-                                value={newStaffKPI.year?.toString() ?? undefined}
+                                value={newStaff.year?.toString() ?? undefined}
                                 onChange={(value) =>
-                                    setNewStaffKPI({ ...newStaffKPI, year: Number(value) })
+                                    setNewStaff({ ...newStaff, year: Number(value) })
                                 }
                                 totalYears={5}
                                 placeholder="Chọn năm"
@@ -267,9 +281,9 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                         <div className="month">
                             <Label htmlFor="name" className="text-lg !font-normal">Tháng</Label>
                             <SelectMonth
-                                value={newStaffKPI.month?.toString() ?? undefined}
+                                value={newStaff.month?.toString() ?? undefined}
                                 onChange={(value) =>
-                                    setNewStaffKPI({ ...newStaffKPI, month: Number(value) })
+                                    setNewStaff({ ...newStaff, month: Number(value) })
                                 }
                             // showAllOption={true}
                             />
@@ -284,10 +298,10 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="KPI"
                                 type="number"
                                 inputMode="numeric"
-                                value={newStaffKPI.kpi !== null ? newStaffKPI.kpi.toString() : ""}
+                                value={newStaff.kpi !== null ? newStaff.kpi.toString() : ""}
                                 onChange={(e) =>
-                                    setNewStaffKPI({
-                                        ...newStaffKPI,
+                                    setNewStaff({
+                                        ...newStaff,
                                         kpi: e.target.value === "" ? null : Number(e.target.value),
                                     })
                                 }
@@ -301,10 +315,10 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="Mục tiêu làm việc"
                                 type="number"
                                 inputMode="numeric"
-                                value={newStaffKPI.workGoal !== null ? newStaffKPI.workGoal.toString() : ""}
+                                value={newStaff.workGoal !== null ? newStaff.workGoal.toString() : ""}
                                 // value={newStaffKPI.workGoal?.toString() ?? undefined}
                                 onChange={(e) =>
-                                    setNewStaffKPI({ ...newStaffKPI, workGoal: Number(e.target.value) })
+                                    setNewStaff({ ...newStaff, workGoal: Number(e.target.value) })
                                 }
                             />
                         </div>
@@ -316,10 +330,10 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="Mục tiêu giờ PG"
                                 type="number"
                                 inputMode="numeric"
-                                value={newStaffKPI.pgTimeGoal !== null ? newStaffKPI.pgTimeGoal.toString() : ""}
+                                value={newStaff.pgTimeGoal !== null ? newStaff.pgTimeGoal.toString() : ""}
                                 // value={newStaffKPI.pgTimeGoal?.toString() ?? undefined}
                                 onChange={(e) =>
-                                    setNewStaffKPI({ ...newStaffKPI, pgTimeGoal: Number(e.target.value) })
+                                    setNewStaff({ ...newStaff, pgTimeGoal: Number(e.target.value) })
                                 }
                             />
                         </div>
@@ -330,10 +344,10 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="Mục tiêu giờ máy"
                                 type="number"
                                 inputMode="numeric"
-                                value={newStaffKPI.machineTimeGoal !== null ? newStaffKPI.machineTimeGoal.toString() : ""}
+                                value={newStaff.machineTimeGoal !== null ? newStaff.machineTimeGoal.toString() : ""}
                                 // value={newStaffKPI.machineTimeGoal?.toString() ?? undefined}
                                 onChange={(e) =>
-                                    setNewStaffKPI({ ...newStaffKPI, machineTimeGoal: Number(e.target.value) })
+                                    setNewStaff({ ...newStaff, machineTimeGoal: Number(e.target.value) })
                                 }
                             />
                         </div>
@@ -344,10 +358,10 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="Mục tiêu điểm gia công"
                                 type="number"
                                 inputMode="numeric"
-                                value={newStaffKPI.manufacturingPoint !== null ? newStaffKPI.manufacturingPoint.toString() : ""}
+                                value={newStaff.manufacturingPoint !== null ? newStaff.manufacturingPoint.toString() : ""}
                                 // value={newStaffKPI.manufacturingPoint?.toString() ?? undefined}
                                 onChange={(e) =>
-                                    setNewStaffKPI({ ...newStaffKPI, manufacturingPoint: Number(e.target.value) })
+                                    setNewStaff({ ...newStaff, manufacturingPoint: Number(e.target.value) })
                                 }
                             />
                         </div>
@@ -358,10 +372,10 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="Mục tiêu Ole"
                                 type="number"
                                 inputMode="numeric"
-                                value={newStaffKPI.oleGoal !== null ? newStaffKPI.oleGoal.toString() : ""}
+                                value={newStaff.oleGoal !== null ? newStaff.oleGoal.toString() : ""}
                                 // value={newStaffKPI.oleGoal?.toString() ?? undefined}
                                 onChange={(e) =>
-                                    setNewStaffKPI({ ...newStaffKPI, oleGoal: Number(e.target.value) })
+                                    setNewStaff({ ...newStaff, oleGoal: Number(e.target.value) })
                                 }
                             />
                         </div>

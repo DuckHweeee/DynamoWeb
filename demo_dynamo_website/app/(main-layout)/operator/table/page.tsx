@@ -37,7 +37,6 @@ import { mockOperators } from "@/lib/dataDemo"
 import EditOperatorForm from "../component/editOperator"
 import AddOperatorForm from "../component/addNewOperator"
 import { useStaff } from "../hook/useStaff"
-import { useStaffWithKPI } from "../hook/useStaffWithKPI"
 import { useRouter } from 'next/navigation'
 import router from "next/router"
 
@@ -110,13 +109,16 @@ function getColumns({
             cell: ({ row }) => <div className="capitalize">{row.getValue("staffOffice")}</div>,
         },
         {
-            accessorKey: "groupName",
+            accessorKey: "staffKpiDtos.groupName",
             header: ({ column }) => (
                 <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Nhóm <ArrowUpDown />
                 </Button>
             ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("groupName")}</div>,
+            // cell: ({ row }) => <div className="capitalize">{row.getValue("groupName")}</div>,
+            cell: ({ row }) => (
+                <div className="capitalize">{row.original.staffKpiDtos?.groupName ?? "Chưa Có Nhóm"}</div>
+            )
         },
         {
             accessorKey: "staffSection",
@@ -236,9 +238,9 @@ export default function OperatorTable() {
             <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
                 <div className="flex flex-row items-center justify-between py-4">
                     <div className="w-2/3">
-                        <p className="text-2xl font-bold">Danh Sách Người Vận hành</p>
+                        <p className="text-2xl font-bold">Danh Sách Nhân Viên</p>
                     </div>
-                    <div className="w-1/3 flex flex-row justify-between items-center gap-3">
+                    <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
                         <div className="relative max-w-sm w-full">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                             <Input
@@ -311,12 +313,13 @@ export default function OperatorTable() {
                     setShowForm(open)
                     if (!open) setEditingOperator(null)
                 }}>
-                    <DialogContent className="w-full !max-w-6xl !gap-5 pb-3">
+                    <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3">
                         <DialogHeader>
                             <DialogTitle className="text-3xl text-[#084188] font-semibold">{editingOperator ? "Chỉnh sửa nhân viên" : "Thêm nhân viên mới"}</DialogTitle>
                         </DialogHeader>
                         {editingOperator ? (
                             <EditOperatorForm
+                                staffList={staff}
                                 idStaffString={editingOperator?.id}
                                 onUpdate={(updated) => {
                                     const index = staff.findIndex(op => op.id === updated.id)
