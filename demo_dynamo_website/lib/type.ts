@@ -113,14 +113,27 @@ export interface Machine2 {
     machineId: number;
     machineName: string;
     machineType: string;
-    machineGroup: string;
+    machineWork: string;
     machineOffice: string;
-    machineStatus: number;
     status: number;
     createdDate: string;
     updatedDate: string;
     groupId: string;
-    machineKpiDtos: any; // Cần trao đổi thêm
+    machineKpiDtos: MachineKpiDtos;
+}
+export interface MachineKpiDtos {
+    year: number | null,
+    month: number | null,
+    oee: number | null,
+    machineMiningTarget: number | null,
+    // "createdDate": "2025-08-15",
+    // "updatedDate": "2025-08-15",
+    machineId: number | null,
+    machineName: string,
+    machineStatus: number | null,
+    groupId: string,
+    groupName: string,
+    id: number | null
 }
 export interface CurrentStaff {
     staffIdNumber: number

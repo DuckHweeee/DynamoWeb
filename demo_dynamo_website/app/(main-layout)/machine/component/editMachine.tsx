@@ -4,19 +4,12 @@ import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Machine } from "@/lib/type"
+import { Machine2 } from "@/lib/type"
 
 type EditMachineFormProps = {
-    initialData: Machine
-    onUpdate: (updated: Machine) => void
+    initialData: Machine2
+    onUpdate: (updated: Machine2) => void
     onCancel: () => void
-}
-
-const labelMap: Record<keyof Machine, string> = {
-    id: "STT",
-    name: "Tên máy",
-    loai_may: "Loại máy",
-    ma_may: "Mã máy",
 }
 
 export default function EditMachineForm({
