@@ -39,8 +39,10 @@ import AddOperatorForm from "../component/addNewOperator"
 import { useStaff } from "../hook/useStaff"
 import { useRouter } from 'next/navigation'
 import router from "next/router"
+import axios from "axios"
+import { toast } from "sonner"
 
-
+const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 function getColumns({
     setEditingOperator,
     setShowForm,
@@ -160,6 +162,46 @@ function getColumns({
             enableHiding: false,
             cell: ({ row }) => {
                 const operator = row.original
+                const handleDelete = async (staffId: string) => {
+                    try {
+                        const response = await fetch(
+                            `${url}/api/staff/${staffId}`,
+                            {
+                                method: "PUT",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    staffId: operator.staffId,
+                                    staffName: operator.staffName,
+                                    shortName: operator.shortName,
+                                    staffOffice: operator.staffOffice,
+                                    staffSection: operator.staffSection,
+                                    kpi: operator.staffKpiDtos?.kpi,
+                                    year: operator.staffKpiDtos?.year,
+                                    month: operator.staffKpiDtos?.month,
+                                    workGoal: operator.staffKpiDtos?.workGoal,
+                                    pgTimeGoal: operator.staffKpiDtos?.pgTimeGoal,
+                                    machineTimeGoal: operator.staffKpiDtos?.machineTimeGoal,
+                                    manufacturingPoint: operator.staffKpiDtos?.manufacturingPoint,
+                                    oleGoal: operator.staffKpiDtos?.oleGoal,
+                                    groupId: operator.staffKpiDtos?.groupId,
+                                    status: 0,
+                                }),
+                            }
+                        );
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.message || "Gửi thất bại ở response 1.");
+                        }
+                        toast.success("Chỉnh sửa thành công!");
+                        location.reload()
+                    } catch (error) {
+                        toast.error("Xóa nhân viên thất bại. Vui lòng thử lại.");
+                        console.error(error);
+                    }
+                }
+
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -169,19 +211,29 @@ function getColumns({
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(operator.id)}>
+                            <DropdownMenuItem
+                                onClick={() => handleDelete(operator.id)}
+                            >
                                 Xóa
                             </DropdownMenuItem>
                             <DropdownMenuItem
+                                // onClick={() => {
+                                //     setEditingOperator(operator)
+                                //     setShowForm(true)
+                                // }}
                                 onClick={() => {
-                                    setEditingOperator(operator)
-                                    setShowForm(true)
+                                    if (operator.status === 1) {
+                                        setEditingOperator(operator);
+                                        setShowForm(true);
+                                    } else {
+                                        toast.error("Nhân viên đã nghỉ việc, không thể chỉnh sửa!");
+                                    }
                                 }}
                             >
                                 Chỉnh sửa
                             </DropdownMenuItem>
                         </DropdownMenuContent>
-                    </DropdownMenu>
+                    </DropdownMenu >
                 )
             },
         },

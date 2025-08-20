@@ -49,18 +49,6 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
         oleGoal: null,
         groupId: ""
     })
-
-    // const [newStaffKPI, setNewStaffKPI] = useState<StaffKPI>({
-    //     year: null,
-    //     month: null,
-    //     pgTimeGoal: null,
-    //     machineTimeGoal: null,
-    //     manufacturingPoint: null,
-    //     oleGoal: null,
-    //     workGoal: null,
-    //     kpi: null,
-    // })
-
     const handleSubmit = async () => {
         // Kiểm tra thông tin bắt buộc của newStaff
         if (
@@ -73,7 +61,6 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
             toast.error("Vui lòng nhập đầy đủ thông tin nhân viên.");
             return;
         }
-
         // Kiểm tra thông tin bắt buộc của newStaffKPI
         if (
             newStaff.year === null ||
@@ -88,7 +75,6 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
             toast.error("Vui lòng nhập đầy đủ thông tin mục tiêu nhân viên.");
             return;
         }
-
         try {
             const response = await fetch(
                 `${urlLink}/api/staff`,
@@ -144,7 +130,6 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
         }
     };
 
-
     const { data: group, loading, error } = useGroup("staff")
 
     return (
@@ -155,22 +140,6 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                     <div className="grid gap-4 grid-cols-3">
                         <div className="grid">
                             <Label htmlFor="staffId" className="text-lg !font-normal">Mã nhân viên</Label>
-                            {/* <Input
-                                id="staffId"
-                                placeholder="Mã nhân viên"
-                                // type="number"
-                                // inputMode="numeric"
-                                value={newStaff.staffId?.toString() ?? ""}
-                                onChange={(e) => {
-                                    const val = e.target.value;
-                                    setNewStaff({
-                                        ...newStaff,
-                                        staffId: val === "" ? null : Number(val),
-                                    });
-                                }}
-                                className="!text-lg placeholder:text-[16px]"
-                            /> */}
-
                             <Input
                                 id="staffId"
                                 placeholder="Mã nhân viên"
