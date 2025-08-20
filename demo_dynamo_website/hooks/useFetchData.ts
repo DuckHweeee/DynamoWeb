@@ -13,6 +13,8 @@ const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 //     }, [])
 //     return processes
 // }
+
+//Cần viết dạng này nhiều hơn (phát triển nếu kịp thời gian) 
 export const useFetchProcesses = () => {
     const [data, setData] = useState<Process2[]>([]);
 
@@ -50,5 +52,6 @@ export function useFetchOperators() {
             .then((res) => setOperator(res.data))
             .catch((err) => console.error("Error fetching operator:", err))
     }, [])
+    // console.log(operator)
     return operator
 }

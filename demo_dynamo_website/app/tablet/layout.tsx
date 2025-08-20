@@ -18,6 +18,7 @@ const geistMono = Geist_Mono({
     subsets: ["latin"],
 });
 
+
 export default function TbaletLayout({
     children,
 }: {
@@ -42,17 +43,6 @@ export default function TbaletLayout({
                         </a>
                     </div>
                     <div className="flex gap-x-5">
-                        <Link href={"/tablet/newProcess"}>
-                            <Button
-                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
-                                    ${isNewProcess
-                                        ? "text-blue-950 border-blue-950 border-3 bg-white"
-                                        : " bg-white text-blue-950"
-                                    }`}
-                            >
-                                Khai Báo
-                            </Button>
-                        </Link>
                         <Link href={"/tablet/process"}>
                             <Button
                                 className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
@@ -62,6 +52,17 @@ export default function TbaletLayout({
                                     }`}
                             >
                                 Chu Trình
+                            </Button>
+                        </Link>
+                        <Link href={"/tablet/newProcess"}>
+                            <Button
+                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
+                                    ${isNewProcess
+                                        ? "text-blue-950 border-blue-950 border-3 bg-white"
+                                        : " bg-white text-blue-950"
+                                    }`}
+                            >
+                                Khai Báo
                             </Button>
                         </Link>
                         <Link href={"/tablet/operation"}>

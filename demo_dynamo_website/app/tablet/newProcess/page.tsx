@@ -42,8 +42,8 @@ export default function TabletProcess() {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
     // Phần chọn máy và nhân viên
-    const [selectedMachineId, setSelectedMachineId] = useState<string>("");
-    const [selectedOperatorId, setSelectedOperatorId] = useState<string>("");
+    // const [selectedMachineId, setSelectedMachineId] = useState<string>("");
+    // const [selectedOperatorId, setSelectedOperatorId] = useState<string>("");
 
     // Fetch Data
     const fetchedOperator = useFetchOperators()
@@ -51,43 +51,62 @@ export default function TabletProcess() {
     useEffect(() => {
         setStaff(fetchedOperator)
     }, [fetchedOperator])
+    // console.log("staff:")
+    // console.log(fetchedOperator)
 
     const fetchedMachine = useFetchMachines()
     const [machine2, setMachine2] = useState<Machine2[]>([])
     useEffect(() => {
         setMachine2(fetchedMachine)
     }, [fetchedMachine])
+    // console.log("machine2")
+    // console.log(machine2)
 
-    // const fetchedProcesses = useFetchProcesses()
+    // Fetch ToDo Progress
     const { data: fetchedProcesses, refetch } = useFetchProcesses();
-    const [processData2, setProcessData2] = useState<Process2[]>([])
+    // const [processData2, setProcessData2] = useState<Process2[]>([])
+    const [todo, setTodo] = useState<Process2[]>([]);
     useEffect(() => {
-        setProcessData2(fetchedProcesses)
-    }, [fetchedProcesses])
+        const fetchProcess = async () => {
+            try {
+                const res = await axios.get<Process2[]>(
+                    `${URL}/api/drawing-code-process`
+                );
+                const filteredData = res.data.filter(item => item.planDto?.plannerId === null);
+                setTodo(filteredData);
+            } catch (error) {
+                console.error("Lỗi khi lấy dữ liệu process:", error);
+            }
+        };
+        fetchProcess();
+    }, []);
+    // useEffect(() => {
+    //     setProcessData2(fetchedProcesses)
+    // }, [fetchedProcesses])
 
     // Handle Submit
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (processId: string) => {
-        if (!selectedMachineId || !selectedOperatorId) {
-            toast.error("Vui lòng chọn đầy đủ thông tin.");
-            return;
-        }
+    // const handleSubmit = async (processId: string) => {
+    //     if (!selectedMachineId || !selectedOperatorId) {
+    //         toast.error("Vui lòng chọn đầy đủ thông tin.");
+    //         return;
+    //     }
 
-        setLoading(true);
-        try {
-            const url = `${URL}/api/drawing-code-process/receive?drawingCodeProcess_id=${processId}&&staffId=${selectedOperatorId}&&machineId=${selectedMachineId}`;
-            await axios.post(url);
-            toast.success("Gửi thành công!");
-            // Refetch lại dữ liệu
-            await refetch();
+    //     setLoading(true);
+    //     try {
+    //         const url = `${URL}/api/drawing-code-process/receive?drawingCodeProcess_id=${processId}&&staffId=${selectedOperatorId}&&machineId=${selectedMachineId}`;
+    //         await axios.post(url);
+    //         toast.success("Gửi thành công!");
+    //         // Refetch lại dữ liệu
+    //         await refetch();
 
-        } catch (error) {
-            toast.error("Gửi thất bại. Vui lòng thử lại.");
-        } finally {
-            setLoading(false);
-        }
-    };
+    //     } catch (error) {
+    //         toast.error("Gửi thất bại. Vui lòng thử lại.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
 
     //Column
@@ -95,7 +114,8 @@ export default function TabletProcess() {
         useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
     const [globalFilter, setGlobalFilter] = useState("")
-    const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
+    // const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
+
     const columns: ColumnDef<Process2>[] = [
         {
             accessorKey: "processType",
@@ -195,7 +215,8 @@ export default function TabletProcess() {
             cell: ({ row }) => <div>{row.getValue("pgTime")}</div>,
         },
         {
-            accessorKey: "pgTime",
+            accessorKey: "planDto.staffId",
+            accessorFn: (row) => row.planDto?.staffId ?? "",
             header: ({ column }) => {
                 return (
                     <Button
@@ -208,10 +229,16 @@ export default function TabletProcess() {
                     </Button>
                 )
             },
-            cell: ({ row }) => <div>{row.getValue("pgTime")}</div>,
+            cell: ({ row }) => {
+                const staffId = row.original.planDto?.staffId;
+                const foundStaff = staff.find(st => st.staffId === staffId);
+                return <div>{foundStaff ? foundStaff.staffName : ""}</div>;
+            }
+
         },
         {
-            accessorKey: "pgTime",
+            accessorKey: "planDto.machineId",
+            accessorFn: (row) => row.planDto?.machineId ?? "",
             header: ({ column }) => {
                 return (
                     <Button
@@ -224,11 +251,15 @@ export default function TabletProcess() {
                     </Button>
                 )
             },
-            cell: ({ row }) => <div>{row.getValue("pgTime")}</div>,
+            cell: ({ row }) => {
+                const machineId = row.original.planDto?.machineId;
+                const foundMachine = machine2.find(mc => mc.machineId === machineId);
+                return <div>{foundMachine ? foundMachine.machineName : ""}</div>;
+            }
         },
     ];
     const table = useReactTable({
-        data: processData2,
+        data: todo,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -253,6 +284,7 @@ export default function TabletProcess() {
     return (
         <>
             <div className="w-full py-3 px-3 bg-white">
+                {/* Header */}
                 <div className="flex items-center justify-between pb-3">
                     <p className="text-3xl capitalize font-semibold">Danh sách mã bản vẽ trong quá trình</p>
                     <div className="flex flex-row justify-between items-center gap-3">
@@ -274,6 +306,8 @@ export default function TabletProcess() {
                         </Button>
                     </div>
                 </div>
+
+                {/* Table */}
                 <div className="border">
                     {
                         loading ? (
@@ -314,10 +348,10 @@ export default function TabletProcess() {
                                                 <Fragment key={row.id}>
                                                     <TableRow
                                                         className={`${isOdd ? "bg-gray-100" : ""} text-2xl font-semibold !border-none`}
-                                                        onClick={() => setExpandedRowId(prev =>
-                                                            prev === row.original.processId ? null : row.original.processId
-                                                        )
-                                                        }
+                                                    // onClick={() => setExpandedRowId(prev =>
+                                                    //     prev === row.original.processId ? null : row.original.processId
+                                                    // )
+                                                    // }
                                                     >
                                                         {row.getVisibleCells().map((cell) => (
                                                             <TableCell key={cell.id} className="text-center">
@@ -407,6 +441,8 @@ export default function TabletProcess() {
                         )
                     }
                 </div>
+
+                {/* Phân trang */}
                 <div className="flex items-center justify-end space-x-2 py-4">
                     <div className="text-lg text-muted-foreground flex-1">
                         Trang {table.getState().pagination.pageIndex + 1} /{" "}
@@ -438,19 +474,15 @@ export default function TabletProcess() {
                 open={isCreating}
                 onOpenChange={async (open) => {
                     setIsCreating(open);
-                    // if (!open) {
-                    //     const response2 = await axios.get<Process2>(
-                    //         `${URL}/api/drawing-code-process/machine/${selectedMachineId}`
-                    //     );
-                    //     setProcess(response2.data);
-
-                    //     const response3 = await axios.get<CurrentStaff[]>(
-                    //         `${URL}/api/current-staff`
-                    //     );
-                    //     setCurrentStaff(response3.data);
-                    // }
+                    if (!open) {
+                        const res = await axios.get<Process2[]>(
+                            `${URL}/api/drawing-code-process`
+                        );
+                        const filteredData = res.data.filter(item => item.planDto?.plannerId === null);
+                        setTodo(filteredData);
+                    }
                 }}
-                selectedMachineId={selectedMachineId} staffList={staff}
+                machineList={machine2} staffList={staff}
             />
         </>
     )

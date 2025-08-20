@@ -58,12 +58,12 @@ export function NavMain({
                             <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
                                     <SidebarMenuButton
-                                        className={`text-lg ${isGroupActive ? "text-[#073c7e] font-bold" : ""}`}
+                                        className={`text-xl ${isGroupActive ? "text-[#073c7e] font-bold" : ""}`}
                                     >
                                         <Link href={item.url}>
                                             {item.icon && <item.icon />}
                                         </Link>
-                                        <span>{item.title}</span>
+                                        <span className="font-semibold">{item.title}</span>
                                         <ChevronRight
                                             className={`ml-auto transition-transform duration-200 ${isGroupActive ? "rotate-90" : ""
                                                 }`}
@@ -92,7 +92,7 @@ export function NavMain({
                                                                     )
                                                                 }
                                                             >
-                                                                <span>{subItem.title}</span>
+                                                                <span className="text-lg">{subItem.title}</span>
                                                             </Link>
                                                         </SidebarMenuSubButton>
                                                     </SidebarMenuSubItem>

@@ -29,8 +29,8 @@ export const MachineStatusProvider = ({ children }: { children: React.ReactNode 
             .then((res) => setMachineStatuses(res.data))
             .catch((err) => console.error("Error fetching machine:", err))
     }, [])
-    console.log("Trc khi co")
-    console.log(machineStatuses)
+    // console.log("Trc khi co")
+    // console.log(machineStatuses)
 
     useEffect(() => {
         const ws = new WebSocket(`${webSocketLink}/ws/users`)
@@ -46,8 +46,8 @@ export const MachineStatusProvider = ({ children }: { children: React.ReactNode 
                 // console.log(msg)
                 if (msg.type === "status" && Array.isArray(msg.data)) {
                     setMachineStatuses(msg.data)
-                    console.log("Sau khi có status")
-                    console.log(machineStatuses)
+                    // console.log("Sau khi có status")
+                    // console.log(machineStatuses)
                 }
             } catch (err) {
                 console.error(" Lỗi khi nhận thông tin, WebSocket error:", err)

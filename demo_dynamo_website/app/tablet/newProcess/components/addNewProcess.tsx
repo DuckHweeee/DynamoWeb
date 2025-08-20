@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { OrderDetailDto, Staff } from "@/lib/type"
+import { Machine2, OrderDetailDto, Staff } from "@/lib/type"
 import axios from "axios"
 import { toast } from "sonner"
 import { FlexibleCombobox } from "./FlexibleCombobox"
@@ -20,7 +20,7 @@ interface Props {
     open: boolean
     onOpenChange: (open: boolean) => void
     staffList: Staff[]
-    selectedMachineId: string
+    machineList: Machine2[]
 }
 interface ProcessingObject {
     id: string,
@@ -56,7 +56,7 @@ export default function CreateProcessDialog({
     open,
     onOpenChange,
     staffList,
-    selectedMachineId,
+    machineList,
 }: Props) {
     const [formData, setFormData] = useState({
         staffId: "",
@@ -66,6 +66,7 @@ export default function CreateProcessDialog({
         pgTime: "",
         partNumber: "",
         orderCode: "",
+        machineId: "",
     })
 
     // Đã test ok, còn thiếu trường hợp Mã hàng nằm ngoài thì bật 1 dialog để tạo mới sau đó mới được chọn
@@ -78,6 +79,7 @@ export default function CreateProcessDialog({
             "pgTime",
             "partNumber",
             "orderCode",
+            "machineId",
         ];
 
         const emptyFields = requiredFields.filter((field) => !formData[field as keyof typeof formData] || formData[field as keyof typeof formData] === "");
@@ -86,29 +88,30 @@ export default function CreateProcessDialog({
             toast.error("Vui lòng chọn đầy đủ thông tin.");
             return;
         }
+        // console.log(formData.machineId)
 
         // Hiển thị thông tin để xác nhận
-        const confirmMessage = `
+        const confirmMessage =
+            `
                         Xác nhận gửi thông tin sau:
-
-                        - Nhân viên: ${staffList.find(st => st.staffId === Number(formData.staffId))?.staffName || formData.staffId}
                         - Đối tượng gia công: ${formData.processType}
+                        - Mã hàng: ${formData.orderCode}
                         - Thứ tự sản phẩm: ${formData.partNumber}
                         - Thứ tự gia công: ${formData.stepNumber}
                         - Điểm gia công: ${formData.manufacturingPoint}
                         - Giờ PG: ${formData.pgTime}
-                        - Mã hàng: ${formData.orderCode}
-
+                        - Nhân viên: ${staffList.find(st => st.staffId === Number(formData.staffId))?.staffName || formData.staffId} - ${formData.staffId}
+                        - Máy: ${machineList.find(mc => mc.machineId === Number(formData.machineId))?.machineName || formData.machineId}
+                        
                         Bạn có chắc chắn muốn gửi không?
                 `.trim();
-
         if (!window.confirm(confirmMessage)) {
             return;
         }
 
         try {
             const response = await fetch(
-                `${urlLink}/api/drawing-code-process/by-operator`,
+                `${urlLink}/api/drawing-code-process`,
                 {
                     method: "POST",
                     headers: {
@@ -121,9 +124,8 @@ export default function CreateProcessDialog({
                         processType: formData.processType,
                         pgTime: Number(formData.pgTime),
                         orderCode: formData.orderCode,
-                        machineId: Number(selectedMachineId),
+                        machineId: Number(formData.machineId),
                         staffId: formData.staffId,
-                        operatorHistories: null
                     }),
                 }
             );
@@ -141,6 +143,7 @@ export default function CreateProcessDialog({
                 pgTime: "",
                 partNumber: "",
                 orderCode: "",
+                machineId: "",
             });
             onOpenChange(false);
         } catch (error) {
@@ -172,7 +175,6 @@ export default function CreateProcessDialog({
                 <DialogHeader>
                     <DialogTitle className="text-3xl font-bold">Tạo Mới Thông Tin Gia Công</DialogTitle>
                 </DialogHeader>
-
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 pb-6">
                     <div className="grid gap-1">
                         <Label htmlFor="process" className="text-2xl">Đối tượng gia công</Label>
@@ -318,12 +320,12 @@ export default function CreateProcessDialog({
                             </SelectContent>
                         </Select> */}
                         <FlexibleCombobox
-                            options={staffList}
-                            value={formData.staffId}
-                            onChange={(val) => setFormData({ ...formData, staffId: val })}
-                            displayField="staffId"
-                            valueField="staffId"
-                            placeholder="Chọn nhân viên"
+                            options={machineList}
+                            value={formData.machineId}
+                            onChange={(val) => setFormData({ ...formData, machineId: val })}
+                            displayField="machineName"
+                            valueField="machineId"
+                            placeholder="Chọn Máy"
                             allowCustom={false}
                         />
                     </div>
