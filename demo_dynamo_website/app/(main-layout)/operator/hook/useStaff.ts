@@ -22,6 +22,31 @@ export function useStaff() {
 
         fetchData()
     }, [])
+    return { data, loading, error }
+}
 
+export interface Group {
+    groupId: string
+    groupName: string
+    groupType: string
+}
+export function useGroup(groupType: string = "staff") {
+    const [data, setData] = useState<Group[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await axios.get<Group[]>(`${url}/api/group`)
+                const filtered = res.data.filter((g) => g.groupType === groupType)
+                setData(filtered)
+            } catch (err) {
+                setError("Lỗi khi tải danh sách nhân viên")
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchData()
+    }, [])
     return { data, loading, error }
 }

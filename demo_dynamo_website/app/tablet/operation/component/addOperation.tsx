@@ -7,18 +7,10 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import {
-    Select,
-    SelectTrigger,
-    SelectValue,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-} from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Staff } from "@/lib/type"
+import { OrderDetailDto, Staff } from "@/lib/type"
 import { FlexibleCombobox } from "./FlexibleCombobox"
 import axios from "axios"
 import { toast } from "sonner"
@@ -58,14 +50,7 @@ const processingObjectList: ProcessingObject[] = [
     },
 ]
 
-interface OrderDetail {
-    orderDetailId: string,
-    drawingCodeId: string
-    orderId: string
-    orderCode: string
-}
-
-const urlLink = "http://10.70.166.119:8080"
+const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export default function CreateProcessDialog({
     open,
@@ -85,7 +70,6 @@ export default function CreateProcessDialog({
 
     // Đã test ok, còn thiếu trường hợp Mã hàng nằm ngoài thì bật 1 dialog để tạo mới sau đó mới được chọn
     const handleSubmit = async () => {
-        // Kiểm tra các trường bắt buộc
         const requiredFields = [
             "staffId",
             "processType",
@@ -100,6 +84,25 @@ export default function CreateProcessDialog({
 
         if (emptyFields.length > 0) {
             toast.error("Vui lòng chọn đầy đủ thông tin.");
+            return;
+        }
+
+        // Hiển thị thông tin để xác nhận
+        const confirmMessage = `
+                        Xác nhận gửi thông tin sau:
+
+                        - Nhân viên: ${staffList.find(st => st.staffId === Number(formData.staffId))?.staffName || formData.staffId}
+                        - Đối tượng gia công: ${formData.processType}
+                        - Thứ tự sản phẩm: ${formData.partNumber}
+                        - Thứ tự gia công: ${formData.stepNumber}
+                        - Điểm gia công: ${formData.manufacturingPoint}
+                        - Giờ PG: ${formData.pgTime}
+                        - Mã hàng: ${formData.orderCode}
+
+                        Bạn có chắc chắn muốn gửi không?
+                `.trim();
+
+        if (!window.confirm(confirmMessage)) {
             return;
         }
 
@@ -147,11 +150,11 @@ export default function CreateProcessDialog({
     };
 
     // Fetch mã hàng
-    const [orderDetail, setOrderDetail] = useState<OrderDetail[] | null>(null);
+    const [orderDetail, setOrderDetail] = useState<OrderDetailDto[] | null>(null);
     useEffect(() => {
         const fetchOrderDetail = async () => {
             try {
-                const response = await axios.get<OrderDetail[]>(
+                const response = await axios.get<OrderDetailDto[]>(
                     `${urlLink}/api/order-detail`
                 );
                 setOrderDetail(response.data);
@@ -163,10 +166,9 @@ export default function CreateProcessDialog({
         fetchOrderDetail();
     }, []);
 
-
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="w-full !max-w-6xl top-3 translate-y-0 !gap-0 !px-8">
+            <DialogContent className="w-full !max-w-6xl top-3 max-[1300px]:!top-23  translate-y-0 !gap-0 !px-8">
                 <DialogHeader>
                     <DialogTitle className="text-3xl font-bold">Tạo Mới Thông Tin Gia Công</DialogTitle>
                 </DialogHeader>
@@ -194,7 +196,7 @@ export default function CreateProcessDialog({
                             displayField="orderCode"
                             valueField="orderCode"
                             placeholder="ID Mã Hàng"
-                            allowCustom={true}
+                            allowCustom={false}
                         />
                     </div>
                     <div className="grid gap-1">

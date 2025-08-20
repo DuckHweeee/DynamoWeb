@@ -42,9 +42,10 @@ export default function TbaletLayout({
                     <div className="flex gap-x-5">
                         <Link href={"/tablet/process"}>
                             <Button
-                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${isProcess
-                                    ? "text-blue-950 border-blue-950 border-3 bg-white"
-                                    : " bg-white text-blue-950"
+                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm max-[1300px]:text-4xl max-[1300px]:!py-8 max-[1300px]:!px-10
+                                    ${isProcess
+                                        ? "text-blue-950 border-blue-950 border-3 bg-white"
+                                        : " bg-white text-blue-950"
                                     }`}
                             >
                                 Chu Trình
@@ -53,9 +54,10 @@ export default function TbaletLayout({
                         <Link href={"/tablet/operation"}>
                             <Button
                                 variant="outline"
-                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${isProcess
-                                    ? " bg-white"
-                                    : "text-blue-950 border-blue-950 border-3"
+                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm max-[1300px]:text-4xl max-[1300px]:!py-8 max-[1300px]:!px-10
+                                     ${isProcess
+                                        ? " bg-white"
+                                        : "text-blue-950 border-blue-950 border-3"
                                     }`}
                             >
                                 Vận Hành
@@ -66,7 +68,7 @@ export default function TbaletLayout({
                 <MachineStatusProvider>
                     {children}
                 </MachineStatusProvider>
-                <Toaster richColors position="top-right" />
+                <Toaster richColors position="top-left" />
             </body>
         </html>
     );

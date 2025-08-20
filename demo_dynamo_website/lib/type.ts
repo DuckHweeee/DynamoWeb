@@ -69,7 +69,7 @@ export type DrawingCode2 = {
 
 
 
-// Tablet - Dữ liệu thật
+// Tablet - Dữ liệu thật--------------------------------------------------------------------------------------------------------------
 export interface Process2 {
     processId: string;
     partNumber: number;
@@ -103,45 +103,66 @@ export interface Machine2 {
     machineType: string;
     machineGroup: string;
     machineOffice: string;
+    machineStatus: number;
     status: number;
     createdDate: string;
     updatedDate: string;
     groupId: string;
-    machineKpiDtos: any; // Nếu bạn có định nghĩa KPI chi tiết thì thay thế `any` bằng kiểu cụ thể
+    machineKpiDtos: any; // Cần trao đổi thêm
 }
-export interface Staff {
-    staffId: number | null;
-    staffName: string;
-    staffOffice: string;
-    staffSection: string;
-    shortName: string;
-    status: number;
-    groupId: string;
-    groupName?: string,
-    staffKpiDtos?: StaffKpiDto;
-    id: string;
-}
-export interface StaffKpiDto {
-    year: number;
-    month: number;
-    pgTimeGoal: number;
-    machineTimeGoal: number;
-    manufacturingPoint: number;
-    oleGoal: number;
-    workGoal: number;
-    kpi: number;
-    createdDate: string;
-    updatedDate: string;
-    staffId: number;
-    id: number;
-}
-
 export interface CurrentStaff {
     staffIdNumber: number
     staffId: string
     operatorName: string
     machineId: number
 }
+
+export interface Staff {
+    staffId: number | null;
+    staffName: string;
+    staffOffice: string;
+    staffSection: string;
+    shortName: string;
+    status: number | null;
+    groupId: string;
+    // staffKpiDtos?: StaffKpiDto;
+    groupName?: string,
+    id: string;
+}
+// export interface StaffKpiDto {
+//     year: number;
+//     month: number;
+//     pgTimeGoal: number;
+//     machineTimeGoal: number;
+//     manufacturingPoint: number;
+//     oleGoal: number;
+//     workGoal: number;
+//     kpi: number;
+//     createdDate: string;
+//     updatedDate: string;
+//     staffId: number;
+//     id: number;
+// }
+
+export interface StaffKPI {
+    kpiId?: number,
+    year: number | null,
+    month: number | null,
+    pgTimeGoal: number | null,
+    machineTimeGoal: number | null,
+    manufacturingPoint: number | null,
+    oleGoal: number | null,
+    workGoal: number | null,
+    kpi: number | null,
+
+}
+
+export interface StaffWithKPI extends Staff {
+    staffKpiDtos: StaffKPI[] | null;
+}
+
+
+
 
 
 

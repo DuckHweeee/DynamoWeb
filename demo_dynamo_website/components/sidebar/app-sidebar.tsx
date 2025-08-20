@@ -74,19 +74,19 @@ const data = {
                 //     url: "/dashboard",
                 // },
                 {
-                    title: "Machine",
+                    title: "Máy móc",
                     url: "/dashboard/machine",
                 },
                 {
-                    title: "Operation",
+                    title: "Người vận hành",
                     url: "/dashboard/operation",
                 },
                 {
-                    title: "Process",
+                    title: "Gia công chi tiết",
                     url: "/dashboard/process",
                 },
                 {
-                    title: "Drawing",
+                    title: "Bản vẽ",
                     url: "/dashboard/drawingCode",
                 },
             ],
