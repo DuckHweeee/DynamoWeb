@@ -5,7 +5,7 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "../../components/sidebar/app-sidebar";
 import { Toaster } from "sonner";
 
-import { ClientHeader } from "./component/clientHeader";
+import { ClientHeader } from "./components/clientHeader";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });

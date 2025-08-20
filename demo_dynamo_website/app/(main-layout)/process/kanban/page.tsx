@@ -45,7 +45,7 @@ const timeFormatter = new Intl.DateTimeFormat('vi-VN', {
 // Fetch process data from API
 const fetchProcessData = async (): Promise<ProcessData[]> => {
   try {
-    const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + 'api/drawing-code-process');
+    const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/drawing-code-process');
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

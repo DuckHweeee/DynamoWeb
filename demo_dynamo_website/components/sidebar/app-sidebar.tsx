@@ -139,7 +139,7 @@ const data = {
             items: [
                 {
                     title: "Kanban Process",
-                    url: "process/kanban",
+                    url: "/process/kanban",
                 },
                 {
                     title: "Process Table",

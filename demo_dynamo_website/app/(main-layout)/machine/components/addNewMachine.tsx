@@ -11,98 +11,100 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { SelectYear } from "./SelectYear"
 import { SelectMonth } from "./SelectMonth"
 import { useGroup } from "../hooks/useMachine"
+import { machineOfficeList } from "../lib/data"
+import { NewMachine } from "../lib/type"
 
 type AddMachineFormProps = {
     onAdd: (machine: Machine2) => void
     onCancel: () => void
 }
-interface NewMachine {
-    machineName: string,
-    machineType: string,
-    machineGroup: string,
-    machineOffice: string,
-    year: number | null,
-    month: number | null,
-    groupId: string,
-    machineMiningTarget: number | null,
-    oee: number | null
+const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-}
 export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps) {
-    const { data: group, loading, error } = useGroup("machine")
+    const { data: group, loading, error } = useGroup()
     const [newMachine, setNewMachine] = useState<NewMachine>({
         machineName: "",
         machineType: "",
-        machineGroup: "",
+        machineWork: "",
         machineOffice: "",
+        groupId: "",
+        groupName: "",
         year: null,
         month: null,
-        groupId: "",
         machineMiningTarget: null,
         oee: null
     })
 
-    // const handleSubmit = () => {
-    //     if (!newMachine.id || !newMachine.name || !newMachine.ma_may) {
-    //         toast.error("Vui lòng nhập đầy đủ thông tin.")
-    //         return
-    //     }
+    const handleSubmit = async () => {
+        // Kiểm tra thông tin bắt buộc
+        if (
+            !newMachine.machineName.trim() ||
+            !newMachine.machineOffice ||
+            !newMachine.machineType.trim() ||
+            !newMachine.machineWork.trim()
+        ) {
+            toast.error("Vui lòng nhập đầy đủ thông tin máy.");
+            return;
+        }
+        // Kiểm tra thông tin bắt buộc
+        if (
+            newMachine.groupId === null ||
+            newMachine.year === null ||
+            newMachine.month === null ||
+            newMachine.machineMiningTarget === null ||
+            newMachine.oee === null
+        ) {
+            toast.error("Vui lòng nhập đầy đủ thông tin mục tiêu máy.");
+            return;
+        }
+        try {
+            const response = await fetch(
+                `${urlLink}/api/machine`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        machineName: newMachine.machineName,
+                        machineType: newMachine.machineType,
+                        machineWork: newMachine.machineWork,
+                        machineOffice: newMachine.machineOffice,
+                        groupId: newMachine.groupId,
+                        year: newMachine.year,
+                        month: newMachine.month,
+                        machineMiningTarget: newMachine.machineMiningTarget,
+                        oee: newMachine.oee
+                    }),
+                }
+            );
 
-    //     onAdd(newMachine)
-
-    //     // Reset form
-    //     setNewMachine({
-    //         id: "",
-    //         name: "",
-    //         loai_may: "",
-    //         ma_may: "",
-    //     })
-    // }
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Gửi thất bại.");
+            }
+            toast.success("Thêm máy thành công!");
+            location.reload()
+            onCancel();
+            setNewMachine({
+                machineName: "",
+                machineType: "",
+                machineWork: "",
+                machineOffice: "",
+                groupId: "",
+                groupName: "",
+                year: null,
+                month: null,
+                machineMiningTarget: null,
+                oee: null
+            });
+        } catch (error) {
+            toast.error("Đã xảy ra lỗi khi gửi.");
+        }
+    };
 
     return (
         <div className="grid gap-3 w-full h-full">
-            {/* <div className="grid gap-4">
-                <div className="grid gap-2">
-                    <Label htmlFor="id">STT</Label>
-                    <Input
-                        id="id"
-                        placeholder="STT"
-                    // value={newMachine.id}
-                    // onChange={(e) => setNewMachine({ ...newMachine, id: e.target.value })}
-                    />
-                </div>
-
-                <div className="grid gap-2">
-                    <Label htmlFor="name">Tên máy</Label>
-                    <Input
-                        id="name"
-                        placeholder="Tên máy"
-                    // value={newMachine.name}
-                    // onChange={(e) => setNewMachine({ ...newMachine, name: e.target.value })}
-                    />
-                </div>
-
-                <div className="grid gap-2">
-                    <Label htmlFor="loai_may">Loại máy</Label>
-                    <Input
-                        id="loai_may"
-                        placeholder="Loại máy"
-                    // value={newMachine.loai_may}
-                    // onChange={(e) => setNewMachine({ ...newMachine, loai_may: e.target.value })}
-                    />
-                </div>
-
-                <div className="grid gap-2">
-                    <Label htmlFor="ma_may">Mã máy</Label>
-                    <Input
-                        id="ma_may"
-                        placeholder="Mã máy"
-                    // value={newMachine.ma_may}
-                    // onChange={(e) => setNewMachine({ ...newMachine, ma_may: e.target.value })}
-                    />
-                </div>
-            </div> */}
-
             <div className="grid gap-7">
                 <div className="px-3 relative rounded-sm border-2 pt-5 pb-6">
                     <div className="text-2xl pb-1 font-medium !top-[-18] absolute bg-white px-2">Thông tin máy</div>
@@ -120,25 +122,18 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
 
                         <div className="grid">
                             <Label htmlFor="cong_viec" className="text-lg !font-normal">Phòng quản lý</Label>
-                            {/* <Input
-                                id="cong_viec"
-                                placeholder="Phòng quản lý"
-                                value={newMachine.machineOffice}
-                                onChange={(e) => setNewMachine({ ...newMachine, machineOffice: e.target.value })}
-                                className="!text-lg placeholder:text-[16px]"
-                            /> */}
                             <Select
-                                value={newMachine.groupId?.toString() ?? ""}
-                                onValueChange={(value) => setNewMachine({ ...newMachine, groupId: value })}
+                                value={newMachine.machineOffice?.toString() ?? ""}
+                                onValueChange={(value) => setNewMachine({ ...newMachine, machineOffice: value })}
                             >
                                 <SelectTrigger className="w-auto text-lg [&>span]:text-[16px]">
                                     <SelectValue placeholder="Chọn nhóm" />
                                 </SelectTrigger>
                                 <SelectContent id="nhom">
                                     <SelectGroup>
-                                        {group.map((g) => (
-                                            <SelectItem className="text-lg" key={g.groupId} value={g.groupId.toString()}>
-                                                {g.groupName}
+                                        {machineOfficeList.map((g) => (
+                                            <SelectItem className="text-lg" key={g.name} value={g.name.toString()}>
+                                                {g.name}
                                             </SelectItem>
                                         ))}
                                     </SelectGroup>
@@ -158,12 +153,12 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                         </div>
 
                         <div className="grid">
-                            <Label htmlFor="phong_ban" className="text-lg !font-normal">Nhóm máy</Label>
+                            <Label htmlFor="phong_ban" className="text-lg !font-normal">Công Việc</Label>
                             <Input
                                 id="phong_ban"
-                                placeholder="Nhóm máy"
-                                value={newMachine.machineGroup}
-                                onChange={(e) => setNewMachine({ ...newMachine, machineGroup: e.target.value })}
+                                placeholder="Công Việc"
+                                value={newMachine.machineWork}
+                                onChange={(e) => setNewMachine({ ...newMachine, machineWork: e.target.value })}
                                 className="!text-lg placeholder:text-[16px]"
                             />
                         </div>
@@ -248,7 +243,7 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                                 onChange={(e) =>
                                     setNewMachine({
                                         ...newMachine,
-                                        machineMiningTarget: e.target.value === "" ? null : Number(e.target.value),
+                                        oee: e.target.value === "" ? null : Number(e.target.value),
                                     })
                                 }
                                 className="!text-lg placeholder:text-[16px]"
@@ -260,12 +255,15 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
 
             <div className="flex gap-4 pt-2 justify-end">
                 <Button
-                    // onClick={handleSubmit} 
-                    className="bg-[#074695] hover:bg-[#0754B4]">
-                    Lưu
-                </Button>
-                <Button variant="outline" onClick={onCancel}>
+                    className="text-xl py-6 px-10 cursor-pointer"
+                    variant="outline"
+                    onClick={onCancel}>
                     Hủy
+                </Button>
+                <Button
+                    onClick={handleSubmit}
+                    className="bg-[#074695] hover:bg-[#0754B4] text-xl py-6 px-10 cursor-pointer">
+                    Lưu
                 </Button>
             </div>
         </div>

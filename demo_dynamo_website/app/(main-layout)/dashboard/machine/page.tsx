@@ -14,12 +14,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { ReportTime } from "../component/reporTime";
-import MachineRunBarChart2 from "../component/machineRunBarChart2";
-import { MachinePieChart } from "../component/machinePieChart";
-import { SumRealTime } from "../component/sumRealTime";
-import { MachineProcessBarChart } from "../component/machineProcessBarChart";
-import MachineTable from "../component/machineTable";
+import { ReportTime } from "../components/reporTime";
+import MachineRunBarChart2 from "../components/machineRunBarChart2";
+import { MachinePieChart } from "../components/machinePieChart";
+import { SumRealTime } from "../components/sumRealTime";
+import { MachineProcessBarChart } from "../components/machineProcessBarChart";
+import MachineTable from "../components/machineTable";
 import { useState } from "react";
 const chartItems = [
     { label: "Máy Đang Chạy", value: 12, fill: "#0ea5e9" },     // blue

@@ -16,7 +16,7 @@ export function useStaffWithKPI(idStaffStrig: string) {
                 const res = await axios.get(`${url}/api/staff/${idStaffStrig}`)
                 setData(res.data)
             } catch (err) {
-                setError("Lỗi khi tải danh sách nhân viên")
+                setError("Lỗi khi tải thông tin")
             } finally {
                 setLoading(false)
             }
