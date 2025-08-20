@@ -138,6 +138,10 @@ const data = {
             icon: SquarePen,
             items: [
                 {
+                    title: "Kanban Process",
+                    url: "process/kanban",
+                },
+                {
                     title: "Process Table",
                     url: "/process",
                 },
