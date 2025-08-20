@@ -40,7 +40,7 @@ export default function EditStaffForm({
     staffList
 }: EditStaffFormProps) {
     // Lấy các group hiện có
-    const { data: group, loading, error } = useGroup("staff")
+    const { data: group, loading, error } = useGroup()
 
     // Staff With KPI
     const { data: staffWithKPI } = useStaffWithKPI(idStaffString)

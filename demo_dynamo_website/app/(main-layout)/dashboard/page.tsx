@@ -1,16 +1,16 @@
 "use client"
 
 import { MonitorDot, TrendingDown, TrendingUp } from "lucide-react"
-import MachineRunBarChart from "./component/machineRunBarChart"
-import MachineRunBarChart2 from "./component/machineRunBarChart2"
-import { MachineRunPieChart } from "./component/machineRunPieChart"
-import { MachinePieChart } from "./component/machinePieChart"
-import { SumRealTime } from "./component/sumRealTime"
-import { MachineProcessBarChart } from "./component/machineProcessBarChart"
-import MachineTable from "./component/machineTable"
-import { ReportTime } from "./component/reporTime"
-import OperatorTable from "./component/operatorTable"
-import DrawingCodeTable from "./component/drawingTable"
+import MachineRunBarChart from "./components/machineRunBarChart"
+import MachineRunBarChart2 from "./components/machineRunBarChart2"
+import { MachineRunPieChart } from "./components/machineRunPieChart"
+import { MachinePieChart } from "./components/machinePieChart"
+import { SumRealTime } from "./components/sumRealTime"
+import { MachineProcessBarChart } from "./components/machineProcessBarChart"
+import MachineTable from "./components/machineTable"
+import { ReportTime } from "./components/reporTime"
+import OperatorTable from "./components/operatorTable"
+import DrawingCodeTable from "./components/drawingTable"
 
 import { Calendar } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";

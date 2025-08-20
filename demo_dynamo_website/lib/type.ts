@@ -201,56 +201,56 @@ export interface Group {
 
 
 
-export interface OrderDetailDto {
-  orderDetailId: string;
-  drawingCodeId: string;
-  drawingCodeName: string;
-  orderId: string;
-  poNumber: string;
-  orderCode: string;
-  quantity: number;
-  orderType: string;
-  createdDate: string;
-  updatedDate: string;
-}
+// export interface OrderDetailDto {
+//   orderDetailId: string;
+//   drawingCodeId: string;
+//   drawingCodeName: string;
+//   orderId: string;
+//   poNumber: string;
+//   orderCode: string;
+//   quantity: number;
+//   orderType: string;
+//   createdDate: string;
+//   updatedDate: string;
+// }
 
 export interface MachineDto {
-  machineId: number;
-  machineName: string;
-  machineType: string;
-  machineGroup: string;
-  machineOffice: string;
-  status: number;
-  createdDate: string;
-  updatedDate: string;
-  groupId: string;
-  groupName: string;
-  machineKpiDtos: any;
+    machineId: number;
+    machineName: string;
+    machineType: string;
+    machineGroup: string;
+    machineOffice: string;
+    status: number;
+    createdDate: string;
+    updatedDate: string;
+    groupId: string;
+    groupName: string;
+    machineKpiDtos: any;
 }
 
 export interface StaffDto {
-  staffId?: string;
-  staffName?: string;
-  // Add other staff properties as needed
+    staffId?: string;
+    staffName?: string;
+    // Add other staff properties as needed
 }
 
 export interface ProcessData {
-  processId: string;
-  partNumber: number;
-  stepNumber: number;
-  manufacturingPoint: number;
-  processType: string;
-  processStatus: number; // 1: Waiting, 2: In Progress, 3: Completed
-  pgTime: number;
-  startTime: string | null;
-  endTime: string | null;
-  createdDate: string;
-  updatedDate: string;
-  isPlan: number;
-  status: number;
-  orderDetailDto: OrderDetailDto | null; // Make orderDetailDto optional
-  machineDto: MachineDto | null; // Make machineDto optional
-  staffDtos: StaffDto[] | null;
-  planDto: any;
-  processTimeDto: any;
+    processId: string;
+    partNumber: number;
+    stepNumber: number;
+    manufacturingPoint: number;
+    processType: string;
+    processStatus: number; // 1: Waiting, 2: In Progress, 3: Completed
+    pgTime: number;
+    startTime: string | null;
+    endTime: string | null;
+    createdDate: string;
+    updatedDate: string;
+    isPlan: number;
+    status: number;
+    orderDetailDto: OrderDetailDto | null; // Make orderDetailDto optional
+    machineDto: MachineDto | null; // Make machineDto optional
+    staffDtos: StaffDto[] | null;
+    planDto: any;
+    processTimeDto: any;
 }

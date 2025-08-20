@@ -130,7 +130,7 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
         }
     };
 
-    const { data: group, loading, error } = useGroup("staff")
+    const { data: group, loading, error } = useGroup()
 
     return (
         <div className="grid gap-3 w-full">
@@ -274,12 +274,14 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                         kpi: e.target.value === "" ? null : Number(e.target.value),
                                     })
                                 }
+                                className="!text-lg placeholder:text-[16px]"
                             />
                         </div>
 
                         <div className="grid gap-1">
                             <Label htmlFor="workGoal" className="text-lg !font-normal">Mục tiêu nhân viên làm việc</Label>
                             <Input
+                                className="!text-lg placeholder:text-[16px]"
                                 id="workGoal"
                                 placeholder="Mục tiêu làm việc"
                                 type="number"
@@ -299,6 +301,7 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="Mục tiêu giờ PG"
                                 type="number"
                                 inputMode="numeric"
+                                className="!text-lg placeholder:text-[16px]"
                                 value={newStaff.pgTimeGoal !== null ? newStaff.pgTimeGoal.toString() : ""}
                                 // value={newStaffKPI.pgTimeGoal?.toString() ?? undefined}
                                 onChange={(e) =>
@@ -313,6 +316,7 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="Mục tiêu giờ máy"
                                 type="number"
                                 inputMode="numeric"
+                                className="!text-lg placeholder:text-[16px]"
                                 value={newStaff.machineTimeGoal !== null ? newStaff.machineTimeGoal.toString() : ""}
                                 // value={newStaffKPI.machineTimeGoal?.toString() ?? undefined}
                                 onChange={(e) =>
@@ -327,6 +331,7 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="Mục tiêu điểm gia công"
                                 type="number"
                                 inputMode="numeric"
+                                className="!text-lg placeholder:text-[16px]"
                                 value={newStaff.manufacturingPoint !== null ? newStaff.manufacturingPoint.toString() : ""}
                                 // value={newStaffKPI.manufacturingPoint?.toString() ?? undefined}
                                 onChange={(e) =>
@@ -341,6 +346,7 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="Mục tiêu Ole"
                                 type="number"
                                 inputMode="numeric"
+                                className="!text-lg placeholder:text-[16px]"
                                 value={newStaff.oleGoal !== null ? newStaff.oleGoal.toString() : ""}
                                 // value={newStaffKPI.oleGoal?.toString() ?? undefined}
                                 onChange={(e) =>
@@ -352,7 +358,7 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                 </div>
             </div>
             <div className="flex gap-4 justify-end">
-                <Button variant="outline" onClick={onCancel} className="py-6 px-10 cursor-pointer text-xl">
+                <Button variant="outline" onClick={onCancel} className="text-xl py-6 px-10 cursor-pointer">
                     Hủy
                 </Button>
                 <Button onClick={handleSubmit} className="text-xl bg-[#074695] hover:bg-[#0754B4] py-6 px-10 cursor-pointer">

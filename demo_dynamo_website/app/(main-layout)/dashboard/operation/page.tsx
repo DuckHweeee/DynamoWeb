@@ -1,7 +1,7 @@
 "use client"
-import { MachineProcessBarChart } from "../component/machineProcessBarChart";
-import OperatorTable from "../component/operatorTable";
-import { ReportTime } from "../component/reporTime";
+import { MachineProcessBarChart } from "../components/machineProcessBarChart";
+import OperatorTable from "../components/operatorTable";
+import { ReportTime } from "../components/reporTime";
 
 import { Calendar } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";

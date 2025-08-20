@@ -37,8 +37,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 
 import { Machine, Machine2 } from "@/lib/type"
 import { mockMachines } from "@/lib/dataDemo"
-import EditMachineForm from "../component/editMachine"
-import AddMachineForm from "../component/addNewMachine"
+import EditMachineForm from "../components/editMachine"
+import AddMachineForm from "../components/addNewMachine"
 import { useMachine } from "../hooks/useMachine"
 
 function getColumns({
@@ -57,7 +57,7 @@ function getColumns({
         {
             accessorKey: "machineName",
             header: ({ column }) => (
-                <Button className="text-lg font-bold" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Tên Máy <ArrowUpDown />
                 </Button>
             ),
@@ -66,7 +66,7 @@ function getColumns({
         {
             accessorKey: "machineType",
             header: ({ column }) => (
-                <Button className="text-lg font-bold" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Loại Máy <ArrowUpDown />
                 </Button>
             ),
@@ -75,8 +75,8 @@ function getColumns({
         {
             accessorKey: "machineWork",
             header: ({ column }) => (
-                <Button className="text-lg font-bold" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Nhóm máy <ArrowUpDown />
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Công Việc <ArrowUpDown />
                 </Button>
             ),
             cell: ({ row }) => <div className="capitalize">{row.getValue("machineWork")}</div>,
@@ -84,7 +84,7 @@ function getColumns({
         {
             accessorKey: "machineOffice",
             header: ({ column }) => (
-                <Button className="text-lg font-bold" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Phòng quản lý <ArrowUpDown />
                 </Button>
             ),
@@ -93,7 +93,7 @@ function getColumns({
         {
             accessorKey: "machineKpiDtos.groupName",
             header: ({ column }) => (
-                <Button className="text-lg font-bold" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Nhóm <ArrowUpDown />
                 </Button>
             ),
@@ -104,7 +104,7 @@ function getColumns({
             accessorKey: "createdDate",
             header: ({ column }) => (
                 <Button
-                    className="text-lg font-bold"
+                    className="text-lg font-bold cursor-pointer"
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
@@ -126,7 +126,11 @@ function getColumns({
         },
         {
             accessorKey: "status",
-            header: "Trạng thái",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Trạng thái <ArrowUpDown />
+                </Button>
+            ),
             cell: ({ row }) => {
                 const status = row.getValue("status") as number
                 const isRunning = status === 1
@@ -136,7 +140,7 @@ function getColumns({
                         className={`w-full px-4 py-1 rounded-sm text-center capitalize
                   ${isRunning
                                 ? "bg-[#E7F7EF] text-[#0CAF60]"
-                                : "bg-gray-400 text-white"}`}
+                                : "bg-gray-300 text-white"}`}
                     >
                         {isRunning ? "Đang chạy" : "Đang dừng"}
                     </div>
@@ -151,7 +155,7 @@ function getColumns({
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
+                            <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
                                 <span className="sr-only">Open menu</span>
                                 <MoreHorizontal />
                             </Button>
@@ -255,7 +259,7 @@ export default function MachineTable() {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888]">
+                                        <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#393939]">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
@@ -279,14 +283,14 @@ export default function MachineTable() {
                     if (!open) setEditingMachine(null)
                 }}
             >
-                <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3">
+                <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-6xl !gap-5 pb-3">
                     <DialogHeader>
-                        <DialogTitle>{editingMachine ? "Chỉnh sửa máy" : "Thêm máy mới"}</DialogTitle>
+                        <DialogTitle className="text-3xl text-[#084188] font-semibold">{editingMachine ? "Chỉnh sửa máy" : "Thêm máy mới"}</DialogTitle>
                     </DialogHeader>
 
                     {editingMachine ? (
                         <EditMachineForm
-                            initialData={editingMachine}
+                            machineId={editingMachine.machineId}
                             onUpdate={(updated) => {
                                 const index = machine.findIndex((m) => m.machineId === updated.machineId)
                                 if (index !== -1) machine[index] = updated

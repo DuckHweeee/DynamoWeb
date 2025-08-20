@@ -365,7 +365,7 @@ export default function OperatorTable() {
                     setShowForm(open)
                     if (!open) setEditingOperator(null)
                 }}>
-                    <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3">
+                    <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
                         <DialogHeader>
                             <DialogTitle className="text-3xl text-[#084188] font-semibold">{editingOperator ? "Chỉnh sửa nhân viên" : "Thêm nhân viên mới"}</DialogTitle>
                         </DialogHeader>
@@ -408,6 +408,7 @@ export default function OperatorTable() {
                 </div> */}
                     <div className="space-x-2">
                         <Button
+                            className="cursor-pointer"
                             variant="outline"
                             size="sm"
                             onClick={() => table.previousPage()}
@@ -416,6 +417,7 @@ export default function OperatorTable() {
                             Trước
                         </Button>
                         <Button
+                            className="cursor-pointer"
                             variant="outline"
                             size="sm"
                             onClick={() => table.nextPage()}
