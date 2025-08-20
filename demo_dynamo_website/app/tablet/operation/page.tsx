@@ -335,8 +335,8 @@ export default function TabletOperation() {
                         <Table className="table-fixed w-full">
                             <TableHeader>
                                 <TableRow className="bg-blue-950 hover:bg-blue-950">
-                                    <TableHead className="w-1/2 text-4xl font-bold text-white text-center py-2 max-[1300px]:text-6xl">Thông tin</TableHead>
-                                    <TableHead className="w-1/2 text-4xl font-bold text-white text-center max-[1300px]:text-6xl">Chi tiết</TableHead>
+                                    <TableHead className="w-1/2 text-4xl font-bold text-white text-center py-2 max-[1300px]:text-4xl">Thông tin</TableHead>
+                                    <TableHead className="w-1/2 text-4xl font-bold text-white text-center max-[1300px]:text-4xl">Chi tiết</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody className="border-x">
@@ -347,10 +347,10 @@ export default function TabletOperation() {
                                     Tablet: Fully: max-[1300px]: ; Chorme: max-2xl
                                     Laptop-Screen: min-2xl
                                     */}
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left pl-3 text-blue-950 max-[1300px]:text-5xl max-[1300px]:!py-3">
+                                            <TableCell className="w-1/2 text-3xl font-bold text-left pl-3 text-blue-950 max-[1300px]:text-4xl max-[1300px]:!py-3">
                                                 Đối Tượng Gia Công
                                             </TableCell>
-                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-5xl">
+                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-4xl">
                                                 {(statusKey == 0 && isEditing) ? (
                                                     <div className="flex w-full h-full items-center justify-center">
                                                         <Select
@@ -373,17 +373,17 @@ export default function TabletOperation() {
                                                         </Select>
                                                     </div>
                                                 ) : (
-                                                    <span className="!text-3xl max-[1300px]:!text-5xl">{process.processType}</span>
+                                                    <span className="!text-3xl max-[1300px]:!text-4xl">{process.processType}</span>
                                                 )}
 
                                             </TableCell>
                                         </TableRow>
 
                                         <TableRow className="border-b-0 h-[50px]">
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-5xl max-[1300px]:!py-3">
+                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-4xl max-[1300px]:!py-3">
                                                 ID Mã Hàng
                                             </TableCell>
-                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-5xl">
+                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-4xl">
                                                 {(statusKey == 0 && isEditing) ? (
                                                     <div className="flex h-full items-stretch w-full justify-center">
                                                         <div className="flex w-full h-full items-center justify-center">
@@ -408,16 +408,16 @@ export default function TabletOperation() {
                                                         </div>
                                                     </div>
                                                 ) : (
-                                                    <span className="!text-3xl max-[1300px]:!text-5xl">{process.orderDetailDto?.orderCode}</span>
+                                                    <span className="!text-3xl max-[1300px]:!text-4xl">{process.orderDetailDto?.orderCode}</span>
                                                 )}
                                             </TableCell>
                                         </TableRow>
 
                                         <TableRow className="border-b-0 bg-gray-100">
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-5xl max-[1300px]:!py-3">
+                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-4xl max-[1300px]:!py-3">
                                                 Thứ Tự Sản Phẩm
                                             </TableCell>
-                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-5xl">
+                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-4xl">
                                                 {/* {process.partNumber} */}
                                                 {(statusKey == 0 && isEditing) ? (
                                                     <div className="flex h-full items-stretch w-full justify-center">
@@ -428,21 +428,21 @@ export default function TabletOperation() {
                                                                 ...prev,
                                                                 updatePartNumber: Number(e.target.value)
                                                             }))}
-                                                            // className="!text-3xl max-[1300px]:!text-5xl text-center w-sm border-black h-full"
-                                                            className="!text-3xl max-[1300px]:!text-5xl text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
+                                                            // className="!text-3xl max-[1300px]:!text-4xl text-center w-sm border-black h-full"
+                                                            className="!text-3xl max-[1300px]:!text-4xl text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
                                                         />
                                                     </div>
                                                 ) : (
-                                                    <span className="!text-3xl max-[1300px]:!text-5xl">{process.partNumber}</span>
+                                                    <span className="!text-3xl max-[1300px]:!text-4xl">{process.partNumber}</span>
                                                 )}
                                             </TableCell>
                                         </TableRow>
 
                                         <TableRow className="border-b-0">
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-5xl max-[1300px]:!py-3">
+                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-4xl">
                                                 Thứ Tự Gia Công
                                             </TableCell>
-                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-5xl">
+                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-4xl">
                                                 {/* {process.stepNumber} */}
                                                 {(statusKey == 0 && isEditing) ? (
                                                     <div className="flex h-full items-stretch w-full justify-center">
@@ -453,18 +453,18 @@ export default function TabletOperation() {
                                                                 ...prev,
                                                                 updateStepNumber: Number(e.target.value)
                                                             }))}
-                                                            // className="!text-3xl max-[1300px]:!text-5xl text-center w-sm rounded-sm border-black h-full"
-                                                            className="!text-3xl max-[1300px]:!text-5xl text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
+                                                            // className="!text-3xl max-[1300px]:!text-4xl text-center w-sm rounded-sm border-black h-full"
+                                                            className="!text-3xl max-[1300px]:!text-4xl text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
                                                         />
                                                     </div>
                                                 ) : (
-                                                    <span className="!text-3xl max-[1300px]:!text-5xl">{process.stepNumber}</span>
+                                                    <span className="!text-3xl max-[1300px]:!text-4xl">{process.stepNumber}</span>
                                                 )}
                                             </TableCell>
                                         </TableRow>
 
                                         <TableRow className="border-b-0 bg-gray-100">
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-5xl max-[1300px]:!py-3">
+                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-4xl">
                                                 Điểm Gia Công
                                             </TableCell>
                                             <TableCell className="p-0 w-1/2 font-bold text-center text-blue-950">
@@ -486,21 +486,21 @@ export default function TabletOperation() {
                                                                     updateManufacturingPoint: newValue
                                                                 }));
                                                             }}
-                                                            // className="!text-3xl max-[1300px]:!text-5xl text-center w-sm rounded-sm border-black h-full"
-                                                            className="!text-3xl max-[1300px]:!text-5xl text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
+                                                            // className="!text-3xl max-[1300px]:!text-4xl text-center w-sm rounded-sm border-black h-full"
+                                                            className="!text-3xl max-[1300px]:!text-4xl text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
                                                         />
                                                     </div>
                                                 ) : (
-                                                    <span className="!text-3xl max-[1300px]:!text-5xl">{process?.manufacturingPoint}</span>
+                                                    <span className="!text-3xl max-[1300px]:!text-4xl">{process?.manufacturingPoint}</span>
                                                 )}
                                             </TableCell>
                                         </TableRow>
 
                                         <TableRow className="border-b-0">
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-5xl max-[1300px]:!py-3">
+                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-4xl">
                                                 Giờ PG
                                             </TableCell>
-                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-5xl">
+                                            <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950 max-[1300px]:text-4xl">
                                                 {(statusKey == 0 && isEditing) ? (
                                                     <div className="flex h-full items-stretch w-full justify-center">
                                                         <Input
@@ -510,18 +510,18 @@ export default function TabletOperation() {
                                                                 ...prev,
                                                                 updatePgTime: Number(e.target.value)
                                                             }))}
-                                                            // className="!text-3xl max-[1300px]:!text-5xl text-center w-sm rounded-sm border-black h-full"
-                                                            className="!text-3xl max-[1300px]:!text-5xl text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
+                                                            // className="!text-3xl max-[1300px]:!text-4xl text-center w-sm rounded-sm border-black h-full"
+                                                            className="!text-3xl max-[1300px]:!text-4xl text-center w-sm border-black h-full border-0 border-b-1 rounded-none"
                                                         />
                                                     </div>
                                                 ) : (
-                                                    <span className="!text-3xl max-[1300px]:!text-5xl">{process.pgTime}</span>
+                                                    <span className="!text-3xl max-[1300px]:!text-4xl">{process.pgTime}</span>
                                                 )}
                                             </TableCell>
                                         </TableRow>
 
                                         <TableRow className="border-b-0 h-[50px] bg-gray-100">
-                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-5xl max-[1300px]:!py-3">
+                                            <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-4xl">
                                                 Nhân Viên
                                             </TableCell>
                                             <TableCell className="w-1/2 p-0 text-center text-3xl">
@@ -552,7 +552,7 @@ export default function TabletOperation() {
                                                             </Select>
                                                         </div>
                                                     ) : (
-                                                        <div className="flex items-center justify-center text-3xl font-bold h-full text-blue-950 max-[1300px]:text-5xl">
+                                                        <div className="flex items-center justify-center text-3xl font-bold h-full text-blue-950 max-[1300px]:text-4xl">
                                                             {operatorName}
                                                         </div>
                                                     );

@@ -26,8 +26,10 @@ export default function TbaletLayout({
     const pathname = usePathname();
 
     const isProcess = pathname.includes("/tablet/process");
-    // const isOperation = pathname.includes("/tablet/operation");
+    const isOperation = pathname.includes("/tablet/operation");
+    const isNewProcess = pathname.includes("/tablet/newProcess");
 
+    const tabletCSS = "max-[1300px]:text-3xl max-[1300px]:!py-7 max-[1300px]:!px-8"
     return (
         <html>
             <body
@@ -40,9 +42,20 @@ export default function TbaletLayout({
                         </a>
                     </div>
                     <div className="flex gap-x-5">
+                        <Link href={"/tablet/newProcess"}>
+                            <Button
+                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
+                                    ${isNewProcess
+                                        ? "text-blue-950 border-blue-950 border-3 bg-white"
+                                        : " bg-white text-blue-950"
+                                    }`}
+                            >
+                                Khai Báo
+                            </Button>
+                        </Link>
                         <Link href={"/tablet/process"}>
                             <Button
-                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm max-[1300px]:text-4xl max-[1300px]:!py-8 max-[1300px]:!px-10
+                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
                                     ${isProcess
                                         ? "text-blue-950 border-blue-950 border-3 bg-white"
                                         : " bg-white text-blue-950"
@@ -54,10 +67,10 @@ export default function TbaletLayout({
                         <Link href={"/tablet/operation"}>
                             <Button
                                 variant="outline"
-                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm max-[1300px]:text-4xl max-[1300px]:!py-8 max-[1300px]:!px-10
-                                     ${isProcess
-                                        ? " bg-white"
-                                        : "text-blue-950 border-blue-950 border-3"
+                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
+                                     ${isOperation
+                                        ? " bg-white border-blue-950 border-3"
+                                        : "text-blue-950 "
                                     }`}
                             >
                                 Vận Hành
