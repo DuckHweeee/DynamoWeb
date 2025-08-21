@@ -19,7 +19,6 @@ export function useStaff() {
                 setLoading(false)
             }
         }
-
         fetchData()
     }, [])
     return { data, loading, error }
@@ -33,10 +32,9 @@ export function useGroup() {
         const fetchData = async () => {
             try {
                 const res = await axios.get<Group[]>(`${url}/api/group`)
-                // const filtered = res.data.filter((g) => g.groupType === groupType)
                 setData(res.data)
             } catch (err) {
-                setError("Lỗi khi tải danh sách nhân viên")
+                setError("Lỗi khi tải dữ liệu")
             } finally {
                 setLoading(false)
             }

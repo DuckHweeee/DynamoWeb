@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { SelectYear } from "./SelectYear"
 import { SelectMonth } from "./SelectMonth"
 import { useGroup } from "../hooks/useMachine"
-import { machineOfficeList } from "../lib/data"
+import { officeList } from "../lib/data"
 import { NewMachine } from "../lib/type"
 
 type AddMachineFormProps = {
@@ -121,17 +121,17 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                         </div>
 
                         <div className="grid">
-                            <Label htmlFor="cong_viec" className="text-lg !font-normal">Phòng quản lý</Label>
+                            <Label htmlFor="nhom" className="text-lg !font-normal">Phòng quản lý</Label>
                             <Select
                                 value={newMachine.machineOffice?.toString() ?? ""}
                                 onValueChange={(value) => setNewMachine({ ...newMachine, machineOffice: value })}
                             >
                                 <SelectTrigger className="w-auto text-lg [&>span]:text-[16px]">
-                                    <SelectValue placeholder="Chọn nhóm" />
+                                    <SelectValue placeholder="Chọn phòng quản lý" />
                                 </SelectTrigger>
                                 <SelectContent id="nhom">
                                     <SelectGroup>
-                                        {machineOfficeList.map((g) => (
+                                        {officeList.map((g) => (
                                             <SelectItem className="text-lg" key={g.name} value={g.name.toString()}>
                                                 {g.name}
                                             </SelectItem>

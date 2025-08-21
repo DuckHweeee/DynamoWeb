@@ -12,7 +12,7 @@ export interface NewMachine {
 }
 export interface UpdateMachine extends NewMachine {
 }
-export interface MachineOffice {
+export interface Office {
     name: string
 }
 

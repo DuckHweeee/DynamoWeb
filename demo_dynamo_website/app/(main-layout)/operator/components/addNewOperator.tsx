@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Staff } from "@/lib/type"
 import { Label } from "@/components/ui/label"
-import { useGroup } from "../hook/useStaff"
+import { useGroup } from "../hooks/useStaff"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { SelectYear } from "./SelectYear"
 import { SelectMonth } from "./SelectMonth"
 import { toast } from "sonner"
+import { officeList } from "../lib/data"
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 type AddStaffFormProps = {
     onAdd: (staff: Staff) => void
@@ -183,13 +184,30 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
 
                         <div className="grid">
                             <Label htmlFor="phong_ban" className="text-lg !font-normal">Phòng ban</Label>
-                            <Input
+                            {/* <Input
                                 id="phong_ban"
                                 placeholder="Phòng ban"
                                 value={newStaff.staffOffice}
                                 onChange={(e) => setNewStaff({ ...newStaff, staffOffice: e.target.value })}
                                 className="!text-lg placeholder:text-[16px]"
-                            />
+                            /> */}
+                            <Select
+                                value={newStaff.staffOffice?.toString() ?? ""}
+                                onValueChange={(value) => setNewStaff({ ...newStaff, staffOffice: value })}
+                            >
+                                <SelectTrigger className="w-auto text-lg [&>span]:text-[16px]">
+                                    <SelectValue placeholder="Chọn phòng ban" />
+                                </SelectTrigger>
+                                <SelectContent id="nhom">
+                                    <SelectGroup>
+                                        {officeList.map((g) => (
+                                            <SelectItem className="text-lg" key={g.name} value={g.name.toString()}>
+                                                {g.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                         </div>
 
                         <div className="grid">

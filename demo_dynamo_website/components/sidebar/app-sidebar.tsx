@@ -104,6 +104,10 @@ const data = {
                     title: "Danh sách nhân viên",
                     url: "/operator",
                 },
+                {
+                    title: "Cài đặt KPI",
+                    url: "/operator/kpi",
+                },
             ],
         },
         {

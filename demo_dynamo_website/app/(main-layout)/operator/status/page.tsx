@@ -1,7 +1,7 @@
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
-import OperatorStatus from "../component/OperatorStatus"
+import OperatorStatus from "../components/OperatorStatus"
 
 const mockMachines = [
     { name: "Nguyen Van A", operator: "Nguyen Van A", code: "1123", machine: "Machine 1", status: "Đang Chạy", pg: 180 },

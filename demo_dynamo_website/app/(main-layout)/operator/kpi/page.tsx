@@ -32,63 +32,32 @@ import {
 } from "@/components/ui/table"
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Staff } from "@/lib/type"
+// import { Staff } from "@/lib/type"
 import EditOperatorForm from "../components/editOperator"
 import AddOperatorForm from "../components/addNewOperator"
 import { useStaff } from "../hooks/useStaff"
 import { useRouter } from 'next/navigation'
 import { toast } from "sonner"
+import { useStaffKPI } from "./hooks/useStaffKPI"
+import { KPI } from "./lib/type"
+import AddNewKPI from "./components/addNewKPI"
+import EditKPIStaffForm from "./components/editKPI"
+import { Staff } from "@/lib/type"
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 function getColumns({
     setEditingOperator,
     setShowForm,
 }: {
-    setEditingOperator: (operator: Staff) => void
+    setEditingOperator: (operator: KPI) => void
     setShowForm: (show: boolean) => void
-}): ColumnDef<Staff>[] {
+}): ColumnDef<KPI>[] {
     return [
         // {
-        //     id: "select",
-        //     header: ({ table }) => (
-        //         <Checkbox
-        //             checked={
-        //                 table.getIsAllPageRowsSelected() ||
-        //                 (table.getIsSomePageRowsSelected() && "indeterminate")
-        //             }
-        //             onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        //             aria-label="Select all"
-        //         />
-        //     ),
-        //     cell: ({ row }) => (
-        //         <Checkbox
-        //             checked={row.getIsSelected()}
-        //             onCheckedChange={(value) => row.toggleSelected(!!value)}
-        //             aria-label="Select row"
-        //         />
-        //     ),
-        //     enableSorting: false,
-        //     enableHiding: false,
+        //     id: "stt",
+        //     header: () => (<span className="text-lg font-bold ">STT</span>),
+        //     cell: ({ row }) => <div>{row.index + 1}</div>,
         // },
-        {
-            id: "stt",
-            // header: ({ column }) => (
-            //     <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            //         STT <ArrowUpDown />
-            //     </Button>
-            // ),
-            header: () => (<span className="text-lg font-bold ">STT</span>),
-            cell: ({ row }) => <div>{row.index + 1}</div>,
-        },
-        {
-            accessorKey: "staffId",
-            header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Mã nhân viên <ArrowUpDown />
-                </Button>
-            ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("staffId")}</div>,
-        },
         {
             accessorKey: "staffName",
             header: ({ column }) => (
@@ -98,96 +67,148 @@ function getColumns({
             ),
             cell: ({ row }) => <div className="capitalize">{row.getValue("staffName")}</div>,
         },
+        // {
+        //     accessorKey: "id",
+        //     header: ({ column }) => (
+        //         <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        //             Mã nhân viên <ArrowUpDown />
+        //         </Button>
+        //     ),
+        //     cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
+        // },
         {
-            accessorKey: "staffOffice",
-            header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Phòng Ban <ArrowUpDown />
-                </Button>
-            ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("staffOffice")}</div>,
-        },
-        {
-            accessorKey: "staffKpiDtos.groupName",
+            accessorKey: "groupName",
             header: ({ column }) => (
                 <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Nhóm <ArrowUpDown />
                 </Button>
             ),
-            // cell: ({ row }) => <div className="capitalize">{row.getValue("groupName")}</div>,
             cell: ({ row }) => (
-                <div className="capitalize">{row.original.staffKpiDtos?.groupName ?? "Chưa Có Nhóm"}</div>
+                <div className="capitalize">{row.getValue("groupName")}</div>
             )
         },
         {
-            accessorKey: "staffSection",
+            accessorKey: "year",
             header: ({ column }) => (
                 <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Công Việc <ArrowUpDown />
+                    Năm <ArrowUpDown />
                 </Button>
             ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("staffSection")}</div>,
+            cell: ({ row }) => <div className="capitalize">{row.getValue("year")}</div>,
         },
         {
-            accessorKey: "status",
+            accessorKey: "month",
             header: ({ column }) => (
-                <Button
-                    className="text-lg font-bold cursor-pointer"
-                    variant="ghost"
-                    onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === "asc")
-                    }
-                >
-                    Trạng Thái <ArrowUpDown />
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Tháng <ArrowUpDown />
                 </Button>
             ),
-            cell: ({ getValue }) => {
-                const value = getValue<number>()
-                const isWorking = value === 1
-                return (
-                    <div
-                        className={`w-full px-4 py-1.5 rounded-sm text-center capitalize
-        ${isWorking ? "bg-[#E7F7EF] text-[#0CAF60]" : "bg-[#FFE6E6] text-[#FE4A4A]"}`}
-                    >
-                        {isWorking ? "Đang Làm" : "Đã Nghỉ"}
-                    </div>
-                )
-            }
+            cell: ({ row }) => <div className="capitalize">{row.getValue("month")}</div>,
+        },
+        {
+            accessorKey: "manufacturingPoint",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Điểm gia công <ArrowUpDown />
+                </Button>
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue("manufacturingPoint")}</div>,
+        },
+        {
+            accessorKey: "pgTimeGoal",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Giờ PG <ArrowUpDown />
+                </Button>
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue("pgTimeGoal")}</div>,
+        },
+        {
+            accessorKey: "machineTimeGoal",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Giờ máy <ArrowUpDown />
+                </Button>
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue("machineTimeGoal")}</div>,
+        },
+        {
+            accessorKey: "workGoal",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Giờ làm việc <ArrowUpDown />
+                </Button>
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue("workGoal")}</div>,
+        },
+        {
+            accessorKey: "kpi",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    KPI <ArrowUpDown />
+                </Button>
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue("kpi")}</div>,
+        },
+        {
+            accessorKey: "oleGoal",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    OLE <ArrowUpDown />
+                </Button>
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue("oleGoal")}</div>,
         },
         {
             id: "actions",
             enableHiding: false,
             cell: ({ row }) => {
                 const operator = row.original
+                const [open, setOpen] = useState(false)
+
                 return (
-                    <DropdownMenu>
+                    <DropdownMenu
+                        open={open}
+                        onOpenChange={(nextOpen) => {
+                            if (nextOpen && operator.staffStatus === 0) {
+                                toast.error("Nhân viên đã nghỉ không thể thao tác")
+                                return
+                            }
+                            setOpen(nextOpen)
+                        }}
+                    >
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+                            <Button
+                                variant="ghost"
+                                className="h-8 w-8 p-0 cursor-pointer"
+                            >
                                 <span className="sr-only">Open menu</span>
                                 <MoreHorizontal size={80} strokeWidth={3} />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem className="text-lg cursor-pointer">
+                            {/* <DropdownMenuItem className="text-lg cursor-pointer">
                                 Thông tin chi tiết
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
                             <DropdownMenuItem
                                 className="text-lg cursor-pointer"
                                 onClick={() => {
-                                    setEditingOperator(operator);
-                                    setShowForm(true);
+                                    setEditingOperator(operator)
+                                    setShowForm(true)
                                 }}
                             >
                                 Chỉnh sửa
                             </DropdownMenuItem>
                         </DropdownMenuContent>
-                    </DropdownMenu >
+                    </DropdownMenu>
                 )
             },
-        },
+        }
+
+
+
     ]
 }
-
 
 
 export default function OperatorTable() {
@@ -201,17 +222,17 @@ export default function OperatorTable() {
     const [rowSelection, setRowSelection] = React.useState({})
     const [globalFilter, setGlobalFilter] = useState("")
 
-    // Staff Data
-    const { data: staff } = useStaff()
+    // Staff KPI
+    const { data: staffKPI } = useStaffKPI()
 
     // Add new operator
     const [showForm, setShowForm] = useState(false)
     // Edit Operator
-    const [editingOperator, setEditingOperator] = useState<Staff | null>(null)
+    const [editingOperator, setEditingOperator] = useState<KPI | null>(null)
 
     const columns = getColumns({ setEditingOperator, setShowForm })
     const table = useReactTable({
-        data: staff,
+        data: staffKPI,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -238,7 +259,7 @@ export default function OperatorTable() {
             <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
                 <div className="flex flex-row items-center justify-between py-4">
                     <div className="w-2/3">
-                        <p className="text-2xl font-bold">Danh Sách Nhân Viên</p>
+                        <p className="text-2xl font-bold">Danh Sách Mục Tiêu Nhân Viên</p>
                     </div>
                     <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
                         <div className="relative max-w-sm w-full">
@@ -258,8 +279,8 @@ export default function OperatorTable() {
                         </Button>
                     </div>
                 </div>
-                <div className="rounded-md border">
-                    <Table>
+                <div className="rounded-md border w-full">
+                    <Table className="w-full">
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <TableRow key={headerGroup.id} className="text-lg font-bold">
@@ -280,27 +301,57 @@ export default function OperatorTable() {
                         </TableHeader>
                         <TableBody>
                             {table.getRowModel().rows?.length ? (
-                                table.getRowModel().rows.map((row) => (
+                                table.getRowModel().rows.map((row, index) => (
                                     <TableRow
                                         key={row.id}
                                         data-state={row.getIsSelected() && "selected"}
+                                        className={index % 2 === 0 ? "bg-gray-50" : ""}
                                     >
-                                        {row.getVisibleCells().map((cell) => (
-                                            <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888]">
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
-                                            </TableCell>
-                                        ))}
+                                        {row.getVisibleCells().map((cell) => {
+                                            // kiểm tra nếu cột là staffName thì custom render
+                                            if (cell.column.id === "staffName") {
+                                                const staffName = row.original.staffName
+                                                const staffId = row.original.id
+                                                const status = row.original.staffStatus
+                                                return (
+                                                    <TableCell
+                                                        key={cell.id}
+                                                        className="font-medium text-[16px] text-center"
+                                                    >
+                                                        <div className="flex flex-col">
+                                                            <div className={`${status === 0
+                                                                ? "text-gray-400"
+                                                                : ""
+                                                                }`}>
+                                                                <div className="">
+                                                                    {staffName}
+                                                                    <span>
+                                                                        {status === 0 ? "- Đã nghỉ" : ""}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="">
+                                                                    ID: {staffId}
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </TableCell>
+                                                )
+                                            }
+                                            return (
+                                                <TableCell
+                                                    key={cell.id}
+                                                    className="font-medium text-[17px] text-[#000000] text-center"
+                                                >
+                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                </TableCell>
+                                            )
+                                        })}
                                     </TableRow>
                                 ))
                             ) : (
                                 <TableRow>
-                                    <TableCell
-                                        colSpan={columns.length}
-                                        className="h-24 text-center"
-                                    >
+                                    <TableCell colSpan={columns.length} className="h-24 text-center">
                                         Không có dữ liệu
                                     </TableCell>
                                 </TableRow>
@@ -313,31 +364,31 @@ export default function OperatorTable() {
                     setShowForm(open)
                     if (!open) setEditingOperator(null)
                 }}>
-                    <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
+                    <DialogContent className="w-full max-[1550px]:!max-w-5xl min-[1550px]:!max-w-5xl !gap-5 pb-3 min-[1550px]:top-100">
                         <DialogHeader>
-                            <DialogTitle className="text-3xl text-[#084188] font-semibold">{editingOperator ? "Chỉnh sửa nhân viên" : "Thêm nhân viên mới"}</DialogTitle>
+                            <DialogTitle className="text-3xl text-[#084188] font-semibold">{editingOperator ? "Chỉnh sửa mục tiêu" : "Thêm mục tiêu"}</DialogTitle>
                         </DialogHeader>
                         {editingOperator ? (
-                            <EditOperatorForm
-                                staffList={staff}
-                                idStaffString={editingOperator?.id}
-                                onUpdate={(updated) => {
-                                    const index = staff.findIndex(op => op.id === updated.id)
-                                    if (index !== -1) staff[index] = updated
-                                    table.setOptions(prev => ({ ...prev, data: [...staff] }))
-                                    setShowForm(false)
-                                    setEditingOperator(null)
-                                }}
+                            <EditKPIStaffForm
+                                inforKPI={editingOperator}
+                                // onUpdate={(updated) => {
+                                //     const index = staff.findIndex(op => op.id === updated.id)
+                                //     if (index !== -1) staff[index] = updated
+                                //     table.setOptions(prev => ({ ...prev, data: [...staff] }))
+                                //     setShowForm(false)
+                                //     setEditingOperator(null)
+                                // }}
                                 onCancel={() => {
                                     setShowForm(false)
                                     setEditingOperator(null)
-                                }}
-                            />
+                                }} onUpdate={function (updated: Staff): void {
+                                    throw new Error("Function not implemented.")
+                                }} />
                         ) : (
-                            <AddOperatorForm
+                            <AddNewKPI
                                 onAdd={(newOp) => {
-                                    staff.push(newOp)
-                                    table.setOptions(prev => ({ ...prev, data: [...staff] }))
+                                    staffKPI.push(newOp)
+                                    table.setOptions(prev => ({ ...prev, data: [...staffKPI] }))
                                     router.refresh()
                                     setShowForm(false)
                                 }}
