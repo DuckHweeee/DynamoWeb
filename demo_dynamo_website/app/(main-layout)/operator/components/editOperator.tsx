@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useGroup } from "../hook/useStaff"
+import { useGroup } from "../hooks/useStaff"
 import { toast } from "sonner"
 import { Staff } from "@/lib/type"
-import { useStaffWithKPI } from "../hook/useStaffWithKPI"
+import { useStaffWithKPI } from "../hooks/useStaffWithKPI"
+import { officeList, statusList } from "../lib/data"
 
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 type EditStaffFormProps = {
@@ -31,7 +32,8 @@ interface EditStaff {
     machineTimeGoal: number | null,
     manufacturingPoint: number | null,
     oleGoal: number | null,
-    groupId: string
+    groupId: string,
+    status: number | null
 }
 export default function EditStaffForm({
     onUpdate,
@@ -60,7 +62,8 @@ export default function EditStaffForm({
         machineTimeGoal: null,
         manufacturingPoint: null,
         oleGoal: null,
-        groupId: ""
+        groupId: "",
+        status: null,
     })
 
     useEffect(() => {
@@ -80,6 +83,7 @@ export default function EditStaffForm({
                 manufacturingPoint: staffWithKPI.staffKpiDtos?.manufacturingPoint ?? null,
                 oleGoal: staffWithKPI.staffKpiDtos?.oleGoal ?? null,
                 groupId: staffWithKPI.staffKpiDtos?.groupId?.toString() ?? "",
+                status: staffWithKPI.status ?? null,
             })
         }
     }, [staffWithKPI])
@@ -135,12 +139,13 @@ export default function EditStaffForm({
                         manufacturingPoint: updateStaff.manufacturingPoint,
                         oleGoal: updateStaff.oleGoal,
                         groupId: updateStaff.groupId,
+                        status: updateStaff.status,
                     }),
                 }
             );
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || "Gửi thất bại ở response 1.");
+                throw new Error(errorData.message || "Gửi thất bại");
             }
             toast.success("Chỉnh sửa thành công!");
             location.reload()
@@ -149,7 +154,6 @@ export default function EditStaffForm({
             toast.error("Đã xảy ra lỗi khi gửi.");
         }
     }
-
 
     return (
         <>
@@ -226,22 +230,29 @@ export default function EditStaffForm({
                                 </div>
                                 <div className="grid">
                                     <Label htmlFor="phong_ban" className="text-lg !font-normal">Phòng ban</Label>
-                                    <Input
-                                        id="phong_ban"
-                                        placeholder="Phòng ban"
-                                        // value={staff?.staffOffice}
-                                        // onChange={(e) =>
-                                        //     setUpdateStaff({ ...updateStaff, staffOffice: e.target.value })
-                                        // }
-                                        value={updateStaff?.staffOffice}
-                                        onChange={(e) =>
-                                            setUpdateStaff({
-                                                ...updateStaff,
-                                                staffOffice: e.target.value,
-                                            })
+                                    <Select
+                                        value={updateStaff.staffOffice?.toLowerCase() ?? ""}
+                                        onValueChange={(value) =>
+                                            setUpdateStaff({ ...updateStaff, staffOffice: value })
                                         }
-                                        className="!text-lg placeholder:text-[16px]"
-                                    />
+                                    >
+                                        <SelectTrigger className="w-auto text-lg [&>span]:text-[16px]">
+                                            <SelectValue placeholder="Chọn nhóm" />
+                                        </SelectTrigger>
+                                        <SelectContent id="nhom">
+                                            <SelectGroup>
+                                                {officeList.map((g) => (
+                                                    <SelectItem
+                                                        className="text-lg"
+                                                        key={g.name}
+                                                        value={g.name.toLowerCase()}
+                                                    >
+                                                        {g.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
 
                                 <div className="grid">
@@ -425,13 +436,44 @@ export default function EditStaffForm({
                         )}
                     </div>
                     {/* Nút */}
-                    <div className="flex justify-end gap-3">
-                        <Button onClick={handleUpdate} className="bg-[#074695] hover:bg-[#0754B4]">
-                            Lưu thay đổi
-                        </Button>
-                        <Button variant="outline" onClick={onCancel}>
-                            Hủy
-                        </Button>
+                    <div className="flex justify-between ">
+                        <div className="flex text-xl items-center pl-6 font-medium w-fit ">
+                            <span className="pr-3">
+                                Trạng Thái:
+                            </span>
+                            <Select
+                                value={updateStaff?.status?.toString()}
+                                onValueChange={(value) =>
+                                    setUpdateStaff((prev) => ({ ...prev, status: Number(value) }))
+                                }
+                            >
+                                <SelectTrigger className="w-auto text-lg [&>span]:text-[16px] px-6">
+                                    <SelectValue placeholder="Chọn nhóm" />
+                                </SelectTrigger>
+                                <SelectContent id="nhom">
+                                    <SelectGroup>
+                                        {statusList.map((g) => (
+                                            <SelectItem
+                                                className="text-lg"
+                                                key={g.id}
+                                                value={g.id.toString()}
+                                            >
+                                                {g.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="flex gap-3">
+                            <Button variant="outline" onClick={onCancel} className="text-xl py-6 px-10 cursor-pointer">
+                                Hủy
+                            </Button>
+                            <Button onClick={handleUpdate} className="bg-[#074695] hover:bg-[#0754B4] text-xl py-6 px-10 cursor-pointer">
+                                Lưu thay đổi
+                            </Button>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -509,22 +551,29 @@ export default function EditStaffForm({
                                 </div>
                                 <div className="grid">
                                     <Label htmlFor="phong_ban" className="text-lg !font-normal">Phòng ban</Label>
-                                    <Input
-                                        id="phong_ban"
-                                        placeholder="Phòng ban"
-                                        // value={staff?.staffOffice}
-                                        // onChange={(e) =>
-                                        //     setUpdateStaff({ ...updateStaff, staffOffice: e.target.value })
-                                        // }
-                                        value={updateStaff?.staffOffice}
-                                        onChange={(e) =>
-                                            setUpdateStaff({
-                                                ...updateStaff,
-                                                staffOffice: e.target.value,
-                                            })
+                                    <Select
+                                        value={updateStaff.staffOffice?.toLowerCase() ?? ""}
+                                        onValueChange={(value) =>
+                                            setUpdateStaff({ ...updateStaff, staffOffice: value })
                                         }
-                                        className="!text-lg placeholder:text-[16px]"
-                                    />
+                                    >
+                                        <SelectTrigger className="w-auto text-lg [&>span]:text-[16px]">
+                                            <SelectValue placeholder="Chọn nhóm" />
+                                        </SelectTrigger>
+                                        <SelectContent id="nhom">
+                                            <SelectGroup>
+                                                {officeList.map((g) => (
+                                                    <SelectItem
+                                                        className="text-lg"
+                                                        key={g.name}
+                                                        value={g.name.toLowerCase()}
+                                                    >
+                                                        {g.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
 
                                 <div className="grid">
@@ -552,7 +601,6 @@ export default function EditStaffForm({
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
-
                                 </div>
 
                                 <div className="grid">
@@ -703,18 +751,52 @@ export default function EditStaffForm({
                                     </div>
                                 </div>
                             </div>
-
-
                         )}
                     </div>
                     {/* Nút */}
-                    <div className="flex justify-end gap-3">
-                        <Button onClick={handleUpdate} className="bg-[#074695] hover:bg-[#0754B4]">
-                            Lưu thay đổi
-                        </Button>
-                        <Button variant="outline" onClick={onCancel}>
-                            Hủy
-                        </Button>
+                    <div className="flex justify-between ">
+                        <div className="flex text-xl items-center pl-6 font-medium w-fit ">
+                            <span className="pr-3">
+                                Trạng Thái:
+                            </span>
+                            <Select
+                                value={updateStaff?.status?.toString()}
+                                onValueChange={(value) =>
+                                    setUpdateStaff((prev) => ({ ...prev, status: Number(value) }))
+                                }
+                            >
+                                <SelectTrigger
+                                    className={`w-auto text-lg [&>span]:text-[16px] gap-5 ${updateStaff?.status === 1
+                                        ? "bg-[#E7F7EF] text-[#0CAF60]"
+                                        : "bg-[#FFE6E6] text-[#fb5656]"
+                                        }`}
+                                >
+                                    <SelectValue placeholder="Chọn nhóm" />
+                                </SelectTrigger>
+                                <SelectContent id="nhom">
+                                    <SelectGroup>
+                                        {statusList.map((g) => (
+                                            <SelectItem
+                                                className="text-lg"
+                                                key={g.id}
+                                                value={g.id.toString()}
+                                            >
+                                                {g.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="flex gap-3">
+                            <Button variant="outline" onClick={onCancel} className="text-xl py-6 px-10 cursor-pointer">
+                                Hủy
+                            </Button>
+                            <Button onClick={handleUpdate} className="bg-[#074695] hover:bg-[#0754B4] text-xl py-6 px-10 cursor-pointer">
+                                Lưu thay đổi
+                            </Button>
+                        </div>
+
                     </div>
                 </div>
             </div>

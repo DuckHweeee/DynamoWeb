@@ -1,6 +1,6 @@
-import { GroupMachine, MachineOffice } from "./type";
+import { GroupMachine, Office } from "./type";
 
-export const machineOfficeList: MachineOffice[] = [
+export const officeList: Office[] = [
     {
         name: "Pin",
     },

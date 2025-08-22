@@ -8,7 +8,7 @@ import { Machine2 } from "@/lib/type"
 import { useGroup, useMachineById } from "../hooks/useMachine"
 import { UpdateMachine } from "../lib/type"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { machineOfficeList } from "../lib/data"
+import { officeList } from "../lib/data"
 import { toast } from "sonner"
 type EditMachineFormProps = {
     onUpdate: (updated: Machine2) => void
@@ -140,7 +140,7 @@ export default function EditMachineForm({
                                 </SelectTrigger>
                                 <SelectContent id="nhom">
                                     <SelectGroup>
-                                        {machineOfficeList.map((g) => (
+                                        {officeList.map((g) => (
                                             <SelectItem
                                                 className="text-lg"
                                                 key={g.name}
