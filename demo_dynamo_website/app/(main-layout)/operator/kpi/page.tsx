@@ -229,7 +229,8 @@ export default function OperatorTable() {
     const [showForm, setShowForm] = useState(false)
     // Edit Operator
     const [editingOperator, setEditingOperator] = useState<KPI | null>(null)
-
+    console.log("editingOperator")
+    console.log(editingOperator)
     const columns = getColumns({ setEditingOperator, setShowForm })
     const table = useReactTable({
         data: staffKPI,

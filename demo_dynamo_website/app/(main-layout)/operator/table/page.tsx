@@ -38,14 +38,19 @@ import AddOperatorForm from "../components/addNewOperator"
 import { useStaff } from "../hooks/useStaff"
 import { useRouter } from 'next/navigation'
 import { toast } from "sonner"
+import DetailStaffForm from "../components/detailOperator"
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 function getColumns({
     setEditingOperator,
     setShowForm,
+    setDetailStaff,
+    setShowDetail,
 }: {
     setEditingOperator: (operator: Staff) => void
+    setDetailStaff: (operator: Staff) => void
     setShowForm: (show: boolean) => void
+    setShowDetail: (show: boolean) => void
 }): ColumnDef<Staff>[] {
     return [
         // {
@@ -168,7 +173,13 @@ function getColumns({
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem className="text-lg cursor-pointer">
+                            <DropdownMenuItem
+                                className="text-lg cursor-pointer pr-6"
+                                onClick={() => {
+                                    setDetailStaff(operator);
+                                    setShowDetail(true);
+                                }}
+                            >
                                 Thông tin chi tiết
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -204,12 +215,17 @@ export default function OperatorTable() {
     // Staff Data
     const { data: staff } = useStaff()
 
-    // Add new operator
+    // Add new Staff
     const [showForm, setShowForm] = useState(false)
-    // Edit Operator
+    // Edit Staff
     const [editingOperator, setEditingOperator] = useState<Staff | null>(null)
+    // Detail Staff
+    const [detailStaff, setDetailStaff] = useState<Staff | null>(null)
+    const [showDetail, setShowDetail] = useState(false);
+    console.log("editingOperator2")
+    console.log(editingOperator)
 
-    const columns = getColumns({ setEditingOperator, setShowForm })
+    const columns = getColumns({ setEditingOperator, setShowForm, setDetailStaff, setShowDetail })
     const table = useReactTable({
         data: staff,
         columns,
@@ -343,6 +359,27 @@ export default function OperatorTable() {
                                 }}
                                 onCancel={() => {
                                     setShowForm(false)
+                                }}
+                            />
+                        )}
+                    </DialogContent>
+                </Dialog>
+
+                <Dialog open={showDetail} onOpenChange={(open) => {
+                    setShowDetail(open);
+                    if (!open) setDetailStaff(null);
+                }}>
+                    <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
+                        <DialogHeader>
+                            <DialogTitle className="text-3xl text-[#084188] font-semibold">
+                                Thông tin chi tiết nhân viên
+                            </DialogTitle>
+                        </DialogHeader>
+                        {detailStaff && (
+                            <DetailStaffForm
+                                staff={detailStaff}
+                                onCancel={() => {
+                                    setShowDetail(false);
                                 }}
                             />
                         )}
