@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { Group, Machine2 } from "@/lib/type";
+import { KPI } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 export function useMachine() {
@@ -61,6 +62,28 @@ export function useMachineById(machineId: number) {
                 setData(res.data)
             } catch (err) {
                 setError("Lỗi khi tải thông tin")
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchData()
+    }, [])
+    return { data, loading, error }
+}
+
+export function useMachineKPI() {
+    const [data, setData] = useState<KPI[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await axios.get<KPI[]>(`${url}/api/machine-kpi`)
+                setData(res.data)
+            } catch (err) {
+                setError("Lỗi khi tải dữ liệu")
             } finally {
                 setLoading(false)
             }

@@ -43,24 +43,3 @@ export function useGroup() {
     }, [])
     return { data, loading, error }
 }
-
-// export function useStaffDetail(staffIdString: string) {
-//     const [data, setData] = useState<Staff[]>([])
-//     const [loading, setLoading] = useState(true)
-//     const [error, setError] = useState<string | null>(null)
-
-//     useEffect(() => {
-//         const fetchData = async () => {
-//             try {
-//                 const res = await axios.get<Staff[]>(`${url}/api/staff/${staffIdString}`)
-//                 setData(res.data)
-//             } catch (err) {
-//                 setError("Lỗi khi tải thông tin")
-//             } finally {
-//                 setLoading(false)
-//             }
-//         }
-//         fetchData()
-//     }, [])
-//     return { data, loading, error }
-// }

@@ -173,22 +173,6 @@ export interface StaffKpiDto {
     id: number;
 }
 
-// export interface StaffKPI {
-//     year: number | null,
-//     month: number | null,
-//     pgTimeGoal: number | null,
-//     machineTimeGoal: number | null,
-//     manufacturingPoint: number | null,
-//     oleGoal: number | null,
-//     workGoal: number | null,
-//     kpi: number | null,
-
-// }
-
-// export interface StaffWithKPI extends Staff {
-//     staffKpiDtos: StaffKPI[] | null;
-// }
-
 export interface Group {
     groupId: string,
     groupName: string,
@@ -197,22 +181,6 @@ export interface Group {
     // "machineGroups": [],
 }
 
-
-
-
-
-// export interface OrderDetailDto {
-//   orderDetailId: string;
-//   drawingCodeId: string;
-//   drawingCodeName: string;
-//   orderId: string;
-//   poNumber: string;
-//   orderCode: string;
-//   quantity: number;
-//   orderType: string;
-//   createdDate: string;
-//   updatedDate: string;
-// }
 
 export interface MachineDto {
     machineId: number;
@@ -231,7 +199,6 @@ export interface MachineDto {
 export interface StaffDto {
     staffId?: string;
     staffName?: string;
-    // Add other staff properties as needed
 }
 
 export interface ProcessData {

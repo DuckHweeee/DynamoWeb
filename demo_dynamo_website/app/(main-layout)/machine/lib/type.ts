@@ -20,3 +20,17 @@ export interface GroupMachine {
     name: string
 }
 
+export interface KPI {
+    year: number,
+    month: number,
+    oee: number,
+    machineMiningTarget: number
+    machineId: number,
+    machineName: string,
+    machineStatus: number,
+    groupId: string,
+    groupName: string,
+    id: number
+    createdDate: string;
+    updatedDate: string;
+}
