@@ -123,6 +123,10 @@ const data = {
                     title: "Danh sách máy móc",
                     url: "/machine/table",
                 },
+                {
+                    title: "Cài đặt KPI",
+                    url: "/machine/kpi",
+                },
             ],
         },
         {
