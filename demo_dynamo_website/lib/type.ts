@@ -15,12 +15,7 @@ export type Machine = {
     ma_may: string
 }
 
-export type DrawingCode = {
-    id: string
-    ma_ban_ve: string
-    dnc: string
-    trang_thai: string
-}
+
 
 export type Process = {
     id: string
@@ -220,4 +215,12 @@ export interface ProcessData {
     staffDtos: StaffDto[] | null;
     planDto: any;
     processTimeDto: any;
+}
+
+export type DrawingCode = {
+    drawingCodeId: string;
+    drawingCodeName: string;
+    status: number;
+    createdDate: string;
+    updatedDate: string;
 }

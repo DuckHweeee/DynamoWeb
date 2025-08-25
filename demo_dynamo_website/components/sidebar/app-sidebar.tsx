@@ -130,12 +130,12 @@ const data = {
             ],
         },
         {
-            title: "Drawing Code",
+            title: "Bản vẽ & Đơn",
             url: "/drawingCode",
             icon: PencilRuler,
             items: [
                 {
-                    title: "Drawing Code Table",
+                    title: "Bản vẽ & Đơn hàng",
                     url: "/drawingCode",
                 },
             ],
