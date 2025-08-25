@@ -217,10 +217,17 @@ export interface ProcessData {
     processTimeDto: any;
 }
 
-export type DrawingCode = {
+export interface DrawingCode {
     drawingCodeId: string;
     drawingCodeName: string;
     status: number;
     createdDate: string;
     updatedDate: string;
+}
+export interface Order {
+    orderId: string;
+    poNumber: string;
+    createdDate: string;
+    updatedDate: string;
+    status: number;
 }

@@ -35,7 +35,6 @@ import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 import { DrawingCode } from "@/lib/type"
-import { mockDrawingCodes } from "@/lib/dataDemo"
 import EditDrawingCodeForm from "../components/editDrawingCode"
 import AddDrawingCodeForm from "../components/addNewDrawingCode"
 import { useDrawingCode } from "../hooks/useDrawingCode"

@@ -34,19 +34,21 @@ import {
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
-import { DrawingCode } from "@/lib/type"
-import { mockDrawingCodes } from "@/lib/dataDemo"
+import { DrawingCode, Order } from "@/lib/type"
 import EditDrawingCodeForm from "../components/editDrawingCode"
 import AddDrawingCodeForm from "../components/addNewDrawingCode"
 import { useDrawingCode } from "../hooks/useDrawingCode"
+import { useOrder } from "../hooks/useOrder"
+import EditOrderForm from "../components/editOrder"
+import AddOrderForm from "../components/addOrder"
 
 function getColumns({
-    setEditingDrawing,
+    setEditingOrder,
     setShowForm,
 }: {
-    setEditingDrawing: (drawing: DrawingCode) => void
+    setEditingOrder: (order: Order) => void
     setShowForm: (show: boolean) => void
-}): ColumnDef<DrawingCode>[] {
+}): ColumnDef<Order>[] {
     return [
         {
             id: "stt",
@@ -54,15 +56,15 @@ function getColumns({
             cell: ({ row }) => <div>{row.index + 1}</div>,
         },
         {
-            accessorKey: "drawingCodeName",
+            accessorKey: "poNumber",
             header: ({ column }) => (
                 <Button
                     className="cursor-pointer text-lg font-bold" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Mã Bản Vẽ
+                    Số PO
                     <ArrowUpDown />
                 </Button>
             ),
-            cell: ({ row }) => <div>{row.getValue("drawingCodeName")}</div>,
+            cell: ({ row }) => <div>{row.getValue("poNumber")}</div>,
         },
         {
             accessorKey: "createdDate",
@@ -127,7 +129,7 @@ function getColumns({
                             <DropdownMenuItem
                                 className="text-lg cursor-pointer pr-6"
                                 onClick={() => {
-                                    setEditingDrawing(drawing)
+                                    setEditingOrder(drawing)
                                     setShowForm(true)
                                 }}
                             >
@@ -148,16 +150,16 @@ export default function DrawingCodeTable() {
     const [rowSelection, setRowSelection] = useState({})
     const [globalFilter, setGlobalFilter] = useState("")
 
-    // DrawingCode Data
-    const { data: drwingCode } = useDrawingCode()
+    // Order Data
+    const { data: order } = useOrder()
 
     const [showForm, setShowForm] = useState(false)
-    const [editingDrawing, setEditingDrawing] = useState<DrawingCode | null>(null)
+    const [editingOrder, setEditingOrder] = useState<Order | null>(null)
 
-    const columns = getColumns({ setEditingDrawing, setShowForm })
+    const columns = getColumns({ setEditingOrder, setShowForm })
 
     const table = useReactTable({
-        data: drwingCode,
+        data: order,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -242,34 +244,34 @@ export default function DrawingCodeTable() {
                 open={showForm}
                 onOpenChange={(open) => {
                     setShowForm(open)
-                    if (!open) setEditingDrawing(null)
+                    if (!open) setEditingOrder(null)
                 }}
             >
                 <DialogContent className="max-w-2xl">
                     <DialogHeader>
-                        <DialogTitle className="text-3xl">{editingDrawing ? "Chỉnh sửa bản vẽ" : "Thêm bản vẽ mới"}</DialogTitle>
+                        <DialogTitle className="text-3xl">{editingOrder ? "Chỉnh sửa bản vẽ" : "Thêm bản vẽ mới"}</DialogTitle>
                     </DialogHeader>
 
-                    {editingDrawing ? (
-                        <EditDrawingCodeForm
-                            initialData={editingDrawing}
+                    {editingOrder ? (
+                        <EditOrderForm
+                            initialData={editingOrder}
                             onUpdate={(updated) => {
-                                const index = drwingCode.findIndex((d) => d.drawingCodeId === updated.drawingCodeId)
-                                if (index !== -1) drwingCode[index] = updated
-                                table.setOptions((prev) => ({ ...prev, data: [...drwingCode] }))
+                                const index = order.findIndex((d) => d.orderId === updated.orderId)
+                                if (index !== -1) order[index] = updated
+                                table.setOptions((prev) => ({ ...prev, data: [...order] }))
                                 setShowForm(false)
-                                setEditingDrawing(null)
+                                setEditingOrder(null)
                             }}
                             onCancel={() => {
                                 setShowForm(false)
-                                setEditingDrawing(null)
+                                setEditingOrder(null)
                             }}
                         />
                     ) : (
-                        <AddDrawingCodeForm
+                        <AddOrderForm
                             onAdd={(newDrawing) => {
-                                drwingCode.push(newDrawing)
-                                table.setOptions((prev) => ({ ...prev, data: [...drwingCode] }))
+                                order.push(newDrawing)
+                                table.setOptions((prev) => ({ ...prev, data: [...order] }))
                                 setShowForm(false)
                             }}
                             onCancel={() => setShowForm(false)}
