@@ -222,8 +222,6 @@ export default function OperatorTable() {
     // Detail Staff
     const [detailStaff, setDetailStaff] = useState<Staff | null>(null)
     const [showDetail, setShowDetail] = useState(false);
-    console.log("editingOperator2")
-    console.log(editingOperator)
 
     const columns = getColumns({ setEditingOperator, setShowForm, setDetailStaff, setShowDetail })
     const table = useReactTable({

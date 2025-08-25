@@ -40,13 +40,18 @@ import { mockMachines } from "@/lib/dataDemo"
 import EditMachineForm from "../components/editMachine"
 import AddMachineForm from "../components/addNewMachine"
 import { useMachine } from "../hooks/useMachine"
+import DetailMachineForm from "../components/detailMachine"
 
 function getColumns({
     setEditingMachine,
     setShowForm,
+    setDetailMachine,
+    setShowDetail,
 }: {
     setEditingMachine: (machine: Machine2) => void
+    setDetailMachine: (machine: Machine2) => void
     setShowForm: (show: boolean) => void
+    setShowDetail: (show: boolean) => void
 }): ColumnDef<Machine2>[] {
     return [
         {
@@ -161,10 +166,17 @@ function getColumns({
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
-                                Xóa
+                            <DropdownMenuItem
+                                className="text-lg cursor-pointer pr-6"
+                                onClick={() => {
+                                    setDetailMachine(machine);
+                                    setShowDetail(true);
+                                }}
+                            >
+                                Thông tin chi tiết
                             </DropdownMenuItem>
                             <DropdownMenuItem
+                                className="text-lg cursor-pointer pr-6"
                                 onClick={() => {
                                     setEditingMachine(machine)
                                     setShowForm(true)
@@ -191,8 +203,10 @@ export default function MachineTable() {
 
     const [showForm, setShowForm] = useState(false)
     const [editingMachine, setEditingMachine] = useState<Machine2 | null>(null)
-
-    const columns = getColumns({ setEditingMachine, setShowForm })
+    // Detail Machine
+    const [detailMachine, setDetailMachine] = useState<Machine2 | null>(null)
+    const [showDetail, setShowDetail] = useState(false);
+    const columns = getColumns({ setEditingMachine, setShowForm, setDetailMachine, setShowDetail })
 
     const table = useReactTable({
         data: machine,
@@ -268,7 +282,7 @@ export default function MachineTable() {
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No results.
+                                    Không có dữ liệu.
                                 </TableCell>
                             </TableRow>
                         )}
@@ -311,6 +325,26 @@ export default function MachineTable() {
                                 setShowForm(false)
                             }}
                             onCancel={() => setShowForm(false)}
+                        />
+                    )}
+                </DialogContent>
+            </Dialog>
+            <Dialog open={showDetail} onOpenChange={(open) => {
+                setShowDetail(open);
+                if (!open) setDetailMachine(null);
+            }}>
+                <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
+                    <DialogHeader>
+                        <DialogTitle className="text-3xl text-[#084188] font-semibold">
+                            Thông tin chi tiết máy
+                        </DialogTitle>
+                    </DialogHeader>
+                    {detailMachine && (
+                        <DetailMachineForm
+                            machine={detailMachine}
+                            onCancel={() => {
+                                setShowDetail(false);
+                            }}
                         />
                     )}
                 </DialogContent>
