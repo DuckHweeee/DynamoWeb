@@ -16,6 +16,7 @@ import {
 import { ArrowUpDown, MoreHorizontal, Plus, Search } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -34,86 +35,99 @@ import {
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
-import { DrawingCode, Order } from "@/lib/type"
-import { useOrder } from "../hooks/useOrder"
-import EditOrderForm from "../components/editOrder"
-import AddOrderForm from "../components/addOrder"
+import { useUnPlannedProcess } from "../hooks/useUnPlannedProcess"
+import { Process } from "../lib/type"
+import EditProcessForm from "./components/editProcess"
+import AddProcessForm from "./components/addNewProcess"
+import DetailProcess from "./components/detailProcess"
+
+function formatSeconds(seconds: string): string {
+    const total = parseInt(seconds)
+    const hours = Math.floor(total / 3600)
+    const minutes = Math.floor((total % 3600) / 60)
+    return `${hours}h ${minutes}m`
+}
 
 function getColumns({
-    setEditingOrder,
+    setEditingProcess,
     setShowForm,
+    setDetailProcess,
+    setOpenDetail
 }: {
-    setEditingOrder: (order: Order) => void
+    setEditingProcess: (process: Process) => void
     setShowForm: (show: boolean) => void
-}): ColumnDef<Order>[] {
+    setDetailProcess: (process: Process) => void
+    setOpenDetail: (show: boolean) => void
+}): ColumnDef<Process>[] {
     return [
         {
-            id: "stt",
-            header: () => (<span className="text-lg font-bold ">STT</span>),
-            cell: ({ row }) => <div>{row.index + 1}</div>,
-        },
-        {
-            accessorKey: "poNumber",
+            accessorKey: "processType",
             header: ({ column }) => (
-                <Button
-                    className="cursor-pointer text-lg font-bold" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Số PO
-                    <ArrowUpDown />
-                </Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Đối tượng gia công <ArrowUpDown /></Button>
             ),
-            cell: ({ row }) => <div>{row.getValue("poNumber")}</div>,
+            cell: ({ row }) => <div className="capitalize">{row.getValue("processType")}</div>,
         },
         {
-            accessorKey: "createdDate",
+            accessorKey: "orderDetailDto.orderCode",
             header: ({ column }) => (
-                <Button
-                    className="cursor-pointer text-lg font-bold" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Ngày Thêm
-                    <ArrowUpDown />
-                </Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Mã hàng <ArrowUpDown /></Button>
             ),
-            cell: ({ row }) => {
-                const value = row.getValue("createdDate") as string
-                const date = value ? new Date(value) : null
-                const formatted = date
-                    ? date.toLocaleDateString("vi-VN", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                    })
-                    : ""
-                return <div>{formatted}</div>
-            },
+            cell: ({ row }) => <div>
+                <div>{row.original.orderDetailDto?.orderCode ?? "—"}</div></div>,
         },
         {
-            accessorKey: "status",
+            accessorKey: "partNumber",
             header: ({ column }) => (
-                <Button
-                    className="cursor-pointer text-lg font-bold" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Trạng Thái
-                    <ArrowUpDown />
-                </Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Số nguyên công <ArrowUpDown /></Button>
+            ),
+            cell: ({ row }) => <div>{row.getValue("partNumber")}</div>,
+        },
+        {
+            accessorKey: "stepNumber",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Thứ tự nguyên công<ArrowUpDown /></Button>
+            ),
+            cell: ({ row }) => <div>{row.getValue("stepNumber")}</div>,
+        },
+        {
+            accessorKey: "manufacturingPoint",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Điểm nguyên công <ArrowUpDown /></Button>
+            ),
+            cell: ({ row }) => <div>{row.getValue("manufacturingPoint")}</div>,
+        },
+        {
+            accessorKey: "pgTime",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Giờ PG <ArrowUpDown /></Button>
+            ),
+            cell: ({ row }) => <div>{row.getValue("pgTime")}</div>,
+        },
+        {
+            accessorKey: "processStatus",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Trạng Thái <ArrowUpDown /></Button>
             ),
             cell: ({ getValue }) => {
                 const value = getValue<number>()
-                const isWorking = value === 1
+                const isWorking = value === 2
                 return (
                     <div className="flex justify-center">
                         <div
                             className={`px-4 py-1.5 rounded-sm text-center capitalize
-        ${isWorking ? "bg-[#E7F7EF] text-[#0CAF60]" : "bg-[#FFE6E6] text-[#FE4A4A]"}`}
+            ${isWorking ? "bg-[#E7F7EF] text-[#0CAF60]" : "bg-[#FFF7E0] text-[#E6A700]"}`}
                         >
-                            {isWorking ? "Còn hiệu lực" : "Hết hiệu lực"}
+                            {isWorking ? "Đang thực hiện" : "Đang chờ"}
                         </div>
                     </div>
                 )
-            }
+            },
         },
         {
             id: "actions",
             enableHiding: false,
             cell: ({ row }) => {
-                const drawing = row.original
+                const process = row.original
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -126,7 +140,16 @@ function getColumns({
                             <DropdownMenuItem
                                 className="text-lg cursor-pointer pr-6"
                                 onClick={() => {
-                                    setEditingOrder(drawing)
+                                    setDetailProcess(process)
+                                    setOpenDetail(true)
+                                }}
+                            >
+                                Xem chi tiết
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                className="text-lg cursor-pointer pr-6"
+                                onClick={() => {
+                                    setEditingProcess(process)
                                     setShowForm(true)
                                 }}
                             >
@@ -140,23 +163,32 @@ function getColumns({
     ]
 }
 
-export default function DrawingCodeTable() {
+export default function UnPlannedProcessTable() {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
     const [globalFilter, setGlobalFilter] = useState("")
+    // UnPlannedProcess Data
+    const { data: process } = useUnPlannedProcess()
 
-    // Order Data
-    const { data: order } = useOrder()
 
     const [showForm, setShowForm] = useState(false)
-    const [editingOrder, setEditingOrder] = useState<Order | null>(null)
+    const [editingProcess, setEditingProcess] = useState<Process | null>(null)
 
-    const columns = getColumns({ setEditingOrder, setShowForm })
+    // Detail
+    const [detailProcess, setDetailProcess] = useState<Process | null>(null)
+    const [openDetail, setOpenDetail] = useState(false);
+
+    const columns = getColumns({
+        setEditingProcess,
+        setShowForm,
+        setDetailProcess,
+        setOpenDetail
+    })
 
     const table = useReactTable({
-        data: order,
+        data: process,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -178,10 +210,10 @@ export default function DrawingCodeTable() {
     })
 
     return (
-        <>
+        <div className="m-1 bg-white rounded-[10px]">
             <div className="flex flex-row items-center justify-between py-4">
                 <div className="w-2/3">
-                    <p className="text-2xl font-bold">Danh Sách Bản Vẽ</p>
+                    <p className="text-2xl font-bold">Quản lý gia công</p>
                 </div>
                 <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
                     <div className="relative max-w-sm w-full">
@@ -206,7 +238,7 @@ export default function DrawingCodeTable() {
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id} className="text-lg font-bold">
+                            <TableRow key={headerGroup.id} className="text-xl font-bold">
                                 {headerGroup.headers.map((header) => (
                                     <TableHead key={header.id} className="text-center py-2">
                                         {!header.isPlaceholder && flexRender(header.column.columnDef.header, header.getContext())}
@@ -241,34 +273,34 @@ export default function DrawingCodeTable() {
                 open={showForm}
                 onOpenChange={(open) => {
                     setShowForm(open)
-                    if (!open) setEditingOrder(null)
+                    if (!open) setEditingProcess(null)
                 }}
             >
-                <DialogContent className="max-w-2xl">
+                <DialogContent className="!max-w-5xl">
                     <DialogHeader>
-                        <DialogTitle className="text-3xl">{editingOrder ? "Chỉnh sửa bản vẽ" : "Thêm bản vẽ mới"}</DialogTitle>
+                        <DialogTitle className="text-4xl">{editingProcess ? "Chỉnh sửa kế hoạch 1223" : "Thêm kế hoạch mới 123"}</DialogTitle>
                     </DialogHeader>
 
-                    {editingOrder ? (
-                        <EditOrderForm
-                            initialData={editingOrder}
+                    {editingProcess ? (
+                        <EditProcessForm
+                            initialData={editingProcess}
                             onUpdate={(updated) => {
-                                const index = order.findIndex((d) => d.orderId === updated.orderId)
-                                if (index !== -1) order[index] = updated
-                                table.setOptions((prev) => ({ ...prev, data: [...order] }))
+                                const index = process.findIndex((p) => p.processId === updated.processId)
+                                if (index !== -1) process[index] = updated
+                                table.setOptions((prev) => ({ ...prev, data: [...process] }))
                                 setShowForm(false)
-                                setEditingOrder(null)
+                                setEditingProcess(null)
                             }}
                             onCancel={() => {
                                 setShowForm(false)
-                                setEditingOrder(null)
+                                setEditingProcess(null)
                             }}
                         />
                     ) : (
-                        <AddOrderForm
-                            onAdd={(newDrawing) => {
-                                order.push(newDrawing)
-                                table.setOptions((prev) => ({ ...prev, data: [...order] }))
+                        <AddProcessForm
+                            onAdd={(newProcess) => {
+                                process.push(newProcess)
+                                table.setOptions((prev) => ({ ...prev, data: [...process] }))
                                 setShowForm(false)
                             }}
                             onCancel={() => setShowForm(false)}
@@ -276,7 +308,7 @@ export default function DrawingCodeTable() {
                     )}
                 </DialogContent>
             </Dialog>
-
+            <DetailProcess openDetail={openDetail} onClose={() => setOpenDetail(false)} process={detailProcess} />
             <div className="flex items-center justify-end space-x-2 py-4">
                 <div className="text-muted-foreground flex-1 text-sm">
                     {table.getFilteredSelectedRowModel().rows.length} / {table.getFilteredRowModel().rows.length} dòng được chọn.
@@ -290,7 +322,7 @@ export default function DrawingCodeTable() {
                     </Button>
                 </div>
             </div>
-            {/* </div> */}
-        </>
+        </div>
     )
 }
+

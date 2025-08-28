@@ -141,7 +141,7 @@ const data = {
             ],
         },
         {
-            title: "Process",
+            title: "Gia công",
             url: "/process",
             icon: SquarePen,
             items: [
@@ -150,7 +150,7 @@ const data = {
                     url: "/process/kanban",
                 },
                 {
-                    title: "Process Table",
+                    title: "Gia công chi tiết",
                     url: "/process",
                 },
             ],

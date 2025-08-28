@@ -122,3 +122,32 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Chọn ngày giờ */
+.react-datepicker {
+  @apply bg-white border border-gray-300 rounded-lg shadow-lg;
+}
+
+.react-datepicker__header {
+  @apply bg-blue-500 text-white font-semibold rounded-t-lg;
+}
+
+.react-datepicker__day {
+  @apply w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-blue-100 rounded-full;
+}
+
+.react-datepicker__day--selected {
+  @apply bg-blue-600 text-white font-bold;
+}
+
+.react-datepicker__day--keyboard-selected {
+  @apply bg-blue-500 text-white;
+}
+
+.react-datepicker__time-container {
+  @apply border-l border-gray-300;
+}
+
+.react-datepicker__time-list-item--selected {
+  @apply bg-blue-600 text-white;
+}

@@ -2,11 +2,10 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "../../globals.css";
-import { Toaster } from "sonner";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
-import { ClipboardList, PencilRuler } from "lucide-react";
+import { ClipboardList, PencilLine } from "lucide-react";
 const geistSans = Geist({
     variable: "--font-geist-sans",
     subsets: ["latin"],
@@ -25,8 +24,10 @@ export default function TbaletLayout({
 }) {
     const pathname = usePathname();
 
-    const isOrder = pathname.startsWith("/drawingCode/order");
-    const isDrawingCode = !isOrder && pathname.startsWith("/drawingCode");
+    // const isPlannedProcess = pathname.startsWith("/process");
+    // const isUnPlannedProcesse = !isPlannedProcess && pathname.startsWith("/process/unplannedProcess");
+    const isPlannedProcess = pathname === "/process";
+    const isUnPlannedProcess = pathname === "/process/unplannedProcess";
     return (
         <div
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -34,35 +35,32 @@ export default function TbaletLayout({
             <div className="m-2 px-4 py-1 bg-white rounded-[10px] shadow">
                 <div className="flex items-center justify-center p-3">
                     <div className="flex gap-x-3">
-                        <Link href={"/drawingCode"}>
+                        <Link href={"/process"}>
                             <Button
                                 className={`cursor-pointer hover:bg-blue-200 text-xl font-semibold !py-6 px-4 rounded-sm border-1 bg-white text-blue-950
-                                    ${isDrawingCode
+                                    ${isPlannedProcess
                                         ? "border-2 border-blue-950"
                                         : ""
                                     }`}
                             >
-                                <PencilRuler
-                                    className={`!w-[20px] !h-[20px] text-blue-950`}
-                                /> Bản vẽ
+                                <ClipboardList className={`!w-[20px] !h-[20px] text-blue-950`} />Kế hoạch chi tiết
                             </Button>
                         </Link>
-                        <Link href={"/drawingCode/order"}>
+                        <Link href={"/process/unplannedProcess"}>
                             <Button
                                 className={`cursor-pointer hover:bg-blue-200 text-xl font-semibold !py-6 px-4 rounded-sm border-1 bg-white text-blue-950
-                                    ${isOrder
+                                    ${isUnPlannedProcess
                                         ? "border-2 border-blue-950"
                                         : ""
                                     }`}
                             >
-                                <ClipboardList className={`!w-[20px] !h-[20px] text-blue-950`} />Đơn hàng
+                                <PencilLine className={`!w-[20px] !h-[20px] text-blue-950`} /> Gia công chi tiết
                             </Button>
                         </Link>
                     </div>
                 </div>
                 {children}
             </div>
-            {/* <Toaster richColors position="top-left" /> */}
         </div>
     );
 }
