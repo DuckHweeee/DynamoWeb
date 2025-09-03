@@ -7,7 +7,8 @@ export const mockOperators: Operator[] = [
         name: "Phuc",
         phong_ban: "D1",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Tinh"
+        cong_viec: "Gia Công Tinh",
+        trang_thai: 1
     },
     {
         stt: "2",
@@ -15,7 +16,8 @@ export const mockOperators: Operator[] = [
         name: "Phuc Bui",
         phong_ban: "D2",
         nhom: "Quản lý",
-        cong_viec: "Gia Công Tinh"
+        cong_viec: "Gia Công Tinh",
+        trang_thai: 1
     },
     {
         stt: "3",
@@ -23,7 +25,8 @@ export const mockOperators: Operator[] = [
         name: "Phuc 26",
         phong_ban: "D1",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Tinh"
+        cong_viec: "Gia Công Tinh",
+        trang_thai: 0
     },
     {
         stt: "4",
@@ -31,7 +34,8 @@ export const mockOperators: Operator[] = [
         name: "Hoang Phuc",
         phong_ban: "D3",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 0
     },
     {
         stt: "6",
@@ -39,7 +43,8 @@ export const mockOperators: Operator[] = [
         name: "Hoang Phuc",
         phong_ban: "D3",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 0
     },
     {
         stt: "7",
@@ -47,7 +52,8 @@ export const mockOperators: Operator[] = [
         name: "Hoang Phuc",
         phong_ban: "D3",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 0
     },
     {
         stt: "8",
@@ -55,7 +61,8 @@ export const mockOperators: Operator[] = [
         name: "Hoang Phuc",
         phong_ban: "D3",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 0
     },
     {
         stt: "9",
@@ -63,7 +70,8 @@ export const mockOperators: Operator[] = [
         name: "Hoang Phuc",
         phong_ban: "D3",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 1
     },
     {
         stt: "9",
@@ -71,7 +79,8 @@ export const mockOperators: Operator[] = [
         name: "Hoang Phuc",
         phong_ban: "D3",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 1
     },
     {
         stt: "10",
@@ -79,7 +88,8 @@ export const mockOperators: Operator[] = [
         name: "Hoang Phuc",
         phong_ban: "D3",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 1
     },
     {
         stt: "11",
@@ -87,7 +97,8 @@ export const mockOperators: Operator[] = [
         name: "Hoang Phuc",
         phong_ban: "D3",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 1
     },
     {
         stt: "12",
@@ -95,7 +106,8 @@ export const mockOperators: Operator[] = [
         name: "Hoang Phuc",
         phong_ban: "D3",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 1
     },
     {
         stt: "13",
@@ -103,7 +115,8 @@ export const mockOperators: Operator[] = [
         name: "Hoang Phuc",
         phong_ban: "D3",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 1
     },
     {
         stt: "14",
@@ -111,7 +124,8 @@ export const mockOperators: Operator[] = [
         name: "Hoang Phuc",
         phong_ban: "D3",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 1
     },
     {
         stt: "15",
@@ -119,7 +133,8 @@ export const mockOperators: Operator[] = [
         name: "Hoang Phuc",
         phong_ban: "D3",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 1
     },
     {
         stt: "16",
@@ -127,7 +142,8 @@ export const mockOperators: Operator[] = [
         name: "Hoang Phuc",
         phong_ban: "D3",
         nhom: "Sản xuất",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 1
     },
     {
         stt: "5",
@@ -135,7 +151,8 @@ export const mockOperators: Operator[] = [
         name: "Phuc Hoang",
         phong_ban: "D2",
         nhom: "Sản Quản Lý",
-        cong_viec: "Gia Công Thô"
+        cong_viec: "Gia Công Thô",
+        trang_thai: 1
     }
 ]
 
@@ -487,3 +504,5 @@ export const mockDrawingCodes2: DrawingCode2[] = [
         thoi_gian_thuc_te: 152590,
     },
 ]
+
+// Tablet

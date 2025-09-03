@@ -5,6 +5,7 @@ export type Operator = {
     phong_ban: string
     nhom: string
     cong_viec: string
+    trang_thai: number
 }
 
 export type Machine = {
@@ -14,12 +15,7 @@ export type Machine = {
     ma_may: string
 }
 
-export type DrawingCode = {
-    id: string
-    ma_ban_ve: string
-    dnc: string
-    trang_thai: string
-}
+
 
 export type Process = {
     id: string
@@ -49,6 +45,7 @@ export type HistoryMachine = {
 }
 
 
+
 // Demo data Dashboard
 export type Operator2 = {
     id: string
@@ -62,4 +59,175 @@ export type DrawingCode2 = {
     name: string
     thoi_gian_du_kien: number
     thoi_gian_thuc_te: number
+}
+
+
+
+
+// Tablet - Dữ liệu thật--------------------------------------------------------------------------------------------------------------
+export interface Process2 {
+    processId: string;
+    partNumber: number;
+    stepNumber: number;
+    manufacturingPoint: number;
+    pgTime: number;
+    processType: string;
+    processStatus: number;
+    isPlan: number;
+    status: number;
+    orderDetailDto: OrderDetailDto;
+    machineDto: Machine2 | null;
+    planDto: PlanDto | null;
+}
+
+export interface PlanDto {
+    id: number | null;
+    inProgress: number | null;
+    machineId: number | null;
+    plannerId: string | null;
+    processId: string | null;
+    remark: number | null;
+    staffId: number | null;
+    status: number | null;
+}
+
+
+export interface OrderDetailDto {
+    orderDetailId: string;
+    drawingCodeId: string;
+    orderId: string;
+    poNumber: number;
+    orderCode: string;
+    quantity: number;
+    orderType: string;
+    createdDate: string;
+    updatedDate: string;
+    pgTimeGoal: number;
+}
+export interface Machine2 {
+    machineId: number;
+    machineName: string;
+    machineType: string;
+    machineWork: string;
+    machineOffice: string;
+    status: number;
+    createdDate: string;
+    updatedDate: string;
+    groupId: string;
+    machineKpiDtos: MachineKpiDtos;
+}
+export interface MachineKpiDtos {
+    year: number | null,
+    month: number | null,
+    oee: number | null,
+    machineMiningTarget: number | null,
+    createdDate: string,
+    updatedDate: string,
+    machineId: number | null,
+    machineName: string,
+    machineStatus: number | null,
+    groupId: string,
+    groupName: string,
+    id: number | null
+}
+export interface CurrentStaff {
+    staffIdNumber: number
+    staffId: string
+    operatorName: string
+    machineId: number
+}
+
+export interface Staff {
+    staffId?: number | null;
+    staffName: string;
+    staffOffice: string;
+    staffSection: string;
+    shortName: string;
+    status: number | null;
+    staffKpiDtos?: StaffKpiDto;
+    id: string;
+}
+
+export interface StaffKpiDto {
+    kpiId?: number,
+    year: number;
+    month: number;
+    pgTimeGoal: number;
+    machineTimeGoal: number;
+    manufacturingPoint: number;
+    oleGoal: number;
+    workGoal: number;
+    kpi: number;
+    createdDate: string;
+    updatedDate: string;
+    staffId?: number;
+    staffName?: string,
+    groupId: string,
+    groupName?: string | null,
+    staffStatus?: number,
+    id: number;
+}
+
+export interface Group {
+    groupId: string,
+    groupName: string,
+    groupType: string,
+    // "staffGroups": [],
+    // "machineGroups": [],
+}
+
+
+export interface MachineDto {
+    machineId: number;
+    machineName: string;
+    machineType: string;
+    machineGroup: string;
+    machineOffice: string;
+    status: number;
+    createdDate: string;
+    updatedDate: string;
+    groupId: string;
+    groupName: string;
+    machineKpiDtos: any;
+}
+
+export interface StaffDto {
+    staffId?: string;
+    staffName?: string;
+}
+
+export interface ProcessData {
+    processId: string;
+    partNumber: number;
+    stepNumber: number;
+    manufacturingPoint: number;
+    processType: string;
+    processStatus: number; // 1: Waiting, 2: In Progress, 3: Completed
+    pgTime: number;
+    startTime: string | null;
+    endTime: string | null;
+    createdDate: string;
+    updatedDate: string;
+    isPlan: number;
+    status: number;
+    orderDetailDto: OrderDetailDto | null; // Make orderDetailDto optional
+    machineDto: MachineDto | null; // Make machineDto optional
+    staffDtos: StaffDto[] | null;
+    planDto: any;
+    processTimeDto: any;
+}
+
+export interface DrawingCode {
+    drawingCodeId: string;
+    drawingCodeName: string;
+    status: number;
+    createdDate: string;
+    updatedDate: string;
+}
+export interface Order {
+    orderId: string;
+    poNumber: string;
+    createdDate: string;
+    updatedDate: string;
+    status: number;
 }

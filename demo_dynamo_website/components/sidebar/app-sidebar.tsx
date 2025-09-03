@@ -19,6 +19,7 @@ import {
     Settings2,
     SquarePen,
     SquareTerminal,
+    Tablet,
     UserCog,
 } from "lucide-react"
 
@@ -35,6 +36,7 @@ import { NavMain } from "./nav-main"
 import { Logo } from "./logo"
 import { useState } from "react"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { IIC } from "./iic"
 
 // This is sample data.
 const data = {
@@ -62,71 +64,91 @@ const data = {
     ],
     navMain: [
         {
-            title: "Dashboard",
+            title: "Thống kê",
             url: "/dashboard",
             icon: LayoutGrid,
             isActive: true,
             items: [
+                // {
+                //     title: "Dashboard All",
+                //     url: "/dashboard",
+                // },
                 {
-                    title: "Dashboard All",
-                    url: "/dashboard",
+                    title: "Máy móc",
+                    url: "/dashboard/machine",
                 },
                 {
-                    title: "Starred",
-                    url: "#",
+                    title: "Người vận hành",
+                    url: "/dashboard/operation",
                 },
                 {
-                    title: "Settings",
-                    url: "#",
+                    title: "Gia công chi tiết",
+                    url: "/dashboard/process",
+                },
+                {
+                    title: "Bản vẽ",
+                    url: "/dashboard/drawingCode",
                 },
             ],
         },
         {
-            title: "Operator",
-            url: "#",
+            title: "Nhân viên",
+            url: "/operator",
             icon: UserCog,
             items: [
                 {
                     title: "OP Status",
-                    url: "#",
+                    url: "/operator/status",
                 },
                 {
-                    title: "OP Table",
+                    title: "Danh sách nhân viên",
                     url: "/operator",
+                },
+                {
+                    title: "Cài đặt KPI",
+                    url: "/operator/kpi",
                 },
             ],
         },
         {
-            title: "Machine",
-            url: "#",
+            title: "Máy móc",
+            url: "/machine",
             icon: MonitorCog,
             items: [
                 {
                     title: "MC Status",
-                    url: "#",
+                    url: "/machine/status",
                 },
                 {
-                    title: "Machine Table",
-                    url: "/machine",
+                    title: "Danh sách máy móc",
+                    url: "/machine/table",
+                },
+                {
+                    title: "Cài đặt KPI",
+                    url: "/machine/kpi",
                 },
             ],
         },
         {
-            title: "Drawing Code",
+            title: "Bản vẽ & Đơn",
             url: "/drawingCode",
             icon: PencilRuler,
             items: [
                 {
-                    title: "Drawing Code Table",
+                    title: "Bản vẽ & Đơn hàng",
                     url: "/drawingCode",
                 },
             ],
         },
         {
             title: "Process",
-            url: "#",
+            url: "/process",
             icon: SquarePen,
             items: [
+                {
+                    title: "Kanban Process",
+                    url: "/process/kanban",
+                },
                 {
                     title: "Process Table",
                     url: "/process",
@@ -134,26 +156,26 @@ const data = {
             ],
         },
         {
-            title: "Oder",
+            title: "Order",
             url: "#",
             icon: MessageCircleMore,
-            items: [
-                {
-                    title: "Introduction",
-                    url: "#",
-                },
-            ],
+            // items: [
+            //     {
+            //         title: "Introduction",
+            //         url: "#",
+            //     },
+            // ],
         },
         {
             title: "Group",
             url: "#",
             icon: FolderMinus,
-            items: [
-                {
-                    title: "Introduction",
-                    url: "#",
-                },
-            ],
+            // items: [
+            //     {
+            //         title: "Introduction",
+            //         url: "#",
+            //     },
+            // ],
         },
         {
             title: "History",
@@ -172,35 +194,27 @@ const data = {
                     title: "History Operator",
                     url: "/history/historyOperator",
                 },
+            ],
+        },
+        {
+            title: "Tablet",
+            url: "/tablet",
+            icon: Tablet,
+            items: [
                 {
-                    title: "Changelog",
-                    url: "#",
+                    title: "Tablet Chu Trình",
+                    url: "/tablet/process",
+                },
+                {
+                    title: "Tablet Vận hành",
+                    url: "/tablet/operation",
+                },
+                {
+                    title: "Tablet Khai Báo",
+                    url: "/tablet/newProcess",
                 },
             ],
         },
-        // {
-        //     title: "Settings",
-        //     url: "#",
-        //     icon: Settings2,
-        //     items: [
-        //         {
-        //             title: "General",
-        //             url: "#",
-        //         },
-        //         {
-        //             title: "Team",
-        //             url: "#",
-        //         },
-        //         {
-        //             title: "Billing",
-        //             url: "#",
-        //         },
-        //         {
-        //             title: "Limits",
-        //             url: "#",
-        //         },
-        //     ],
-        // },
     ],
     projects: [
         {
@@ -233,9 +247,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {/* <NavProjects projects={data.projects} /> */}
             </SidebarContent>
             {/* <SidebarFooter>
-                <NavUser user={data.user} />
+                <IIC />
             </SidebarFooter> */}
-            <SidebarRail />
+            {/* <SidebarRail /> */}
         </Sidebar>
     )
 }
