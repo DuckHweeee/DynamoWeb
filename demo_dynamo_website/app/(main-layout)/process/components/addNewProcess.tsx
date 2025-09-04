@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 
-import { useOrder } from "../hooks/useOrder"
+import { useOrderDetail } from "../hooks/useOrderDetail"
 import { FlexibleCombobox } from "./FlexibleCombobox"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
@@ -35,7 +35,7 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
     });
     const [startDate, setStartDate] = useState<Date | null>(new Date())
     const [endDate, setEndDate] = useState<Date | null>(new Date())
-    const { data: orderList } = useOrder()
+    const { data: orderList } = useOrderDetail()
     const { data: machineList } = useMachine()
     const { data: staffList } = useStaff()
     const handleSubmit = async () => {
@@ -106,7 +106,7 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
         <div className="space-y-3">
             <div className="grid gap-2 grid-cols-3">
                 <div className="grid gap-1">
-                    <Label htmlFor="process" className="text-lg">Đối tượng gia công</Label>
+                    <Label htmlFor="process" className="text-lg">Đối Tượng Gia Công</Label>
                     <FlexibleCombobox
                         options={processingObjectList}
                         value={newProcess.processType}

@@ -15,16 +15,14 @@ import axios from "axios"
 import { toast } from "sonner"
 import { FlexibleCombobox } from "./FlexibleCombobox"
 import { processingObjectList } from "../../lib/data"
+import { useMachine } from "../hooks/useMachine"
 
 
 interface Props {
     open: boolean
     onOpenChange: (open: boolean) => void
     staffList: Staff[]
-    machineList: Machine2[]
 }
-
-
 
 
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -33,8 +31,8 @@ export default function CreateProcessDialog({
     open,
     onOpenChange,
     staffList,
-    machineList,
 }: Props) {
+    const { data: machineList } = useMachine();
     const [formData, setFormData] = useState({
         staffId: "",
         processType: "",

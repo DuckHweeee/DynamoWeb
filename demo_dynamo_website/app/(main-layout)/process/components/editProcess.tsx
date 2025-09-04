@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { useOrder } from "../hooks/useOrder"
+import { useOrderDetail } from "../hooks/useOrderDetail"
 import { FlexibleCombobox } from "./FlexibleCombobox"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
@@ -27,7 +27,7 @@ export default function EditProcessForm({
     onCancel,
 }: EditProcessFormProps) {
 
-    const { data: orderList } = useOrder()
+    const { data: orderList } = useOrderDetail()
     const { data: machineList } = useMachine()
     const { data: staffList } = useStaff()
 

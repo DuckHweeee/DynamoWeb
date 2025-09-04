@@ -156,15 +156,15 @@ const data = {
             ],
         },
         {
-            title: "Order",
+            title: "Mã hàng",
             url: "#",
             icon: MessageCircleMore,
-            // items: [
-            //     {
-            //         title: "Introduction",
-            //         url: "#",
-            //     },
-            // ],
+            items: [
+                {
+                    title: "Mã hàng gia công",
+                    url: "/orderDetail",
+                },
+            ],
         },
         {
             title: "Group",
@@ -178,7 +178,7 @@ const data = {
             // ],
         },
         {
-            title: "History",
+            title: "Lịch sử",
             url: "/history",
             icon: FolderClock,
             items: [
