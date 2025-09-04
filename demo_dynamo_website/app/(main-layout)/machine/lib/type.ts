@@ -27,7 +27,6 @@ export interface KPI {
     machineMiningTarget: number
     machineId: number,
     machineName: string,
-    machineStatus: number,
     groupId: string,
     groupName: string,
     id: number

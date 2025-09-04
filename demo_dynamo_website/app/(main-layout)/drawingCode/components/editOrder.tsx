@@ -5,51 +5,51 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DrawingCode } from "@/lib/type"
+import { DrawingCode, Order } from "@/lib/type"
 import { toast } from "sonner"
 
-type EditDrawingCodeFormProps = {
-    initialData: DrawingCode
-    onUpdate: (updated: DrawingCode) => void
+type EditOrderFormProps = {
+    initialData: Order
+    onUpdate: (updated: Order) => void
     onCancel: () => void
 }
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-export default function EditDrawingCodeForm({
+export default function EditOrderForm({
     initialData,
     onUpdate,
     onCancel,
-}: EditDrawingCodeFormProps) {
-    const [drawingCode] = useState<DrawingCode>(initialData)
-    const [updateDrawingCode, setUpdateDrawingCode] = useState({
-        drawingCodeName: "",
+}: EditOrderFormProps) {
+    const [order] = useState<Order>(initialData)
+    const [updateOrder, setUpdateOrdere] = useState({
+        poNumber: "",
         status: 1,
     })
     useEffect(() => {
-        if (drawingCode) {
-            setUpdateDrawingCode({
-                drawingCodeName: drawingCode.drawingCodeName ?? "",
-                status: drawingCode.status ?? 1,
+        if (order) {
+            setUpdateOrdere({
+                poNumber: order.poNumber ?? "",
+                status: order.status ?? 1,
             })
         }
-    }, [drawingCode])
+    }, [order])
 
     const handleUpdate = async () => {
-        if (!updateDrawingCode.drawingCodeName.trim()) {
-            toast.error("Vui lòng nhập mã bản vẽ.");
+        if (!updateOrder.poNumber.trim()) {
+            toast.error("Vui lòng nhập PO.");
             return;
         }
         try {
             const response = await fetch(
-                `${url}/api/drawing-code/${drawingCode.drawingCodeId}`,
+                `${url}/api/order/${order.orderId}`,
                 {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        drawingCodeId: drawingCode.drawingCodeId,
-                        drawingCodeName: updateDrawingCode.drawingCodeName,
-                        status: updateDrawingCode.status,
+                        orderId: order.orderId,
+                        poNumber: updateOrder.poNumber,
+                        status: updateOrder.status,
                     }),
                 }
             );
@@ -70,22 +70,22 @@ export default function EditDrawingCodeForm({
         <div className="space-y-6">
             <div className="grid gap-3">
                 <div className="grid gap-1">
-                    <Label htmlFor="drawingCodeName" className="text-xl">Mã bản vẽ</Label>
+                    <Label htmlFor="drawingCodeName" className="text-xl">Số PO</Label>
                     <Input
                         id="drawingCodeName"
                         placeholder="Mã bản vẽ"
                         className="!text-xl"
-                        value={updateDrawingCode.drawingCodeName}
-                        onChange={(e) => setUpdateDrawingCode({ ...updateDrawingCode, drawingCodeName: e.target.value })}
+                        value={updateOrder.poNumber}
+                        onChange={(e) => setUpdateOrdere({ ...updateOrder, poNumber: e.target.value })}
                     />
                 </div>
                 <div className="grid gap-1">
                     <Label htmlFor="status" className="text-xl">Trạng thái</Label>
                     <Select
-                        value={String(updateDrawingCode.status)}
+                        value={String(updateOrder.status)}
                         onValueChange={(value) =>
-                            setUpdateDrawingCode({
-                                ...updateDrawingCode,
+                            setUpdateOrdere({
+                                ...updateOrder,
                                 status: Number(value),
                             })
                         }

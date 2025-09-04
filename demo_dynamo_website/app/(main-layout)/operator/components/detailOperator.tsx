@@ -329,7 +329,7 @@ export default function DetailStaffForm({
                                     <Label htmlFor="nhom" className="text-lg !font-normal">Nhóm</Label>
                                     <Input
                                         id="shortName"
-                                        placeholder="nhom"
+                                        placeholder="Nhóm"
                                         readOnly
                                         value={displayKPI?.groupName.toLowerCase() ?? ""}
                                         className="!text-lg placeholder:text-[16px] capitalize"
@@ -382,7 +382,7 @@ export default function DetailStaffForm({
                                     <Input
                                         id="kpi"
                                         className="!text-lg"
-                                        placeholder="Mục tiêu làm việc"
+                                        placeholder=""
                                         type="number"
                                         inputMode="numeric"
                                         value={displayKPI?.kpi ?? ""}
@@ -393,7 +393,7 @@ export default function DetailStaffForm({
                                     <Label htmlFor="workGoal" className="text-lg !font-normal">Mục tiêu nhân viên làm việc</Label>
                                     <Input
                                         id="workGoal"
-                                        placeholder="Mục tiêu làm việc"
+                                        placeholder=""
                                         type="number"
                                         inputMode="numeric"
                                         className="!text-lg"
@@ -405,7 +405,7 @@ export default function DetailStaffForm({
                                     <Label htmlFor="pgTimeGoal" className="text-lg !font-normal">Mục tiêu giờ PG</Label>
                                     <Input
                                         id="pgTimeGoal"
-                                        placeholder="Mục tiêu giờ PG"
+                                        placeholder=""
                                         type="number"
                                         inputMode="numeric"
                                         className="!text-lg"
@@ -417,7 +417,7 @@ export default function DetailStaffForm({
                                     <Label htmlFor="machineTimeGoal" className="text-lg !font-normal">Mục tiêu giờ máy</Label>
                                     <Input
                                         id="machineTimeGoal"
-                                        placeholder="Mục tiêu giờ máy"
+                                        placeholder=""
                                         type="number"
                                         inputMode="numeric"
                                         className="!text-lg"
@@ -429,7 +429,7 @@ export default function DetailStaffForm({
                                     <Label htmlFor="manufacturingPoint" className="text-lg !font-normal">Mục tiêu điểm gia công</Label>
                                     <Input
                                         id="manufacturingPoint"
-                                        placeholder="Mục tiêu điểm gia công"
+                                        placeholder=""
                                         type="number"
                                         inputMode="numeric"
                                         className="!text-lg"
@@ -441,7 +441,7 @@ export default function DetailStaffForm({
                                     <Label htmlFor="oleGoal" className="text-lg !font-normal">Mục tiêu Ole</Label>
                                     <Input
                                         id="oleGoal"
-                                        placeholder="Mục tiêu Ole"
+                                        placeholder=""
                                         type="number"
                                         inputMode="numeric"
                                         className="!text-lg"

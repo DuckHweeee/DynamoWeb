@@ -6,32 +6,33 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 
-import { DrawingCode } from "@/lib/type"
+import { Order } from "@/lib/type"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-type AddDrawingCodeFormProps = {
-    onAdd: (drawing: DrawingCode) => void
+type AddOrderFormProps = {
+    onAdd: (drawing: Order) => void
     onCancel: () => void
 }
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-export default function AddDrawingCodeForm({ onAdd, onCancel }: AddDrawingCodeFormProps) {
-    const [addNewDrawingCode, setAddNewDrawingCode] = useState({
-        drawingCodeName: "",
+export default function AddOrderForm({ onAdd, onCancel }: AddOrderFormProps) {
+    const [addNewOrder, setAddNewOrder] = useState({
+        poNumber: "",
     })
     const handleSubmit = async () => {
-        if (!addNewDrawingCode.drawingCodeName.trim()) {
-            toast.error("Vui lòng nhập mã bản vẽ.");
+        if (!addNewOrder.poNumber.trim()) {
+            toast.error("Vui lòng nhập số PO.");
             return;
         }
         try {
             const response = await fetch(
-                `${url}/api/drawing-code`,
+                `${url}/api/order`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        drawingCodeName: addNewDrawingCode.drawingCodeName,
+                        poNumber: addNewOrder.poNumber,
                         status: 1,
                     }),
                 }
@@ -52,12 +53,12 @@ export default function AddDrawingCodeForm({ onAdd, onCancel }: AddDrawingCodeFo
     return (
         <div className="space-y-3">
             <div className="grid gap-">
-                <Label htmlFor="id" className="text-xl">Mã bản vẽ</Label>
+                <Label htmlFor="id" className="text-xl">Số PO</Label>
                 <Input
                     id="id"
                     placeholder="Mã bản vẽ"
-                    value={addNewDrawingCode.drawingCodeName}
-                    onChange={(e) => setAddNewDrawingCode({ ...addNewDrawingCode, drawingCodeName: e.target.value })}
+                    value={addNewOrder.poNumber}
+                    onChange={(e) => setAddNewOrder({ ...addNewOrder, poNumber: e.target.value })}
                 />
             </div>
 

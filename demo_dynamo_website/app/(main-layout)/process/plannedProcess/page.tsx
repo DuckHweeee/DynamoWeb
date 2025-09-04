@@ -34,120 +34,91 @@ import {
 } from "@/components/ui/table"
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { mockProcesses } from "@/lib/dataDemo"
+import AddProcessForm from "../components/addNewProcess"
+import { usePlannedProcess } from "../hooks/usePlannedProcess"
+import { Process } from "../lib/type"
+import DetailProcess from "../components/detailProcess"
+import EditProcessForm from "../components/editProcess"
 
-import { Machine, Machine2 } from "@/lib/type"
-import { mockMachines } from "@/lib/dataDemo"
-import EditMachineForm from "../components/editMachine"
-import AddMachineForm from "../components/addNewMachine"
-import { useMachine } from "../hooks/useMachine"
-import DetailMachineForm from "../components/detailMachine"
+function formatSeconds(seconds: string): string {
+    const total = parseInt(seconds)
+    const hours = Math.floor(total / 3600)
+    const minutes = Math.floor((total % 3600) / 60)
+    return `${hours}h ${minutes}m`
+}
 
 function getColumns({
-    setEditingMachine,
+    setEditingProcess,
     setShowForm,
-    setDetailMachine,
-    setShowDetail,
+    setDetailProcess,
+    setOpenDetail
 }: {
-    setEditingMachine: (machine: Machine2) => void
-    setDetailMachine: (machine: Machine2) => void
+    setEditingProcess: (process: Process) => void
     setShowForm: (show: boolean) => void
-    setShowDetail: (show: boolean) => void
-}): ColumnDef<Machine2>[] {
+    setDetailProcess: (process: Process) => void
+    setOpenDetail: (show: boolean) => void
+}): ColumnDef<Process>[] {
     return [
         {
-            id: "stt",
-            header: () => (<span className="text-lg font-bold ">STT</span>),
-            cell: ({ row }) => <div>{row.index + 1}</div>,
+            accessorKey: "processType",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Đối tượng gia công <ArrowUpDown /></Button>
+            ),
+            cell: ({ row }) => <div className="capitalize">{row.getValue("processType")}</div>,
         },
         {
-            accessorKey: "machineName",
+            accessorKey: "orderDetailDto.orderCode",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Tên Máy <ArrowUpDown />
-                </Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Mã hàng <ArrowUpDown /></Button>
             ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("machineName")}</div>,
+            cell: ({ row }) => <div>
+                <div>{row.original.orderDetailDto?.orderCode ?? "—"}</div></div>,
         },
         {
-            accessorKey: "machineType",
+            accessorKey: "partNumber",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Loại Máy <ArrowUpDown />
-                </Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Số nguyên công <ArrowUpDown /></Button>
             ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("machineType")}</div>,
+            cell: ({ row }) => <div>{row.getValue("partNumber")}</div>,
         },
         {
-            accessorKey: "machineWork",
+            accessorKey: "stepNumber",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Công Việc <ArrowUpDown />
-                </Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Thứ tự nguyên công<ArrowUpDown /></Button>
             ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("machineWork")}</div>,
+            cell: ({ row }) => <div>{row.getValue("stepNumber")}</div>,
         },
         {
-            accessorKey: "machineOffice",
+            accessorKey: "manufacturingPoint",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Phòng quản lý <ArrowUpDown />
-                </Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Điểm nguyên công <ArrowUpDown /></Button>
             ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("machineOffice")}</div>,
+            cell: ({ row }) => <div>{row.getValue("manufacturingPoint")}</div>,
         },
         {
-            accessorKey: "machineKpiDtos.groupName",
+            accessorKey: "pgTime",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Nhóm <ArrowUpDown />
-                </Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Giờ PG <ArrowUpDown /></Button>
             ),
-            cell: ({ row }) => <div className="capitalize">{row.original.machineKpiDtos?.groupName ?? "Chưa Có Nhóm"}</div>,
-
+            cell: ({ row }) => <div>{row.getValue("pgTime")}</div>,
         },
         {
-            accessorKey: "createdDate",
+            accessorKey: "processStatus",
             header: ({ column }) => (
-                <Button
-                    className="text-lg font-bold cursor-pointer"
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Ngày thêm <ArrowUpDown />
-                </Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Trạng Thái <ArrowUpDown /></Button>
             ),
-            cell: ({ row }) => {
-                const value = row.getValue("createdDate") as string
-                const date = value ? new Date(value) : null
-                const formatted = date
-                    ? date.toLocaleDateString("vi-VN", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                    })
-                    : ""
-                return <div>{formatted}</div>
-            },
-        },
-        {
-            accessorKey: "status",
-            header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Trạng thái <ArrowUpDown />
-                </Button>
-            ),
-            cell: ({ row }) => {
-                const status = row.getValue("status") as number
-                const isRunning = status === 1
-
+            cell: ({ getValue }) => {
+                const value = getValue<number>()
+                const isWorking = value === 2
                 return (
-                    <div
-                        className={`w-full px-4 py-1 rounded-sm text-center capitalize
-                  ${isRunning
-                                ? "bg-[#E7F7EF] text-[#0CAF60]"
-                                : "bg-gray-300 text-white"}`}
-                    >
-                        {isRunning ? "Đang chạy" : "Đang dừng"}
+                    <div className="flex justify-center">
+                        <div
+                            className={`px-4 py-1.5 rounded-sm text-center capitalize
+        ${isWorking ? "bg-[#E7F7EF] text-[#0CAF60]" : "bg-[#FFF7E0] text-[#E6A700]"}`}
+                        >
+                            {isWorking ? "Đang thực hiện" : "Đang chờ"}
+                        </div>
                     </div>
                 )
             },
@@ -156,7 +127,7 @@ function getColumns({
             id: "actions",
             enableHiding: false,
             cell: ({ row }) => {
-                const machine = row.original
+                const process = row.original
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -169,16 +140,16 @@ function getColumns({
                             <DropdownMenuItem
                                 className="text-lg cursor-pointer pr-6"
                                 onClick={() => {
-                                    setDetailMachine(machine);
-                                    setShowDetail(true);
+                                    setDetailProcess(process)
+                                    setOpenDetail(true)
                                 }}
                             >
-                                Thông tin chi tiết
+                                Xem chi tiết
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 className="text-lg cursor-pointer pr-6"
                                 onClick={() => {
-                                    setEditingMachine(machine)
+                                    setEditingProcess(process)
                                     setShowForm(true)
                                 }}
                             >
@@ -192,24 +163,33 @@ function getColumns({
     ]
 }
 
-export default function MachineTable() {
-    // Staff Data
-    const { data: machine } = useMachine()
+export default function PlannedProcessTable() {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
     const [globalFilter, setGlobalFilter] = useState("")
+    // PlannedProcess Data
+    const { data: process } = usePlannedProcess()
+
 
     const [showForm, setShowForm] = useState(false)
-    const [editingMachine, setEditingMachine] = useState<Machine2 | null>(null)
-    // Detail Machine
-    const [detailMachine, setDetailMachine] = useState<Machine2 | null>(null)
-    const [showDetail, setShowDetail] = useState(false);
-    const columns = getColumns({ setEditingMachine, setShowForm, setDetailMachine, setShowDetail })
+    const [editingProcess, setEditingProcess] = useState<Process | null>(null)
+
+    // Detail
+    const [detailProcess, setDetailProcess] = useState<Process | null>(null)
+    const [openDetail, setOpenDetail] = useState(false);
+
+
+    const columns = getColumns({
+        setEditingProcess,
+        setShowForm,
+        setDetailProcess,
+        setOpenDetail
+    })
 
     const table = useReactTable({
-        data: machine,
+        data: process,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -231,10 +211,10 @@ export default function MachineTable() {
     })
 
     return (
-        <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
+        <div className="m-1 bg-white rounded-[10px]">
             <div className="flex flex-row items-center justify-between py-4">
                 <div className="w-2/3">
-                    <p className="text-2xl font-bold">Hiện Trạng Máy Móc</p>
+                    <p className="text-2xl font-bold">Quản lý kế hoạch gia công</p>
                 </div>
                 <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
                     <div className="relative max-w-sm w-full">
@@ -259,9 +239,9 @@ export default function MachineTable() {
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id} className="text-lg font-bold">
+                            <TableRow key={headerGroup.id} className="text-xl font-bold">
                                 {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id} className="text-center">
+                                    <TableHead key={header.id} className="text-center py-2">
                                         {!header.isPlaceholder && flexRender(header.column.columnDef.header, header.getContext())}
                                     </TableHead>
                                 ))}
@@ -273,7 +253,7 @@ export default function MachineTable() {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#393939]">
+                                        <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888]">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
@@ -282,7 +262,7 @@ export default function MachineTable() {
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    Không có dữ liệu.
+                                    Không có kết quả.
                                 </TableCell>
                             </TableRow>
                         )}
@@ -294,34 +274,33 @@ export default function MachineTable() {
                 open={showForm}
                 onOpenChange={(open) => {
                     setShowForm(open)
-                    if (!open) setEditingMachine(null)
+                    if (!open) setEditingProcess(null)
                 }}
             >
-                <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-6xl !gap-5 pb-3">
+                <DialogContent className="!max-w-5xl">
                     <DialogHeader>
-                        <DialogTitle className="text-3xl text-[#084188] font-semibold">{editingMachine ? "Chỉnh sửa máy" : "Thêm máy mới"}</DialogTitle>
+                        <DialogTitle className="text-4xl">{editingProcess ? "Chỉnh sửa kế hoạch" : "Thêm kế hoạch mới"}</DialogTitle>
                     </DialogHeader>
 
-                    {editingMachine ? (
-                        <EditMachineForm
-                            machineId={editingMachine.machineId}
+                    {editingProcess ? (
+                        <EditProcessForm
+                            initialData={editingProcess}
                             onUpdate={(updated) => {
-                                const index = machine.findIndex((m) => m.machineId === updated.machineId)
-                                if (index !== -1) machine[index] = updated
-                                table.setOptions((prev) => ({ ...prev, data: [...machine] }))
+                                const index = process.findIndex((p) => p.processId === updated.processId)
+                                if (index !== -1) process[index] = updated
                                 setShowForm(false)
-                                setEditingMachine(null)
+                                setEditingProcess(null)
                             }}
                             onCancel={() => {
                                 setShowForm(false)
-                                setEditingMachine(null)
+                                setEditingProcess(null)
                             }}
                         />
                     ) : (
-                        <AddMachineForm
-                            onAdd={(newMachine) => {
-                                machine.push(newMachine)
-                                table.setOptions((prev) => ({ ...prev, data: [...machine] }))
+                        <AddProcessForm
+                            onAdd={(newProcess) => {
+                                process.push(newProcess)
+                                table.setOptions((prev) => ({ ...prev, data: [...process] }))
                                 setShowForm(false)
                             }}
                             onCancel={() => setShowForm(false)}
@@ -329,38 +308,18 @@ export default function MachineTable() {
                     )}
                 </DialogContent>
             </Dialog>
-            <Dialog open={showDetail} onOpenChange={(open) => {
-                setShowDetail(open);
-                if (!open) setDetailMachine(null);
-            }}>
-                <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
-                    <DialogHeader>
-                        <DialogTitle className="text-3xl text-[#084188] font-semibold">
-                            Thông tin chi tiết máy
-                        </DialogTitle>
-                    </DialogHeader>
-                    {detailMachine && (
-                        <DetailMachineForm
-                            machine={detailMachine}
-                            onCancel={() => {
-                                setShowDetail(false);
-                            }}
-                        />
-                    )}
-                </DialogContent>
-            </Dialog>
+            <DetailProcess openDetail={openDetail} onClose={() => setOpenDetail(false)} process={detailProcess} />
 
             <div className="flex items-center justify-end space-x-2 py-4">
                 <div className="text-muted-foreground flex-1 text-sm">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
+                    {table.getFilteredSelectedRowModel().rows.length} / {table.getFilteredRowModel().rows.length} dòng được chọn.
                 </div>
                 <div className="space-x-2">
                     <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-                        Previous
+                        Trước
                     </Button>
                     <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-                        Next
+                        Tiếp
                     </Button>
                 </div>
             </div>

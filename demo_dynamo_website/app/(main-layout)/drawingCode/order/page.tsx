@@ -16,7 +16,6 @@ import {
 import { ArrowUpDown, MoreHorizontal, Plus, Search } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -35,24 +34,18 @@ import {
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
-import { Machine, Machine2 } from "@/lib/type"
-import { mockMachines } from "@/lib/dataDemo"
-import EditMachineForm from "../components/editMachine"
-import AddMachineForm from "../components/addNewMachine"
-import { useMachine } from "../hooks/useMachine"
-import DetailMachineForm from "../components/detailMachine"
+import { DrawingCode, Order } from "@/lib/type"
+import { useOrder } from "../hooks/useOrder"
+import EditOrderForm from "../components/editOrder"
+import AddOrderForm from "../components/addOrder"
 
 function getColumns({
-    setEditingMachine,
+    setEditingOrder,
     setShowForm,
-    setDetailMachine,
-    setShowDetail,
 }: {
-    setEditingMachine: (machine: Machine2) => void
-    setDetailMachine: (machine: Machine2) => void
+    setEditingOrder: (order: Order) => void
     setShowForm: (show: boolean) => void
-    setShowDetail: (show: boolean) => void
-}): ColumnDef<Machine2>[] {
+}): ColumnDef<Order>[] {
     return [
         {
             id: "stt",
@@ -60,60 +53,23 @@ function getColumns({
             cell: ({ row }) => <div>{row.index + 1}</div>,
         },
         {
-            accessorKey: "machineName",
+            accessorKey: "poNumber",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Tên Máy <ArrowUpDown />
+                <Button
+                    className="cursor-pointer text-lg font-bold" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Số PO
+                    <ArrowUpDown />
                 </Button>
             ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("machineName")}</div>,
-        },
-        {
-            accessorKey: "machineType",
-            header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Loại Máy <ArrowUpDown />
-                </Button>
-            ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("machineType")}</div>,
-        },
-        {
-            accessorKey: "machineWork",
-            header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Công Việc <ArrowUpDown />
-                </Button>
-            ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("machineWork")}</div>,
-        },
-        {
-            accessorKey: "machineOffice",
-            header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Phòng quản lý <ArrowUpDown />
-                </Button>
-            ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("machineOffice")}</div>,
-        },
-        {
-            accessorKey: "machineKpiDtos.groupName",
-            header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Nhóm <ArrowUpDown />
-                </Button>
-            ),
-            cell: ({ row }) => <div className="capitalize">{row.original.machineKpiDtos?.groupName ?? "Chưa Có Nhóm"}</div>,
-
+            cell: ({ row }) => <div>{row.getValue("poNumber")}</div>,
         },
         {
             accessorKey: "createdDate",
             header: ({ column }) => (
                 <Button
-                    className="text-lg font-bold cursor-pointer"
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Ngày thêm <ArrowUpDown />
+                    className="cursor-pointer text-lg font-bold" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Ngày Thêm
+                    <ArrowUpDown />
                 </Button>
             ),
             cell: ({ row }) => {
@@ -132,31 +88,32 @@ function getColumns({
         {
             accessorKey: "status",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Trạng thái <ArrowUpDown />
+                <Button
+                    className="cursor-pointer text-lg font-bold" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Trạng Thái
+                    <ArrowUpDown />
                 </Button>
             ),
-            cell: ({ row }) => {
-                const status = row.getValue("status") as number
-                const isRunning = status === 1
-
+            cell: ({ getValue }) => {
+                const value = getValue<number>()
+                const isWorking = value === 1
                 return (
-                    <div
-                        className={`w-full px-4 py-1 rounded-sm text-center capitalize
-                  ${isRunning
-                                ? "bg-[#E7F7EF] text-[#0CAF60]"
-                                : "bg-gray-300 text-white"}`}
-                    >
-                        {isRunning ? "Đang chạy" : "Đang dừng"}
+                    <div className="flex justify-center">
+                        <div
+                            className={`px-4 py-1.5 rounded-sm text-center capitalize
+        ${isWorking ? "bg-[#E7F7EF] text-[#0CAF60]" : "bg-[#FFE6E6] text-[#FE4A4A]"}`}
+                        >
+                            {isWorking ? "Còn hiệu lực" : "Hết hiệu lực"}
+                        </div>
                     </div>
                 )
-            },
+            }
         },
         {
             id: "actions",
             enableHiding: false,
             cell: ({ row }) => {
-                const machine = row.original
+                const drawing = row.original
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -169,16 +126,7 @@ function getColumns({
                             <DropdownMenuItem
                                 className="text-lg cursor-pointer pr-6"
                                 onClick={() => {
-                                    setDetailMachine(machine);
-                                    setShowDetail(true);
-                                }}
-                            >
-                                Thông tin chi tiết
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                className="text-lg cursor-pointer pr-6"
-                                onClick={() => {
-                                    setEditingMachine(machine)
+                                    setEditingOrder(drawing)
                                     setShowForm(true)
                                 }}
                             >
@@ -192,24 +140,23 @@ function getColumns({
     ]
 }
 
-export default function MachineTable() {
-    // Staff Data
-    const { data: machine } = useMachine()
+export default function DrawingCodeTable() {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
     const [globalFilter, setGlobalFilter] = useState("")
 
+    // Order Data
+    const { data: order } = useOrder()
+
     const [showForm, setShowForm] = useState(false)
-    const [editingMachine, setEditingMachine] = useState<Machine2 | null>(null)
-    // Detail Machine
-    const [detailMachine, setDetailMachine] = useState<Machine2 | null>(null)
-    const [showDetail, setShowDetail] = useState(false);
-    const columns = getColumns({ setEditingMachine, setShowForm, setDetailMachine, setShowDetail })
+    const [editingOrder, setEditingOrder] = useState<Order | null>(null)
+
+    const columns = getColumns({ setEditingOrder, setShowForm })
 
     const table = useReactTable({
-        data: machine,
+        data: order,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -231,10 +178,10 @@ export default function MachineTable() {
     })
 
     return (
-        <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
+        <>
             <div className="flex flex-row items-center justify-between py-4">
                 <div className="w-2/3">
-                    <p className="text-2xl font-bold">Hiện Trạng Máy Móc</p>
+                    <p className="text-2xl font-bold">Danh Sách Bản Vẽ</p>
                 </div>
                 <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
                     <div className="relative max-w-sm w-full">
@@ -261,7 +208,7 @@ export default function MachineTable() {
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id} className="text-lg font-bold">
                                 {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id} className="text-center">
+                                    <TableHead key={header.id} className="text-center py-2">
                                         {!header.isPlaceholder && flexRender(header.column.columnDef.header, header.getContext())}
                                     </TableHead>
                                 ))}
@@ -273,7 +220,7 @@ export default function MachineTable() {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#393939]">
+                                        <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888]">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
@@ -282,7 +229,7 @@ export default function MachineTable() {
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    Không có dữ liệu.
+                                    Không có kết quả.
                                 </TableCell>
                             </TableRow>
                         )}
@@ -294,34 +241,34 @@ export default function MachineTable() {
                 open={showForm}
                 onOpenChange={(open) => {
                     setShowForm(open)
-                    if (!open) setEditingMachine(null)
+                    if (!open) setEditingOrder(null)
                 }}
             >
-                <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-6xl !gap-5 pb-3">
+                <DialogContent className="max-w-2xl">
                     <DialogHeader>
-                        <DialogTitle className="text-3xl text-[#084188] font-semibold">{editingMachine ? "Chỉnh sửa máy" : "Thêm máy mới"}</DialogTitle>
+                        <DialogTitle className="text-3xl">{editingOrder ? "Chỉnh sửa bản vẽ" : "Thêm bản vẽ mới"}</DialogTitle>
                     </DialogHeader>
 
-                    {editingMachine ? (
-                        <EditMachineForm
-                            machineId={editingMachine.machineId}
+                    {editingOrder ? (
+                        <EditOrderForm
+                            initialData={editingOrder}
                             onUpdate={(updated) => {
-                                const index = machine.findIndex((m) => m.machineId === updated.machineId)
-                                if (index !== -1) machine[index] = updated
-                                table.setOptions((prev) => ({ ...prev, data: [...machine] }))
+                                const index = order.findIndex((d) => d.orderId === updated.orderId)
+                                if (index !== -1) order[index] = updated
+                                table.setOptions((prev) => ({ ...prev, data: [...order] }))
                                 setShowForm(false)
-                                setEditingMachine(null)
+                                setEditingOrder(null)
                             }}
                             onCancel={() => {
                                 setShowForm(false)
-                                setEditingMachine(null)
+                                setEditingOrder(null)
                             }}
                         />
                     ) : (
-                        <AddMachineForm
-                            onAdd={(newMachine) => {
-                                machine.push(newMachine)
-                                table.setOptions((prev) => ({ ...prev, data: [...machine] }))
+                        <AddOrderForm
+                            onAdd={(newDrawing) => {
+                                order.push(newDrawing)
+                                table.setOptions((prev) => ({ ...prev, data: [...order] }))
                                 setShowForm(false)
                             }}
                             onCancel={() => setShowForm(false)}
@@ -329,41 +276,21 @@ export default function MachineTable() {
                     )}
                 </DialogContent>
             </Dialog>
-            <Dialog open={showDetail} onOpenChange={(open) => {
-                setShowDetail(open);
-                if (!open) setDetailMachine(null);
-            }}>
-                <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
-                    <DialogHeader>
-                        <DialogTitle className="text-3xl text-[#084188] font-semibold">
-                            Thông tin chi tiết máy
-                        </DialogTitle>
-                    </DialogHeader>
-                    {detailMachine && (
-                        <DetailMachineForm
-                            machine={detailMachine}
-                            onCancel={() => {
-                                setShowDetail(false);
-                            }}
-                        />
-                    )}
-                </DialogContent>
-            </Dialog>
 
             <div className="flex items-center justify-end space-x-2 py-4">
                 <div className="text-muted-foreground flex-1 text-sm">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
+                    {table.getFilteredSelectedRowModel().rows.length} / {table.getFilteredRowModel().rows.length} dòng được chọn.
                 </div>
                 <div className="space-x-2">
                     <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-                        Previous
+                        Trước
                     </Button>
                     <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-                        Next
+                        Tiếp
                     </Button>
                 </div>
             </div>
-        </div>
+            {/* </div> */}
+        </>
     )
 }

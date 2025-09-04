@@ -166,9 +166,9 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                     </div>
                 </div>
 
-                {/* Mục tiêu nhân viên */}
+                {/* Mục tiêu Máy */}
                 <div className="px-3 relative rounded-sm border-2 pt-5 pb-6">
-                    <div className="text-2xl pb-1 font-medium !top-[-18] absolute bg-white px-2">Mục tiêu</div>
+                    <div className="text-2xl pb-1 font-medium !top-[-18] absolute bg-white px-2">Mục tiêu máy</div>
                     <div className="grid gap-4 grid-cols-3 pb-3">
                         <div className="grid">
                             <Label htmlFor="nhom" className="text-lg !font-normal">Nhóm</Label>

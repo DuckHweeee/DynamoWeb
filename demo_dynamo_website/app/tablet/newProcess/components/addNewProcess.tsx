@@ -14,6 +14,7 @@ import { Machine2, OrderDetailDto, Staff } from "@/lib/type"
 import axios from "axios"
 import { toast } from "sonner"
 import { FlexibleCombobox } from "./FlexibleCombobox"
+import { processingObjectList } from "../../lib/data"
 
 
 interface Props {
@@ -22,33 +23,9 @@ interface Props {
     staffList: Staff[]
     machineList: Machine2[]
 }
-interface ProcessingObject {
-    id: string,
-    name: string
-}
 
-const processingObjectList: ProcessingObject[] = [
-    {
-        id: "1",
-        name: "SP_Chính",
-    },
-    {
-        id: "2",
-        name: "NG_Chạy lại",
-    },
-    {
-        id: "3",
-        name: "LK-Đồ gá",
-    },
-    {
-        id: "4",
-        name: "Điện cực",
-    },
-    {
-        id: "5",
-        name: "Dự bị",
-    },
-]
+
+
 
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 const tabletCSS = "max-[1300px]:!top-2";
@@ -268,25 +245,6 @@ export default function CreateProcessDialog({
 
                     <div className="grid gap-1">
                         <Label htmlFor="operator" className="text-2xl">Nhân viên</Label>
-                        {/* <Select
-                            value={formData.staffId}
-                            onValueChange={(value) =>
-                                setFormData({ ...formData, staffId: value })
-                            }
-                        >
-                            <SelectTrigger className="w-full text-lg" id="operator">
-                                <SelectValue placeholder="Chọn nhân viên" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    {staffList.map((op) => (
-                                        <SelectItem key={op.id} value={op.id}>
-                                            {op.staffName}
-                                        </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select> */}
                         <FlexibleCombobox
                             options={staffList}
                             value={formData.staffId}
@@ -300,25 +258,6 @@ export default function CreateProcessDialog({
 
                     <div className="grid gap-1">
                         <Label htmlFor="operator" className="text-2xl">Máy</Label>
-                        {/* <Select
-                            value={formData.staffId}
-                            onValueChange={(value) =>
-                                setFormData({ ...formData, staffId: value })
-                            }
-                        >
-                            <SelectTrigger className="w-full text-lg" id="operator">
-                                <SelectValue placeholder="Chọn nhân viên" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    {staffList.map((op) => (
-                                        <SelectItem key={op.id} value={op.id}>
-                                            {op.staffName}
-                                        </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select> */}
                         <FlexibleCombobox
                             options={machineList}
                             value={formData.machineId}

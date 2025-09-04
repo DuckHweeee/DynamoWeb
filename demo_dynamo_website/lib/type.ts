@@ -15,12 +15,7 @@ export type Machine = {
     ma_may: string
 }
 
-export type DrawingCode = {
-    id: string
-    ma_ban_ve: string
-    dnc: string
-    trang_thai: string
-}
+
 
 export type Process = {
     id: string
@@ -126,8 +121,8 @@ export interface MachineKpiDtos {
     month: number | null,
     oee: number | null,
     machineMiningTarget: number | null,
-    // "createdDate": "2025-08-15",
-    // "updatedDate": "2025-08-15",
+    createdDate: string,
+    updatedDate: string,
     machineId: number | null,
     machineName: string,
     machineStatus: number | null,
@@ -220,4 +215,19 @@ export interface ProcessData {
     staffDtos: StaffDto[] | null;
     planDto: any;
     processTimeDto: any;
+}
+
+export interface DrawingCode {
+    drawingCodeId: string;
+    drawingCodeName: string;
+    status: number;
+    createdDate: string;
+    updatedDate: string;
+}
+export interface Order {
+    orderId: string;
+    poNumber: string;
+    createdDate: string;
+    updatedDate: string;
+    status: number;
 }
