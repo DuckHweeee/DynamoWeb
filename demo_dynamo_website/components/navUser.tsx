@@ -1,0 +1,83 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Bell, ChevronDown, LogOut } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+function getBreadcrumbFromPath(pathname: string) {
+    const segments = pathname.split("/").filter(Boolean);
+    return segments
+        .map((segment) =>
+            segment
+                .split("-")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ")
+        )
+        .join(" > ");
+}
+
+export function ClientHeader() {
+    const pathname = usePathname();
+    const breadcrumb = getBreadcrumbFromPath(pathname || "/");
+    const { user, logout } = useAuth();
+
+    return (
+        <header className="m-2 px-4 py-3 bg-white rounded-[10px] flex items-center justify-between shadow">
+            <div className="flex items-center gap-4">
+                <SidebarTrigger className="-ml-1" />
+                <div className="flex flex-col">
+                    <h1 className="text-2xl font-semibold text-[#369FFF]">
+                        Hello {user?.username}, welcome back!
+                    </h1>
+                    <p className="text-sm text-gray-500">{breadcrumb}</p>
+                </div>
+            </div>
+
+            <div className="flex items-center gap-6">
+                <div className="relative">
+                    <Bell className="w-6 h-6 text-gray-700" />
+                    <span className="absolute top-0 right-0 h-2.5 w-2.5 bg-red-500 rounded-full" />
+                </div>
+
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <div className="flex items-center px-3 py-1 bg-[#DDEEFF] rounded-md cursor-pointer hover:bg-[#CCE0FF] transition-colors">
+                            <div className="flex flex-row gap-2 items-center">
+                                <Avatar className="h-10 w-10">
+                                    <AvatarImage src="/dynamo.png" />
+                                    <AvatarFallback>
+                                        {user?.username?.charAt(0).toUpperCase() || "D"}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div className="flex flex-col text-lg">
+                                    <span className="text-black font-medium">
+                                        {user?.username || "Dynamo"}
+                                    </span>
+                                    <span className="text-blue-600">
+                                        {user?.role || "Admin"}
+                                    </span>
+                                </div>
+                            </div>
+                            <ChevronDown className="ml-2 text-gray-600" />
+                        </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                        <DropdownMenuItem onClick={logout} className="cursor-pointer">
+                            <LogOut className="mr-2 h-4 w-4" />
+                            <span>Đăng xuất</span>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+        </header>
+    );
+}

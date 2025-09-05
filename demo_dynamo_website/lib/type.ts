@@ -174,6 +174,23 @@ export interface Group {
     // groupType: string,
     // "staffGroups": [],
     // "machineGroups": [],
+    groupId: string;
+    groupName: string;
+    groupType: string;
+    staffGroups: any[];
+    machineGroups: any[];
+    createdDate?: string;
+    updatedDate?: string;
+}
+
+export interface CreateGroupData {
+    groupName: string;
+    groupType: string;
+}
+
+export interface UpdateGroupData {
+    groupName: string;
+    groupType: string;
 }
 
 

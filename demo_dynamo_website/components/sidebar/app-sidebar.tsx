@@ -167,15 +167,15 @@ const data = {
             ],
         },
         {
-            title: "Group",
-            url: "#",
+            title: "Nhóm",
+            url: "/group",
             icon: FolderMinus,
-            // items: [
-            //     {
-            //         title: "Introduction",
-            //         url: "#",
-            //     },
-            // ],
+            items: [
+                {
+                    title: "Các Nhóm",
+                    url: "/group",
+                },
+            ],
         },
         {
             title: "Lịch sử",
