@@ -17,12 +17,6 @@ const legendItems = [
     { name: "Off Machine 5", value: 1.26, fill: "#ABCAFB" },
     { name: "Machine 6", value: 1.8, fill: "#6BF2E5" },
     { name: "Off Machine 6", value: 0.9, fill: "#00EAFF" },
-    { name: "Machine 7", value: 2.18, fill: "#0077FF" },
-    { name: "Off Machine 7", value: 1.18, fill: "#5069E7" },
-    { name: "Machine 8", value: 0.59, fill: "#4400E4" },
-    { name: "Off Machine 8", value: 0.56, fill: "#E4DC00" },
-    { name: "Off Machine 9", value: 0.89, fill: "#E47A00" },
-    { name: "Machine 9", value: 0.3, fill: "#BDBDBD" },
 ]
 
 export default function MachineRunBarChart2({ title, description }: { title: string; description: string }) {
@@ -35,12 +29,6 @@ export default function MachineRunBarChart2({ title, description }: { title: str
         { name: "Off Machine 5", value: 1.26, fill: "#ABCAFB" },
         { name: "Machine 6", value: 1.8, fill: "#6BF2E5" },
         { name: "Off Machine 6", value: 0.9, fill: "#00EAFF" },
-        { name: "Machine 7", value: 2.18, fill: "#0077FF" },
-        { name: "Off Machine 7", value: 1.18, fill: "#5069E7" },
-        { name: "Machine 8", value: 0.59, fill: "#4400E4" },
-        { name: "Off Machine 8", value: 0.56, fill: "#E4DC00" },
-        { name: "Off Machine 9", value: 0.89, fill: "#E47A00" },
-        { name: "Machine 9", value: 0.3, fill: "#BDBDBD" },
     ]
 
     return (
@@ -65,7 +53,7 @@ export default function MachineRunBarChart2({ title, description }: { title: str
                     <Bar dataKey="value" />
                 </BarChart>
             </ResponsiveContainer>
-            {/* CUSTOM LEGEND */}
+            {/* Hiện chú thích */}
             <div className="mb-4 flex flex-wrap gap-4 bg-white p-3 rounded-lg justify-between ">
                 {legendItems.map((item, index) => (
                     <div key={index} className="flex items-center gap-2">

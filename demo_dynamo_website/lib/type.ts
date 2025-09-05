@@ -169,6 +169,11 @@ export interface StaffKpiDto {
 }
 
 export interface Group {
+    groupId: string,
+    groupName: string,
+    // groupType: string,
+    // "staffGroups": [],
+    // "machineGroups": [],
     groupId: string;
     groupName: string;
     groupType: string;

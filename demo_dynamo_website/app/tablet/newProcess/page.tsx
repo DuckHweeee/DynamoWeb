@@ -32,7 +32,7 @@ import { CurrentStaff, Machine2, Operator2, Process2, Staff } from "@/lib/type"
 import { toast } from "sonner"
 import axios from "axios"
 import { OrbitProgress } from "@/node_modules/react-loading-indicators"
-import CreateProcessDialog from "./components/addNewProcess"
+import Link from "next/link"
 
 const URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const tabletCSS = "max-[1300px]:text-3xl max-[1300px]:!py-7 max-[1300px]:!px-8"
@@ -72,7 +72,7 @@ export default function TabletProcess() {
                 const res = await axios.get<Process2[]>(
                     `${URL}/api/drawing-code-process`
                 );
-                const filteredData = res.data.filter(item => item.planDto?.plannerId === null);
+                const filteredData = res.data.filter(item => item.isPlan === 0);
                 setTodo(filteredData);
             } catch (error) {
                 console.error("Lỗi khi lấy dữ liệu process:", error);
@@ -214,28 +214,27 @@ export default function TabletProcess() {
             },
             cell: ({ row }) => <div>{row.getValue("pgTime")}</div>,
         },
-        {
-            accessorKey: "planDto.staffId",
-            accessorFn: (row) => row.planDto?.staffId ?? "",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Nhân Viên
-                        <ArrowUpDown />
-                    </Button>
-                )
-            },
-            cell: ({ row }) => {
-                const staffId = row.original.planDto?.staffId;
-                const foundStaff = staff.find(st => st.staffId === staffId);
-                return <div>{foundStaff ? foundStaff.staffName : ""}</div>;
-            }
-
-        },
+        // {
+        //     accessorKey: "planDto.staffId",
+        //     accessorFn: (row) => row.planDto?.staffId ?? "",
+        //     header: ({ column }) => {
+        //         return (
+        //             <Button
+        //                 className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
+        //                 variant="ghost"
+        //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        //             >
+        //                 Nhân Viên
+        //                 <ArrowUpDown />
+        //             </Button>
+        //         )
+        //     },
+        //     cell: ({ row }) => {
+        //         const staffId = row.original.planDto?.staffId;
+        //         const foundStaff = staff.find(st => st.staffId === staffId);
+        //         return <div>{foundStaff ? foundStaff.staffName : ""}</div>;
+        //     }
+        // },
         {
             accessorKey: "planDto.machineId",
             accessorFn: (row) => row.planDto?.machineId ?? "",
@@ -252,7 +251,7 @@ export default function TabletProcess() {
                 )
             },
             cell: ({ row }) => {
-                const machineId = row.original.planDto?.machineId;
+                const machineId = row.original.machineDto?.machineId;
                 const foundMachine = machine2.find(mc => mc.machineId === machineId);
                 return <div>{foundMachine ? foundMachine.machineName : ""}</div>;
             }
@@ -286,7 +285,7 @@ export default function TabletProcess() {
             <div className="w-full py-3 px-3 bg-white">
                 {/* Header */}
                 <div className="flex items-center justify-between pb-3">
-                    <p className="text-3xl capitalize font-semibold">Danh sách mã bản vẽ trong quá trình</p>
+                    <p className="text-3xl capitalize">Danh sách mã bản vẽ trong quá trình</p>
                     <div className="flex flex-row justify-between items-center gap-3">
                         <div className="relative max-w-sm w-full">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -297,13 +296,16 @@ export default function TabletProcess() {
                                 className="pl-10 py-5"
                             />
                         </div>
-                        <Button
-                            variant="secondary" size="icon" className="px-18 py-6 text-xl max-[1300px]:text-2xl text-white max-[1300px]:font-extrabold font-bold bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
-                            onClick={() => setIsCreating(true)}
-                        >
-                            <Plus size={70} strokeWidth={6} color="white" />
-                            Tạo mới
-                        </Button>
+                        <Link href="/tablet/newProcess/addNewProcess">
+                            <Button
+                                variant="secondary" size="icon" className="px-18 py-6 text-xl max-[1300px]:text-2xl text-white max-[1300px]:font-extrabold font-bold bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
+                                onClick={() => setIsCreating(true)}
+                            >
+                                <Plus size={70} strokeWidth={6} color="white" />
+                                Tạo mới
+                            </Button>
+                        </Link>
+
                     </div>
                 </div>
 
@@ -470,20 +472,6 @@ export default function TabletProcess() {
                     </div>
                 </div>
             </div >
-            <CreateProcessDialog
-                open={isCreating}
-                onOpenChange={async (open) => {
-                    setIsCreating(open);
-                    if (!open) {
-                        const res = await axios.get<Process2[]>(
-                            `${URL}/api/drawing-code-process`
-                        );
-                        const filteredData = res.data.filter(item => item.planDto?.plannerId === null);
-                        setTodo(filteredData);
-                    }
-                }}
-                machineList={machine2} staffList={staff}
-            />
         </>
     )
 }

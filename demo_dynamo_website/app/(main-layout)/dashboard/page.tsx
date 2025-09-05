@@ -37,7 +37,7 @@ const chartItems = [
 ]
 
 export default function Dashboard() {
-    const [date, setDate] = useState<DateRange | undefined>();
+    const [date, setDate] = useState<Date | undefined>(new Date())
     return (
         <div>
             <div className="m-2 my-1.5 px-4 py-3 bg-white rounded-[10px] shadow" >
@@ -48,27 +48,26 @@ export default function Dashboard() {
                             <PopoverTrigger asChild>
                                 <button
                                     className={cn(
-                                        "flex items-center gap-2 bg-[#004799] text-white px-4 py-3 rounded-md hover:bg-[#003b80] transition"
+                                        "flex items-center gap-2 bg-[#004799] text-white px-8 py-3 rounded-md hover:bg-[#003b80] transition"
                                     )}
                                 >
-                                    <Calendar className="w-5 h-5" />
-                                    <span className="text-sm">
-                                        {date?.from ? format(date.from, "dd/MM/yyyy") : "Ngày bắt đầu"} -{" "}
-                                        {date?.to ? format(date.to, "dd/MM/yyyy") : "Ngày kết thúc"}
+                                    <span className="text-[16px]">
+                                        {date ? format(date, "dd/MM/yyyy") : "Chọn ngày"}
                                     </span>
+                                    <Calendar className="w-5 h-5" />
                                 </button>
                             </PopoverTrigger>
                             <PopoverContent className="flex gap-4 p-4 !w-full" align="start">
                                 <DatePicker
-                                    mode="range"
+                                    mode="single"
                                     selected={date}
                                     onSelect={setDate}
-                                    numberOfMonths={2}
+                                    numberOfMonths={1}
                                 />
                             </PopoverContent>
                         </Popover>
 
-                        {/* Bộ lọc 1 */}
+                        {/* Bộ lọc nhóm */}
                         <Select>
                             <SelectTrigger className="w-[180px] bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
                                 <SelectValue placeholder="Nhóm" />

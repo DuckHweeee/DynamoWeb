@@ -172,7 +172,6 @@ export default function PlannedProcessTable() {
     // PlannedProcess Data
     const { data: process } = usePlannedProcess()
 
-
     const [showForm, setShowForm] = useState(false)
     const [editingProcess, setEditingProcess] = useState<Process | null>(null)
 
