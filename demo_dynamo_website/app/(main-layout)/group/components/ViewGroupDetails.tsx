@@ -18,16 +18,7 @@ export function ViewGroupDetails({ group, onClose }: ViewGroupDetailsProps) {
         toast.success("Copied to clipboard!");
     };
 
-    const getGroupTypeColor = (type: string) => {
-        switch (type.toLowerCase()) {
-            case "staff":
-                return "bg-blue-100 text-blue-800";
-            case "machine":
-                return "bg-green-100 text-green-800";
-            default:
-                return "bg-gray-100 text-gray-800";
-        }
-    };
+
 
     return (
         <div className="space-y-6">
@@ -35,35 +26,9 @@ export function ViewGroupDetails({ group, onClose }: ViewGroupDetailsProps) {
             <div className="flex items-start justify-between">
                 <div>
                     <h3 className="text-lg font-semibold">{group.groupName}</h3>
-                    <div className="flex items-center gap-2 mt-1">
-                        <Badge className={getGroupTypeColor(group.groupType)}>
-                            {group.groupType}
-                        </Badge>
-                    </div>
                 </div>
             </div>
-
             <Separator />
-
-            {/* Basic Information */}
-            <div className="space-y-4">
-                <h4 className="text-sm font-medium text-gray-900">Thông tin chi tiết</h4>
-                
-                <div className="grid grid-cols-1 gap-4">
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-2">
-                            <Users className="w-4 h-4 text-gray-500" />
-                            <span className="text-sm text-gray-700">Loại Nhóm</span>
-                        </div>
-                        <Badge className={getGroupTypeColor(group.groupType)}>
-                            {group.groupType}
-                        </Badge>
-                    </div>
-                </div>
-            </div>
-
-            <Separator />
-
             {/* Timestamps */}
             <div className="space-y-4">
                 <h4 className="text-sm font-medium text-gray-900">Thời gian</h4>

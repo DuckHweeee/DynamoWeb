@@ -114,7 +114,7 @@ function getColumns({
                         </div>
                         <div className="text-sm text-muted-foreground font-normal flex items-center mt-1">
                             <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                            ID: {groupId.substring(0, 12)}
+                            ID: {groupId ? groupId.substring(0, 12) : 'N/A'}
                         </div>
                     </div>
                 )
@@ -350,9 +350,10 @@ export default function GroupKPIPage() {
         if (!groupSearchFilter) return filteredGroupKPIs
         
         return filteredGroupKPIs.filter(item => {
-            const groupId = item.groupId?.toString().toLowerCase() || ""
-            const groupName = groups?.find(g => g.groupId === item.groupId)?.groupName?.toLowerCase() || ""
-            const searchTerm = groupSearchFilter.toLowerCase()
+            const groupId = item.groupId?.toString()?.toLowerCase() || ""
+            const group = groups?.find(g => g.groupId === item.groupId)
+            const groupName = group?.groupName?.toLowerCase() || ""
+            const searchTerm = groupSearchFilter?.toLowerCase() || ""
             
             return groupId.includes(searchTerm) || groupName.includes(searchTerm)
         })

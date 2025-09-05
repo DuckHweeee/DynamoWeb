@@ -46,10 +46,13 @@ export function GroupTable() {
     const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
 
     // Filter groups based on search term
-    const filteredGroups = groups.filter(group =>
-        group.groupName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        group.groupId.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredGroups = groups.filter(group => {
+        const groupName = group.groupName?.toLowerCase() || "";
+        const groupId = group.groupId?.toLowerCase() || "";
+        const searchTermLower = searchTerm?.toLowerCase() || "";
+        
+        return groupName.includes(searchTermLower) || groupId.includes(searchTermLower);
+    });
 
     const handleCreateSuccess = () => {
         refetch();
