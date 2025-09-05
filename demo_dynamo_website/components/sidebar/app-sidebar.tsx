@@ -37,6 +37,7 @@ import { Logo } from "./logo"
 import { useState } from "react"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { IIC } from "./iic"
+import { title } from "process"
 
 // This is sample data.
 const data = {
@@ -175,6 +176,10 @@ const data = {
                     title: "Các Nhóm",
                     url: "/group",
                 },
+                {
+                    title:"Cài đặt KPI",
+                    url: "/group/kpi",
+                }
             ],
         },
         {

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -14,12 +13,6 @@ interface ViewGroupDetailsProps {
 }
 
 export function ViewGroupDetails({ group, onClose }: ViewGroupDetailsProps) {
-    const [isMounted, setIsMounted] = useState(false);
-
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
-
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
         toast.success("Copied to clipboard!");
@@ -33,15 +26,6 @@ export function ViewGroupDetails({ group, onClose }: ViewGroupDetailsProps) {
                 return "bg-green-100 text-green-800";
             default:
                 return "bg-gray-100 text-gray-800";
-        }
-    };
-
-    const formatDateTime = (dateString: string | null | undefined) => {
-        if (!dateString || !isMounted) return "N/A";
-        try {
-            return new Date(dateString).toLocaleString('vi-VN');
-        } catch {
-            return "N/A";
         }
     };
 
@@ -91,7 +75,10 @@ export function ViewGroupDetails({ group, onClose }: ViewGroupDetailsProps) {
                             <span className="text-sm text-gray-700">Ngày Tạo</span>
                         </div>
                         <span className="text-sm text-gray-900">
-                            {formatDateTime(group.createdDate)}
+                            {group.createdDate 
+                                ? new Date(group.createdDate).toLocaleString()
+                                : "N/A"
+                            }
                         </span>
                     </div>
 
@@ -101,7 +88,10 @@ export function ViewGroupDetails({ group, onClose }: ViewGroupDetailsProps) {
                             <span className="text-sm text-gray-700">Ngày Cập Nhật</span>
                         </div>
                         <span className="text-sm text-gray-900">
-                            {formatDateTime(group.updatedDate)}
+                            {group.updatedDate 
+                                ? new Date(group.updatedDate).toLocaleString()
+                                : "N/A"
+                            }
                         </span>
                     </div>
                 </div>

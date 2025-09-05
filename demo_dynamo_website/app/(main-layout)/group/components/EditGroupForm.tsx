@@ -11,7 +11,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useGroupMutations } from "../hooks/useGroup";
+import { useGroupMutations } from "../../../../hooks/useGroup";
 import { Group, UpdateGroupData } from "@/lib/type";
 import { toast } from "sonner";
 

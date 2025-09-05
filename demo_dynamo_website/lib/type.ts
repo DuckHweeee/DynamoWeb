@@ -188,6 +188,36 @@ export interface UpdateGroupData {
     groupType: string;
 }
 
+// Group KPI Types
+export interface GroupKPI {
+    id: number;
+    year: number;
+    month: number | null;
+    week: number | null;
+    day: number | null;
+    isMonth: number; // 0 = monthly KPI, 1 = weekly KPI, 2 = daily KPI
+    office: string;
+    workingHourGoal: number;
+    workingHourDifference: number;
+    workingHour: number;
+    groupId: string;
+    createdDate: string;
+    updatedDate: string;
+}
+
+export interface NewGroupKPI {
+    year: number | null;
+    month: number | null;
+    week: number | null;
+    day: number | null;
+    isMonth: number; // 0 = monthly KPI, 1 = weekly KPI, 2 = daily KPI
+    office: string;
+    workingHourGoal: number | null;
+    workingHourDifference?: number | null; // Optional - backend will calculate
+    workingHour?: number | null; // Optional - backend will calculate
+    groupId: string;
+}
+
 
 export interface MachineDto {
     machineId: number;
