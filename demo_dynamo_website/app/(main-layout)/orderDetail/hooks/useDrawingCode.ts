@@ -1,17 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { OrderDetailDto } from "../lib/type";
+import { DrawingCode } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-export function useOrder() {
-    const [data, setData] = useState<OrderDetailDto[]>([])
+export function useDrawingCode() {
+    const [data, setData] = useState<DrawingCode[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get<OrderDetailDto[]>(`${url}/api/order-detail`);
+                const res = await axios.get<DrawingCode[]>(`${url}/api/drawing-code`);
                 setData(res.data)
             } catch (err) {
                 setError("Lỗi khi tải dữ liệu")

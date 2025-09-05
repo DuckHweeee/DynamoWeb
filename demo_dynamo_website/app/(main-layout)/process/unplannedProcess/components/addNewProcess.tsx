@@ -12,7 +12,7 @@ import "react-datepicker/dist/react-datepicker.css"
 import { vi } from "date-fns/locale"
 import dayjs from "dayjs";
 import { Process } from "../../lib/type"
-import { useOrder } from "../../hooks/useOrder"
+import { useOrder } from "../../hooks/useOrderDetail"
 import { useMachine } from "../../hooks/useMachine"
 import { useStaff } from "../../hooks/useStaff"
 import { processingObjectList } from "../../lib/data"
