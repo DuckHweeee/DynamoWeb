@@ -32,6 +32,7 @@ import { Machine2, Operator2, Process2, Staff } from "@/lib/type"
 import { toast } from "sonner"
 import axios from "axios"
 import { OrbitProgress } from "@/node_modules/react-loading-indicators"
+import { useProcess } from "./hooks/useProcess"
 
 const URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 export default function TabletProcess() {
@@ -56,28 +57,18 @@ export default function TabletProcess() {
     }, [fetchedMachine])
 
     // const fetchedProcesses = useFetchProcesses()
-    const { data: fetchedProcesses, refetch } = useFetchProcesses();
-    const [processData2, setProcessData2] = useState<Process2[]>([])
-    useEffect(() => {
-        setProcessData2(fetchedProcesses)
-    }, [fetchedProcesses])
-    console.log("processData2")
-    console.log(processData2)
-
+    // const { data: fetchedProcesses, refetch } = useFetchProcesses();
+    // const [processData2, setProcessData2] = useState<Process2[]>([])
+    // useEffect(() => {
+    //     setProcessData2(fetchedProcesses)
+    // }, [fetchedProcesses])
+    // console.log("processData2")
+    // console.log(processData2)
+    const { data: processData2, refetch } = useProcess()
 
     // Handle Submit
     const [loading, setLoading] = useState(false);
     const handleSubmit = async (processId: string) => {
-        // if (!selectedStaffId) {
-        //     toast.error("Vui lòng chọn Nhân Viên");
-        //     return;
-        // }
-        // if (!selectedMachineId) {
-        //     toast.error("Vui lòng chọn Máy.");
-        //     return;
-        // }
-
-
         setLoading(true);
         try {
             const url = `${URL}/api/drawing-code-process/receive?drawingCodeProcess_id=${processId}&&staffId=${selectedStaffId}&&machineId=${selectedMachineId}`;

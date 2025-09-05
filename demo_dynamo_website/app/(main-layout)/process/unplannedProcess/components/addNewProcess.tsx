@@ -12,7 +12,7 @@ import "react-datepicker/dist/react-datepicker.css"
 import { vi } from "date-fns/locale"
 import dayjs from "dayjs";
 import { Process } from "../../lib/type"
-import { useOrder } from "../../hooks/useOrderDetail"
+import { useOrderDetail } from "../../hooks/useOrderDetail"
 import { useMachine } from "../../hooks/useMachine"
 import { useStaff } from "../../hooks/useStaff"
 import { processingObjectList } from "../../lib/data"
@@ -35,7 +35,7 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
     });
     const [startDate, setStartDate] = useState<Date | null>(new Date())
     const [endDate, setEndDate] = useState<Date | null>(new Date())
-    const { data: orderList } = useOrder()
+    const { data: orderList } = useOrderDetail()
     const { data: machineList } = useMachine()
     const { data: staffList } = useStaff()
     const handleSubmit = async () => {

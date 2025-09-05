@@ -27,12 +27,12 @@ interface FlexibleComboboxProps<T> {
     valueField: keyof T
     placeholder?: string
 }
-function fuzzyMatch(text: string, pattern: string) {
-    text = text.toLowerCase();
-    pattern = pattern.toLowerCase();
+// function fuzzyMatch(text: string, pattern: string) {
+//     text = text.toLowerCase();
+//     pattern = pattern.toLowerCase();
 
-    return text.includes(pattern);
-}
+//     return text.includes(pattern);
+// }
 export function FlexibleCombobox<T>({
     options,
     value,
@@ -67,7 +67,7 @@ export function FlexibleCombobox<T>({
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-full justify-between text-lg"
+                    className="w-full justify-between text-[20px] py-5"
                 >
                     <span
                         className={
@@ -83,13 +83,14 @@ export function FlexibleCombobox<T>({
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-full p-0">
+            <PopoverContent align="start"
+                className="w-[var(--radix-popover-trigger-width)] p-0">
                 <Command>
                     <CommandInput
                         placeholder={placeholder}
                         value={inputValue}
                         onValueChange={setInputValue}
-                        className="text-[15.5px]"
+                        className="text-[16px]"
                     />
                     <CommandEmpty>
                         {allowCustom

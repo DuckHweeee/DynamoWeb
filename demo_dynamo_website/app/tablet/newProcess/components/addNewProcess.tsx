@@ -80,6 +80,8 @@ export default function CreateProcessDialog({
                         
                         Bạn có chắc chắn muốn gửi không?
                 `.trim();
+        console.log("formData")
+        console.log(formData)
         if (!window.confirm(confirmMessage)) {
             return;
         }
@@ -101,6 +103,7 @@ export default function CreateProcessDialog({
                         orderCode: formData.orderCode,
                         machineId: Number(formData.machineId),
                         staffId: formData.staffId,
+                        isPlan: 0
                     }),
                 }
             );
@@ -256,12 +259,29 @@ export default function CreateProcessDialog({
 
                     <div className="grid gap-1">
                         <Label htmlFor="operator" className="text-2xl">Máy</Label>
-                        <FlexibleCombobox
+                        {/* <FlexibleCombobox
                             options={machineList}
                             value={formData.machineId}
                             onChange={(val) => setFormData({ ...formData, machineId: val })}
-                            displayField="machineName"
+                            displayField="machineId"
                             valueField="machineId"
+                            placeholder="Chọn Máy"
+                            allowCustom={false}
+                        /> */}
+                        <FlexibleCombobox
+                            options={machineList}
+                            value={
+                                machineList.find(m => Number(m.machineId) === Number(formData.machineId))?.machineName || ""
+                            } // hiển thị name theo id đang lưu
+                            onChange={(selectedName) => {
+                                const selected = machineList.find(m => m.machineName === selectedName);
+                                setFormData({
+                                    ...formData,
+                                    machineId: selected ? String(selected.machineId) : "", // lưu lại ID
+                                });
+                            }}
+                            displayField="machineName"  // hiển thị bằng name
+                            valueField="machineName"    // chọn bằng name
                             placeholder="Chọn Máy"
                             allowCustom={false}
                         />
