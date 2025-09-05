@@ -25,7 +25,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { MoreHorizontal, Plus, Search, Eye, Edit, Trash2 } from "lucide-react";
-import { useGroups, useGroupMutations } from "../hooks/useGroup";
+import { useGroups, useGroupMutations } from "../../../../hooks/useGroup";
 import { Group } from "@/lib/type";
 import { toast } from "sonner";
 import { CreateGroupForm } from "./CreateGroupForm";
@@ -48,7 +48,6 @@ export function GroupTable() {
     // Filter groups based on search term
     const filteredGroups = groups.filter(group =>
         group.groupName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        group.groupType.toLowerCase().includes(searchTerm.toLowerCase()) ||
         group.groupId.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -92,17 +91,6 @@ export function GroupTable() {
     const handleDelete = (group: Group) => {
         setSelectedGroup(group);
         setShowDeleteDialog(true);
-    };
-
-    const getGroupTypeColor = (type: string) => {
-        switch (type.toLowerCase()) {
-            case "staff":
-                return "bg-blue-100 text-blue-800";
-            case "machine":
-                return "bg-green-100 text-green-800";
-            default:
-                return "bg-gray-100 text-gray-800";
-        }
     };
 
     if (loading) {
@@ -155,11 +143,6 @@ export function GroupTable() {
                             </TableHead>
                             <TableHead>
                                 <Button className="text-lg font-bold" variant="ghost">
-                                    Loại Nhóm
-                                </Button>
-                            </TableHead>
-                            <TableHead>
-                                <Button className="text-lg font-bold" variant="ghost">
                                     Ngày Tạo
                                 </Button>
                             </TableHead>
@@ -176,7 +159,7 @@ export function GroupTable() {
                     <TableBody>
                         {filteredGroups.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={5} className="h-24 text-center">
+                                <TableCell colSpan={4} className="h-24 text-center">
                                     {searchTerm ? "Không tìm thấy nhóm nào khớp với tìm kiếm." : "Không có nhóm nào."}
                                 </TableCell>
                             </TableRow>
@@ -187,11 +170,6 @@ export function GroupTable() {
                                         <div>
                                             <div className="text-lg">{group.groupName}</div>
                                         </div>
-                                    </TableCell>
-                                    <TableCell className="pl-5 font-medium text-lg">
-                                        <Badge className={getGroupTypeColor(group.groupType)}>
-                                            {group.groupType === "staff" ? "Nhân Viên" : "Máy Móc"}
-                                        </Badge>
                                     </TableCell>
                                     <TableCell className="pl-5 font-medium text-lg">
                                         <div className="text-lg">
