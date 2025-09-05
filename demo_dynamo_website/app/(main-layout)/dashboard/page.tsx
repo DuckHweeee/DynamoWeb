@@ -28,6 +28,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react"
+import DateRangeSelector from "./components/pickTime"
 
 const chartItems = [
     { label: "Máy Đang Chạy", value: 12, fill: "#0ea5e9" },     // blue
@@ -44,7 +45,7 @@ export default function Dashboard() {
                 <div className="flex flex-wrap items-center justify-end mb-4">
                     {/* Vùng chọn ngày */}
                     <div className="flex flex-wrap gap-4 items-center">
-                        <Popover>
+                        {/* <Popover>
                             <PopoverTrigger asChild>
                                 <button
                                     className={cn(
@@ -65,7 +66,8 @@ export default function Dashboard() {
                                     numberOfMonths={1}
                                 />
                             </PopoverContent>
-                        </Popover>
+                        </Popover> */}
+                        <DateRangeSelector />
 
                         {/* Bộ lọc nhóm */}
                         <Select>

@@ -126,7 +126,7 @@ export function GroupTable() {
                         onClick={() => setShowCreateDialog(true)}
                         className="bg-[#004799] hover:bg-[#003b80] text-white px-6 py-2 rounded-md transition"
                     >
-                         <Plus size={60} strokeWidth={5} color="white" />
+                        <Plus size={60} strokeWidth={5} color="white" />
                     </Button>
                 </div>
             </div>
