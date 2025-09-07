@@ -239,8 +239,16 @@ export interface MachineDto {
 }
 
 export interface StaffDto {
-    staffId?: string;
+    staffId?: number;
     staffName?: string;
+    staffOffice?: string;
+    staffSection?: string;
+    shortName?: string;
+    status?: number;
+    createdDate?: string;
+    updatedDate?: string;
+    staffKpiDtos?: any;
+    id?: string;
 }
 
 export interface ProcessData {
@@ -277,4 +285,30 @@ export interface Order {
     createdDate: string;
     updatedDate: string;
     status: number;
+}
+
+export interface DrawingCodeProcessHistory {
+    processId: string;
+    partNumber: number;
+    stepNumber: number;
+    manufacturingPoint: number;
+    processType: string;
+    processStatus: number;
+    pgTime: number;
+    startTime: string;
+    endTime: string;
+    createdDate: string;
+    updatedDate: string;
+    isPlan: number;
+    status: number;
+    orderDetailDto: {
+        orderDetailId: string;
+        orderCode: string;
+    };
+    machineDto: {
+        machineName: string;
+    };
+    staffDtos: StaffDto[];
+    planDto: any;
+    processTimeDto: any;
 }

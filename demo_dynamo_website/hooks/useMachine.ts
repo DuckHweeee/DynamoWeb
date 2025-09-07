@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { Group, Machine2 } from "@/lib/type";
-import { KPI } from "../lib/type";
+import { KPI } from "../app/(main-layout)/machine/lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 export function useMachine() {

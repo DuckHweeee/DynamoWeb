@@ -31,8 +31,6 @@ export default function AddNewGroupKPI({ onAdd, onCancel }: AddGroupKPIFormProps
         isMonth: 0, // Default to monthly
         office: "",
         workingHourGoal: null,
-        workingHourDifference: null,
-        workingHour: null,
     })
 
     const { data: groups, loading: groupsLoading } = useGroups()

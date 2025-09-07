@@ -39,7 +39,7 @@ import AddNewKPI from "./components/addNewKPI"
 import EditKPIStaffForm from "./components/editKPI"
 import { Staff } from "@/lib/type"
 import { KPI } from "../lib/type"
-import { useMachineKPI } from "../hooks/useMachine"
+import { useMachineKPI } from "../../../../hooks/useMachine"
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 function getColumns({

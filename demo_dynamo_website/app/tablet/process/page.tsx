@@ -32,7 +32,7 @@ import { Machine2, Operator2, Process2, Staff } from "@/lib/type"
 import { toast } from "sonner"
 import axios from "axios"
 import { OrbitProgress } from "@/node_modules/react-loading-indicators"
-import { useProcess } from "./hooks/useProcess"
+import { useProcess } from "../../../hooks/useProcess"
 
 const URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 export default function TabletProcess() {

@@ -39,7 +39,7 @@ import { Machine, Machine2 } from "@/lib/type"
 import { mockMachines } from "@/lib/dataDemo"
 import EditMachineForm from "../components/editMachine"
 import AddMachineForm from "../components/addNewMachine"
-import { useMachine } from "../hooks/useMachine"
+import { useMachine } from "../../../../hooks/useMachine"
 import DetailMachineForm from "../components/detailMachine"
 
 function getColumns({
