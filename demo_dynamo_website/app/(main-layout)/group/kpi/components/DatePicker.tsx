@@ -15,49 +15,49 @@ interface DatePickerProps {
     disabled?: boolean
 }
 
-export default function DatePicker({ 
-    value, 
-    year, 
-    onSelect, 
+export default function DatePicker({
+    value,
+    year,
+    onSelect,
     placeholder = "Chọn ngày...",
-    disabled = false 
+    disabled = false
 }: DatePickerProps) {
     const [open, setOpen] = useState(false)
     const currentYear = year || new Date().getFullYear()
     const currentDate = new Date()
-    
+
     // Get days in month
     const getDaysInMonth = (month: number, year: number) => {
         return new Date(year, month, 0).getDate()
     }
-    
+
     // Get month information
     const months = [
-        { value: 1, label: "Tháng 1", short: "T1" },
-        { value: 2, label: "Tháng 2", short: "T2" },
-        { value: 3, label: "Tháng 3", short: "T3" },
-        { value: 4, label: "Tháng 4", short: "T4" },
-        { value: 5, label: "Tháng 5", short: "T5" },
-        { value: 6, label: "Tháng 6", short: "T6" },
-        { value: 7, label: "Tháng 7", short: "T7" },
-        { value: 8, label: "Tháng 8", short: "T8" },
-        { value: 9, label: "Tháng 9", short: "T9" },
-        { value: 10, label: "Tháng 10", short: "T10" },
-        { value: 11, label: "Tháng 11", short: "T11" },
-        { value: 12, label: "Tháng 12", short: "T12" },
+        { value: 1, label: "Tháng 1" },
+        { value: 2, label: "Tháng 2" },
+        { value: 3, label: "Tháng 3" },
+        { value: 4, label: "Tháng 4" },
+        { value: 5, label: "Tháng 5" },
+        { value: 6, label: "Tháng 6" },
+        { value: 7, label: "Tháng 7" },
+        { value: 8, label: "Tháng 8" },
+        { value: 9, label: "Tháng 9" },
+        { value: 10, label: "Tháng 10" },
+        { value: 11, label: "Tháng 11" },
+        { value: 12, label: "Tháng 12" },
     ]
-    
+
     const [selectedMonth, setSelectedMonth] = useState(value?.month || currentDate.getMonth() + 1)
-    
+
     const handleDateSelect = (day: number, month: number) => {
         onSelect(day, month)
         setOpen(false)
     }
-    
+
     const handleMonthChange = (month: number) => {
         setSelectedMonth(month)
     }
-    
+
     // Quick actions
     const handleToday = () => {
         if (currentYear === currentDate.getFullYear()) {
@@ -67,41 +67,48 @@ export default function DatePicker({
             handleDateSelect(today, currentMonth)
         }
     }
-    
+
+    // const formatDisplayValue = () => {
+    //     if (value?.day && value?.month) {
+    //         const monthName = months.find(m => m.value === value.month)?.short || value.month
+    //         return `${value.day}/${monthName}/${currentYear}`
+    //     }
+    //     return null
+    // }
+
     const formatDisplayValue = () => {
         if (value?.day && value?.month) {
-            const monthName = months.find(m => m.value === value.month)?.short || value.month
-            return `${value.day}/${monthName}/${currentYear}`
+            return `${String(value.day).padStart(2, "0")}/${String(value.month).padStart(2, "0")}/${currentYear}`
         }
         return null
     }
-    
+
     // Generate calendar days
     const generateCalendarDays = (month: number, year: number) => {
         const daysInMonth = getDaysInMonth(month, year)
         const firstDayOfMonth = new Date(year, month - 1, 1).getDay()
         const startDay = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1 // Monday = 0
-        
+
         const days = []
-        
+
         // Add empty cells for days before month starts
         for (let i = 0; i < startDay; i++) {
             days.push(null)
         }
-        
+
         // Add days of the month
         for (let day = 1; day <= daysInMonth; day++) {
             days.push(day)
         }
-        
+
         return days
     }
-    
+
     const calendarDays = generateCalendarDays(selectedMonth, currentYear)
     const isCurrentYear = currentYear === currentDate.getFullYear()
     const isCurrentMonth = selectedMonth === currentDate.getMonth() + 1
     const currentDay = currentDate.getDate()
-    
+
     return (
         <div className="space-y-2">
             <Popover open={open} onOpenChange={setOpen}>
@@ -141,7 +148,7 @@ export default function DatePicker({
                                 <ChevronRight className="h-4 w-4" />
                             </Button>
                         </div>
-                        
+
                         {/* Quick Actions */}
                         {isCurrentYear && (
                             <div className="mb-4">
@@ -155,7 +162,7 @@ export default function DatePicker({
                                 </Button>
                             </div>
                         )}
-                        
+
                         {/* Calendar Grid */}
                         <div className="space-y-2">
                             {/* Day headers */}
@@ -166,17 +173,17 @@ export default function DatePicker({
                                     </div>
                                 ))}
                             </div>
-                            
+
                             {/* Calendar days */}
                             <div className="grid grid-cols-7 gap-1">
                                 {calendarDays.map((day, index) => {
                                     if (day === null) {
                                         return <div key={index} className="p-2" />
                                     }
-                                    
+
                                     const isSelected = value?.day === day && value?.month === selectedMonth
                                     const isToday = isCurrentYear && isCurrentMonth && day === currentDay
-                                    
+
                                     return (
                                         <Button
                                             key={day}
@@ -194,7 +201,7 @@ export default function DatePicker({
                                 })}
                             </div>
                         </div>
-                        
+
                         <div className="mt-4 pt-4 border-t">
                             <p className="text-xs text-muted-foreground">
                                 Chọn ngày trong {months.find(m => m.value === selectedMonth)?.label} {currentYear}
