@@ -14,11 +14,11 @@ import {
 const chartConfig = {
     target: {
         label: "Mục tiêu",
-        color: "#92c7ff",
+        color: "#00a6fb",
     },
     real: {
         label: "Thực tế",
-        color: "#3483ff",
+        color: "#0582ca",
     },
 } satisfies ChartConfig
 
@@ -63,7 +63,7 @@ export function DivergingBarChart({
                             axisLine={false}
                             fontSize={20}
                         />
-                        <XAxis type="number" tickLine={false} axisLine={false} />
+                        <XAxis type="number" tickLine={false} axisLine={true} hide />
 
                         {/* Thanh target */}
                         <Bar

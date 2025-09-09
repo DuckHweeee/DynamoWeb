@@ -59,7 +59,7 @@ export function ReportTime({ title, description }: { title: string; description:
                             Tổng Giờ Lỗi Tháng
                             <TrendingUp size={14} className="ml-1 text-green-500" />
                         </p>
-                        <p className="text-sm text-gray-400">+20.1% from last month</p>
+                        <p className="text-sm text-gray-400">1 giờ / người</p>
                     </div>
                 </div>
                 <div className="inline-block rounded-sm bg-white px-6 py-4 shadow-md border w-full">
@@ -75,7 +75,7 @@ export function ReportTime({ title, description }: { title: string; description:
                             Tổng Giờ PG Tháng
                             <TrendingUp size={14} className="ml-1 text-green-500" />
                         </p>
-                        <p className="text-sm text-gray-400">+20.1% from last month</p>
+                        <p className="text-sm text-gray-400">1 giờ 15 phút / người</p>
                     </div>
                 </div>
                 <div className="inline-block rounded-sm bg-white px-6 py-4 shadow-md border w-full">
@@ -91,7 +91,7 @@ export function ReportTime({ title, description }: { title: string; description:
                             Tổng Số Gia Công Tháng
                             <TrendingUp size={14} className="ml-1 text-green-500" />
                         </p>
-                        <p className="text-sm text-gray-400">+20.1% from last month</p>
+                        <p className="text-sm text-gray-400">1 giờ 45 phút / người</p>
                     </div>
                 </div>
 
