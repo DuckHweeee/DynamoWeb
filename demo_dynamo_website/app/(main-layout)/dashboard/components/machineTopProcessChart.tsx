@@ -2,7 +2,15 @@
 
 import { TrendingUp } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
-
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import {
     Card,
     CardContent,
@@ -21,13 +29,11 @@ import {
 export const description = "A horizontal bar chart"
 
 const chartData = [
-    { name: "I-01", number: 186 },
-    { name: "I-02", number: 305 },
+    { name: "I-01", number: 256 },
+    { name: "I-02", number: 257 },
     { name: "I-03", number: 237 },
-    { name: "I-04", number: 73 },
+    { name: "I-04", number: 285 },
     { name: "I-05", number: 200 },
-    { name: "I-06", number: 214 },
-    { name: "I-07", number: 156 },
 ]
 
 const chartConfig = {
@@ -39,16 +45,31 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-export function MachineProcessBarChart({ title, description }: { title: string; description: string }) {
+export function MachineTopProcessChart({ title, description }: { title: string; description: string }) {
     return (
         <Card className="!w-full">
+
             <CardHeader>
-                {/* <CardTitle>Bar Chart - Horizontal</CardTitle>
-                <CardDescription>January - June 2024</CardDescription> */}
-                {/* <p className="text-xl font-bold">Tổng số process từng máy trong nhóm đã chạy xong</p>
-                <p className="text-sm text-gray-500 mb-4">Tổng thời gian hoạt động của nhóm này</p> */}
-                <p className="text-2xl font-bold">{title}</p>
-                <p className="text-xl text-gray-500">{description}</p>
+                <div className="flex justify-between">
+                    <div className="items-center">
+                        <p className="text-2xl font-bold">{title}</p>
+                        <p className="text-xl text-gray-500">{description}</p>
+                    </div>
+                    <div className="flex items-center">
+                        <Select>
+                            <SelectTrigger className="w-[180px] bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
+                                <SelectValue placeholder="Nhóm" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    {/* <SelectLabel>Fruits</SelectLabel> */}
+                                    <SelectItem value="apple">Cao nhất</SelectItem>
+                                    <SelectItem value="banana">Thấp nhất</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig}>

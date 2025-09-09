@@ -34,7 +34,7 @@ export default function TabletLayout({
     const isNewProcess = pathname.includes("/tablet/newProcess");
 
     const tabletCSS = "max-[1300px]:text-3xl max-[1300px]:!py-7 max-[1300px]:!px-8";
-    
+
     return (
         <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             <ProtectedRoute allowedRoles={["Operator", "Admin"]}>
@@ -45,11 +45,11 @@ export default function TabletLayout({
                         </a>
                         {user && (
                             <div className="text-xl font-bold text-gray-600">
-                                Welcome, {user.username} 
+                                Welcome, {user.username}
                             </div>
                         )}
                     </div>
-                    
+
                     <div className="flex gap-x-5">
                         <Link href={"/tablet/process"}>
                             <Button
@@ -85,21 +85,19 @@ export default function TabletLayout({
                                 Vận Hành
                             </Button>
                         </Link>
-                    </div>
 
-                    <div className="flex items-center gap-2">
                         <Button
                             onClick={logout}
                             variant="outline"
                             size="sm"
-                            className="flex items-center gap-2"
+                            className="text-2xl font-semibold !py-6 px-4 rounded-sm border-red-500 border-2"
                         >
                             <LogOut className="w-4 h-4" />
                             Đăng Xuất
                         </Button>
                     </div>
                 </div>
-                
+
                 <MachineStatusProvider>
                     {children}
                 </MachineStatusProvider>

@@ -71,7 +71,7 @@ const columns: ColumnDef<HistoryMachine>[] = [
         cell: ({ row }) => (
             <div>
                 <div className="text-lg">{row.getValue("ten_may")}</div>
-                <div className="text-sm text-muted-foreground font-normal">#{row.original.id}</div>
+                {/* <div className="text-sm text-muted-foreground font-normal">#{row.original.id}</div> */}
             </div>
         ),
     },
@@ -187,7 +187,7 @@ export default function MachineTable({ title, description }: { title: string; de
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id} className="text-lg font-bold">
                                 {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id} className="text-center py-5">
+                                    <TableHead key={header.id} className="text-center py-2">
                                         {!header.isPlaceholder && flexRender(header.column.columnDef.header, header.getContext())}
                                     </TableHead>
                                 ))}

@@ -11,10 +11,11 @@ import { useMachine } from "./hooks/useMachine";
 import { FlexibleCombobox } from "./components/FlexibleCombobox";
 import { processingObjectList } from "../../lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import router from "next/router";
+import { useRouter } from "next/navigation";
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export default function CreateProcessPage() {
+    const router = useRouter()
     const { data: machineList } = useMachine();
     const [staffList, setStaffList] = useState<Staff[]>([]);
     const [orderDetail, setOrderDetail] = useState<OrderDetailDto[] | null>(null);

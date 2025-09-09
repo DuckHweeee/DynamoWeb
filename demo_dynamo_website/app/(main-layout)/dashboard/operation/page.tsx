@@ -19,6 +19,29 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { DivergingBarChart } from "./components/DivergingBarChart";
+import DateRangeSelector from "../components/DateRangeSelector";
+const myData = [
+    { name: "Phuc", target: 450, real: 600 },
+    { name: "An", target: 520, real: 320 },
+    { name: "Bình", target: 600, real: 750 },
+    { name: "An", target: 520, real: 920 },
+    { name: "Bình", target: 300, real: 550 },
+]
+const myData2 = [
+    { name: "Lợi", target: 400, real: 380 },
+    { name: "Đức", target: 700, real: 720 },
+    { name: "Trang", target: 500, real: 450 },
+    { name: "Huy", target: 650, real: 800 },
+    { name: "Lan", target: 550, real: 500 },
+]
+const myData3 = [
+    { name: "Lợi", target: 400, real: 380 },   // real < target
+    { name: "Đức", target: 700, real: 720 },   // real > target
+    { name: "Trang", target: 500, real: 450 }, // real < target
+    { name: "Huy", target: 650, real: 800 },   // real > target
+    { name: "Lan", target: 550, real: 500 },
+]
 export default function OperationChart() {
     const [date, setDate] = useState<DateRange | undefined>();
     return (
@@ -28,33 +51,11 @@ export default function OperationChart() {
                 <div className="flex flex-wrap items-center justify-end mb-4">
                     {/* Vùng chọn ngày */}
                     <div className="flex flex-wrap gap-4 items-center">
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <button
-                                    className={cn(
-                                        "flex items-center gap-2 bg-[#004799] text-white px-4 py-3 rounded-md hover:bg-[#003b80] transition"
-                                    )}
-                                >
-                                    <Calendar className="w-5 h-5" />
-                                    <span className="text-sm">
-                                        {date?.from ? format(date.from, "dd/MM/yyyy") : "Ngày bắt đầu"} -{" "}
-                                        {date?.to ? format(date.to, "dd/MM/yyyy") : "Ngày kết thúc"}
-                                    </span>
-                                </button>
-                            </PopoverTrigger>
-                            <PopoverContent className="flex gap-4 p-4 !w-full" align="start">
-                                <DatePicker
-                                    mode="range"
-                                    selected={date}
-                                    onSelect={setDate}
-                                    numberOfMonths={2}
-                                />
-                            </PopoverContent>
-                        </Popover>
+                        <DateRangeSelector />
 
-                        {/* Bộ lọc 1 */}
+                        {/* Bộ lọc nhóm */}
                         <Select>
-                            <SelectTrigger className="w-[180px] bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
+                            <SelectTrigger className="w-[180px] text-xl bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
                                 <SelectValue placeholder="Nhóm" />
                             </SelectTrigger>
                             <SelectContent>
@@ -74,10 +75,12 @@ export default function OperationChart() {
 
                 <div className="grid grid-cols-2 gap-5 my-5">
                     {/* <MachineRunBarChart /> */}
-                    <MachineProcessBarChart title="Tổng giờ làm việc của từng người vận hành" description="Description" />
-                    <MachineProcessBarChart title="Tổng điểm của từng người vận hành" description="Description" />
-                    <MachineProcessBarChart title="Tổng số nguyên công của từng người vận hành" description="Description" />
-                    <MachineProcessBarChart title="KPI của từng người vận hành trong nhóm" description="Description" />
+                    <DivergingBarChart title="Tổng điểm gia công trong nhóm 1" description="Thống kê tổng điểm của từng nhân viên trong nhóm" data={myData} />
+                    <DivergingBarChart title="Tổng giờ PG trong nhóm 1" description="Thống kê tổng giờ PG của nhân viên trong nhóm" data={myData2} />
+                    <DivergingBarChart title="Tổng giờ máy trong nhóm 1" description="Tổng giờ máy của từng nhân viên trong nhóm" data={myData3} />
+                    <DivergingBarChart title="Nhân viên làm việc trong nhóm 1" description="Nhân viên làm việc" data={myData} />
+                    <DivergingBarChart title="OLE trong nhóm 1" description="OLE của từng nhân viên trong nhóm" data={myData} />
+                    <DivergingBarChart title="KPI trong nhóm 1" description="KPI của từng nhân viên trong nhóm " data={myData} />
                 </div>
                 <OperatorTable title="Danh sách người vận hành" description="Tất cả các máy" />
             </div >
