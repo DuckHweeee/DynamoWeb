@@ -36,7 +36,8 @@ export function ClientHeader() {
                 <SidebarTrigger className="-ml-1" />
                 <div className="flex flex-col">
                     <h1 className="text-2xl font-semibold text-[#369FFF]">
-                        Xin chào {user?.username}, ngày mới tốt lành!
+                        {/* Xin chào {user?.username}, ngày mới tốt lành! */}
+                        Xin chào Dynamo, ngày mới tốt lành!
                     </h1>
                     <p className="text-sm text-gray-500">{breadcrumb}</p>
                 </div>
