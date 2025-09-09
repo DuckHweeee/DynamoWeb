@@ -188,15 +188,15 @@ const data = {
             icon: FolderClock,
             items: [
                 {
-                    title: "History Process",
+                    title: " Quy trình",
                     url: "/history/historyProcess",
                 },
                 {
-                    title: "History Machine",
+                    title: " Máy móc",
                     url: "/history/historyMachine",
                 },
                 {
-                    title: "History Operator",
+                    title: " Người vận hành",
                     url: "/history/historyOperator",
                 },
             ],
