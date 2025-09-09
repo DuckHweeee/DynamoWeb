@@ -21,11 +21,14 @@ import { SumRealTime } from "../components/sumRealTime";
 import { MachineProcessBarChart } from "../components/machineProcessBarChart";
 import MachineTable from "../components/machineTable";
 import { useState } from "react";
+import DateRangeSelector from "../components/DateRangeSelector";
 const chartItems = [
-    { label: "Máy Đang Chạy", value: 12, fill: "#0ea5e9" },     // blue
-    { label: "Máy Dừng", value: 3, fill: "#facc15" },           // yellow
-    { label: "Máy Lỗi", value: 1, fill: "#ef4444" },            // red
-    { label: "Bảo Trì", value: 2, fill: "#8b5cf6" },            // purple
+    { label: "Tổn thất Offset", value: 90 },
+    { label: "Tổn thất NG/khác", value: 36 },
+    { label: "Hiệu suất khai thác máy", value: 78 },
+    { label: "Hiệu suất giá trị", value: 64 },
+    { label: "Hiệu suất PG", value: 58 },
+    { label: "OEE", value: 34 },
 ]
 export default function MachineChart() {
     const [date, setDate] = useState<DateRange | undefined>();
@@ -35,43 +38,21 @@ export default function MachineChart() {
                 <div className="flex flex-wrap items-center justify-end mb-4">
                     {/* Vùng chọn ngày */}
                     <div className="flex flex-wrap gap-4 items-center">
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <button
-                                    className={cn(
-                                        "flex items-center gap-2 bg-[#004799] text-white px-4 py-3 rounded-md hover:bg-[#003b80] transition"
-                                    )}
-                                >
-                                    <Calendar className="w-5 h-5" />
-                                    <span className="text-sm">
-                                        {date?.from ? format(date.from, "dd/MM/yyyy") : "Ngày bắt đầu"} -{" "}
-                                        {date?.to ? format(date.to, "dd/MM/yyyy") : "Ngày kết thúc"}
-                                    </span>
-                                </button>
-                            </PopoverTrigger>
-                            <PopoverContent className="flex gap-4 p-4 !w-full" align="start">
-                                <DatePicker
-                                    mode="range"
-                                    selected={date}
-                                    onSelect={setDate}
-                                    numberOfMonths={2}
-                                />
-                            </PopoverContent>
-                        </Popover>
+                        <DateRangeSelector />
 
-                        {/* Bộ lọc 1 */}
+                        {/* Bộ lọc nhóm */}
                         <Select>
-                            <SelectTrigger className="w-[180px] bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
+                            <SelectTrigger className="w-[180px] text-xl bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
                                 <SelectValue placeholder="Nhóm" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
                                     {/* <SelectLabel>Fruits</SelectLabel> */}
-                                    <SelectItem value="apple">Nhóm 1</SelectItem>
-                                    <SelectItem value="banana">Nhóm 2</SelectItem>
-                                    <SelectItem value="blueberry">Nhóm 3</SelectItem>
-                                    <SelectItem value="grapes">Nhóm 4</SelectItem>
-                                    <SelectItem value="pineapple">Nhóm 5</SelectItem>
+                                    <SelectItem value="apple" className="text-lg">Nhóm 1</SelectItem>
+                                    <SelectItem value="banana" className="text-lg">Nhóm 2</SelectItem>
+                                    <SelectItem value="blueberry" className="text-lg">Nhóm 3</SelectItem>
+                                    <SelectItem value="grapes" className="text-lg">Nhóm 4</SelectItem>
+                                    <SelectItem value="pineapple" className="text-lg">Nhóm 5</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
@@ -81,7 +62,7 @@ export default function MachineChart() {
                 <div className="my-5 grid grid-cols-2 gap-3">
                     {/* <MachineRunBarChart /> */}
                     <MachineRunBarChart2 title="Tổng Giờ Chạy Trong Tháng Nhóm 1" description="Tổng thời gian hoạt động của nhóm này." />
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-3 gap-3">
                         {chartItems.map((item, index) => (
                             <MachinePieChart key={index} data={item} />
                         ))}
@@ -103,8 +84,8 @@ export default function MachineChart() {
                 <SumRealTime title="Tổng Thời Gian Thực" description="PG Dự Kiến Của Từng Máy Trong Nhóm" />
                 <div className="flex gap-5 justify-between my-5">
                     {/* <MachineRunBarChart /> */}
-                    <MachineProcessBarChart title="Tổng số process từng máy trong nhóm đã chạy xong" description="Description" />
-                    <MachineProcessBarChart title="Tổng số process từng máy trong nhóm đã chạy xong" description="Description" />
+                    <MachineProcessBarChart title="Tổng số gia công từng máy trong nhóm đã chạy xong" description="Thống kê số lượng gia công chi tiết đã được thực thi" />
+                    <MachineProcessBarChart title="Top 5 máy chạy nhiều nhất trong nhóm" description="Thống kê top 5 máy chạy nhiều nhất" />
                 </div>
                 <MachineTable title="Danh sách Thống kê Máy móc" description="Tất cả các máy" />
             </div >

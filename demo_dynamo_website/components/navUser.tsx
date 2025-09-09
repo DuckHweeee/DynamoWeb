@@ -7,10 +7,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 function getBreadcrumbFromPath(pathname: string) {
@@ -36,7 +36,7 @@ export function ClientHeader() {
                 <SidebarTrigger className="-ml-1" />
                 <div className="flex flex-col">
                     <h1 className="text-2xl font-semibold text-[#369FFF]">
-                        Hello {user?.username}, welcome back!
+                        Xin chào {user?.username}, ngày mới tốt lành!
                     </h1>
                     <p className="text-sm text-gray-500">{breadcrumb}</p>
                 </div>
@@ -59,18 +59,20 @@ export function ClientHeader() {
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="flex flex-col text-lg">
-                                    <span className="text-black font-medium">
-                                        {user?.username || "Dynamo"}
+                                    <span className="text-black font-medium capitalize">
+                                        {/* {user?.username || "Dynamo"} */}
+                                        {"Dynamo"}
                                     </span>
                                     <span className="text-blue-600">
-                                        {user?.role || "Admin"}
+                                        {/* Vai trò {user?.role || "quản lý"} */}
+                                        Vai trò {"quản lý"}
                                     </span>
                                 </div>
                             </div>
                             <ChevronDown className="ml-2 text-gray-600" />
                         </div>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuContent align="end" className="w-55">
                         <DropdownMenuItem onClick={logout} className="cursor-pointer">
                             <LogOut className="mr-2 h-4 w-4" />
                             <span>Đăng xuất</span>

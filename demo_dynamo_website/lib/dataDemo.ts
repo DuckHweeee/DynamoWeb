@@ -302,21 +302,21 @@ export const mockHistoryProcesses: HistoryProcess[] = [
 ]
 
 export const mockHistoryMachines: HistoryMachine[] = [
-    { ten_may: "DC 1", id: "ID123456", tgc: 34600, tgd: 62700, tgt: 63300, tgl: 33400 },
-    { ten_may: "DC 2", id: "ID987654", tgc: 57400, tgd: 32400, tgt: 89600, tgl: 44400 },
-    { ten_may: "DC 3", id: "ID116794", tgc: 25400, tgd: 15900, tgt: 46400, tgl: 22200 },
-    { ten_may: "DC 4", id: "ID164895", tgc: 76000, tgd: 34800, tgt: 10800, tgl: 66600 },
-    { ten_may: "DC 5", id: "ID164879", tgc: 72200, tgd: 33000, tgt: 10200, tgl: 55500 },
-    { ten_may: "DC 6", id: "ID132468", tgc: 38300, tgd: 27600, tgt: 64000, tgl: 33300 },
-    { ten_may: "DC 7", id: "ID133468", tgc: 42200, tgd: 8800, tgt: 84000, tgl: 44400 },
-    { ten_may: "DC 8", id: "ID132468", tgc: 34000, tgd: 33600, tgt: 66600, tgl: 22250 },
-    { ten_may: "Máy I", id: "ID123548", tgc: 27700, tgd: 21300, tgt: 55000, tgl: 18880 },
-    { ten_may: "Máy J", id: "ID468923", tgc: 42000, tgd: 24900, tgt: 67900, tgl: 32220 },
-    { ten_may: "Máy K", id: "ID682035", tgc: 38800, tgd: 23600, tgt: 69400, tgl: 22210 },
-    { ten_may: "Máy L", id: "ID135487", tgc: 44500, tgd: 36100, tgt: 76600, tgl: 28820 },
-    { ten_may: "Máy M", id: "ID165792", tgc: 55200, tgd: 36400, tgt: 38600, tgl: 29950 },
-    { ten_may: "Máy N", id: "ID987962", tgc: 29900, tgd: 28800, tgt: 54700, tgl: 35500 },
-    { ten_may: "Máy O", id: "ID354687", tgc: 32100, tgd: 39200, tgt: 77000, tgl: 77100 },
+    { ten_may: "I-01", id: "ID123456", tgc: 34600, tgd: 62700, tgt: 63300, tgl: 33400 },
+    { ten_may: "I-02", id: "ID987654", tgc: 57400, tgd: 32400, tgt: 89600, tgl: 44400 },
+    { ten_may: "I-03", id: "ID116794", tgc: 25400, tgd: 15900, tgt: 46400, tgl: 22200 },
+    { ten_may: "I-04", id: "ID164895", tgc: 76000, tgd: 34800, tgt: 10800, tgl: 66600 },
+    { ten_may: "I-05", id: "ID164879", tgc: 72200, tgd: 33000, tgt: 10200, tgl: 55500 },
+    { ten_may: "I-06", id: "ID132468", tgc: 38300, tgd: 27600, tgt: 64000, tgl: 33300 },
+    { ten_may: "I-07", id: "ID133468", tgc: 42200, tgd: 8800, tgt: 84000, tgl: 44400 },
+    { ten_may: "I-08", id: "ID132468", tgc: 34000, tgd: 33600, tgt: 66600, tgl: 22250 },
+    { ten_may: "I-09", id: "ID123548", tgc: 27700, tgd: 21300, tgt: 55000, tgl: 18880 },
+    { ten_may: "I-10", id: "ID468923", tgc: 42000, tgd: 24900, tgt: 67900, tgl: 32220 },
+    { ten_may: "I-11", id: "ID682035", tgc: 38800, tgd: 23600, tgt: 69400, tgl: 22210 },
+    { ten_may: "I-12", id: "ID135487", tgc: 44500, tgd: 36100, tgt: 76600, tgl: 28820 },
+    { ten_may: "I-13", id: "ID165792", tgc: 55200, tgd: 36400, tgt: 38600, tgl: 29950 },
+    { ten_may: "I-14", id: "ID987962", tgc: 29900, tgd: 28800, tgt: 54700, tgl: 35500 },
+    { ten_may: "I-15", id: "ID354687", tgc: 32100, tgd: 39200, tgt: 77000, tgl: 77100 },
 ]
 
 // Demo data Dashboard

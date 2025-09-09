@@ -47,13 +47,13 @@ export default function DateRangeSelector() {
     return (
         <div className="flex gap-2">
             <Select value={mode} onValueChange={(val) => setMode(val as "day" | "week" | "month")}>
-                <SelectTrigger className="w-[150px]">
+                <SelectTrigger className="w-[150px] bg-[#004799] px-4 !py-5.5 text-xl text-white cursor-pointer [&>svg]:!text-white">
                     <SelectValue placeholder="Chọn chế độ" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="day">Ngày</SelectItem>
-                    <SelectItem value="week">Tuần</SelectItem>
-                    <SelectItem value="month">Tháng</SelectItem>
+                    <SelectItem value="day" className="text-lg">Ngày</SelectItem>
+                    <SelectItem value="week" className="text-lg">Tuần</SelectItem>
+                    <SelectItem value="month" className="text-lg">Tháng</SelectItem>
                 </SelectContent>
             </Select>
 
@@ -64,15 +64,15 @@ export default function DateRangeSelector() {
                             <PopoverTrigger asChild>
                                 <Button
                                     variant="outline"
-                                    className="w-auto justify-start text-right font-normal text-xl"
+                                    className="cursor-pointer w-auto justify-start text-right text-xl bg-[#004799] hover:bg-[#004799] px-4 !py-5.5 hover:text-white text-white "
                                 >
                                     {selectedDate
                                         ? dayjs(selectedDate).format("DD/MM/YYYY")
                                         : "Chọn ngày"}
-                                    <CalendarIcon className="h-4 w-4 opacity-50" />
+                                    <CalendarIcon className="h-5 w-5 opacity-90" />
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
+                            <PopoverContent className="w-auto p-0 ">
                                 <Calendar
                                     mode="single"
                                     selected={selectedDate ?? undefined}
@@ -88,12 +88,12 @@ export default function DateRangeSelector() {
                     <div className="w-full">
                         {/* <div className="border p-3 rounded-lg w-[300px]"> */}
                         <Select onValueChange={(val) => setSelectedWeek(Number(val))}>
-                            <SelectTrigger>
+                            <SelectTrigger className="cursor-pointer text-xl bg-[#004799] hover:bg-[#004799] px-4 !py-5.5  hover:text-white !text-white [&>svg]:!text-white">
                                 <SelectValue placeholder="Chọn tuần" />
                             </SelectTrigger>
                             <SelectContent className="max-h-[300px]">
                                 {weeks.map((w) => (
-                                    <SelectItem key={w.week} value={String(w.week)}>
+                                    <SelectItem key={w.week} value={String(w.week)} className="text-lg">
                                         Tuần {w.week}: {w.start} - {w.end}
                                     </SelectItem>
                                 ))}
@@ -114,12 +114,12 @@ export default function DateRangeSelector() {
                     // <div className="grid grid-cols-3 gap-2 border p-3 rounded-lg">
                     <div className="w-full">
                         <Select onValueChange={(val) => setSelectedMonth(Number(val))}>
-                            <SelectTrigger>
+                            <SelectTrigger className="cursor-pointer text-xl bg-[#004799] hover:bg-[#004799] px-4 !py-5.5 hover:text-white !text-white [&>svg]:!text-white">
                                 <SelectValue placeholder="Chọn tháng" />
                             </SelectTrigger>
                             <SelectContent className="max-h-[300px]">
                                 {months.map((m) => (
-                                    <SelectItem key={m} value={String(m)}>
+                                    <SelectItem key={m} value={String(m)} className="text-lg">
                                         Tháng {m}
                                     </SelectItem>
                                 ))}
