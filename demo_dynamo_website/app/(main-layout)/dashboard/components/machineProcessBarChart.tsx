@@ -26,8 +26,8 @@ const chartData = [
     { name: "I-03", number: 237 },
     { name: "I-04", number: 73 },
     { name: "I-05", number: 200 },
-    { name: "I-06", number: 214 },
-    { name: "I-07", number: 156 },
+    { name: "I-05", number: 200 },
+
 ]
 
 const chartConfig = {
@@ -63,12 +63,12 @@ export function MachineProcessBarChart({ title, description }: { title: string; 
                         <XAxis type="number"
                             dataKey="number"
                             // tick={{ fontSize: 15 }}
-                            // tickLine={true}
+                            tickLine={false}
                             // tickMargin={10}
-                            // axisLine={true}
-                            hide
+                            axisLine={true}
+                        // hide
                         />
-                        <CartesianGrid horizontal={false} />
+                        {/* <CartesianGrid horizontal={false} /> */}
                         <YAxis
                             dataKey="name"
                             type="category"

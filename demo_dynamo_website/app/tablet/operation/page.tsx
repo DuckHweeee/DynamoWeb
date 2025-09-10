@@ -403,6 +403,7 @@ export default function TabletOperation() {
             const url = `${urlLink}/api/drawing-code-process/receive?drawingCodeProcess_id=${selectedProcess?.processId}&staffId=${staffIString}&machineId=${selectedMachineId}`;
             await axios.post(url);
             toast.success("Gửi thành công!");
+            location.reload()
         } catch (error) {
             toast.error("Gửi thất bại. Vui lòng thử lại.");
         } finally {

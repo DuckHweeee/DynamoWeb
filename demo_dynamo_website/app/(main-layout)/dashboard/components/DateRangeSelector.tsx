@@ -21,13 +21,14 @@ dayjs.extend(isoWeek)
 dayjs.extend(isoWeeksInYear)
 dayjs.extend(isLeapYear)   // ✅ kích hoạt
 
-type Mode = "day" | "week" | "month"
+type Mode = "day" | "week" | "month" | "year"
 
 export default function DateRangeSelector() {
     const [mode, setMode] = useState<Mode>("day")
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
     const [selectedWeek, setSelectedWeek] = useState<number | null>(null)
     const [selectedMonth, setSelectedMonth] = useState<number | null>(null)
+    const [selectedYear, setSelectedYear] = useState<number | null>(null)
 
     const getWeeksOfYear = (year: number) => {
         const weeks: { week: number; start: string; end: string }[] = []
@@ -46,7 +47,7 @@ export default function DateRangeSelector() {
 
     return (
         <div className="flex gap-2">
-            <Select value={mode} onValueChange={(val) => setMode(val as "day" | "week" | "month")}>
+            <Select value={mode} onValueChange={(val) => setMode(val as "day" | "week" | "month" | "year")}>
                 <SelectTrigger className="w-[150px] bg-[#004799] px-4 !py-5.5 text-xl text-white cursor-pointer [&>svg]:!text-white">
                     <SelectValue placeholder="Chọn chế độ" />
                 </SelectTrigger>
@@ -54,6 +55,7 @@ export default function DateRangeSelector() {
                     <SelectItem value="day" className="text-lg">Ngày</SelectItem>
                     <SelectItem value="week" className="text-lg">Tuần</SelectItem>
                     <SelectItem value="month" className="text-lg">Tháng</SelectItem>
+                    <SelectItem value="year" className="text-lg">Năm</SelectItem>
                 </SelectContent>
             </Select>
 
@@ -64,7 +66,7 @@ export default function DateRangeSelector() {
                             <PopoverTrigger asChild>
                                 <Button
                                     variant="outline"
-                                    className="cursor-pointer w-auto justify-start text-right text-xl bg-[#004799] hover:bg-[#004799] px-4 !py-5.5 hover:text-white text-white "
+                                    className="cursor-pointer w-auto justify-start text-right text-xl font-normal bg-[#004799] hover:bg-[#004799] px-4 !py-5.5 hover:text-white text-white "
                                 >
                                     {selectedDate
                                         ? dayjs(selectedDate).format("DD/MM/YYYY")
@@ -86,7 +88,6 @@ export default function DateRangeSelector() {
 
                 {mode === "week" && (
                     <div className="w-full">
-                        {/* <div className="border p-3 rounded-lg w-[300px]"> */}
                         <Select onValueChange={(val) => setSelectedWeek(Number(val))}>
                             <SelectTrigger className="cursor-pointer text-xl bg-[#004799] hover:bg-[#004799] px-4 !py-5.5  hover:text-white !text-white [&>svg]:!text-white">
                                 <SelectValue placeholder="Chọn tuần" />
@@ -99,19 +100,10 @@ export default function DateRangeSelector() {
                                 ))}
                             </SelectContent>
                         </Select>
-
-                        {/* {selectedWeek && (
-                            <p className="mt-3 text-lg font-semibold">
-                                Tuần đã chọn: Tuần {selectedWeek} (
-                                {weeks.find((w) => w.week === selectedWeek)?.start} -{" "}
-                                {weeks.find((w) => w.week === selectedWeek)?.end})
-                            </p>
-                        )} */}
                     </div>
                 )}
 
                 {mode === "month" && (
-                    // <div className="grid grid-cols-3 gap-2 border p-3 rounded-lg">
                     <div className="w-full">
                         <Select onValueChange={(val) => setSelectedMonth(Number(val))}>
                             <SelectTrigger className="cursor-pointer text-xl bg-[#004799] hover:bg-[#004799] px-4 !py-5.5 hover:text-white !text-white [&>svg]:!text-white">
@@ -125,11 +117,23 @@ export default function DateRangeSelector() {
                                 ))}
                             </SelectContent>
                         </Select>
-                        {/* {selectedMonth && (
-                            <p className="col-span-3 mt-3 text-lg font-semibold">
-                                Tháng đã chọn: {selectedMonth}/{dayjs().year()}
-                            </p>
-                        )} */}
+                    </div>
+                )}
+
+                {mode === "year" && (
+                    <div className="w-full">
+                        <Select onValueChange={(val) => setSelectedYear(Number(val))}>
+                            <SelectTrigger className="cursor-pointer text-xl bg-[#004799] hover:bg-[#004799] px-4 !py-5.5 hover:text-white !text-white [&>svg]:!text-white">
+                                <SelectValue placeholder="Chọn năm" />
+                            </SelectTrigger>
+                            <SelectContent className="max-h-[300px]">
+                                {Array.from({ length: 3 }, (_, i) => dayjs().year() - (2 - i)).map((year) => (
+                                    <SelectItem key={year} value={String(year)} className="text-lg">
+                                        {year}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 )}
             </div>

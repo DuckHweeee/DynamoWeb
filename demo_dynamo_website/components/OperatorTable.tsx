@@ -276,148 +276,147 @@ export function OperatorTable({
     }
 
     return (
-        <div className="w-full">
-            <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
-                <div className="flex flex-row items-center justify-between py-4">
-                    <div className="w-2/3">
-                        <p className="text-2xl font-bold">{title}</p>
-                    </div>
-                    <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
-                        <div className="relative max-w-sm w-full">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                            <Input
-                                placeholder="Tìm kiếm"
-                                value={globalFilter}
-                                onChange={(e) => setGlobalFilter(e.target.value)}
-                                className="pl-10 py-5"
-                            />
-                        </div>
-
-                        {showAddButton && onAdd && (
-                            <Button
-                                variant="secondary"
-                                size="icon"
-                                className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
-                                onClick={onAdd}
-                            >
-                                <Plus size={60} strokeWidth={5} color="white" />
-                            </Button>
-                        )}
-                    </div>
+        <div className="bg-white rounded-[10px] px-6 mx-2 h-screen">
+            <div className="flex flex-row items-center justify-between py-4 bg-white">
+                <div className="w-2/3">
+                    <p className="text-2xl font-bold">{title}</p>
                 </div>
-                <div className="rounded-md border">
-                    <Table>
-                        <TableHeader>
-                            {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} className="text-lg font-bold">
-                                    {headerGroup.headers.map((header) => {
-                                        return (
-                                            <TableHead key={header.id} className="text-center py-2">
-                                                {header.isPlaceholder
-                                                    ? null
-                                                    : flexRender(
-                                                        header.column.columnDef.header,
-                                                        header.getContext()
-                                                    )}
-                                            </TableHead>
-                                        )
-                                    })}
-                                </TableRow>
-                            ))}
-                        </TableHeader>
-                        <TableBody>
-                            {loading ? (
-                                // Loading skeleton
-                                Array.from({ length: 5 }).map((_, index) => (
-                                    <TableRow key={index}>
-                                        {columns.map((_, cellIndex) => (
-                                            <TableCell key={cellIndex}>
-                                                <Skeleton className="h-4 w-full" />
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))
-                            ) : table.getRowModel().rows?.length ? (
-                                table.getRowModel().rows.map((row) => (
-                                    <TableRow
-                                        key={row.id}
-                                        data-state={row.getIsSelected() && "selected"}
-                                    >
-                                        {row.getVisibleCells().map((cell) => (
-                                            <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888]">
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
+                <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
+                    <div className="relative max-w-sm w-full">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <Input
+                            placeholder="Tìm kiếm"
+                            value={globalFilter}
+                            onChange={(e) => setGlobalFilter(e.target.value)}
+                            className="pl-10 py-5"
+                        />
+                    </div>
+
+                    {showAddButton && onAdd && (
+                        <Button
+                            variant="secondary"
+                            size="icon"
+                            className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
+                            onClick={onAdd}
+                        >
+                            <Plus size={60} strokeWidth={5} color="white" />
+                        </Button>
+                    )}
+                </div>
+            </div>
+            <div className="rounded-md border">
+                <Table>
+                    <TableHeader>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <TableRow key={headerGroup.id} className="text-lg font-bold">
+                                {headerGroup.headers.map((header) => {
+                                    return (
+                                        <TableHead key={header.id} className="text-center py-2">
+                                            {header.isPlaceholder
+                                                ? null
+                                                : flexRender(
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
                                                 )}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={columns.length}
-                                        className="h-24 text-center"
-                                    >
-                                        Không có dữ liệu
-                                    </TableCell>
+                                        </TableHead>
+                                    )
+                                })}
+                            </TableRow>
+                        ))}
+                    </TableHeader>
+                    <TableBody>
+                        {loading ? (
+                            // Loading skeleton
+                            Array.from({ length: 5 }).map((_, index) => (
+                                <TableRow key={index}>
+                                    {columns.map((_, cellIndex) => (
+                                        <TableCell key={cellIndex}>
+                                            <Skeleton className="h-4 w-full" />
+                                        </TableCell>
+                                    ))}
                                 </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
+                            ))
+                        ) : table.getRowModel().rows?.length ? (
+                            table.getRowModel().rows.map((row) => (
+                                <TableRow
+                                    key={row.id}
+                                    data-state={row.getIsSelected() && "selected"}
+                                >
+                                    {row.getVisibleCells().map((cell) => (
+                                        <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888]">
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={columns.length}
+                                    className="h-24 text-center"
+                                >
+                                    Không có dữ liệu
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
 
-                {/* Edit Dialog */}
-                {showEditDialog && editForm && (
-                    <Dialog open={showEditDialog} onOpenChange={onCloseEditDialog}>
-                        <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
-                            <DialogHeader>
-                                <DialogTitle className="text-3xl text-[#084188] font-semibold">
-                                    Chỉnh sửa nhân viên
-                                </DialogTitle>
-                            </DialogHeader>
-                            {editForm}
-                        </DialogContent>
-                    </Dialog>
-                )}
+            {/* Edit Dialog */}
+            {showEditDialog && editForm && (
+                <Dialog open={showEditDialog} onOpenChange={onCloseEditDialog}>
+                    <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
+                        <DialogHeader>
+                            <DialogTitle className="text-3xl text-[#084188] font-semibold">
+                                Chỉnh sửa nhân viên
+                            </DialogTitle>
+                        </DialogHeader>
+                        {editForm}
+                    </DialogContent>
+                </Dialog>
+            )}
 
-                {/* Detail Dialog */}
-                {showDetailDialog && detailForm && (
-                    <Dialog open={showDetailDialog} onOpenChange={onCloseDetailDialog}>
-                        <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
-                            <DialogHeader>
-                                <DialogTitle className="text-3xl text-[#084188] font-semibold">
-                                    Thông tin chi tiết nhân viên
-                                </DialogTitle>
-                            </DialogHeader>
-                            {detailForm}
-                        </DialogContent>
-                    </Dialog>
-                )}
+            {/* Detail Dialog */}
+            {showDetailDialog && detailForm && (
+                <Dialog open={showDetailDialog} onOpenChange={onCloseDetailDialog}>
+                    <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
+                        <DialogHeader>
+                            <DialogTitle className="text-3xl text-[#084188] font-semibold">
+                                Thông tin chi tiết nhân viên
+                            </DialogTitle>
+                        </DialogHeader>
+                        {detailForm}
+                    </DialogContent>
+                </Dialog>
+            )}
 
-                <div className="flex items-center justify-end space-x-2 py-4">
-                    <div className="space-x-2">
-                        <Button
-                            className="cursor-pointer"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
-                        >
-                            Trước
-                        </Button>
-                        <Button
-                            className="cursor-pointer"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
-                        >
-                            Tiếp
-                        </Button>
-                    </div>
+            <div className="flex items-center justify-end space-x-2 py-4">
+                <div className="space-x-2">
+                    <Button
+                        className="cursor-pointer"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                    >
+                        Trước
+                    </Button>
+                    <Button
+                        className="cursor-pointer"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                    >
+                        Tiếp
+                    </Button>
                 </div>
             </div>
         </div>
+        // </div>
     )
 }

@@ -177,7 +177,7 @@ const data = {
                     url: "/group",
                 },
                 {
-                    title:"Cài đặt KPI",
+                    title: "Cài đặt KPI",
                     url: "/group/kpi",
                 }
             ],
@@ -207,15 +207,15 @@ const data = {
             icon: Tablet,
             items: [
                 {
-                    title: "Tablet Chu Trình",
+                    title: "Tablet kế hoạch",
                     url: "/tablet/process",
                 },
                 {
-                    title: "Tablet Vận hành",
+                    title: "Tablet vận hành",
                     url: "/tablet/operation",
                 },
                 {
-                    title: "Tablet Khai Báo",
+                    title: "Tablet khai báo",
                     url: "/tablet/newProcess",
                 },
             ],

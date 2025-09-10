@@ -22,6 +22,7 @@ import { MachineProcessBarChart } from "../components/machineProcessBarChart";
 import MachineTable from "../components/machineTable";
 import { useState } from "react";
 import DateRangeSelector from "../components/DateRangeSelector";
+import { ReportTimeMachine } from "./components/ReportTimeMachine";
 const chartItems = [
     { label: "Tổn thất Offset", value: 90 },
     { label: "Tổn thất NG/khác", value: 36 },
@@ -58,7 +59,7 @@ export default function MachineChart() {
                         </Select>
                     </div>
                 </div>
-                <ReportTime title={"Thống kê máy móc"} description={"12 máy"} />
+                <ReportTimeMachine title={"Thống kê máy móc"} description={"12 máy"} />
                 <div className="my-5 grid grid-cols-2 gap-3">
                     {/* <MachineRunBarChart /> */}
                     <MachineRunBarChart2 title="Tổng Giờ Chạy Trong Tháng Nhóm 1" description="Tổng thời gian hoạt động của nhóm này." />
@@ -81,7 +82,7 @@ export default function MachineChart() {
                 </div>
                 </div> */}
 
-                <SumRealTime title="Tổng Thời Gian Thực" description="PG Dự Kiến Của Từng Máy Trong Nhóm" />
+                <SumRealTime title="Tổng Thời Gian Thực Của Từng Máy Trong Nhóm (Giờ)" description="Tổng giờ chạy thực so với tổng giờ chạy mục tiêu" />
                 <div className="flex gap-5 justify-between my-5">
                     {/* <MachineRunBarChart /> */}
                     <MachineProcessBarChart title="Tổng số gia công từng máy trong nhóm đã chạy xong" description="Thống kê số lượng gia công chi tiết đã được thực thi" />

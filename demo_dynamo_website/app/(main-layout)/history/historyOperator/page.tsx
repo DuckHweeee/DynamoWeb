@@ -26,7 +26,8 @@ export default function HistoryOperatorPage() {
     console.log("Selected Staff:", selectedStaff)
 
     return (
-        <div className="h-screen flex flex-col p-4 bg-gray-50">
+        // <div className="h-screen flex flex-col p-4 bg-gray-50">
+        <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow h-screen">
             <Toaster />
 
             {/* Main Content */}
