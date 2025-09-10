@@ -16,7 +16,7 @@ export default function MainLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <ProtectedRoute allowedRoles={["Admin"]}>
+      <ProtectedRoute allowedRoles={["Admin", "Operator"]}>
         <SidebarProvider>
           <Toaster richColors position="top-right" closeButton />
           <AppSidebar />

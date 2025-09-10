@@ -13,7 +13,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, Plus, Search, SquareArrowOutUpRight } from "lucide-react"
+import { ArrowUpDown, Plus, Search } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -26,10 +26,8 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Fragment, useEffect, useState } from "react"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useFetchMachines, useFetchOperators, useFetchProcesses } from "@/hooks/useFetchData"
-import { CurrentStaff, Machine2, Operator2, Process2, Staff } from "@/lib/type"
-import { toast } from "sonner"
+import { Machine2, Process2, Staff } from "@/lib/type"
 import axios from "axios"
 import { OrbitProgress } from "@/node_modules/react-loading-indicators"
 import Link from "next/link"

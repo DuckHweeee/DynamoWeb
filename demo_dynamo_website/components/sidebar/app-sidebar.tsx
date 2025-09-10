@@ -26,19 +26,11 @@ import {
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarHeader,
-    SidebarRail,
 } from "@/components/ui/sidebar"
 import { NavMain } from "./nav-main"
-// import { NavProjects } from "./nav-projects"
-// import { NavUser } from "./nav-user"
 import { Logo } from "./logo"
-import { useState } from "react"
-import { useIsMobile } from "@/hooks/use-mobile"
-import { IIC } from "./iic"
-import { title } from "process"
-
+import { useAuth } from "@/contexts/AuthContext"
 // This is sample data.
 const data = {
     user: {
@@ -70,10 +62,6 @@ const data = {
             icon: LayoutGrid,
             isActive: true,
             items: [
-                // {
-                //     title: "Dashboard All",
-                //     url: "/dashboard",
-                // },
                 {
                     title: "Máy móc",
                     url: "/dashboard/machine",
@@ -207,15 +195,15 @@ const data = {
             icon: Tablet,
             items: [
                 {
-                    title: "Tablet kế hoạch",
+                    title: "Kế hoạch",
                     url: "/tablet/process",
                 },
                 {
-                    title: "Tablet vận hành",
+                    title: "Vận hành",
                     url: "/tablet/operation",
                 },
                 {
-                    title: "Tablet khai báo",
+                    title: "Khai báo",
                     url: "/tablet/newProcess",
                 },
             ],
@@ -241,14 +229,26 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    // const isMobile = useIsMobile()
+    const { user } = useAuth()
+    
+    // Filter navigation items based on user role
+    const getNavItemsForRole = () => {
+        if (user?.role === "Operator") {
+            return data.navMain.filter(item => 
+                item.title === "Thống kê" || item.title === "Tablet"
+            )
+        }
+        // Admin sees all navigation items
+        return data.navMain
+    }
+
     return (
         <Sidebar collapsible="icon" {...props} className="bg-white">
             <SidebarHeader>
                 <Logo />
             </SidebarHeader>
             <SidebarContent>
-                <NavMain items={data.navMain} />
+                <NavMain items={getNavItemsForRole()} />
                 {/* <NavProjects projects={data.projects} /> */}
             </SidebarContent>
             {/* <SidebarFooter>
