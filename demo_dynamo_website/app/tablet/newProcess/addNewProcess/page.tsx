@@ -138,7 +138,8 @@ export default function CreateProcessPage() {
                 orderCode: "",
                 machineId: "",
             });
-            router.push("/tablet/newProcess");
+            // router.push("/tablet/newProcess");
+            window.location.href = "/tablet/newProcess"
         } catch (error) {
             console.error("Lỗi khi gửi:", error);
             toast.error("Đã xảy ra lỗi khi gửi.");

@@ -74,7 +74,7 @@ export default function OperationChart() {
                 </div>
                 <ReportTimeOperator title={"Thống kê vận hành"} description={"12 người vận hành"} />
 
-                <div className="grid grid-cols-2 gap-5 my-5">
+                <div className="grid grid-cols-2 gap-4 my-5">
                     {/* <MachineRunBarChart /> */}
                     <DivergingBarChart title="Tổng điểm gia công trong nhóm 1" description="Thống kê tổng điểm của từng nhân viên trong nhóm" data={myData} />
                     <DivergingBarChart title="Tổng giờ PG trong nhóm 1" description="Thống kê tổng giờ PG của nhân viên trong nhóm" data={myData2} />

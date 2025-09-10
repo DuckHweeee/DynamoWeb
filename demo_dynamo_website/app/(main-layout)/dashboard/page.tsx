@@ -33,6 +33,7 @@ import { MachineTopProcessChart } from "./components/machineTopProcessChart"
 import { DivergingBarChart } from "./operation/components/DivergingBarChart"
 import { ReportTimeMachine } from "./machine/components/ReportTimeMachine"
 import { ReportTimeOperator } from "./operation/components/ReportTimeOperator"
+import { SumRealTimeMachine } from "./machine/components/SumRealTimeMachine"
 
 const chartItems = [
     { label: "Tổn thất Offset", value: 90 },
@@ -136,7 +137,7 @@ export default function Dashboard() {
                 </div>
                 </div> */}
 
-                <SumRealTime title="Tổng Thời Gian Thực Của Từng Máy Trong Nhóm (Giờ)" description="Tổng giờ chạy thực so với tổng giờ chạy mục tiêu" />
+                <SumRealTimeMachine title="Tổng Thời Gian Thực Của Từng Máy Trong Nhóm (Giờ)" description="Tổng giờ chạy thực so với tổng giờ chạy mục tiêu" />
                 <div className="flex gap-5 justify-between my-5">
                     {/* <MachineRunBarChart /> */}
                     <MachineProcessBarChart title="Tổng số gia công từng máy trong nhóm đã chạy xong" description="Thống kê số lượng gia công chi tiết đã được thực thi" />

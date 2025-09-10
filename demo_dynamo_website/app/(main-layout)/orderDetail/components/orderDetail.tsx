@@ -71,7 +71,7 @@ export default function DetailOrderDetail({ openDetail, onClose, orderDetail }: 
 
                     </div>
 
-                    <div className="bg-gray-50 rounded-xl py-2 px-4 mb-3">
+                    <div className="bg-gray-50 rounded-xl py-2 px-4">
                         <div className="flex items-center gap-2 mb-1">
                             <div className="w-1 h-5 bg-blue-800 rounded"></div>
                             <h3 className="text-blue-800 font-bold text-xl">Tính tổng lô hàng</h3>
@@ -113,7 +113,7 @@ export default function DetailOrderDetail({ openDetail, onClose, orderDetail }: 
                     </div>
                 </ScrollArea>
 
-                <div className="flex justify-end py-1">
+                <div className="flex justify-end">
                     <Button onClick={onClose} className="bg-blue-600 hover:bg-blue-700 text-white py-7 px-10 cursor-pointer text-xl">
                         Đóng
                     </Button>
