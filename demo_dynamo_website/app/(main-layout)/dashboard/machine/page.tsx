@@ -18,11 +18,13 @@ import { ReportTime } from "../components/reporTime";
 import MachineRunBarChart2 from "../components/machineRunBarChart2";
 import { MachinePieChart } from "../components/machinePieChart";
 import { SumRealTime } from "../components/sumRealTime";
-import { MachineProcessBarChart } from "../components/machineProcessBarChart";
 import MachineTable from "../components/machineTable";
 import { useState } from "react";
 import DateRangeSelector from "../components/DateRangeSelector";
 import { ReportTimeMachine } from "./components/ReportTimeMachine";
+import { SumRealTimeMachine } from "./components/SumRealTimeMachine";
+import { MachineProcessBarChart } from "../components/machineProcessBarChart";
+import { MachineTopProcessChart } from "../components/machineTopProcessChart";
 const chartItems = [
     { label: "Tổn thất Offset", value: 90 },
     { label: "Tổn thất NG/khác", value: 36 },
@@ -82,11 +84,11 @@ export default function MachineChart() {
                 </div>
                 </div> */}
 
-                <SumRealTime title="Tổng Thời Gian Thực Của Từng Máy Trong Nhóm (Giờ)" description="Tổng giờ chạy thực so với tổng giờ chạy mục tiêu" />
+                <SumRealTimeMachine title="Tổng Thời Gian Thực PG Của Từng Máy Trong Nhóm (Giờ)" description="Tổng giờ chạy thực so với tổng giờ chạy mục tiêu" />
                 <div className="flex gap-5 justify-between my-5">
                     {/* <MachineRunBarChart /> */}
                     <MachineProcessBarChart title="Tổng số gia công từng máy trong nhóm đã chạy xong" description="Thống kê số lượng gia công chi tiết đã được thực thi" />
-                    <MachineProcessBarChart title="Top 5 máy chạy nhiều nhất trong nhóm" description="Thống kê top 5 máy chạy nhiều nhất" />
+                    <MachineTopProcessChart title="Top 5 máy chạy nhiều nhất trong nhóm" description="Thống kê top 5 máy chạy nhiều nhất" />
                 </div>
                 <MachineTable title="Danh sách Thống kê Máy móc" description="Tất cả các máy" />
             </div >

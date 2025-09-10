@@ -39,6 +39,7 @@ import { useOrderDetail } from "./hooks/useOrderDetail"
 import AddOrderDetailForm from "./components/addOrderDetail"
 import EditOrderDetailForm from "./components/editOrderDetail"
 import DetailOrderDetail from "./components/orderDetail"
+import { Progress } from "@/components/ui/progress"
 
 function getColumns({
     setEditingOrderDetail,
@@ -55,7 +56,7 @@ function getColumns({
         {
             accessorKey: "orderType",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Đối tượng gia công <ArrowUpDown /></Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Đối tượng gia công<ArrowUpDown /></Button>
             ),
             cell: ({ row }) => <div className="capitalize">{row.getValue("orderType")}</div>,
         },
@@ -67,6 +68,7 @@ function getColumns({
             cell: ({ row }) => <div>
                 <div>{row.getValue("orderCode") ?? "—"}</div></div>,
         },
+
         {
             accessorKey: "quantity",
             header: ({ column }) => (
@@ -104,6 +106,36 @@ function getColumns({
                     })
                     : ""
                 return <div>{formatted}</div>
+            },
+        },
+        {
+            id: "Tiến dộ",
+            header: ({ column }) => (
+                // <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Tiến dộ <ArrowUpDown /></Button>
+                <span className="text-lg font-bold" >Tiến dộ</span>
+
+            ),
+            cell: ({ row }) => {
+                const progress =
+                    (Number(row.original?.processTimeSummaryDto?.quantity) /
+                        Number(row.original?.quantity)) *
+                    100
+                return (
+                    <div className="flex items-center gap-2">
+                        <Progress
+                            value={progress}
+                            className={`w-[90%] ${progress < 50
+                                ? "[&>div]:!bg-red-500"
+                                : progress < 80
+                                    ? "[&>div]:!bg-yellow-500"
+                                    : "[&>div]:!bg-green-500"
+                                }`}
+                        />
+                        <span className="text-sm font-semibold">
+                            {progress.toFixed(0)}%
+                        </span>
+                    </div>
+                )
             },
         },
         {

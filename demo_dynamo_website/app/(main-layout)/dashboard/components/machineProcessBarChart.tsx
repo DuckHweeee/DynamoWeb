@@ -63,10 +63,10 @@ export function MachineProcessBarChart({ title, description }: { title: string; 
                         <XAxis type="number"
                             dataKey="number"
                             // tick={{ fontSize: 15 }}
-                            tickLine={false}
+                            // tickLine={false}
                             // tickMargin={10}
-                            axisLine={true}
-                        // hide
+                            // axisLine={true}
+                            hide
                         />
                         {/* <CartesianGrid horizontal={false} /> */}
                         <YAxis

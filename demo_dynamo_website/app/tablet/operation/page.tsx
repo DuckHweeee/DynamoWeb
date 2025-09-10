@@ -78,8 +78,8 @@ export default function TabletOperation() {
     // const [selectedOperatorId, setSelectedOperatorId] = useState("");
     const [loading, setLoading] = useState(false);
     const [selectedMachineId, setSelectedMachineId] = useState<string>("");
-    console.log("selectedMachineId")
-    console.log(selectedMachineId)
+    // console.log("selectedMachineId")
+    // console.log(selectedMachineId)
     const [updateInfor, setUpdateInfor] = useState<UpdateInfor>({
         updateProcessType: "",
         updateOrderCode: "",
@@ -411,8 +411,8 @@ export default function TabletOperation() {
         }
     };
     let [selectStaff, setSelectStaff] = useState<Number>()
-    console.log("selectStaff")
-    console.log(selectStaff)
+    // console.log("selectStaff")
+    // console.log(selectStaff)
     return (
         <>
             {
