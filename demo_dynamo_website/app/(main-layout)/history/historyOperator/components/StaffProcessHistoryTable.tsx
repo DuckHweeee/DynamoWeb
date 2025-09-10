@@ -40,11 +40,11 @@ interface StaffProcessHistoryTableProps {
     staffName: string
 }
 
-export function StaffProcessHistoryTable({ 
-    isOpen, 
-    onClose, 
-    staffId, 
-    staffName 
+export function StaffProcessHistoryTable({
+    isOpen,
+    onClose,
+    staffId,
+    staffName
 }: StaffProcessHistoryTableProps) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -55,7 +55,7 @@ export function StaffProcessHistoryTable({
 
     // Convert dates to strings for API
     const startDateString = startDate ? format(startDate, "yyyy-MM-dd") : null
-    const endDateString = endDate ? format(endDate, "yyyy-MM-dd") : null 
+    const endDateString = endDate ? format(endDate, "yyyy-MM-dd") : null
 
     // Helper function to format time
     const formatTime = (dateString: string | null) => {
@@ -79,8 +79,8 @@ export function StaffProcessHistoryTable({
         {
             accessorKey: "createdDate",
             header: ({ column }) => (
-                <Button 
-                    variant="ghost" 
+                <Button
+                    variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     className="h-auto p-0 hover:bg-transparent text-xs"
                 >
@@ -151,10 +151,10 @@ export function StaffProcessHistoryTable({
             cell: ({ row }) => {
                 const rawStatus = row.getValue("status")
                 const status = Number(rawStatus)
-                
+
                 let statusText = "Lỗi"
                 let variant: "default" | "secondary" | "destructive" = "destructive"
-                
+
                 if (status === 1) {
                     statusText = "Hoàn thành"
                     variant = "default"
@@ -162,7 +162,7 @@ export function StaffProcessHistoryTable({
                     statusText = "Chờ xử lý"
                     variant = "secondary"
                 }
-                
+
                 return (
                     <Badge variant={variant} className="text-xs px-2 py-1">
                         {statusText}

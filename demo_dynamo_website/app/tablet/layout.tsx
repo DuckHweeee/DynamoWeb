@@ -59,7 +59,7 @@ export default function TabletLayout({
                                         : " bg-white text-blue-950"
                                     }`}
                             >
-                                Chu Trình
+                                Kế Hoạch
                             </Button>
                         </Link>
                         <Link href={"/tablet/newProcess"}>

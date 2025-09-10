@@ -70,28 +70,28 @@ function getColumns({
         {
             accessorKey: "quantity",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Số nguyên công <ArrowUpDown /></Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Số lượng <ArrowUpDown /></Button>
             ),
             cell: ({ row }) => <div>{row.getValue("quantity")}</div>,
         },
         {
             accessorKey: "managerGroupName",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Thứ tự nguyên công<ArrowUpDown /></Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Nhóm quản lý<ArrowUpDown /></Button>
             ),
             cell: ({ row }) => <div>{row.getValue("managerGroupName")}</div>,
         },
         {
             accessorKey: "pgTimeGoal",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Điểm nguyên công <ArrowUpDown /></Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>PG dự kiến<ArrowUpDown /></Button>
             ),
             cell: ({ row }) => <div>{row.getValue("pgTimeGoal")}</div>,
         },
         {
             accessorKey: "createdDate",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Giờ PG <ArrowUpDown /></Button>
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Ngày tạo<ArrowUpDown /></Button>
             ),
             cell: ({ row }) => {
                 const value = row.getValue("createdDate") as string

@@ -31,6 +31,8 @@ import { useState } from "react"
 import DateRangeSelector from "./components/DateRangeSelector"
 import { MachineTopProcessChart } from "./components/machineTopProcessChart"
 import { DivergingBarChart } from "./operation/components/DivergingBarChart"
+import { ReportTimeMachine } from "./machine/components/ReportTimeMachine"
+import { ReportTimeOperator } from "./operation/components/ReportTimeOperator"
 
 const chartItems = [
     { label: "Tổn thất Offset", value: 90 },
@@ -111,7 +113,7 @@ export default function Dashboard() {
                         </Select>
                     </div>
                 </div>
-                <ReportTime title={"Thống kê máy móc"} description={"12 máy"} />
+                <ReportTimeMachine title={"Thống kê máy móc"} description={"12 máy"} />
                 <div className="my-5 grid grid-cols-2 gap-3">
                     {/* <MachineRunBarChart /> */}
                     <MachineRunBarChart2 title="Tổng Giờ Chạy Trong Tháng Nhóm 1" description="Tổng thời gian hoạt động của nhóm này." />
@@ -145,7 +147,7 @@ export default function Dashboard() {
 
             {/* Thống kê vận hành */}
             <div className="m-2 my-5 px-4 py-5 bg-white rounded-[10px] shadow" >
-                <ReportTime title={"Thống kê người vận hành"} description={"12 người vận hành"} />
+                <ReportTimeOperator title={"Thống kê người vận hành"} description={"12 người vận hành"} />
                 <div className="grid grid-cols-2 gap-5 my-5">
                     {/* <MachineRunBarChart /> */}
                     <DivergingBarChart title="Tổng điểm gia công trong nhóm 1" description="Thống kê tổng điểm của từng nhân viên trong nhóm" data={myData} />
@@ -169,7 +171,7 @@ export default function Dashboard() {
 
             {/* Thống kê Process */}
             <div className="m-2 my-5 px-4 py-5 bg-white rounded-[10px] shadow" >
-                <ReportTime title={"Thống kê Process "} description={"12 nguyên công"} />
+                <ReportTime title={"Thống kê nguyên công "} description={"12 nguyên công"} />
                 <OperatorTable title="Danh sách thống kê nhân viên" description="Tất cả các máy" />
             </div >
         </div >

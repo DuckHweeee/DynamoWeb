@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { DivergingBarChart } from "./components/DivergingBarChart";
 import DateRangeSelector from "../components/DateRangeSelector";
+import { ReportTimeOperator } from "./components/ReportTimeOperator";
 const myData = [
     { name: "Phuc", target: 450, real: 600 },
     { name: "An", target: 520, real: 320 },
@@ -71,7 +72,7 @@ export default function OperationChart() {
                         </Select>
                     </div>
                 </div>
-                <ReportTime title={"Thống kê vận hành"} description={"12 người vận hành"} />
+                <ReportTimeOperator title={"Thống kê vận hành"} description={"12 người vận hành"} />
 
                 <div className="grid grid-cols-2 gap-5 my-5">
                     {/* <MachineRunBarChart /> */}
