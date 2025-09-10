@@ -5,14 +5,16 @@ import type { NextRequest } from 'next/server';
 const protectedRoutes = {
   // Admin-only routes
   '/': ['Admin'],
-  '/dashboard': ['Admin'],
   '/machine': ['Admin'],
   '/operator': ['Admin'],
   '/process': ['Admin'],
   '/history': ['Admin'],
   '/drawingCode': ['Admin'],
   
-  // Operator-only routes
+  // Dashboard routes (accessible to both Admin and Operator)
+  '/dashboard': ['Admin', 'Operator'],
+  
+  // Tablet routes (accessible to both Admin and Operator)
   '/tablet/process': ['Operator', 'Admin'],
   '/tablet/newProcess': ['Operator', 'Admin'],
   '/tablet/operation': ['Operator', 'Admin'],
@@ -23,13 +25,13 @@ const protectedRoutes = {
 
 // Routes that operators are completely blocked from
 const adminOnlyPaths = [
-  '/',
-  '/dashboard',
   '/machine',
   '/operator', 
   '/process',
   '/history',
-  '/drawingCode'
+  '/drawingCode',
+  '/group',
+  '/orderDetail'
 ];
 
 export function middleware(request: NextRequest) {

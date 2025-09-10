@@ -5,7 +5,6 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Bell, ChevronDown, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -65,8 +64,7 @@ export function ClientHeader() {
                                         {"Dynamo"}
                                     </span>
                                     <span className="text-blue-600">
-                                        {/* Vai trò {user?.role || "quản lý"} */}
-                                        Vai trò {"quản lý"}
+                                        Vai trò {user?.role === "Admin" ? "Quản lý" : "Người vận hành"}
                                     </span>
                                 </div>
                             </div>
