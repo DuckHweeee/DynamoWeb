@@ -151,12 +151,12 @@ export default function Dashboard() {
                 <ReportTimeOperator />
                 <div className="grid grid-cols-2 gap-5 my-5">
                     {/* <MachineRunBarChart /> */}
-                    <DivergingBarChart heightChart="fit" title="Tổng điểm gia công trong nhóm 1" description="Thống kê tổng điểm của từng nhân viên trong nhóm" data={myData} />
-                    <DivergingBarChart heightChart={"fit"} title="Tổng giờ PG trong nhóm 1" description="Thống kê tổng giờ PG của nhân viên trong nhóm" data={myData2} />
-                    <DivergingBarChart heightChart={"fit"} title="Tổng giờ máy trong nhóm 1" description="Tổng giờ máy của từng nhân viên trong nhóm" data={myData3} />
-                    <DivergingBarChart heightChart={"fit"} title="Nhân viên làm việc trong nhóm 1" description="Nhân viên làm việc" data={myData} />
-                    <DivergingBarChart heightChart={"fit"} title="OLE trong nhóm 1" description="OLE của từng nhân viên trong nhóm" data={myData} />
-                    <DivergingBarChart heightChart={"fit"} title="KPI trong nhóm 1" description="KPI của từng nhân viên trong nhóm " data={myData} />
+                    <DivergingBarChart title="Tổng điểm gia công trong nhóm 1" description="Thống kê tổng điểm của từng nhân viên trong nhóm" data={myData} />
+                    <DivergingBarChart title="Tổng giờ PG trong nhóm 1" description="Thống kê tổng giờ PG của nhân viên trong nhóm" data={myData2} />
+                    <DivergingBarChart title="Tổng giờ máy trong nhóm 1" description="Tổng giờ máy của từng nhân viên trong nhóm" data={myData3} />
+                    <DivergingBarChart title="Nhân viên làm việc trong nhóm 1" description="Nhân viên làm việc" data={myData} />
+                    <DivergingBarChart title="OLE trong nhóm 1" description="OLE của từng nhân viên trong nhóm" data={myData} />
+                    <DivergingBarChart title="KPI trong nhóm 1" description="KPI của từng nhân viên trong nhóm " data={myData} />
                 </div>
                 {/* <OperatorTable title="Danh sách người vận hành" description="Tất cả các máy" /> */}
             </div >

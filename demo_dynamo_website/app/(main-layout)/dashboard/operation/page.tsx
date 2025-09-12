@@ -396,13 +396,13 @@ export default function OperationChart() {
                     </Select>
                 </div>
                 <ReportTimeOperator />
-                <DivergingBarChart heightChart="[400px]" title="Tổng điểm gia công trong nhóm 15" description="Thống kê tổng điểm của từng nhân viên trong nhóm" data={myData} />
+                <DivergingBarChart title="Tổng điểm gia công trong nhóm 15" description="Thống kê tổng điểm của từng nhân viên trong nhóm" data={myData} />
                 <div className="grid grid-cols-2 gap-4 my-5">
-                    <DivergingBarChart heightChart="[400px]" title="Tổng giờ PG trong nhóm 1" description="Thống kê tổng giờ PG của nhân viên trong nhóm" data={myData2} />
-                    <DivergingBarChart heightChart="[400px]" title="Tổng giờ máy trong nhóm 1" description="Tổng giờ máy của từng nhân viên trong nhóm" data={myData3} />
+                    <DivergingBarChart title="Tổng giờ PG trong nhóm 1" description="Thống kê tổng giờ PG của nhân viên trong nhóm" data={myData2} />
+                    <DivergingBarChart title="Tổng giờ máy trong nhóm 1" description="Tổng giờ máy của từng nhân viên trong nhóm" data={myData3} />
                     {/* <DivergingBarChart heightChart="fit" title="Nhân viên làm việc trong nhóm 1" description="Nhân viên làm việc" data={myData} /> */}
-                    <DivergingBarChart heightChart="[400px]" title="OLE trong nhóm 1" description="OLE của từng nhân viên trong nhóm" data={myData} />
-                    <DivergingBarChart heightChart="[400px]" title="KPI trong nhóm 1" description="KPI của từng nhân viên trong nhóm " data={myData} />
+                    <DivergingBarChart title="OLE trong nhóm 1" description="OLE của từng nhân viên trong nhóm" data={myData} />
+                    <DivergingBarChart title="KPI trong nhóm 1" description="KPI của từng nhân viên trong nhóm " data={myData} />
                 </div>
 
                 {/* <StaffTable title="Danh sách thống kê người vận hành" description="Danh sách người vận hành" staffList={staffList} /> */}
