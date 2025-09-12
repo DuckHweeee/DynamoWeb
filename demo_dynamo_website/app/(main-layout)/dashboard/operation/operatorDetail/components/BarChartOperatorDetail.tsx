@@ -1,0 +1,122 @@
+"use client"
+
+import { TrendingUp } from "lucide-react"
+import { Bar, BarChart, CartesianGrid, LabelList, ReferenceLine, XAxis, YAxis } from "recharts"
+
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import {
+    ChartConfig,
+    ChartContainer,
+    ChartLegend,
+    ChartLegendContent,
+    ChartTooltip,
+    ChartTooltipContent,
+} from "@/components/ui/chart"
+
+export const description = "A multiple bar chart"
+
+const chartData = [
+    { name: "Điểm nguyên công", real: 186, desirable: 180 },
+    { name: "PG", real: 205, desirable: 200 },
+    { name: "Giờ máy", real: 209, desirable: 230 },
+    { name: "OLE", real: 214, desirable: 140 },
+    { name: "KPI", real: 79, desirable: 140 },
+    { name: "Hỏi lại", real: 203, desirable: 120 },
+]
+
+const chartConfig = {
+    real: {
+        label: "Thực tế",
+        color: "#0077FF",
+    },
+    desirable: {
+        label: "Dự kiến",
+        color: "#074695",
+    },
+} satisfies ChartConfig
+const legendItems = [
+    { name: "Thực tế", value: 0.5, fill: "#0077FF" },
+    { name: "Dự kiến", value: 0.6, fill: "#074695" },
+]
+export function BarChartOperatorDetail({ title, description }: { title: string; description: string }) {
+    return (
+        <Card>
+            <CardHeader>
+                {/* <CardTitle>Tổng Thời Gian Thực</CardTitle>
+                <CardDescription>PG Dự Kiến Của Từng Máy Trong Nhóm</CardDescription> */}
+                <p className="text-2xl font-bold">{title}</p>
+                <p className="text-xl text-gray-500 mb-4">{description}</p>
+            </CardHeader>
+            <CardContent>
+                <ChartContainer config={chartConfig} className="h-[350px] w-full">
+                    <BarChart accessibilityLayer data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <CartesianGrid vertical={false} />
+                        <XAxis
+                            dataKey="name"
+                            tickLine={false}
+                            tickMargin={5}
+                            axisLine={false}
+                            tick={{ fontSize: 18 }}
+                        />
+                        <YAxis hide />
+                        {/* <ChartLegend className="text-lg" content={<ChartLegendContent />} /> */}
+                        <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent indicator="dashed" />}
+                        />
+                        <Bar dataKey="real" fill="var(--color-real)" radius={4}>
+                            <LabelList
+                                dataKey="real"
+                                position="insideTop"
+                                offset={8}
+                                className="fill-white"
+                                fontSize={14}
+                            />
+                        </Bar>
+                        <Bar dataKey="desirable" fill="var(--color-desirable)" radius={4} >
+                            <LabelList
+                                dataKey="desirable"
+                                position="insideTop"
+                                offset={8}
+                                className="fill-white"
+                                fontSize={14}
+                            />
+                        </Bar>
+                        {/*                         
+                        <ReferenceLine
+                            y={100}   // 👈 truyền số vào đây
+                            stroke="red"           // màu đường
+                            label={{
+                                value: `${100}`,
+                                position: "left",
+                                fontSize: 15,
+                                fill: "red",
+                                offset: 5,
+                            }}
+                        /> */}
+                    </BarChart>
+                </ChartContainer>
+                <div className="mx-6 flex items-center justify-center gap-6 bg-white p-3 ml-20">
+                    {legendItems.map((item, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                            <div
+                                className="w-3 h-3 rounded-sm"
+                                style={{ backgroundColor: item.fill }}
+                            />
+                            <span className="text-sm text-gray-800 font-medium">
+                                {item.name}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </CardContent>
+        </Card >
+    )
+}

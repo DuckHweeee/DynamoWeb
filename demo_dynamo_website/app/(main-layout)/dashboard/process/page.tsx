@@ -1,5 +1,5 @@
 "use client"
-import OperatorTable from "../components/operatorTable";
+import OperatorTable from "../operation/components/StaffTable";
 import { ReportTime } from "../components/reporTime";
 
 import { Calendar } from "lucide-react";
@@ -51,7 +51,7 @@ export default function ProcessChart() {
                     </div>
                 </div>
                 <ReportTime title={"Thống kê Process "} description={"12 nguyên công"} />
-                <OperatorTable title="Danh sách thống kê nhân viên" description="Tất cả các máy" />
+                {/* <OperatorTable title="Danh sách thống kê nhân viên" description="Tất cả các máy" /> */}
             </div >
         </>
     )

@@ -1,12 +1,10 @@
 "use client"
 
-import { Bar, BarChart, Cell, LabelList, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, Cell, LabelList, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import {
     ChartConfig,
     ChartContainer,
-    ChartLegend,
-    ChartLegendContent,
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
@@ -26,6 +24,7 @@ interface DivergingBarChartProps {
     title: string
     description: string
     data: { name: string; target: number; real: number }[]
+    heightChart: string
 }
 const legendItems = [
     { name: "Mục tiêu", value: 0.6, fill: "#00a6fb" },
@@ -36,6 +35,7 @@ export function DivergingBarChart({
     title,
     description,
     data,
+    heightChart,
 }: DivergingBarChartProps) {
     // 👉 Tính trung bình
     const avgtarget =
@@ -58,7 +58,8 @@ export function DivergingBarChart({
                 </div>
             </CardHeader>
             <CardContent>
-                <ChartContainer config={chartConfig}>
+                <ChartContainer config={chartConfig} className={`!h-${heightChart} w-full`}>
+                    {/* <ResponsiveContainer width="100%" height="30%"> */}
                     <BarChart accessibilityLayer data={chartData} layout="vertical">
                         <YAxis
                             dataKey="name"
@@ -133,8 +134,10 @@ export function DivergingBarChart({
                         />
                         {/* <ChartLegend className="text-lg" content={<ChartLegendContent />} /> */}
                     </BarChart>
+                    {/* </ResponsiveContainer> */}
+
                 </ChartContainer>
-                <div className="mx-6 grid grid-cols-3 gap-4 bg-white p-3 ml-20">
+                <div className="mx-6 grid grid-cols-3 gap-4 bg-white p-3 justify-items-center">
                     {legendItems.map((item, index) => (
                         <div key={index} className="flex items-center gap-2">
                             <div
@@ -148,7 +151,7 @@ export function DivergingBarChart({
                     ))}
                 </div>
             </CardContent>
-        </Card>
+        </Card >
     )
 }
 
