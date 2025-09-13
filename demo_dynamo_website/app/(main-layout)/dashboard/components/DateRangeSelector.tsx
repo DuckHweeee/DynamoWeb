@@ -84,47 +84,53 @@ export default function DateRangeSelector({ onChange }: Props) {
     }, [mode, selectedDate, selectedWeek, selectedMonth, selectedYear, onChange])
 
     return (
-        <div className="flex gap-2">
-            <Select value={mode} onValueChange={(val) => setMode(val as Mode)}>
-                <SelectTrigger className="w-[150px] bg-[#004799] px-4 !py-5.5 text-xl text-white cursor-pointer [&>svg]:!text-white">
-                    <SelectValue placeholder="Chọn chế độ" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="day" className="text-lg">Ngày</SelectItem>
-                    <SelectItem value="week" className="text-lg">Tuần</SelectItem>
-                    <SelectItem value="month" className="text-lg">Tháng</SelectItem>
-                    <SelectItem value="year" className="text-lg">Năm</SelectItem>
-                </SelectContent>
-            </Select>
+        <div className="flex gap-15">
+            <div className="space-y-1">
+                <label className="text-sm font-medium text-gray-600 tracking-wide">Loại</label>
+                <Select value={mode} onValueChange={(val) => setMode(val as Mode)}>
+                    <SelectTrigger className="w-[150px] text-lg">
+                        <SelectValue placeholder="Chọn chế độ" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="day" className="text-lg">Ngày</SelectItem>
+                        <SelectItem value="week" className="text-lg">Tuần</SelectItem>
+                        <SelectItem value="month" className="text-lg">Tháng</SelectItem>
+                        <SelectItem value="year" className="text-lg">Năm</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
 
-            <div className="flex-1">
+            <div className="flex-1 flex-col gap-2">
+                <label className="text-sm font-medium text-gray-600 tracking-wide">Thời gian</label>
                 {mode === "day" && (
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button
-                                variant="outline"
-                                className="cursor-pointer w-auto justify-start text-right text-xl font-normal bg-[#004799] hover:bg-[#004799] px-4 !py-5.5 hover:text-white text-white "
-                            >
-                                {selectedDate
-                                    ? dayjs(selectedDate).format("DD/MM/YYYY")
-                                    : "Chọn ngày"}
-                                <CalendarIcon className="h-5 w-5 opacity-90" />
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 ">
-                            <Calendar
-                                mode="single"
-                                selected={selectedDate ?? undefined}
-                                onSelect={(date) => setSelectedDate(date ?? null)}
-                                initialFocus
-                            />
-                        </PopoverContent>
-                    </Popover>
+                    <div className="flex flex-col gap-2">
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    className="cursor-pointer w-auto justify-start text-right text-lg font-normal "                            >
+                                    {selectedDate
+                                        ? dayjs(selectedDate).format("DD/MM/YYYY")
+                                        : "Chọn ngày"}
+                                    <CalendarIcon className="h-5 w-5 opacity-90" />
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0 ">
+                                <Calendar
+                                    mode="single"
+                                    selected={selectedDate ?? undefined}
+                                    onSelect={(date) => setSelectedDate(date ?? null)}
+                                    initialFocus
+                                />
+                            </PopoverContent>
+                        </Popover>
+                    </div>
+
                 )}
 
                 {mode === "week" && (
                     <Select value={String(selectedWeek ?? "")} onValueChange={(val) => setSelectedWeek(Number(val))}>
-                        <SelectTrigger className="cursor-pointer text-xl bg-[#004799] hover:bg-[#004799] px-4 !py-5.5 hover:text-white !text-white [&>svg]:!text-white">
+                        <SelectTrigger className="cursor-pointer text-xl ">
                             <SelectValue placeholder="Chọn tuần" />
                         </SelectTrigger>
                         <SelectContent className="max-h-[300px]">
@@ -147,7 +153,7 @@ export default function DateRangeSelector({ onChange }: Props) {
                         value={String(selectedMonth ?? "")}
                         onValueChange={(val) => setSelectedMonth(Number(val))}
                     >
-                        <SelectTrigger className="cursor-pointer text-xl bg-[#004799] hover:bg-[#004799] px-4 !py-5.5 hover:text-white !text-white [&>svg]:!text-white">
+                        <SelectTrigger className="cursor-pointer text-xl ">
                             <SelectValue placeholder="Chọn tháng" />
                         </SelectTrigger>
                         <SelectContent className="max-h-[300px]">
@@ -169,16 +175,22 @@ export default function DateRangeSelector({ onChange }: Props) {
                         value={String(selectedYear ?? "")}
                         onValueChange={(val) => setSelectedYear(Number(val))}
                     >
-                        <SelectTrigger className="cursor-pointer text-xl bg-[#004799] hover:bg-[#004799] px-4 !py-5.5 hover:text-white !text-white [&>svg]:!text-white">
-                            <SelectValue placeholder="Chọn năm" />
+                        <SelectTrigger className="cursor-pointer text-xl ">                            <SelectValue placeholder="Chọn năm" />
                         </SelectTrigger>
-                        <SelectContent className="max-h-[300px]">
+                        {/* <SelectContent className="max-h-[300px]">
                             {Array.from({ length: 3 }, (_, i) => dayjs().year() - (2 - i)).map((year) => (
                                 <SelectItem
                                     key={year}
                                     value={String(year)}
                                     className={`text-lg ${selectedYear === year ? "bg-blue-100 text-blue-900" : ""}`}
                                 >
+                                    {year}
+                                </SelectItem>
+                            ))}
+                        </SelectContent> */}
+                        <SelectContent className="max-h-[300px]">
+                            {Array.from({ length: 3 }, (_, i) => dayjs().year() - 2 + i).map((year) => (
+                                <SelectItem key={year} value={String(year)} className="text-lg">
                                     {year}
                                 </SelectItem>
                             ))}

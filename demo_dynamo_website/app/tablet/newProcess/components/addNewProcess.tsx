@@ -80,8 +80,8 @@ export default function CreateProcessDialog({
                         
                         Bạn có chắc chắn muốn gửi không?
                 `.trim();
-        console.log("formData")
-        console.log(formData)
+        // console.log("formData")
+        // console.log(formData)
         if (!window.confirm(confirmMessage)) {
             return;
         }

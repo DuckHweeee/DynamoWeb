@@ -52,7 +52,7 @@ export function DivergingBarChart({
             <CardHeader>
                 <div className="items-center">
                     <p className="text-2xl font-bold">{title}</p>
-                    <p className="text-xl text-gray-500">{description}</p>
+                    <p className="text-xl text-gray-500 capitalize">{description}</p>
                 </div>
             </CardHeader>
             <CardContent>

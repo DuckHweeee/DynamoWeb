@@ -8,7 +8,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import DateRangeSelectorDetail from "./components/DateRangeSelectorDetail";
 import { Button } from "@/components/ui/button";
-import { Download, Search, UserRoundSearch, X } from "lucide-react";
+import { Download, UserRoundSearch, } from "lucide-react";
 
 interface myStaff {
     staffFullName: string;

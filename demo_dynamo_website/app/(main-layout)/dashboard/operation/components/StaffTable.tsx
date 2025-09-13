@@ -13,17 +13,9 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Plus } from "lucide-react"
+import { ArrowUpDown, } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
 import {
     Table,
     TableBody,
@@ -33,9 +25,6 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Operator2, Staff } from "@/lib/type"
-import { mockOperators, mockOperators2 } from "@/lib/dataDemo"
 import { StaffOverview } from "../lib/type"
 function formatSecondsToTime(seconds: number): string {
     const hours = Math.floor(seconds / 3600)
@@ -47,7 +36,7 @@ const columns: ColumnDef<StaffOverview>[] = [
     {
         accessorKey: "staffFullName",
         header: ({ column }) => (
-            <Button className="text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            <Button className="cursor-pointer text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 Tên nhân viên <ArrowUpDown />
             </Button>
         ),
@@ -61,7 +50,7 @@ const columns: ColumnDef<StaffOverview>[] = [
     {
         accessorKey: "totalWorkingHour",
         header: ({ column }) => (
-            <Button className="text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            <Button className="cursor-pointer text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 Giờ làm việc <ArrowUpDown />
             </Button>
         ),
@@ -70,7 +59,7 @@ const columns: ColumnDef<StaffOverview>[] = [
     {
         accessorKey: "totalOperationNumber",
         header: ({ column }) => (
-            <Button className="text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            <Button className="cursor-pointer text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 Số nguyên công <ArrowUpDown />
             </Button>
         ),
@@ -79,7 +68,7 @@ const columns: ColumnDef<StaffOverview>[] = [
     {
         accessorKey: "totalManufacturingPoint",
         header: ({ column }) => (
-            <Button className="text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            <Button className="cursor-pointer text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 Điểm nguyên công <ArrowUpDown />
             </Button>
         ),
@@ -88,15 +77,15 @@ const columns: ColumnDef<StaffOverview>[] = [
         ),
     },
     {
-        id: "kpi",
+        accessorKey: "kpi",
         header: ({ column }) => (
-            <Button className="text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                KPI
+            <Button className="cursor-pointer text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                KPI <ArrowUpDown />
             </Button>
         ),
-        cell: ({ row }) => {
+        cell: ({ row }) => (
             <div className="font-bold">{row.getValue("kpi")}</div>
-        },
+        ),
     },
 ]
 
@@ -108,7 +97,6 @@ export default function StaffTable({ title, description, staffList }: { title: s
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
     const [globalFilter, setGlobalFilter] = useState("")
-
     const table = useReactTable({
         data: staffList,
         columns,
@@ -146,7 +134,7 @@ export default function StaffTable({ title, description, staffList }: { title: s
                             <TableRow key={headerGroup.id} className="text-lg font-bold">
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id} className="">
+                                        <TableHead key={header.id} className="text-center">
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -167,7 +155,10 @@ export default function StaffTable({ title, description, staffList }: { title: s
                                     data-state={row.getIsSelected() && "selected"}
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="pl-5 font-medium text-[16px] text-[#888888]">
+                                        <TableCell
+                                            key={cell.id}
+                                            className={`font-medium text-[16px] text-[#888888] text-center`}
+                                        >
                                             {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext()
