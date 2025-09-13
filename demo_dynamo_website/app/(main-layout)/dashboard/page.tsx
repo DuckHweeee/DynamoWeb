@@ -9,7 +9,7 @@ import { SumRealTime } from "./components/sumRealTime"
 import { MachineProcessBarChart } from "./components/machineProcessBarChart"
 import MachineTable from "./components/machineTable"
 import { ReportTime } from "./components/reporTime"
-import OperatorTable from "./components/operatorTable"
+import OperatorTable from "./operation/components/StaffTable"
 import DrawingCodeTable from "./components/drawingTable"
 
 import { Calendar } from "lucide-react";
@@ -148,7 +148,7 @@ export default function Dashboard() {
 
             {/* Thống kê vận hành */}
             <div className="m-2 my-5 px-4 py-5 bg-white rounded-[10px] shadow" >
-                <ReportTimeOperator title={"Thống kê người vận hành"} description={"12 người vận hành"} />
+                <ReportTimeOperator />
                 <div className="grid grid-cols-2 gap-5 my-5">
                     {/* <MachineRunBarChart /> */}
                     <DivergingBarChart title="Tổng điểm gia công trong nhóm 1" description="Thống kê tổng điểm của từng nhân viên trong nhóm" data={myData} />
@@ -158,7 +158,7 @@ export default function Dashboard() {
                     <DivergingBarChart title="OLE trong nhóm 1" description="OLE của từng nhân viên trong nhóm" data={myData} />
                     <DivergingBarChart title="KPI trong nhóm 1" description="KPI của từng nhân viên trong nhóm " data={myData} />
                 </div>
-                <OperatorTable title="Danh sách người vận hành" description="Tất cả các máy" />
+                {/* <OperatorTable title="Danh sách người vận hành" description="Tất cả các máy" /> */}
             </div >
 
             {/* Thống kê bản vẽ */}
@@ -173,7 +173,7 @@ export default function Dashboard() {
             {/* Thống kê Process */}
             <div className="m-2 my-5 px-4 py-5 bg-white rounded-[10px] shadow" >
                 <ReportTime title={"Thống kê nguyên công "} description={"12 nguyên công"} />
-                <OperatorTable title="Danh sách thống kê nhân viên" description="Tất cả các máy" />
+                {/* <OperatorTable title={""} description={""} staffList={[]} /> */}
             </div >
         </div >
     )

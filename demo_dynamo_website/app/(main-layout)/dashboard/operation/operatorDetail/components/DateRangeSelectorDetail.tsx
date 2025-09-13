@@ -24,15 +24,27 @@ dayjs.extend(isLeapYear)
 type Mode = "day" | "week" | "month" | "year"
 
 interface Props {
+    startDate?: string
+    endDate?: string
     onChange?: (range: { startDate: string; endDate: string }) => void
 }
 
-export default function DateRangeSelector({ onChange }: Props) {
+export default function DateRangeSelectorDetail({ startDate, endDate, onChange }: Props) {
     const [mode, setMode] = useState<Mode>("day")
-    const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
-    const [selectedWeek, setSelectedWeek] = useState<number | null>(dayjs().isoWeek())
-    const [selectedMonth, setSelectedMonth] = useState<number | null>(dayjs().month() + 1)
-    const [selectedYear, setSelectedYear] = useState<number | null>(dayjs().year())
+
+    // Khởi tạo state với giá trị từ props hoặc mặc định
+    const [selectedDate, setSelectedDate] = useState<Date | null>(() =>
+        startDate ? dayjs(startDate).toDate() : null
+    );
+    const [selectedWeek, setSelectedWeek] = useState<number | null>(() =>
+        startDate ? dayjs(startDate).isoWeek() : null
+    );
+    const [selectedMonth, setSelectedMonth] = useState<number | null>(() =>
+        startDate ? dayjs(startDate).month() + 1 : null
+    );
+    const [selectedYear, setSelectedYear] = useState<number | null>(() =>
+        startDate ? dayjs(startDate).year() : null
+    );
 
     const getWeeksOfYear = (year: number) => {
         const weeks: { week: number; start: string; end: string }[] = []
@@ -45,43 +57,88 @@ export default function DateRangeSelector({ onChange }: Props) {
         return weeks
     }
 
-    const weeks = getWeeksOfYear(dayjs().year())
     const months = Array.from({ length: 12 }, (_, i) => i + 1)
 
+    // đồng bộ khi cha truyền props
     useEffect(() => {
-        let startDate = ""
-        let endDate = ""
+        if (startDate && endDate) {
+            const start = dayjs(startDate);
+            const end = dayjs(endDate);
+
+            // Kiểm tra ngày
+            if (start.isSame(end, 'day')) {
+                setMode('day');
+                setSelectedDate(start.toDate());
+                return;
+            }
+
+            // Kiểm tra tuần
+            const weekStart = start.startOf('isoWeek');
+            const weekEnd = start.endOf('isoWeek');
+            if (start.isSame(weekStart, 'day') && end.isSame(weekEnd, 'day')) {
+                setMode('week');
+                setSelectedYear(start.year());
+                setSelectedWeek(start.isoWeek());
+                return;
+            }
+
+            // Kiểm tra tháng
+            const monthStart = start.startOf('month');
+            const monthEnd = start.endOf('month');
+            if (start.isSame(monthStart, 'day') && end.isSame(monthEnd, 'day')) {
+                setMode('month');
+                setSelectedYear(start.year());
+                setSelectedMonth(start.month() + 1);
+                return;
+            }
+
+            // Kiểm tra năm
+            const yearStart = start.startOf('year');
+            const yearEnd = start.endOf('year');
+            if (start.isSame(yearStart, 'day') && end.isSame(yearEnd, 'day')) {
+                setMode('year');
+                setSelectedYear(start.year());
+            }
+        }
+    }, [startDate, endDate])
+
+    // gọi onChange khi chọn lại
+    useEffect(() => {
+        let s = ""
+        let e = ""
 
         if (mode === "day" && selectedDate) {
-            startDate = dayjs(selectedDate).format("YYYY-MM-DD")
-            endDate = startDate
+            s = dayjs(selectedDate).format("YYYY-MM-DD")
+            e = s
         }
 
         if (mode === "week" && selectedWeek && selectedYear) {
             const start = dayjs().year(selectedYear).isoWeek(selectedWeek).startOf("isoWeek")
             const end = dayjs().year(selectedYear).isoWeek(selectedWeek).endOf("isoWeek")
-            startDate = start.format("YYYY-MM-DD")
-            endDate = end.format("YYYY-MM-DD")
+            s = start.format("YYYY-MM-DD")
+            e = end.format("YYYY-MM-DD")
         }
 
         if (mode === "month" && selectedMonth && selectedYear) {
             const start = dayjs().year(selectedYear).month(selectedMonth - 1).startOf("month")
             const end = dayjs().year(selectedYear).month(selectedMonth - 1).endOf("month")
-            startDate = start.format("YYYY-MM-DD")
-            endDate = end.format("YYYY-MM-DD")
+            s = start.format("YYYY-MM-DD")
+            e = end.format("YYYY-MM-DD")
         }
 
         if (mode === "year" && selectedYear) {
             const start = dayjs().year(selectedYear).startOf("year")
             const end = dayjs().year(selectedYear).endOf("year")
-            startDate = start.format("YYYY-MM-DD")
-            endDate = end.format("YYYY-MM-DD")
+            s = start.format("YYYY-MM-DD")
+            e = end.format("YYYY-MM-DD")
         }
 
-        if (startDate && endDate && onChange) {
-            onChange({ startDate, endDate })
+        if (s && e && onChange) {
+            onChange({ startDate: s, endDate: e })
         }
     }, [mode, selectedDate, selectedWeek, selectedMonth, selectedYear, onChange])
+
+    const weeks = getWeeksOfYear(selectedYear ?? dayjs().year())
 
     return (
         <div className="flex gap-15">
@@ -108,11 +165,12 @@ export default function DateRangeSelector({ onChange }: Props) {
                             <PopoverTrigger asChild>
                                 <Button
                                     variant="outline"
-                                    className="cursor-pointer w-auto justify-start text-right text-lg font-normal "                            >
+                                    className="cursor-pointer w-auto justify-start text-right text-lg font-normal "
+                                >
                                     {selectedDate
                                         ? dayjs(selectedDate).format("DD/MM/YYYY")
                                         : "Chọn ngày"}
-                                    <CalendarIcon className="h-5 w-5 opacity-90" />
+                                    <CalendarIcon className="!h-5 !w-5 opacity-40" />
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0 ">
@@ -125,32 +183,30 @@ export default function DateRangeSelector({ onChange }: Props) {
                             </PopoverContent>
                         </Popover>
                     </div>
-
                 )}
 
                 {mode === "week" && (
-                    <Select value={String(selectedWeek ?? "")} onValueChange={(val) => setSelectedWeek(Number(val))}>
+                    <Select
+                        value={selectedWeek ? String(selectedWeek) : undefined}
+                        onValueChange={(val) => setSelectedWeek(Number(val))}
+                    >
                         <SelectTrigger className="cursor-pointer text-xl ">
                             <SelectValue placeholder="Chọn tuần" />
                         </SelectTrigger>
                         <SelectContent className="max-h-[300px]">
                             {weeks.map((w) => (
-                                <SelectItem
-                                    key={w.week}
-                                    value={String(w.week)}
-                                    className={`text-lg ${selectedWeek === w.week ? "bg-blue-100 text-blue-900" : ""}`}
-                                >
+                                <SelectItem key={w.week} value={String(w.week)} className="text-lg">
                                     Tuần {w.week}: {w.start} - {w.end}
                                 </SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
-                )}
 
+                )}
 
                 {mode === "month" && (
                     <Select
-                        value={String(selectedMonth ?? "")}
+                        value={selectedMonth ? String(selectedMonth) : undefined}
                         onValueChange={(val) => setSelectedMonth(Number(val))}
                     >
                         <SelectTrigger className="cursor-pointer text-xl ">
@@ -158,11 +214,7 @@ export default function DateRangeSelector({ onChange }: Props) {
                         </SelectTrigger>
                         <SelectContent className="max-h-[300px]">
                             {months.map((m) => (
-                                <SelectItem
-                                    key={m}
-                                    value={String(m)}
-                                    className={`text-lg ${selectedMonth === m ? "bg-blue-100 text-blue-900" : ""}`}
-                                >
+                                <SelectItem key={m} value={String(m)} className="text-lg">
                                     Tháng {m}
                                 </SelectItem>
                             ))}
@@ -172,24 +224,14 @@ export default function DateRangeSelector({ onChange }: Props) {
 
                 {mode === "year" && (
                     <Select
-                        value={String(selectedYear ?? "")}
+                        value={selectedYear ? String(selectedYear) : undefined}
                         onValueChange={(val) => setSelectedYear(Number(val))}
                     >
-                        <SelectTrigger className="cursor-pointer text-xl ">                            <SelectValue placeholder="Chọn năm" />
+                        <SelectTrigger className="cursor-pointer text-xl ">
+                            <SelectValue placeholder="Chọn năm" />
                         </SelectTrigger>
-                        {/* <SelectContent className="max-h-[300px]">
-                            {Array.from({ length: 3 }, (_, i) => dayjs().year() - (2 - i)).map((year) => (
-                                <SelectItem
-                                    key={year}
-                                    value={String(year)}
-                                    className={`text-lg ${selectedYear === year ? "bg-blue-100 text-blue-900" : ""}`}
-                                >
-                                    {year}
-                                </SelectItem>
-                            ))}
-                        </SelectContent> */}
                         <SelectContent className="max-h-[300px]">
-                            {Array.from({ length: 3 }, (_, i) => dayjs().year() - 2 + i).map((year) => (
+                            {Array.from({ length: 5 }, (_, i) => dayjs().year() - 2 + i).map((year) => (
                                 <SelectItem key={year} value={String(year)} className="text-lg">
                                     {year}
                                 </SelectItem>
@@ -199,6 +241,6 @@ export default function DateRangeSelector({ onChange }: Props) {
                 )}
             </div>
         </div>
+
     )
 }
-

@@ -75,11 +75,8 @@ const statusMap = {
 };
 
 export default function TabletOperation() {
-    // const [selectedOperatorId, setSelectedOperatorId] = useState("");
     const [loading, setLoading] = useState(false);
     const [selectedMachineId, setSelectedMachineId] = useState<string>("");
-    // console.log("selectedMachineId")
-    // console.log(selectedMachineId)
     const [updateInfor, setUpdateInfor] = useState<UpdateInfor>({
         updateProcessType: "",
         updateOrderCode: "",
@@ -135,24 +132,28 @@ export default function TabletOperation() {
         if (!selectedMachineId) return;
         const fetchProcess = async () => {
             try {
-                // const response = await axios.get<Process2>(
-                //     `${urlLink}/api/drawing-code-process/machine/${selectedMachineId}`
-                // );
-                // setProcess(response.data);
-
                 const res = await axios.get<ProcessResponse>(
                     `${urlLink}/api/drawing-code-process/machine/${selectedMachineId}`
                 );
                 setTodo(res.data.todo || []);
                 setInProgress(res.data.inProgress || null);
-                // console.log("inProgress")
-                // console.log(inProgress)
             } catch (error) {
                 console.error("Lỗi khi lấy dữ liệu process:", error);
-                // setProcess(null);
             }
         };
         setSelectedProcess(null);
+
+        // Reset updateInfor khi chuyển máy để tránh hiển thị thông tin cũ
+        setUpdateInfor({
+            updateProcessType: "",
+            updateOrderCode: "",
+            updatePartNumber: 0,
+            updateStepNumber: 0,
+            updatePgTime: 0,
+            updateManufacturingPoint: 0,
+            updateStaffId: 0,
+        });
+
         fetchProcess();
     }, [selectedMachineId]);
 
@@ -183,8 +184,14 @@ export default function TabletOperation() {
     const matchedStaff = currentStaff?.find(
         (item) => item.machineId === Number(selectedMachineId)
     );
-    let currentStaffId = updateInfor.updateStaffId || matchedStaff?.staffIdNumber || selectedProcess?.planDto?.staffId;
 
+    // Sửa logic tính currentStaffId để chỉ dùng updateStaffId khi đang editing
+    let currentStaffId = isEditing
+        ? (updateInfor.updateStaffId || matchedStaff?.staffIdNumber || selectedProcess?.planDto?.staffId)
+        : (matchedStaff?.staffIdNumber || selectedProcess?.planDto?.staffId);
+
+    console.log("currentStaffId")
+    console.log(currentStaffId)
     // Test
     const handleSave = async () => {
         if (
@@ -219,7 +226,7 @@ export default function TabletOperation() {
         setLoading(true);
         try {
             const response = await fetch(
-                `${urlLink}/api/drawing-code-process/${inProgress?.processId}`,
+                `${urlLink}/api/drawing-code-process/tablet/${inProgress?.processId}`,
                 {
                     method: "PUT",
                     headers: {
@@ -254,6 +261,18 @@ export default function TabletOperation() {
             );
             setCurrentStaff(response3.data);
             setIsEditing(false);
+
+            // Reset updateInfor sau khi save thành công
+            setUpdateInfor({
+                updateProcessType: "",
+                updateOrderCode: "",
+                updatePartNumber: 0,
+                updateStepNumber: 0,
+                updatePgTime: 0,
+                updateManufacturingPoint: 0,
+                updateStaffId: 0,
+            });
+
             toast.success("Chỉnh sửa thành công");
 
         } catch (error) {
@@ -284,7 +303,6 @@ export default function TabletOperation() {
             );
             setTodo(res.data.todo || []);
             setInProgress(res.data.inProgress || null);
-
             toast.success("Hoàn thành quy trình thành công!");
             const response3 = await axios.get<CurrentStaff[]>(
                 `${urlLink}/api/current-staff`
@@ -321,60 +339,6 @@ export default function TabletOperation() {
         }
     };
 
-
-    // Test submit chuyển từ todo sang inProgress
-    // const handleSubmit = async () => {
-    //     setLoading(true);
-    //     let staffIString = String(
-    //         staff.find(st => String(st.staffId) === String(selectedProcess?.planDto?.staffId))?.id
-    //     );
-    //     if (staffIString === "") {
-    //         toast.error("Gửi thất bại. Vui lòng thử lại.");
-    //         return
-    //     }
-    //     try {
-    //         const url = `${urlLink}/api/drawing-code-process/receive?drawingCodeProcess_id=${selectedProcess?.processId}&&staffId=${staffIString}&&machineId=${selectedMachineId}`;
-    //         await axios.post(url);
-    //         toast.success("Gửi thành công!");
-
-    //         // Đợi hỏi lại thông tin chính xác
-    //         // const res = await axios.get<ProcessResponse>(
-    //         //     `${urlLink}/api/drawing-code-process/machine/${selectedMachineId}`
-    //         // );
-    //         // setTodo(res.data.todo || []);
-    //         // setInProgress(res.data.inProgress || null);
-
-    //     } catch (error) {
-    //         toast.error("Gửi thất bại. Vui lòng thử lại.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-    // const handleSubmit = async () => {
-    //     setLoading(true);
-
-    //     const staffFound = staff.find(
-    //         st => String(st.staffId) === String(selectedProcess?.planDto?.staffId)
-    //     );
-
-    //     if (!staffFound) {
-    //         toast.error("Chưa có thông tin nhân viên. Vui lòng chọn nhân viên trước khi gửi.");
-    //         setLoading(false);
-    //         return;
-    //     }
-
-    //     const staffIString = String(staffFound.id);
-
-    //     try {
-    //         const url = `${urlLink}/api/drawing-code-process/receive?drawingCodeProcess_id=${selectedProcess?.processId}&staffId=${staffIString}&machineId=${selectedMachineId}`;
-    //         await axios.post(url);
-    //         toast.success("Gửi thành công!");
-    //     } catch (error) {
-    //         toast.error("Gửi thất bại. Vui lòng thử lại.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
     const handleSubmit = async () => {
         setLoading(true);
 
@@ -403,6 +367,7 @@ export default function TabletOperation() {
             const url = `${urlLink}/api/drawing-code-process/receive?drawingCodeProcess_id=${selectedProcess?.processId}&staffId=${staffIString}&machineId=${selectedMachineId}`;
             await axios.post(url);
             toast.success("Gửi thành công!");
+            setSelectStaff(undefined);
             location.reload()
         } catch (error) {
             toast.error("Gửi thất bại. Vui lòng thử lại.");
@@ -410,9 +375,18 @@ export default function TabletOperation() {
             setLoading(false);
         }
     };
-    let [selectStaff, setSelectStaff] = useState<Number>()
+
+    // Đang kiểm tra lại
+    const [selectStaff, setSelectStaff] = useState<Number>()
+    useEffect(() => {
+        setSelectStaff(currentStaff?.find(
+            (item) => item.machineId === Number(selectedMachineId)
+        )?.staffIdNumber);
+    }, [selectedMachineId, isAddnew]);
     // console.log("selectStaff")
     // console.log(selectStaff)
+
+
     return (
         <>
             {
@@ -436,6 +410,7 @@ export default function TabletOperation() {
                                         setSelectedMachineId(value);
                                         setIsCreating(false);
                                         setIsEditing(false);
+                                        setSelectStaff(undefined)
                                     }}
                                 >
                                     <SelectTrigger className="w-auto text-3xl py-8">
@@ -683,53 +658,6 @@ export default function TabletOperation() {
                                                 <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-[32px]">
                                                     Nhân Viên
                                                 </TableCell>
-                                                {/* <TableCell className="w-1/2 p-0 text-center text-3xl">
-                                                    {(() => {
-                                                        let operatorName =
-                                                            staff.find((st) => st.staffId === currentStaffId)?.staffName;
-
-                                                        if (isEditing || !operatorName) {
-                                                            // Nếu đang edit HOẶC chưa có nhân viên thì hiện Select luôn
-                                                            return (
-                                                                <div className="flex w-full h-full items-center justify-center">
-                                                                    <Select
-                                                                        value={currentStaffId ? String(currentStaffId) : undefined}
-                                                                        onValueChange={(val) =>
-                                                                            setUpdateInfor((prev) => ({
-                                                                                ...prev,
-                                                                                updateStaffId: Number(val),
-                                                                            }))
-                                                                        }
-                                                                    >
-                                                                        <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-[32px] font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
-                                                                            <SelectValue placeholder="Chọn nhân viên" className="!placeholder:text-blue-950" />
-                                                                        </SelectTrigger>
-                                                                        <SelectContent>
-                                                                            <SelectGroup>
-                                                                                {staff.map((st) => (
-                                                                                    <SelectItem
-                                                                                        className="text-2xl font-bold text-blue-950 max-[1300px]:text-[32px]"
-                                                                                        key={st.staffId}
-                                                                                        value={String(st.staffId)}
-                                                                                    >
-                                                                                        {st.shortName} - {st.staffId}
-                                                                                    </SelectItem>
-                                                                                ))}
-                                                                            </SelectGroup>
-                                                                        </SelectContent>
-                                                                    </Select>
-                                                                </div>
-                                                            );
-                                                        }
-
-                                                        return (
-                                                            <div className="flex items-center justify-center text-3xl font-bold h-full text-blue-950 max-[1300px]:text-[32px]">
-                                                                {operatorName}
-                                                            </div>
-                                                        );
-                                                    })()}
-                                                </TableCell> */}
-
                                                 <TableCell className="w-1/2 p-0 text-center text-3xl">
                                                     {(() => {
                                                         let operatorName =
@@ -826,19 +754,17 @@ export default function TabletOperation() {
                         <Button
                             variant="outline"
                             onClick={() => {
-
                                 setIsEditing(false);
-                                if (inProgress) {
-                                    setUpdateInfor({
-                                        updateProcessType: inProgress.processType || "",
-                                        updateOrderCode: inProgress.orderDetailDto?.orderCode || "",
-                                        updatePartNumber: Number(inProgress.partNumber) || 0,
-                                        updateStepNumber: Number(inProgress.stepNumber) || 0,
-                                        updatePgTime: Number(inProgress.pgTime) || 0,
-                                        updateManufacturingPoint: Number(inProgress.manufacturingPoint) || 0,
-                                        updateStaffId: Number(matchedStaff?.staffIdNumber || 0)
-                                    });
-                                }
+                                // Reset updateInfor khi hủy chỉnh sửa
+                                setUpdateInfor({
+                                    updateProcessType: "",
+                                    updateOrderCode: "",
+                                    updatePartNumber: 0,
+                                    updateStepNumber: 0,
+                                    updatePgTime: 0,
+                                    updateManufacturingPoint: 0,
+                                    updateStaffId: 0,
+                                });
                             }}
                             className="cursor-pointer text-gray-500  px-10 py-7 text-3xl font-bold max-[1300px]:px-10"
                         >
@@ -869,15 +795,6 @@ export default function TabletOperation() {
                             Hoàn thành
                         </Button>
                     )}
-                    {/* {((statusKey === "S" || statusKey == 0) && isNull) && (
-                        <Button
-                            onClick={() => setIsCreating(true)}
-                            className="cursor-pointer bg-green-700 hover:bg-green-600 px-10 py-7 text-3xl font-bold max-[1300px]:px-10"
-                        >
-                            Tạo mới
-                        </Button>
-                    )} */}
-                    {/* {((statusKey === "S" || statusKey == 0) && inProgress == null) && ( */}
                     {isAddnew && (
                         <Button
                             onClick={() => handleSubmit()}
@@ -888,26 +805,6 @@ export default function TabletOperation() {
                     )}
                 </div>
             </ div>
-
-            {/* Tạo mới */}
-            {/* <CreateProcessDialog
-                open={isCreating}
-                onOpenChange={async (open) => {
-                    setIsCreating(open);
-                    if (!open) {
-                        const response2 = await axios.get<Process2>(
-                            `${urlLink}/api/drawing-code-process/machine/${selectedMachineId}`
-                        );
-                        setProcess(response2.data);
-
-                        const response3 = await axios.get<CurrentStaff[]>(
-                            `${urlLink}/api/current-staff`
-                        );
-                        setCurrentStaff(response3.data);
-                    }
-                }}
-                selectedMachineId={selectedMachineId} staffList={staff}
-            /> */}
         </>
     );
 }

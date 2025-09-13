@@ -276,8 +276,8 @@ export default function TabletProcess() {
 
                                                         setSelectedMachineId(may ? String(may) : "");
                                                         setSelectedStaffId(nhanvien ? String(nhanvien) : "");
-                                                        console.log(may ? String(may) : "");
-                                                        console.log(nhanvien ? String(nhanvien) : "");
+                                                        // console.log(may ? String(may) : "");
+                                                        // console.log(nhanvien ? String(nhanvien) : "");
                                                     }
                                                     }
                                                 >
