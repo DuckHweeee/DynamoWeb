@@ -49,6 +49,8 @@ export default function TabletProcess() {
     useEffect(() => {
         setStaff(fetchedOperator)
     }, [fetchedOperator])
+    // const { data: staff } = useFetchOperators()
+
 
     const fetchedMachine = useFetchMachines()
     const [machine2, setMachine2] = useState<Machine2[]>([])
@@ -56,14 +58,7 @@ export default function TabletProcess() {
         setMachine2(fetchedMachine)
     }, [fetchedMachine])
 
-    // const fetchedProcesses = useFetchProcesses()
-    // const { data: fetchedProcesses, refetch } = useFetchProcesses();
-    // const [processData2, setProcessData2] = useState<Process2[]>([])
-    // useEffect(() => {
-    //     setProcessData2(fetchedProcesses)
-    // }, [fetchedProcesses])
-    // console.log("processData2")
-    // console.log(processData2)
+
     const { data: processData2, refetch } = useProcess()
 
     // Handle Submit

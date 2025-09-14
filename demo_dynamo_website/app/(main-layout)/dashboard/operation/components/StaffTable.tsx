@@ -26,12 +26,20 @@ import {
 } from "@/components/ui/table"
 import { useState } from "react"
 import { StaffOverview } from "../lib/type"
-function formatSecondsToTime(seconds: number): string {
-    const hours = Math.floor(seconds / 3600)
-    const minutes = Math.floor((seconds % 3600) / 60)
-    return `${hours}h ${minutes}m`
-}
+// function formatSecondsToTime(seconds: number): string {
+//     const hours = Math.floor(seconds / 3600)
+//     const minutes = Math.floor((seconds % 3600) / 60)
+//     return `${hours}h ${minutes}m`
+// }
+function convertHoursToHM(hours: number): string {
+    const h = Math.floor(hours);
+    const m = Math.round((hours - h) * 60);
 
+    if (h > 0 && m > 0) return `${h} giờ ${m} phút`;
+    if (h > 0) return `${h} giờ`;
+    if (m > 0) return `${m} phút`;
+    return "0 phút";
+}
 const columns: ColumnDef<StaffOverview>[] = [
     {
         accessorKey: "staffFullName",
@@ -54,7 +62,7 @@ const columns: ColumnDef<StaffOverview>[] = [
                 Giờ làm việc <ArrowUpDown />
             </Button>
         ),
-        cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("totalWorkingHour"))}</div>,
+        cell: ({ row }) => <div>{convertHoursToHM(row.getValue("totalWorkingHour"))}</div>,
     },
     {
         accessorKey: "totalOperationNumber",

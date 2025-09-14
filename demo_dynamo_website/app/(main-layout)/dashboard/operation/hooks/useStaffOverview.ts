@@ -4,7 +4,7 @@ import { StaffOverview } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export function useStaffOverview(groupId: string, startDate: string, endDate: string, p0: { enabled: boolean; }) {
+export function useStaffOverview(groupId: string, startDate: string, endDate: string) {
     const [data, setData] = useState<StaffOverview[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
