@@ -27,12 +27,6 @@ interface FlexibleComboboxProps<T> {
     valueField: keyof T
     placeholder?: string
 }
-// function fuzzyMatch(text: string, pattern: string) {
-//     text = text.toLowerCase();
-//     pattern = pattern.toLowerCase();
-
-//     return text.includes(pattern);
-// }
 export function FlexibleCombobox<T>({
     options,
     value,
@@ -48,17 +42,10 @@ export function FlexibleCombobox<T>({
     const selectedItem = options.find(
         (item) => String(item[valueField]) === value
     )
-    // const selectedItem = options.find(
-    //     (item) => String(item[valueField]) === value // so sánh machineId với value
-    // );
 
     const filteredOptions = options.filter((item) =>
         String(item[displayField]).toLowerCase().includes(inputValue.toLowerCase())
     )
-    // const filteredOptions = options.filter((item) =>
-    //     fuzzyMatch(String(item[displayField]), inputValue)
-    // );
-
 
     return (
         <Popover open={open} onOpenChange={setOpen}>

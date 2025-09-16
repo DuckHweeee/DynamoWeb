@@ -148,7 +148,7 @@ export default function Dashboard() {
 
             {/* Thống kê vận hành */}
             <div className="m-2 my-5 px-4 py-5 bg-white rounded-[10px] shadow" >
-                <ReportTimeOperator />
+                {/* <ReportTimeOperator /> */}
                 <div className="grid grid-cols-2 gap-5 my-5">
                     {/* <MachineRunBarChart /> */}
                     <DivergingBarChart title="Tổng điểm gia công trong nhóm 1" description="Thống kê tổng điểm của từng nhân viên trong nhóm" data={myData} />

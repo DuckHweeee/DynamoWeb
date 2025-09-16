@@ -29,9 +29,21 @@ export interface StaffStatistic {
     processRate: number;
     totalKpi: number;
     kpiRate: number;
-    staff: Staff[];
+    staffDto: Staff[];
 }
 export interface Staff {
-    staffId: string;
+    id: number;
     staffName: string;
+}
+
+export interface HistoryProcess {
+    orderCode: string;
+    partNumber: number;
+    stepNumber: number;
+    startTime: string;
+    endTime: string;
+    machineName: string;
+    staffIdNumber: number;
+    staffName: string;
+    status: string;
 }

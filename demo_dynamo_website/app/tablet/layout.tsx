@@ -43,11 +43,11 @@ export default function TabletLayout({
                         <a href="#" className="-m-1.5 p-1.5">
                             <img className="h-15 w-auto" src="/logo.png" alt="Logo" />
                         </a>
-                        {user && (
+                        {/* {user && (
                             <div className="text-xl font-bold text-gray-600">
                                 Welcome, {user.username}
                             </div>
-                        )}
+                        )} */}
                     </div>
 
                     <div className="flex gap-x-5">

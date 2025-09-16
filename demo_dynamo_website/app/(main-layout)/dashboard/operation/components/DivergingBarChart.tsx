@@ -26,9 +26,9 @@ interface DivergingBarChartProps {
     data: { name: string; target: number; real: number }[]
 }
 const legendItems = [
-    { name: "Mục tiêu", value: 0.6, fill: "#00a6fb" },
-    { name: "Thực tế", value: 0.5, fill: "#0587ca" },
-    { name: "Thấp hơn mục tiêu", value: 0.5, fill: "#ff4d4d" },
+    { name: "Mục tiêu", fill: "#00a6fb" },
+    { name: "Thực tế", fill: "#0587ca" },
+    { name: "Thấp hơn mục tiêu", fill: "#ff4d4d" },
 ]
 export function DivergingBarChart({
     title,

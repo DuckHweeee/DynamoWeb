@@ -34,24 +34,68 @@ export const useFetchProcesses = () => {
     };
 };
 
-// Cần viết lại cái này
+// Chưa test
+// export function useFetchMachines() {
+//     const [machine, setMachine] = useState<Machine2[]>([])
+//     useEffect(() => {
+//         axios.get(`${url}/api/machine`)
+//             .then((res) => setMachine(res.data))
+//             .catch((err) => console.error("Error fetching machine:", err))
+//     }, [])
+//     return machine
+// }
 export function useFetchMachines() {
-    const [machine, setMachine] = useState<Machine2[]>([])
+    const [data, setData] = useState<Machine2[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+
     useEffect(() => {
-        axios.get(`${url}/api/machine`)
-            .then((res) => setMachine(res.data))
-            .catch((err) => console.error("Error fetching machine:", err))
+        const fetchData = async () => {
+            try {
+                const res = await axios.get<Machine2[]>(`${url}/api/machine`);
+                setData(res.data)
+            } catch (err) {
+                setError("Lỗi khi tải dữ liệu")
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchData()
     }, [])
-    return machine
+    return { data, loading, error }
 }
 
+
+
+
+// Chưa test
+// export function useFetchOperators() {
+//     const [operator, setOperator] = useState<Staff[]>([])
+//     useEffect(() => {
+//         axios.get(`${url}/api/staff`)
+//             .then((res) => setOperator(res.data))
+//             .catch((err) => console.error("Error fetching operator:", err))
+//     }, [])
+//     // console.log(operator)
+//     return operator
+// }
 export function useFetchOperators() {
-    const [operator, setOperator] = useState<Staff[]>([])
+    const [data, setData] = useState<Staff[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+
     useEffect(() => {
-        axios.get(`${url}/api/staff`)
-            .then((res) => setOperator(res.data))
-            .catch((err) => console.error("Error fetching operator:", err))
+        const fetchData = async () => {
+            try {
+                const res = await axios.get<Staff[]>(`${url}/api/staff`);
+                setData(res.data)
+            } catch (err) {
+                setError("Lỗi khi tải dữ liệu")
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchData()
     }, [])
-    // console.log(operator)
-    return operator
+    return { data, loading, error }
 }
