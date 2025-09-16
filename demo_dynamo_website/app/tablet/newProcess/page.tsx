@@ -43,22 +43,23 @@ export default function TabletProcess() {
     // const [selectedMachineId, setSelectedMachineId] = useState<string>("");
     // const [selectedOperatorId, setSelectedOperatorId] = useState<string>("");
 
-    // Fetch Data
-    const fetchedOperator = useFetchOperators()
-    const [staff, setStaff] = useState<Staff[]>([])
-    useEffect(() => {
-        setStaff(fetchedOperator)
-    }, [fetchedOperator])
-    // console.log("staff:")
-    // console.log(fetchedOperator)
+    // Chưa test
+    // const fetchedOperator = useFetchOperators()
+    // const [staff, setStaff] = useState<Staff[]>([])
+    // useEffect(() => {
+    //     setStaff(fetchedOperator)
+    // }, [fetchedOperator])
+    const { data: staff } = useFetchOperators()
 
-    const fetchedMachine = useFetchMachines()
-    const [machine2, setMachine2] = useState<Machine2[]>([])
-    useEffect(() => {
-        setMachine2(fetchedMachine)
-    }, [fetchedMachine])
-    // console.log("machine2")
-    // console.log(machine2)
+
+    // Chưa test
+    // const fetchedMachine = useFetchMachines()
+    // const [machine2, setMachine2] = useState<Machine2[]>([])
+    // useEffect(() => {
+    //     setMachine2(fetchedMachine)
+    // }, [fetchedMachine])
+    const { data: machine2 } = useFetchMachines()
+
 
     // Fetch ToDo Progress
     const { data: fetchedProcesses, refetch } = useFetchProcesses();
@@ -212,27 +213,6 @@ export default function TabletProcess() {
             },
             cell: ({ row }) => <div>{row.getValue("pgTime")}</div>,
         },
-        // {
-        //     accessorKey: "planDto.staffId",
-        //     accessorFn: (row) => row.planDto?.staffId ?? "",
-        //     header: ({ column }) => {
-        //         return (
-        //             <Button
-        //                 className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
-        //                 variant="ghost"
-        //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        //             >
-        //                 Nhân Viên
-        //                 <ArrowUpDown />
-        //             </Button>
-        //         )
-        //     },
-        //     cell: ({ row }) => {
-        //         const staffId = row.original.planDto?.staffId;
-        //         const foundStaff = staff.find(st => st.staffId === staffId);
-        //         return <div>{foundStaff ? foundStaff.staffName : ""}</div>;
-        //     }
-        // },
         {
             accessorKey: "planDto.machineId",
             accessorFn: (row) => row.planDto?.machineId ?? "",
@@ -348,10 +328,6 @@ export default function TabletProcess() {
                                                 <Fragment key={row.id}>
                                                     <TableRow
                                                         className={`${isOdd ? "bg-gray-100" : ""} text-2xl font-semibold !border-none`}
-                                                    // onClick={() => setExpandedRowId(prev =>
-                                                    //     prev === row.original.processId ? null : row.original.processId
-                                                    // )
-                                                    // }
                                                     >
                                                         {row.getVisibleCells().map((cell) => (
                                                             <TableCell key={cell.id} className="text-center">
@@ -362,67 +338,6 @@ export default function TabletProcess() {
                                                             </TableCell>
                                                         ))}
                                                     </TableRow>
-                                                    {/* {row.original.processId === expandedRowId && (
-                                                        <TableRow className={`${isOdd ? "bg-gray-100" : ""} text-2xl font-semibold !border-none`}>
-                                                            <TableCell colSpan={6}>
-                                                                <div className="pb-3 max-2xl:pl-6 max-2xl:pr-3  min-2xl:pr-3 min-2xl:pl-10 flex items-center gap-3">
-                                                                    <div className="flex gap-6 w-full">
-                                                                        <div className="w-1/2 flex items-center gap-2">
-                                                                            <p className="font-bold text-2xl whitespace-nowrap">Chọn máy:</p>
-                                                                            <Select
-                                                                                value={selectedMachineId}
-                                                                                onValueChange={(value) => setSelectedMachineId(value)}
-                                                                            >
-                                                                                <SelectTrigger className="w-full text-2xl">
-                                                                                    <SelectValue placeholder="Máy" />
-                                                                                </SelectTrigger>
-                                                                                <SelectContent>
-                                                                                    <SelectGroup>
-                                                                                        {machine2
-                                                                                            .filter((m) => m.status === 0)
-                                                                                            .map((m) => (
-                                                                                                <SelectItem className="text-2xl" key={m.machineId} value={m.machineId.toString()}>
-                                                                                                    {m.machineName}
-                                                                                                </SelectItem>
-                                                                                            ))}
-                                                                                    </SelectGroup>
-                                                                                </SelectContent>
-                                                                            </Select>
-                                                                        </div>
-
-                                                                        <div className="w-1/2 flex items-center gap-2">
-                                                                            <p className="font-bold text-2xl whitespace-nowrap">Chọn nhân viên:</p>
-                                                                            <Select
-                                                                                value={selectedOperatorId}
-                                                                                onValueChange={(value) => setSelectedOperatorId(value)}
-                                                                            >
-                                                                                <SelectTrigger className="w-full text-2xl">
-                                                                                    <SelectValue placeholder="Nhân viên" />
-                                                                                </SelectTrigger>
-                                                                                <SelectContent>
-                                                                                    <SelectGroup>
-                                                                                        {staff.map((staff) => (
-                                                                                            <SelectItem className="text-2xl" key={staff.id} value={staff.id}>
-                                                                                                {staff.staffName} - {staff.staffId}
-                                                                                            </SelectItem>
-                                                                                        ))}
-                                                                                    </SelectGroup>
-                                                                                </SelectContent>
-                                                                            </Select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <Button
-                                                                            className="bg-green-700 hover:bg-green-600 px-10 py-6 text-xl font-bold"
-                                                                            onClick={() => handleSubmit(row.original.processId)}
-                                                                        >
-                                                                            Gửi
-                                                                        </Button>
-                                                                    </div>
-                                                                </div>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    )} */}
                                                 </Fragment>
                                             );
                                         })

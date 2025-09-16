@@ -177,7 +177,7 @@ export interface Group {
     groupId: string;
     groupName: string;
     groupType: string;
-    staffGroups: any[];
+    staffGroups: [];
     machineGroups: any[];
     createdDate?: string;
     updatedDate?: string;

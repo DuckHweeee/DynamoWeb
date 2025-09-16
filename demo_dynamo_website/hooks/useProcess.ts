@@ -24,7 +24,7 @@ export function useProcess() {
     useEffect(() => {
         fetchData();
     }, [fetchData]);
-    console.log(data)
+    // console.log(data)
     // const fetchData = async () => {
     //     const res = await fetch(`${url}/api/drawing-code-process`);
     //     const filtered = res.data.filter((item: any) => item.isPlan == 1);

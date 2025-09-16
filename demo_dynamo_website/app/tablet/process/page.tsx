@@ -43,21 +43,21 @@ export default function TabletProcess() {
     const [selectedMachineId, setSelectedMachineId] = useState<string>("");
     const [selectedStaffId, setSelectedStaffId] = useState<string>("");
 
-    // Fetch Data
-    const fetchedOperator = useFetchOperators()
-    const [staff, setStaff] = useState<Staff[]>([])
-    useEffect(() => {
-        setStaff(fetchedOperator)
-    }, [fetchedOperator])
-    // const { data: staff } = useFetchOperators()
+    // Chưa test
+    // const fetchedOperator = useFetchOperators()
+    // const [staff, setStaff] = useState<Staff[]>([])
+    // useEffect(() => {
+    //     setStaff(fetchedOperator)
+    // }, [fetchedOperator])
+    const { data: staff } = useFetchOperators()
 
-
-    const fetchedMachine = useFetchMachines()
-    const [machine2, setMachine2] = useState<Machine2[]>([])
-    useEffect(() => {
-        setMachine2(fetchedMachine)
-    }, [fetchedMachine])
-
+    // Chưa test
+    // const fetchedMachine = useFetchMachines()
+    // const [machine2, setMachine2] = useState<Machine2[]>([])
+    // useEffect(() => {
+    //     setMachine2(fetchedMachine)
+    // }, [fetchedMachine])
+    const { data: machine2 } = useFetchMachines()
 
     const { data: processData2, refetch } = useProcess()
 
@@ -365,10 +365,10 @@ export default function TabletProcess() {
                 }
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="text-lg text-muted-foreground flex-1">
+                {/* <div className="text-lg text-muted-foreground flex-1">
                     Trang {table.getState().pagination.pageIndex + 1} /{" "}
                     <span>{table.getPageCount()}</span>
-                </div>
+                </div> */}
                 <div className="space-x-2">
                     <Button
                         variant="outline"

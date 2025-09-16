@@ -12,12 +12,13 @@ import { FlexibleCombobox } from "./components/FlexibleCombobox";
 import { processingObjectList } from "../../lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useRouter } from "next/navigation";
+import { useFetchOperators } from "@/hooks/useFetchData";
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export default function CreateProcessPage() {
     const router = useRouter()
     const { data: machineList } = useMachine();
-    const [staffList, setStaffList] = useState<Staff[]>([]);
+    // const [staffList, setStaffList] = useState<Staff[]>([]);
     const [orderDetail, setOrderDetail] = useState<OrderDetailDto[] | null>(null);
 
     const [formData, setFormData] = useState({
@@ -31,18 +32,19 @@ export default function CreateProcessPage() {
         machineId: "",
     });
 
-    // Fetch staff
-    useEffect(() => {
-        const fetchStaff = async () => {
-            try {
-                const res = await axios.get<Staff[]>(`${urlLink}/api/staff`);
-                setStaffList(res.data);
-            } catch (error) {
-                console.error("Lỗi khi lấy staff:", error);
-            }
-        };
-        fetchStaff();
-    }, []);
+    // Chưa test
+    // useEffect(() => {
+    //     const fetchStaff = async () => {
+    //         try {
+    //             const res = await axios.get<Staff[]>(`${urlLink}/api/staff`);
+    //             setStaffList(res.data);
+    //         } catch (error) {
+    //             console.error("Lỗi khi lấy staff:", error);
+    //         }
+    //     };
+    //     fetchStaff();
+    // }, []);
+    const { data: staffList } = useFetchOperators()
 
     // Fetch order detail
     useEffect(() => {
@@ -147,135 +149,6 @@ export default function CreateProcessPage() {
     };
 
     return (
-        // <div className="w-full max-w-6xl mx-auto p-6">
-        //     <h1 className="text-3xl font-bold mb-6">Tạo Mới Thông Tin Gia Công</h1>
-        //     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 pb-6">
-        //         <div className="grid gap-1">
-        //             <Label className="text-2xl">Đối tượng gia công</Label>
-        //             <FlexibleCombobox
-        //                 options={processingObjectList}
-        //                 value={formData.processType}
-        //                 onChange={(val) => setFormData({ ...formData, processType: val })}
-        //                 displayField="name"
-        //                 valueField="name"
-        //                 placeholder="Chọn Đối Tượng Gia Công"
-        //                 allowCustom={false}
-        //             />
-        //         </div>
-
-        //         <div className="grid gap-1">
-        //             <Label className="text-2xl">ID Mã Hàng</Label>
-        //             <FlexibleCombobox
-        //                 options={orderDetail || []}
-        //                 value={formData.orderCode}
-        //                 onChange={(val) => setFormData({ ...formData, orderCode: val })}
-        //                 displayField="orderCode"
-        //                 valueField="orderCode"
-        //                 placeholder="ID Mã Hàng"
-        //                 allowCustom={false}
-        //             />
-        //         </div>
-
-        //         <div className="grid gap-1">
-        //             <Label className="text-2xl">Thứ Tự Sản Phẩm</Label>
-        //             <Input
-        //                 type="number"
-        //                 placeholder="Thứ Tự Sản Phẩm"
-        //                 className="!text-xl !placeholder-gray-300"
-        //                 value={formData.partNumber}
-        //                 onChange={(e) =>
-        //                     setFormData({ ...formData, partNumber: e.target.value })
-        //                 }
-        //             />
-        //         </div>
-
-        //         <div className="grid gap-1">
-        //             <Label className="text-2xl">Thứ Tự Gia Công</Label>
-        //             <Input
-        //                 type="number"
-        //                 placeholder="Thứ Tự Gia Công"
-        //                 className="!text-xl !placeholder-gray-300"
-        //                 value={formData.stepNumber}
-        //                 onChange={(e) =>
-        //                     setFormData({ ...formData, stepNumber: e.target.value })
-        //                 }
-        //             />
-        //         </div>
-
-        //         <div className="grid gap-1">
-        //             <Label className="text-2xl">Điểm Gia Công</Label>
-        //             <Input
-        //                 type="number"
-        //                 placeholder="Điểm Gia Công"
-        //                 className="!text-xl !placeholder-gray-300"
-        //                 value={formData.manufacturingPoint}
-        //                 onChange={(e) =>
-        //                     setFormData({ ...formData, manufacturingPoint: e.target.value })
-        //                 }
-        //             />
-        //         </div>
-
-        //         <div className="grid gap-1">
-        //             <Label className="text-2xl">Giờ PG</Label>
-        //             <Input
-        //                 type="number"
-        //                 placeholder="Giờ PG"
-        //                 className="!text-xl !placeholder-gray-300"
-        //                 value={formData.pgTime}
-        //                 onChange={(e) =>
-        //                     setFormData({ ...formData, pgTime: e.target.value })
-        //                 }
-        //             />
-        //         </div>
-
-        //         <div className="grid gap-1">
-        //             <Label className="text-2xl">Nhân viên</Label>
-        //             <FlexibleCombobox
-        //                 options={staffList}
-        //                 value={formData.staffId}
-        //                 onChange={(val) => setFormData({ ...formData, staffId: val })}
-        //                 displayField="staffId"
-        //                 valueField="staffId"
-        //                 placeholder="Chọn nhân viên"
-        //                 allowCustom={false}
-        //             />
-        //         </div>
-
-        //         <div className="grid gap-1">
-        //             <Label className="text-2xl">Máy</Label>
-        //             <FlexibleCombobox
-        //                 options={machineList}
-        //                 value={
-        //                     machineList.find(
-        //                         (m) => Number(m.machineId) === Number(formData.machineId)
-        //                     )?.machineName || ""
-        //                 }
-        //                 onChange={(selectedName) => {
-        //                     const selected = machineList.find(
-        //                         (m) => m.machineName === selectedName
-        //                     );
-        //                     setFormData({
-        //                         ...formData,
-        //                         machineId: selected ? String(selected.machineId) : "",
-        //                     });
-        //                 }}
-        //                 displayField="machineName"
-        //                 valueField="machineName"
-        //                 placeholder="Chọn Máy"
-        //                 allowCustom={false}
-        //             />
-        //         </div>
-        //     </div>
-
-        //     <div className="flex justify-end">
-        //         <Button
-        //             onClick={handleSubmit}
-        //             className="bg-green-700 hover:bg-green-600 text-2xl font-bold px-13 py-8.5"
-        //         >
-        //             Gửi
-        //         </Button>
-        //     </div>
-        // </div>
         <div className="w-full max-w-7xl mx-auto p-8">
             <Card className="shadow-lg border-1 rounded-lg">
                 <CardHeader>
