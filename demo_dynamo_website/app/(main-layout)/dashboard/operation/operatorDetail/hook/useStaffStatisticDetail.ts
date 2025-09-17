@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StaffStatistic } from "../../lib/type";
+import { HistoryProcess, StaffStatistic } from "../../lib/type";
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export function useStaffStatisticWorking(id: number, startDate: string, endDate: string) {
@@ -113,7 +113,7 @@ export function useStaffStatisticWorkingDefault(groupId: string, startDate: stri
 
 
 export function useStaffStatisticHistoryProcess(id: number, startDate: string, endDate: string) {
-    const [data, setData] = useState<StaffStatistic | null>(null);
+    const [data, setData] = useState<HistoryProcess[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     useEffect(() => {
