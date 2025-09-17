@@ -14,9 +14,6 @@ export type Machine = {
     loai_may: string
     ma_may: string
 }
-
-
-
 export type Process = {
     id: string
     ma_ban_ve: string

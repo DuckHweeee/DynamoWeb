@@ -1,6 +1,6 @@
 "use client"
 
-import { MonitorDot, TrendingDown, TrendingUp } from "lucide-react"
+import { MonitorDot, TrendingDown, TrendingUp, Download } from "lucide-react"
 import MachineRunBarChart from "./components/machineRunBarChart"
 import MachineRunBarChart2 from "./components/machineRunBarChart2"
 import { MachineRunPieChart } from "./components/machineRunPieChart"
@@ -9,15 +9,7 @@ import { SumRealTime } from "./components/sumRealTime"
 import { MachineProcessBarChart } from "./components/machineProcessBarChart"
 import MachineTable from "./components/machineTable"
 import { ReportTime } from "./components/reporTime"
-import OperatorTable from "./operation/components/StaffTable"
 import DrawingCodeTable from "./components/drawingTable"
-
-import { Calendar } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar as DatePicker } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
-import { DateRange } from "react-day-picker"
-import { format } from "date-fns";
 import {
     Select,
     SelectContent,
@@ -66,34 +58,43 @@ const myData3 = [
 ]
 export default function Dashboard() {
     const [date, setDate] = useState<Date | undefined>(new Date())
+    const [selectedGroup, setSelectedGroup] = useState<string>("")
+    const [selectedStaff, setSelectedStaff] = useState<string>("")
+    const [selectedStaffName, setSelectedStaffName] = useState<string>("")
+    const [startDate, setStartDate] = useState<string>("")
+    const [selectedEndDate, setSelectedEndDate] = useState<string>("")
+
+    // Mock data for groups and staff - replace with actual API data
+    const groupList = [
+        { groupId: 1, groupName: "Nhóm CNC" },
+        { groupId: 2, groupName: "Nhóm Phay" },
+        { groupId: 3, groupName: "Nhóm Tiện" },
+        { groupId: 4, groupName: "Nhóm Khoan" },
+        { groupId: 5, groupName: "Nhóm Mài" },
+    ];
+
+    const staffList = [
+        { staffId: 1, staffFullName: "Nguyễn Văn A" },
+        { staffId: 2, staffFullName: "Trần Thị B" },
+        { staffId: 3, staffFullName: "Lê Văn C" },
+        { staffId: 4, staffFullName: "Phạm Thị D" },
+        { staffId: 5, staffFullName: "Hoàng Văn E" },
+        { staffId: 6, staffFullName: "Vũ Thị F" },
+    ];
+
+    const handleStaffSelection = (staffId: string) => {
+        const staff = staffList.find(s => s.staffId === parseInt(staffId));
+        if (staff) {
+            setSelectedStaff(staffId);
+            setSelectedStaffName(staff.staffFullName);
+        }
+    };
     return (
         <div>
             <div className="m-2 my-1.5 px-4 py-3 bg-white rounded-[10px] shadow" >
-                <div className="flex flex-wrap items-center justify-end mb-4">
+                <div className="flex flex-row items-center justify-end mb-4">
                     {/* Vùng chọn ngày */}
                     <div className="flex flex-wrap gap-4 items-center">
-                        {/* <Popover>
-                            <PopoverTrigger asChild>
-                                <button
-                                    className={cn(
-                                        "flex items-center gap-2 bg-[#004799] text-white px-8 py-3 rounded-md hover:bg-[#003b80] transition"
-                                    )}
-                                >
-                                    <span className="text-[16px]">
-                                        {date ? format(date, "dd/MM/yyyy") : "Chọn ngày"}
-                                    </span>
-                                    <Calendar className="w-5 h-5" />
-                                </button>
-                            </PopoverTrigger>
-                            <PopoverContent className="flex gap-4 p-4 !w-full" align="start">
-                                <DatePicker
-                                    mode="single"
-                                    selected={date}
-                                    onSelect={setDate}
-                                    numberOfMonths={1}
-                                />
-                            </PopoverContent>
-                        </Popover> */}
                         <DateRangeSelector />
 
                         {/* Bộ lọc nhóm */}
@@ -114,7 +115,7 @@ export default function Dashboard() {
                         </Select>
                     </div>
                 </div>
-                <ReportTimeMachine title={"Thống kê máy móc"} description={"12 máy"} />
+                <ReportTimeMachine />
                 <div className="my-5 grid grid-cols-2 gap-3">
                     {/* <MachineRunBarChart /> */}
                     <MachineRunBarChart2 title="Tổng Giờ Chạy Trong Tháng Nhóm 1" description="Tổng thời gian hoạt động của nhóm này." />
@@ -124,19 +125,6 @@ export default function Dashboard() {
                         ))}
                     </div>
                 </div>
-
-                {/* <div className="my-5 flex gap-3 justify-between">
-                <div className="w-1/2 h-[300px]">
-                    <MachineRunBarChart />
-                </div>
-
-                <div className="w-1/2 h-[300px] grid grid-cols-2 gap-4">
-                    {chartItems.map((item, index) => (
-                        <MachinePieChart key={index} data={item} />
-                    ))}
-                </div>
-                </div> */}
-
                 <SumRealTimeMachine title="Tổng Thời Gian Thực Của Từng Máy Trong Nhóm (Giờ)" description="Tổng giờ chạy thực so với tổng giờ chạy mục tiêu" />
                 <div className="flex gap-5 justify-between my-5">
                     {/* <MachineRunBarChart /> */}
