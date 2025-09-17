@@ -32,6 +32,7 @@ import { Machine2, Operator2, Process2, Staff } from "@/lib/type"
 import { toast } from "sonner"
 import axios from "axios"
 import { OrbitProgress } from "@/node_modules/react-loading-indicators"
+import { useProcess } from "../../../hooks/useProcess"
 
 const URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 export default function TabletProcess() {
@@ -42,42 +43,27 @@ export default function TabletProcess() {
     const [selectedMachineId, setSelectedMachineId] = useState<string>("");
     const [selectedStaffId, setSelectedStaffId] = useState<string>("");
 
-    // Fetch Data
-    const fetchedOperator = useFetchOperators()
-    const [staff, setStaff] = useState<Staff[]>([])
-    useEffect(() => {
-        setStaff(fetchedOperator)
-    }, [fetchedOperator])
+    // Chưa test
+    // const fetchedOperator = useFetchOperators()
+    // const [staff, setStaff] = useState<Staff[]>([])
+    // useEffect(() => {
+    //     setStaff(fetchedOperator)
+    // }, [fetchedOperator])
+    const { data: staff } = useFetchOperators()
 
-    const fetchedMachine = useFetchMachines()
-    const [machine2, setMachine2] = useState<Machine2[]>([])
-    useEffect(() => {
-        setMachine2(fetchedMachine)
-    }, [fetchedMachine])
+    // Chưa test
+    // const fetchedMachine = useFetchMachines()
+    // const [machine2, setMachine2] = useState<Machine2[]>([])
+    // useEffect(() => {
+    //     setMachine2(fetchedMachine)
+    // }, [fetchedMachine])
+    const { data: machine2 } = useFetchMachines()
 
-    // const fetchedProcesses = useFetchProcesses()
-    const { data: fetchedProcesses, refetch } = useFetchProcesses();
-    const [processData2, setProcessData2] = useState<Process2[]>([])
-    useEffect(() => {
-        setProcessData2(fetchedProcesses)
-    }, [fetchedProcesses])
-    console.log("processData2")
-    console.log(processData2)
-
+    const { data: processData2, refetch } = useProcess()
 
     // Handle Submit
     const [loading, setLoading] = useState(false);
     const handleSubmit = async (processId: string) => {
-        // if (!selectedStaffId) {
-        //     toast.error("Vui lòng chọn Nhân Viên");
-        //     return;
-        // }
-        // if (!selectedMachineId) {
-        //     toast.error("Vui lòng chọn Máy.");
-        //     return;
-        // }
-
-
         setLoading(true);
         try {
             const url = `${URL}/api/drawing-code-process/receive?drawingCodeProcess_id=${processId}&&staffId=${selectedStaffId}&&machineId=${selectedMachineId}`;
@@ -285,8 +271,8 @@ export default function TabletProcess() {
 
                                                         setSelectedMachineId(may ? String(may) : "");
                                                         setSelectedStaffId(nhanvien ? String(nhanvien) : "");
-                                                        console.log(may ? String(may) : "");
-                                                        console.log(nhanvien ? String(nhanvien) : "");
+                                                        // console.log(may ? String(may) : "");
+                                                        // console.log(nhanvien ? String(nhanvien) : "");
                                                     }
                                                     }
                                                 >
@@ -379,10 +365,10 @@ export default function TabletProcess() {
                 }
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="text-lg text-muted-foreground flex-1">
+                {/* <div className="text-lg text-muted-foreground flex-1">
                     Trang {table.getState().pagination.pageIndex + 1} /{" "}
                     <span>{table.getPageCount()}</span>
-                </div>
+                </div> */}
                 <div className="space-x-2">
                     <Button
                         variant="outline"

@@ -14,7 +14,9 @@ import { OrderDetailDto, Staff } from "@/lib/type"
 import { FlexibleCombobox } from "./FlexibleCombobox"
 import axios from "axios"
 import { toast } from "sonner"
+import { processingObjectList } from "../../lib/data"
 
+const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 interface Props {
     open: boolean
@@ -22,36 +24,6 @@ interface Props {
     staffList: Staff[]
     selectedMachineId: string
 }
-interface ProcessingObject {
-    id: string,
-    name: string
-}
-
-const processingObjectList: ProcessingObject[] = [
-    {
-        id: "1",
-        name: "SP_Chính",
-    },
-    {
-        id: "2",
-        name: "NG_Chạy lại",
-    },
-    {
-        id: "3",
-        name: "LK-Đồ gá",
-    },
-    {
-        id: "4",
-        name: "Điện cực",
-    },
-    {
-        id: "5",
-        name: "Dự bị",
-    },
-]
-
-const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
-
 export default function CreateProcessDialog({
     open,
     onOpenChange,
@@ -266,25 +238,6 @@ export default function CreateProcessDialog({
 
                     <div className="grid gap-1">
                         <Label htmlFor="operator" className="text-2xl">Nhân viên</Label>
-                        {/* <Select
-                            value={formData.staffId}
-                            onValueChange={(value) =>
-                                setFormData({ ...formData, staffId: value })
-                            }
-                        >
-                            <SelectTrigger className="w-full text-lg" id="operator">
-                                <SelectValue placeholder="Chọn nhân viên" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    {staffList.map((op) => (
-                                        <SelectItem key={op.id} value={op.id}>
-                                            {op.staffName}
-                                        </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select> */}
                         <FlexibleCombobox
                             options={staffList}
                             value={formData.staffId}

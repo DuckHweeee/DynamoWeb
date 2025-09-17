@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useMachineStatus } from "../_components/MachineStatusContext";
 import { OrbitProgress } from "@/node_modules/react-loading-indicators";
+import { processingObjectList } from "../lib/data";
 
 
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -42,30 +43,6 @@ interface ProcessResponse {
     inProgress: Process2 | null;
 }
 
-// Các đối tượng gia công
-const processingObjectList: ProcessingObject[] = [
-    {
-        id: "1",
-        name: "SP_Chính",
-    },
-    {
-        id: "2",
-        name: "NG_Chạy lại",
-    },
-    {
-        id: "3",
-        name: "LK-Đồ gá",
-    },
-    {
-        id: "4",
-        name: "Điện cực",
-    },
-    {
-        id: "5",
-        name: "Dự bị",
-    },
-];
-
 // Trạng thái máy và màu hiển thị
 const statusMap = {
     E: { color: "bg-red-500", label: "Đang Lỗi" },
@@ -75,11 +52,8 @@ const statusMap = {
 };
 
 export default function TabletOperation() {
-    // const [selectedOperatorId, setSelectedOperatorId] = useState("");
     const [loading, setLoading] = useState(false);
     const [selectedMachineId, setSelectedMachineId] = useState<string>("");
-    console.log("selectedMachineId")
-    console.log(selectedMachineId)
     const [updateInfor, setUpdateInfor] = useState<UpdateInfor>({
         updateProcessType: "",
         updateOrderCode: "",
@@ -107,22 +81,30 @@ export default function TabletOperation() {
         fetchOrderDetail();
     }, []);
 
-    // Máy
-    const [machine, setMachine] = useState<Machine2[]>([]);
-    const fetchedMachine = useFetchMachines();
+    // Chưa test máy
+    // const [machine, setMachine] = useState<Machine2[]>([]);
+    // const fetchedMachine = useFetchMachines();
+    // useEffect(() => {
+    //     if (fetchedMachine.length > 0) {
+    //         setMachine(fetchedMachine);
+    //         setSelectedMachineId((prev) => prev || fetchedMachine[0].machineId.toString());
+    //     }
+    // }, [fetchedMachine]);
+    const { data: machine } = useFetchMachines()
+    // Thêm useEffect để thiết lập máy đầu tiên
     useEffect(() => {
-        if (fetchedMachine.length > 0) {
-            setMachine(fetchedMachine);
-            setSelectedMachineId((prev) => prev || fetchedMachine[0].machineId.toString());
+        if (!selectedMachineId && machine.length > 0) {
+            setSelectedMachineId(machine[0].machineId.toString());
         }
-    }, [fetchedMachine]);
+    }, [machine, selectedMachineId]);
 
-    // Staff
-    const [staff, setstaff] = useState<Staff[]>([]);
-    const fetchedOperator = useFetchOperators();
-    useEffect(() => {
-        setstaff(fetchedOperator);
-    }, [fetchedOperator]);
+    // Chưa test
+    // const [staff, setstaff] = useState<Staff[]>([]);
+    // const fetchedOperator = useFetchOperators();
+    // useEffect(() => {
+    //     setstaff(fetchedOperator);
+    // }, [fetchedOperator]);
+    const { data: staff } = useFetchOperators()
 
 
     // Process
@@ -135,24 +117,28 @@ export default function TabletOperation() {
         if (!selectedMachineId) return;
         const fetchProcess = async () => {
             try {
-                // const response = await axios.get<Process2>(
-                //     `${urlLink}/api/drawing-code-process/machine/${selectedMachineId}`
-                // );
-                // setProcess(response.data);
-
                 const res = await axios.get<ProcessResponse>(
                     `${urlLink}/api/drawing-code-process/machine/${selectedMachineId}`
                 );
                 setTodo(res.data.todo || []);
                 setInProgress(res.data.inProgress || null);
-                console.log("inProgress")
-                console.log(inProgress)
             } catch (error) {
                 console.error("Lỗi khi lấy dữ liệu process:", error);
-                // setProcess(null);
             }
         };
         setSelectedProcess(null);
+
+        // Reset updateInfor khi chuyển máy để tránh hiển thị thông tin cũ
+        setUpdateInfor({
+            updateProcessType: "",
+            updateOrderCode: "",
+            updatePartNumber: 0,
+            updateStepNumber: 0,
+            updatePgTime: 0,
+            updateManufacturingPoint: 0,
+            updateStaffId: 0,
+        });
+
         fetchProcess();
     }, [selectedMachineId]);
 
@@ -183,7 +169,14 @@ export default function TabletOperation() {
     const matchedStaff = currentStaff?.find(
         (item) => item.machineId === Number(selectedMachineId)
     );
-    let currentStaffId = updateInfor.updateStaffId || matchedStaff?.staffIdNumber || selectedProcess?.planDto?.staffId;
+
+    // Sửa logic tính currentStaffId để chỉ dùng updateStaffId khi đang editing
+    let currentStaffId = isEditing
+        ? (updateInfor.updateStaffId || matchedStaff?.staffIdNumber || selectedProcess?.planDto?.staffId)
+        : (matchedStaff?.staffIdNumber || selectedProcess?.planDto?.staffId);
+
+    // console.log("currentStaffId")
+    // console.log(currentStaffId)
 
     // Test
     const handleSave = async () => {
@@ -219,7 +212,7 @@ export default function TabletOperation() {
         setLoading(true);
         try {
             const response = await fetch(
-                `${urlLink}/api/drawing-code-process/${inProgress?.processId}`,
+                `${urlLink}/api/drawing-code-process/tablet/${inProgress?.processId}`,
                 {
                     method: "PUT",
                     headers: {
@@ -254,6 +247,18 @@ export default function TabletOperation() {
             );
             setCurrentStaff(response3.data);
             setIsEditing(false);
+
+            // Reset updateInfor sau khi save thành công
+            setUpdateInfor({
+                updateProcessType: "",
+                updateOrderCode: "",
+                updatePartNumber: 0,
+                updateStepNumber: 0,
+                updatePgTime: 0,
+                updateManufacturingPoint: 0,
+                updateStaffId: 0,
+            });
+
             toast.success("Chỉnh sửa thành công");
 
         } catch (error) {
@@ -284,7 +289,6 @@ export default function TabletOperation() {
             );
             setTodo(res.data.todo || []);
             setInProgress(res.data.inProgress || null);
-
             toast.success("Hoàn thành quy trình thành công!");
             const response3 = await axios.get<CurrentStaff[]>(
                 `${urlLink}/api/current-staff`
@@ -321,32 +325,52 @@ export default function TabletOperation() {
         }
     };
 
-
-    // Test submit chuyển từ todo sang inProgress
     const handleSubmit = async () => {
         setLoading(true);
-        let staffIString = String(
-            staff.find(st => String(st.staffId) === String(selectedProcess?.planDto?.staffId))?.id || ""
+
+        // Ưu tiên lấy staff từ selectStaff nếu người dùng vừa chọn
+        const staffIdToUse = selectStaff || selectedProcess?.planDto?.staffId;
+
+        if (!staffIdToUse) {
+            toast.error("Chưa có thông tin nhân viên. Vui lòng chọn nhân viên trước khi gửi.");
+            setLoading(false);
+            return;
+        }
+
+        const staffFound = staff.find(
+            (st) => String(st.staffId) === String(staffIdToUse)
         );
 
+        if (!staffFound) {
+            toast.error("Nhân viên không hợp lệ. Vui lòng thử lại.");
+            setLoading(false);
+            return;
+        }
+
+        const staffIString = String(staffFound.id);
+
         try {
-            const url = `${urlLink}/api/drawing-code-process/receive?drawingCodeProcess_id=${selectedProcess?.processId}&&staffId=${staffIString}&&machineId=${selectedMachineId}`;
+            const url = `${urlLink}/api/drawing-code-process/receive?drawingCodeProcess_id=${selectedProcess?.processId}&staffId=${staffIString}&machineId=${selectedMachineId}`;
             await axios.post(url);
             toast.success("Gửi thành công!");
-
-            // Đợi hỏi lại thông tin chính xác
-            // const res = await axios.get<ProcessResponse>(
-            //     `${urlLink}/api/drawing-code-process/machine/${selectedMachineId}`
-            // );
-            // setTodo(res.data.todo || []);
-            // setInProgress(res.data.inProgress || null);
-
+            setSelectStaff(undefined);
+            location.reload()
         } catch (error) {
             toast.error("Gửi thất bại. Vui lòng thử lại.");
         } finally {
             setLoading(false);
         }
     };
+
+    // Đang kiểm tra lại
+    const [selectStaff, setSelectStaff] = useState<Number>()
+    useEffect(() => {
+        setSelectStaff(currentStaff?.find(
+            (item) => item.machineId === Number(selectedMachineId)
+        )?.staffIdNumber);
+    }, [selectedMachineId, isAddnew]);
+    // console.log("selectStaff")
+    // console.log(selectStaff)
 
 
     return (
@@ -372,6 +396,7 @@ export default function TabletOperation() {
                                         setSelectedMachineId(value);
                                         setIsCreating(false);
                                         setIsEditing(false);
+                                        setSelectStaff(undefined)
                                     }}
                                 >
                                     <SelectTrigger className="w-auto text-3xl py-8">
@@ -596,7 +621,7 @@ export default function TabletOperation() {
                                                     Giờ PG
                                                 </TableCell>
                                                 <TableCell className="w-1/2 text-3xl font-bold text-center text-blue-950">
-                                                    {(statusKey == 0 && isEditing) ? (
+                                                    {(isEditing) ? (
                                                         <div className="flex h-full items-stretch w-full justify-center">
                                                             <Input
                                                                 inputMode="numeric"
@@ -615,6 +640,90 @@ export default function TabletOperation() {
                                                 </TableCell>
                                             </TableRow>
 
+                                            {/* <TableRow className="border-0 bg-gray-100 h-[50px]">
+                                                <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-[32px]">
+                                                    Nhân Viên
+                                                </TableCell>
+                                                <TableCell className="w-1/2 p-0 text-center text-3xl">
+                                                    {(() => {
+                                                        let operatorName =
+                                                            staff.find((st) => st.staffId === currentStaffId)?.staffName || "";
+
+                                                        // 1. Trường hợp đang edit → dùng setUpdateInfor
+                                                        if (isEditing) {
+                                                            return (
+                                                                <div className="flex w-full h-full items-center justify-center">
+                                                                    <Select
+                                                                        value={currentStaffId ? String(currentStaffId) : undefined}
+                                                                        onValueChange={(val) =>
+                                                                            setUpdateInfor((prev) => ({
+                                                                                ...prev,
+                                                                                updateStaffId: Number(val),
+                                                                            }))
+                                                                        }
+                                                                    >
+                                                                        <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
+                                                                            <SelectValue placeholder="Chọn nhân viên" />
+                                                                        </SelectTrigger>
+                                                                        <SelectContent>
+                                                                            <SelectGroup>
+                                                                                {staff.map((st) => (
+                                                                                    <SelectItem
+                                                                                        className="text-2xl font-bold text-blue-950"
+                                                                                        key={st.staffId}
+                                                                                        value={String(st.staffId)}
+                                                                                    >
+                                                                                        {st.shortName} - {st.staffId}
+                                                                                    </SelectItem>
+                                                                                ))}
+                                                                            </SelectGroup>
+                                                                        </SelectContent>
+                                                                    </Select>
+                                                                </div>
+                                                            );
+                                                        }
+
+                                                        // 2. Trường hợp chưa có nhân viên → cho chọn và gửi đi bằng handleSubmit
+                                                        if (isAddnew && !operatorName) {
+                                                            return (
+                                                                <div className="flex w-full h-full items-center justify-center gap-2">
+                                                                    <Select
+                                                                        value={selectStaff ? String(selectStaff) : undefined}
+                                                                        onValueChange={(val) =>
+                                                                            setSelectStaff(Number(val))
+                                                                        }
+                                                                    >
+                                                                        <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
+                                                                            <SelectValue placeholder="Chọn nhân viên" />
+                                                                        </SelectTrigger>
+                                                                        <SelectContent>
+                                                                            <SelectGroup>
+                                                                                {staff.map((st) => (
+                                                                                    <SelectItem
+                                                                                        className="text-2xl font-bold text-blue-950"
+                                                                                        key={st.staffId}
+                                                                                        value={String(st.staffId)}
+                                                                                    >
+                                                                                        {st.shortName} - {st.staffId}
+                                                                                    </SelectItem>
+                                                                                ))}
+                                                                            </SelectGroup>
+                                                                        </SelectContent>
+                                                                    </Select>
+                                                                </div>
+                                                            );
+                                                        }
+
+                                                        // 3. Trường hợp đã có nhân viên → hiển thị tên
+                                                        return (
+                                                            <div className="flex items-center justify-center text-3xl font-bold h-full text-blue-950">
+                                                                {operatorName}
+                                                            </div>
+                                                        );
+                                                    })()}
+                                                </TableCell>                                                
+                                            </TableRow> */}
+                                            {/* Chưa test */}
                                             <TableRow className="border-0 bg-gray-100 h-[50px]">
                                                 <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-[32px]">
                                                     Nhân Viên
@@ -622,32 +731,76 @@ export default function TabletOperation() {
                                                 <TableCell className="w-1/2 p-0 text-center text-3xl">
                                                     {(() => {
                                                         let operatorName =
-                                                            staff.find((st) => st.staffId === currentStaffId)?.staffName || "Không xác định";
-                                                        return isEditing ? (
-                                                            <div className="flex w-full h-full items-center justify-center">
-                                                                <Select value={String(currentStaffId)} onValueChange={(val) => setUpdateInfor(prev => ({ ...prev, updateStaffId: Number(val) }))}>
-                                                                    {/* <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-[32px] font-bold flex items-center justify-center border-black !shadow-none text-blue-950"> */}
-                                                                    <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl max-[1300px]:text-[32px] font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
-                                                                        <SelectValue placeholder="Chọn nhân viên" className="!placeholder:text-blue-950" />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        <SelectGroup>
-                                                                            {staff.map((st) => (
-                                                                                <SelectItem
-                                                                                    className="text-2xl font-bold text-blue-950 max-[1300px]:text-[32px]"
-                                                                                    key={st.staffId}
-                                                                                    value={String(st.staffId)}
-                                                                                >
-                                                                                    {/* {st.staffName} */}
-                                                                                    {st.shortName} - {st.staffId}
-                                                                                </SelectItem>
-                                                                            ))}
-                                                                        </SelectGroup>
-                                                                    </SelectContent>
-                                                                </Select>
-                                                            </div>
-                                                        ) : (
-                                                            <div className="flex items-center justify-center text-3xl font-bold h-full text-blue-950 max-[1300px]:text-[32px]">
+                                                            staff.find((st) => st.staffId === currentStaffId)?.staffName || "";
+
+                                                        // 1. Trường hợp đang edit → dùng setUpdateInfor
+                                                        if (isEditing) {
+                                                            return (
+                                                                <div className="flex w-full h-full items-center justify-center">
+                                                                    <Select
+                                                                        value={currentStaffId ? String(currentStaffId) : undefined}
+                                                                        onValueChange={(val) =>
+                                                                            setUpdateInfor((prev) => ({
+                                                                                ...prev,
+                                                                                updateStaffId: Number(val),
+                                                                            }))
+                                                                        }
+                                                                    >
+                                                                        <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
+                                                                            <SelectValue placeholder="Chọn nhân viên" />
+                                                                        </SelectTrigger>
+                                                                        <SelectContent>
+                                                                            <SelectGroup>
+                                                                                {staff.map((st) => (
+                                                                                    <SelectItem
+                                                                                        className="text-2xl font-bold text-blue-950"
+                                                                                        key={st.staffId}
+                                                                                        value={String(st.staffId)}
+                                                                                    >
+                                                                                        {st.shortName} - {st.staffId}
+                                                                                    </SelectItem>
+                                                                                ))}
+                                                                            </SelectGroup>
+                                                                        </SelectContent>
+                                                                    </Select>
+                                                                </div>
+                                                            );
+                                                        }
+
+                                                        // 2. Trường hợp chưa có nhân viên → chỉ hiển thị khi đã chọn từ bên trái
+                                                        if (isAddnew && !operatorName && selectedProcess) {
+                                                            return (
+                                                                <div className="flex w-full h-full items-center justify-center gap-2">
+                                                                    <Select
+                                                                        value={selectStaff ? String(selectStaff) : undefined}
+                                                                        onValueChange={(val) =>
+                                                                            setSelectStaff(Number(val))
+                                                                        }
+                                                                    >
+                                                                        <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
+                                                                            <SelectValue placeholder="Chọn nhân viên" />
+                                                                        </SelectTrigger>
+                                                                        <SelectContent>
+                                                                            <SelectGroup>
+                                                                                {staff.map((st) => (
+                                                                                    <SelectItem
+                                                                                        className="text-2xl font-bold text-blue-950"
+                                                                                        key={st.staffId}
+                                                                                        value={String(st.staffId)}
+                                                                                    >
+                                                                                        {st.shortName} - {st.staffId}
+                                                                                    </SelectItem>
+                                                                                ))}
+                                                                            </SelectGroup>
+                                                                        </SelectContent>
+                                                                    </Select>
+                                                                </div>
+                                                            );
+                                                        }
+
+                                                        // 3. Trường hợp đã có nhân viên → hiển thị tên
+                                                        return (
+                                                            <div className="flex items-center justify-center text-3xl font-bold h-full text-blue-950">
                                                                 {operatorName}
                                                             </div>
                                                         );
@@ -671,19 +824,17 @@ export default function TabletOperation() {
                         <Button
                             variant="outline"
                             onClick={() => {
-
                                 setIsEditing(false);
-                                if (inProgress) {
-                                    setUpdateInfor({
-                                        updateProcessType: inProgress.processType || "",
-                                        updateOrderCode: inProgress.orderDetailDto?.orderCode || "",
-                                        updatePartNumber: Number(inProgress.partNumber) || 0,
-                                        updateStepNumber: Number(inProgress.stepNumber) || 0,
-                                        updatePgTime: Number(inProgress.pgTime) || 0,
-                                        updateManufacturingPoint: Number(inProgress.manufacturingPoint) || 0,
-                                        updateStaffId: Number(matchedStaff?.staffIdNumber || 0)
-                                    });
-                                }
+                                // Reset updateInfor khi hủy chỉnh sửa
+                                setUpdateInfor({
+                                    updateProcessType: "",
+                                    updateOrderCode: "",
+                                    updatePartNumber: 0,
+                                    updateStepNumber: 0,
+                                    updatePgTime: 0,
+                                    updateManufacturingPoint: 0,
+                                    updateStaffId: 0,
+                                });
                             }}
                             className="cursor-pointer text-gray-500  px-10 py-7 text-3xl font-bold max-[1300px]:px-10"
                         >
@@ -706,7 +857,7 @@ export default function TabletOperation() {
                             Lưu
                         </Button>
                     )}
-                    {!isEditing && !isCreating && !isNull && statusKey === "S" && Number(selectedMachineId) > 9 && (
+                    {!isEditing && !isCreating && !isNull && (statusKey === "S" || Number(selectedMachineId) > 9) && (
                         <Button
                             onClick={handleComplete}
                             className="cursor-pointer bg-green-700 hover:bg-green-600  px-10 py-7 text-3xl font-bold max-[1300px]:px-10"
@@ -714,16 +865,7 @@ export default function TabletOperation() {
                             Hoàn thành
                         </Button>
                     )}
-                    {/* {((statusKey === "S" || statusKey == 0) && isNull) && (
-                        <Button
-                            onClick={() => setIsCreating(true)}
-                            className="cursor-pointer bg-green-700 hover:bg-green-600 px-10 py-7 text-3xl font-bold max-[1300px]:px-10"
-                        >
-                            Tạo mới
-                        </Button>
-                    )} */}
-                    {/* {((statusKey === "S" || statusKey == 0) && inProgress == null) && ( */}
-                    {isAddnew && (
+                    {isAddnew && selectedProcess && (
                         <Button
                             onClick={() => handleSubmit()}
                             className="cursor-pointer bg-green-700 hover:bg-green-600 px-10 py-7 text-3xl font-bold max-[1300px]:px-10"
@@ -733,26 +875,6 @@ export default function TabletOperation() {
                     )}
                 </div>
             </ div>
-
-            {/* Tạo mới */}
-            {/* <CreateProcessDialog
-                open={isCreating}
-                onOpenChange={async (open) => {
-                    setIsCreating(open);
-                    if (!open) {
-                        const response2 = await axios.get<Process2>(
-                            `${urlLink}/api/drawing-code-process/machine/${selectedMachineId}`
-                        );
-                        setProcess(response2.data);
-
-                        const response3 = await axios.get<CurrentStaff[]>(
-                            `${urlLink}/api/current-staff`
-                        );
-                        setCurrentStaff(response3.data);
-                    }
-                }}
-                selectedMachineId={selectedMachineId} staffList={staff}
-            /> */}
         </>
     );
 }

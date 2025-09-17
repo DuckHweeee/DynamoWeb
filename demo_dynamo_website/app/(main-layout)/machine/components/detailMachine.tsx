@@ -6,7 +6,7 @@ import { Machine2 } from "@/lib/type"
 import { SelectYear } from "./SelectYear"
 import { SelectMonth } from "./SelectMonth"
 import { KPI } from "../lib/type"
-import { useMachineKPI } from "../hooks/useMachine"
+import { useMachineKPI } from "../../../../hooks/useMachine"
 
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 type DetailMachineFormProps = {

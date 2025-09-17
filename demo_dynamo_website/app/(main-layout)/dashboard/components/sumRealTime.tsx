@@ -1,7 +1,7 @@
 "use client"
 
 import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 import {
     Card,
@@ -21,27 +21,27 @@ import {
 export const description = "A multiple bar chart"
 
 const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-    { month: "June", desktop: 79, mobile: 140 },
-    { month: "March", desktop: 203, mobile: 120 },
-    { month: "June", desktop: 64, mobile: 140 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "June", desktop: 30, mobile: 90 },
-    { month: "July", desktop: 214, mobile: 190 },
-    { month: "December", desktop: 24, mobile: 180 },
-    { month: "December", desktop: 59, mobile: 118 },
+    { name: "I-01", real: 186, target: 80 },
+    { name: "I-02", real: 305, target: 200 },
+    { name: "I-03", real: 209, target: 130 },
+    { name: "I-04", real: 214, target: 140 },
+    { name: "I-05", real: 79, target: 140 },
+    { name: "I-06", real: 203, target: 120 },
+    { name: "I-07", real: 64, target: 140 },
+    { name: "I-08", real: 73, target: 190 },
+    { name: "I-09", real: 30, target: 90 },
+    { name: "I-10", real: 214, target: 190 },
+    { name: "I-11", real: 24, target: 180 },
+    { name: "I-12", real: 59, target: 118 },
 ]
 
 const chartConfig = {
-    desktop: {
-        label: "Desktop",
+    real: {
+        label: "Thực tế",
         color: "#074695",
     },
-    mobile: {
-        label: "Mobile",
+    target: {
+        label: "Mục tiêu",
         color: "#0077FF",
     },
 } satisfies ChartConfig
@@ -52,26 +52,27 @@ export function SumRealTime({ title, description }: { title: string; description
             <CardHeader>
                 {/* <CardTitle>Tổng Thời Gian Thực</CardTitle>
                 <CardDescription>PG Dự Kiến Của Từng Máy Trong Nhóm</CardDescription> */}
-                <p className="text-xl font-bold">{title}</p>
-                <p className="text-sm text-gray-500 mb-4">{description}</p>
+                <p className="text-2xl font-bold">{title}</p>
+                <p className="text-xl text-gray-500 mb-4">{description}</p>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig} className="h-[300px] w-full">
                     <BarChart accessibilityLayer data={chartData}>
                         <CartesianGrid vertical={false} />
                         <XAxis
-                            dataKey="month"
+                            dataKey="name"
                             tickLine={false}
                             tickMargin={10}
                             axisLine={false}
-                            tick={{ fontSize: 0 }}
+                            tick={{ fontSize: 18 }}
                         />
+                        <YAxis />
                         <ChartTooltip
                             cursor={false}
                             content={<ChartTooltipContent indicator="dashed" />}
                         />
-                        <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-                        <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+                        <Bar dataKey="real" fill="var(--color-real)" radius={4} />
+                        <Bar dataKey="target" fill="var(--color-target)" radius={4} />
                     </BarChart>
                 </ChartContainer>
             </CardContent>

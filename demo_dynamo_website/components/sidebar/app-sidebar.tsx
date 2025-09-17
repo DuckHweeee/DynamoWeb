@@ -26,18 +26,11 @@ import {
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarHeader,
-    SidebarRail,
 } from "@/components/ui/sidebar"
 import { NavMain } from "./nav-main"
-// import { NavProjects } from "./nav-projects"
-// import { NavUser } from "./nav-user"
 import { Logo } from "./logo"
-import { useState } from "react"
-import { useIsMobile } from "@/hooks/use-mobile"
-import { IIC } from "./iic"
-
+import { useAuth } from "@/contexts/AuthContext"
 // This is sample data.
 const data = {
     user: {
@@ -69,10 +62,6 @@ const data = {
             icon: LayoutGrid,
             isActive: true,
             items: [
-                // {
-                //     title: "Dashboard All",
-                //     url: "/dashboard",
-                // },
                 {
                     title: "Máy móc",
                     url: "/dashboard/machine",
@@ -141,7 +130,7 @@ const data = {
             ],
         },
         {
-            title: "Process",
+            title: "Gia công",
             url: "/process",
             icon: SquarePen,
             items: [
@@ -150,48 +139,52 @@ const data = {
                     url: "/process/kanban",
                 },
                 {
-                    title: "Process Table",
+                    title: "Gia công chi tiết",
                     url: "/process",
                 },
             ],
         },
         {
-            title: "Order",
+            title: "Mã hàng",
             url: "#",
             icon: MessageCircleMore,
-            // items: [
-            //     {
-            //         title: "Introduction",
-            //         url: "#",
-            //     },
-            // ],
+            items: [
+                {
+                    title: "Mã hàng gia công",
+                    url: "/orderDetail",
+                },
+            ],
         },
         {
-            title: "Group",
-            url: "#",
+            title: "Nhóm",
+            url: "/group",
             icon: FolderMinus,
-            // items: [
-            //     {
-            //         title: "Introduction",
-            //         url: "#",
-            //     },
-            // ],
+            items: [
+                {
+                    title: "Các Nhóm",
+                    url: "/group",
+                },
+                {
+                    title: "Cài đặt KPI",
+                    url: "/group/kpi",
+                }
+            ],
         },
         {
-            title: "History",
+            title: "Lịch sử",
             url: "/history",
             icon: FolderClock,
             items: [
                 {
-                    title: "History Process",
+                    title: " Quy trình",
                     url: "/history/historyProcess",
                 },
                 {
-                    title: "History Machine",
+                    title: " Máy móc",
                     url: "/history/historyMachine",
                 },
                 {
-                    title: "History Operator",
+                    title: " Người vận hành",
                     url: "/history/historyOperator",
                 },
             ],
@@ -202,15 +195,15 @@ const data = {
             icon: Tablet,
             items: [
                 {
-                    title: "Tablet Chu Trình",
+                    title: "Kế hoạch",
                     url: "/tablet/process",
                 },
                 {
-                    title: "Tablet Vận hành",
+                    title: "Vận hành",
                     url: "/tablet/operation",
                 },
                 {
-                    title: "Tablet Khai Báo",
+                    title: "Khai báo",
                     url: "/tablet/newProcess",
                 },
             ],
@@ -236,14 +229,26 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    // const isMobile = useIsMobile()
+    const { user } = useAuth()
+    
+    // Filter navigation items based on user role
+    const getNavItemsForRole = () => {
+        if (user?.role === "Operator") {
+            return data.navMain.filter(item => 
+                item.title === "Thống kê" || item.title === "Tablet"
+            )
+        }
+        // Admin sees all navigation items
+        return data.navMain
+    }
+
     return (
         <Sidebar collapsible="icon" {...props} className="bg-white">
             <SidebarHeader>
                 <Logo />
             </SidebarHeader>
             <SidebarContent>
-                <NavMain items={data.navMain} />
+                <NavMain items={getNavItemsForRole()} />
                 {/* <NavProjects projects={data.projects} /> */}
             </SidebarContent>
             {/* <SidebarFooter>

@@ -174,99 +174,6 @@ export const mockMachines: Machine[] = [
     { id: "15", name: "Máy Hàn TIG", loai_may: "Hàn", ma_may: "HAN-015" },
 ]
 
-export const mockDrawingCodes: DrawingCode[] = [
-    {
-        id: "DC001",
-        ma_ban_ve: "MBV-001",
-        dnc: "DNC-001",
-        trang_thai: "Chưa hoàn thành",
-    },
-    {
-        id: "DC003",
-        ma_ban_ve: "MBV-003",
-        dnc: "DNC-003",
-        trang_thai: "Chưa hoàn thành",
-    },
-    {
-        id: "DC002",
-        ma_ban_ve: "MBV-002",
-        dnc: "DNC-002",
-        trang_thai: "Hoàn thành",
-    },
-
-    {
-        id: "DC004",
-        ma_ban_ve: "MBV-004",
-        dnc: "DNC-004",
-        trang_thai: "Hoàn thành",
-    },
-    {
-        id: "DC005",
-        ma_ban_ve: "MBV-005",
-        dnc: "DNC-005",
-        trang_thai: "Chưa hoàn thành",
-    },
-    {
-        id: "DC006",
-        ma_ban_ve: "MBV-006",
-        dnc: "DNC-006",
-        trang_thai: "Hoàn thành",
-    },
-    {
-        id: "DC007",
-        ma_ban_ve: "MBV-007",
-        dnc: "DNC-007",
-        trang_thai: "Chưa hoàn thành",
-    },
-    {
-        id: "DC008",
-        ma_ban_ve: "MBV-008",
-        dnc: "DNC-008",
-        trang_thai: "Hoàn thành",
-    },
-    {
-        id: "DC009",
-        ma_ban_ve: "MBV-009",
-        dnc: "DNC-009",
-        trang_thai: "Chưa hoàn thành",
-    },
-    {
-        id: "DC010",
-        ma_ban_ve: "MBV-010",
-        dnc: "DNC-010",
-        trang_thai: "Hoàn thành",
-    },
-    {
-        id: "DC011",
-        ma_ban_ve: "MBV-011",
-        dnc: "DNC-011",
-        trang_thai: "Chưa hoàn thành",
-    },
-    {
-        id: "DC012",
-        ma_ban_ve: "MBV-012",
-        dnc: "DNC-012",
-        trang_thai: "Hoàn thành",
-    },
-    {
-        id: "DC013",
-        ma_ban_ve: "MBV-013",
-        dnc: "DNC-013",
-        trang_thai: "Hoàn thành",
-    },
-    {
-        id: "DC014",
-        ma_ban_ve: "MBV-014",
-        dnc: "DNC-014",
-        trang_thai: "Chưa hoàn thành",
-    },
-    {
-        id: "DC015",
-        ma_ban_ve: "MBV-015",
-        dnc: "DNC-015",
-        trang_thai: "Hoàn thành",
-    },
-]
 
 export const mockProcesses: Process[] = [
     { id: "1", ma_ban_ve: "MBV001", dnc: "100", tgdk: "15500", snc: "3", ttnc: "2", trang_thai: "Chưa hoàn thành" },
@@ -395,21 +302,21 @@ export const mockHistoryProcesses: HistoryProcess[] = [
 ]
 
 export const mockHistoryMachines: HistoryMachine[] = [
-    { ten_may: "DC 1", id: "ID123456", tgc: 34600, tgd: 62700, tgt: 63300, tgl: 33400 },
-    { ten_may: "DC 2", id: "ID987654", tgc: 57400, tgd: 32400, tgt: 89600, tgl: 44400 },
-    { ten_may: "DC 3", id: "ID116794", tgc: 25400, tgd: 15900, tgt: 46400, tgl: 22200 },
-    { ten_may: "DC 4", id: "ID164895", tgc: 76000, tgd: 34800, tgt: 10800, tgl: 66600 },
-    { ten_may: "DC 5", id: "ID164879", tgc: 72200, tgd: 33000, tgt: 10200, tgl: 55500 },
-    { ten_may: "DC 6", id: "ID132468", tgc: 38300, tgd: 27600, tgt: 64000, tgl: 33300 },
-    { ten_may: "DC 7", id: "ID133468", tgc: 42200, tgd: 8800, tgt: 84000, tgl: 44400 },
-    { ten_may: "DC 8", id: "ID132468", tgc: 34000, tgd: 33600, tgt: 66600, tgl: 22250 },
-    { ten_may: "Máy I", id: "ID123548", tgc: 27700, tgd: 21300, tgt: 55000, tgl: 18880 },
-    { ten_may: "Máy J", id: "ID468923", tgc: 42000, tgd: 24900, tgt: 67900, tgl: 32220 },
-    { ten_may: "Máy K", id: "ID682035", tgc: 38800, tgd: 23600, tgt: 69400, tgl: 22210 },
-    { ten_may: "Máy L", id: "ID135487", tgc: 44500, tgd: 36100, tgt: 76600, tgl: 28820 },
-    { ten_may: "Máy M", id: "ID165792", tgc: 55200, tgd: 36400, tgt: 38600, tgl: 29950 },
-    { ten_may: "Máy N", id: "ID987962", tgc: 29900, tgd: 28800, tgt: 54700, tgl: 35500 },
-    { ten_may: "Máy O", id: "ID354687", tgc: 32100, tgd: 39200, tgt: 77000, tgl: 77100 },
+    { ten_may: "I-01", id: "ID123456", tgc: 34600, tgd: 62700, tgt: 63300, tgl: 33400 },
+    { ten_may: "I-02", id: "ID987654", tgc: 57400, tgd: 32400, tgt: 89600, tgl: 44400 },
+    { ten_may: "I-03", id: "ID116794", tgc: 25400, tgd: 15900, tgt: 46400, tgl: 22200 },
+    { ten_may: "I-04", id: "ID164895", tgc: 76000, tgd: 34800, tgt: 10800, tgl: 66600 },
+    { ten_may: "I-05", id: "ID164879", tgc: 72200, tgd: 33000, tgt: 10200, tgl: 55500 },
+    { ten_may: "I-06", id: "ID132468", tgc: 38300, tgd: 27600, tgt: 64000, tgl: 33300 },
+    { ten_may: "I-07", id: "ID133468", tgc: 42200, tgd: 8800, tgt: 84000, tgl: 44400 },
+    { ten_may: "I-08", id: "ID132468", tgc: 34000, tgd: 33600, tgt: 66600, tgl: 22250 },
+    { ten_may: "I-09", id: "ID123548", tgc: 27700, tgd: 21300, tgt: 55000, tgl: 18880 },
+    { ten_may: "I-10", id: "ID468923", tgc: 42000, tgd: 24900, tgt: 67900, tgl: 32220 },
+    { ten_may: "I-11", id: "ID682035", tgc: 38800, tgd: 23600, tgt: 69400, tgl: 22210 },
+    { ten_may: "I-12", id: "ID135487", tgc: 44500, tgd: 36100, tgt: 76600, tgl: 28820 },
+    { ten_may: "I-13", id: "ID165792", tgc: 55200, tgd: 36400, tgt: 38600, tgl: 29950 },
+    { ten_may: "I-14", id: "ID987962", tgc: 29900, tgd: 28800, tgt: 54700, tgl: 35500 },
+    { ten_may: "I-15", id: "ID354687", tgc: 32100, tgd: 39200, tgt: 77000, tgl: 77100 },
 ]
 
 // Demo data Dashboard

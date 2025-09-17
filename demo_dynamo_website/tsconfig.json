@@ -33,7 +33,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/(main-layout)/operator"
+    "app/(main-layout)/operator",
+    "app/(main-layout)/process/lib/datats",
+    "app/(main-layout)/dashboard/operation/operatorDetail"
   ],
   "exclude": [
     "node_modules"

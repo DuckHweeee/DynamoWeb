@@ -14,9 +14,6 @@ export type Machine = {
     loai_may: string
     ma_may: string
 }
-
-
-
 export type Process = {
     id: string
     ma_ban_ve: string
@@ -169,11 +166,58 @@ export interface StaffKpiDto {
 }
 
 export interface Group {
-    groupId: string,
-    groupName: string,
-    groupType: string,
+    // groupId: string,
+    // groupName: string,
+    // groupType: string,
     // "staffGroups": [],
     // "machineGroups": [],
+    groupId: string;
+    groupName: string;
+    groupType: string;
+    staffGroups: [];
+    machineGroups: any[];
+    createdDate?: string;
+    updatedDate?: string;
+}
+
+export interface CreateGroupData {
+    groupName: string;
+    groupType: string;
+}
+
+export interface UpdateGroupData {
+    groupName: string;
+    groupType: string;
+}
+
+// Group KPI Types
+export interface GroupKPI {
+    id: number;
+    year: number;
+    month: number | null;
+    week: number | null;
+    day: number | null;
+    isMonth: number; // 0 = monthly KPI, 1 = weekly KPI, 2 = daily KPI
+    office: string;
+    workingHourGoal: number;
+    workingHourDifference: number;
+    workingHour: number;
+    groupId: string;
+    createdDate: string;
+    updatedDate: string;
+}
+
+export interface NewGroupKPI {
+    year: number | null;
+    month: number | null;
+    week: number | null;
+    day: number | null;
+    isMonth: number; // 0 = monthly KPI, 1 = weekly KPI, 2 = daily KPI
+    office: string;
+    workingHourGoal: number | null;
+    workingHourDifference?: number | null; // Optional - backend will calculate
+    workingHour?: number | null; // Optional - backend will calculate
+    groupId: string;
 }
 
 
@@ -192,8 +236,16 @@ export interface MachineDto {
 }
 
 export interface StaffDto {
-    staffId?: string;
+    staffId?: number;
     staffName?: string;
+    staffOffice?: string;
+    staffSection?: string;
+    shortName?: string;
+    status?: number;
+    createdDate?: string;
+    updatedDate?: string;
+    staffKpiDtos?: any;
+    id?: string;
 }
 
 export interface ProcessData {
@@ -230,4 +282,30 @@ export interface Order {
     createdDate: string;
     updatedDate: string;
     status: number;
+}
+
+export interface DrawingCodeProcessHistory {
+    processId: string;
+    partNumber: number;
+    stepNumber: number;
+    manufacturingPoint: number;
+    processType: string;
+    processStatus: number;
+    pgTime: number;
+    startTime: string;
+    endTime: string;
+    createdDate: string;
+    updatedDate: string;
+    isPlan: number;
+    status: number;
+    orderDetailDto: {
+        orderDetailId: string;
+        orderCode: string;
+    };
+    machineDto: {
+        machineName: string;
+    };
+    staffDtos: StaffDto[];
+    planDto: any;
+    processTimeDto: any;
 }
