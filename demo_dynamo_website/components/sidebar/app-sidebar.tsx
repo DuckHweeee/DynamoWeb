@@ -62,22 +62,22 @@ const data = {
             icon: LayoutGrid,
             isActive: true,
             items: [
+                // {
+                //     title: "Máy móc",
+                //     url: "/dashboard/machine",
+                // },
                 {
-                    title: "Máy móc",
-                    url: "/dashboard/machine",
-                },
-                {
-                    title: "Người vận hành",
+                    title: "Vận hành",
                     url: "/dashboard/operation",
                 },
-                {
-                    title: "Gia công chi tiết",
-                    url: "/dashboard/process",
-                },
-                {
-                    title: "Bản vẽ",
-                    url: "/dashboard/drawingCode",
-                },
+                // {
+                //     title: "Gia công chi tiết",
+                //     url: "/dashboard/process",
+                // },
+                // {
+                //     title: "Bản vẽ",
+                //     url: "/dashboard/drawingCode",
+                // },
             ],
         },
         {
@@ -189,52 +189,52 @@ const data = {
                 },
             ],
         },
-        {
-            title: "Tablet",
-            url: "/tablet",
-            icon: Tablet,
-            items: [
-                {
-                    title: "Kế hoạch",
-                    url: "/tablet/process",
-                },
-                {
-                    title: "Vận hành",
-                    url: "/tablet/operation",
-                },
-                {
-                    title: "Khai báo",
-                    url: "/tablet/newProcess",
-                },
-            ],
-        },
+        // {
+        //     title: "Tablet",
+        //     url: "/tablet",
+        //     icon: Tablet,
+        //     items: [
+        //         {
+        //             title: "Kế hoạch",
+        //             url: "/tablet/process",
+        //         },
+        //         {
+        //             title: "Vận hành",
+        //             url: "/tablet/operation",
+        //         },
+        //         {
+        //             title: "Khai báo",
+        //             url: "/tablet/newProcess",
+        //         },
+        //     ],
+        // },
     ],
-    projects: [
-        {
-            name: "Design Engineering",
-            url: "#",
-            icon: Frame,
-        },
-        {
-            name: "Sales & Marketing",
-            url: "#",
-            icon: PieChart,
-        },
-        {
-            name: "Travel",
-            url: "#",
-            icon: Map,
-        },
-    ],
+    // projects: [
+    //     {
+    //         name: "Design Engineering",
+    //         url: "#",
+    //         icon: Frame,
+    //     },
+    //     {
+    //         name: "Sales & Marketing",
+    //         url: "#",
+    //         icon: PieChart,
+    //     },
+    //     {
+    //         name: "Travel",
+    //         url: "#",
+    //         icon: Map,
+    //     },
+    // ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { user } = useAuth()
-    
+
     // Filter navigation items based on user role
     const getNavItemsForRole = () => {
         if (user?.role === "Operator") {
-            return data.navMain.filter(item => 
+            return data.navMain.filter(item =>
                 item.title === "Thống kê" || item.title === "Tablet"
             )
         }
