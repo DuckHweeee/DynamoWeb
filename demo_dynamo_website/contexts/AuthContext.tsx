@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     // Mock authentication - replace with real API call
     const mockUser = MOCK_USERS.find(
-      (u) => u.username === username && password === "password123"
+      (u) => u.username === username && password === "dynamo"
     );
 
     if (mockUser) {
