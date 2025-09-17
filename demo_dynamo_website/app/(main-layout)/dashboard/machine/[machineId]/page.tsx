@@ -9,6 +9,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
 import { MachinePieChart } from "../../components/machinePieChart";
 import MachineLogTable from "../../components/machineLogTable";
 import { useState, useEffect } from "react";
@@ -16,6 +18,8 @@ import { useParams, useSearchParams, useRouter } from "next/navigation";
 import DateRangeSelector from "../../components/DateRangeSelector";
 import { ReportTimeMachine } from "../components/ReportTimeMachine";
 import { RunningTimePieChart } from "../../components/runningTimePieChart";
+import { useMachine } from "@/hooks/useMachine";
+import { useGroups } from "@/hooks/useGroup";
 
 const chartItems = [
     { label: "Tổn thất Offset", value: 90 },
@@ -26,12 +30,22 @@ const chartItems = [
     { label: "OEE", value: 34 },
 ]
 
-const MachineIdDashboard = () => {
+const MachineDetailOverview = () => {
     const params = useParams();
     const searchParams = useSearchParams();
     const router = useRouter();
     const [date, setDate] = useState<DateRange | undefined>();
-    
+
+    // State management similar to main machine page
+    const [selectedStartDate, setStartDate] = useState<string>()
+    const [selectedEndDate, setSelectedEndDate] = useState<string>()
+    const [selectedGroup, setSelectedGroup] = useState<string>()
+    const [selectedMachine, setSelectedMachine] = useState<string>("");
+
+    // Get data
+    const { data: groupList } = useGroups()
+    const { data: machineList } = useMachine()
+
     // Get machine data from URL parameters
     const machineId = params.machineId as string;
     const machineName = searchParams.get('machineName') || `Máy số ${machineId}`;
@@ -43,15 +57,49 @@ const MachineIdDashboard = () => {
     const month = searchParams.get('month');
     const year = searchParams.get('year');
 
+    // Set initial state from URL parameters
+    useEffect(() => {
+        if (startDate) setStartDate(startDate);
+        if (endDate) setSelectedEndDate(endDate);
+        if (groupId) setSelectedGroup(groupId);
+        if (machineId) setSelectedMachine(machineId);
+    }, [startDate, endDate, groupId, machineId]);
+
+    // Set default group when data loads
+    useEffect(() => {
+        if (groupList.length > 0 && !selectedGroup && !groupId) {
+            setSelectedGroup(String(groupList[0].groupId))
+        }
+    }, [groupList, selectedGroup, groupId])
+
+    // Get selected group name
+    const selectedGroupName = groupList?.find((g) => String(g.groupId) === selectedGroup)?.groupName;
+
     // Handle machine selection change
     const handleMachineChange = (newMachineId: string) => {
         // Preserve existing URL parameters
         const newSearchParams = new URLSearchParams(searchParams.toString());
         newSearchParams.set('machineId', newMachineId);
-        newSearchParams.set('machineName', `Máy số ${newMachineId}`);
         
+        // Find machine name from the list
+        const machine = machineList?.find(m => String(m.machineId) === newMachineId);
+        const newMachineName = machine?.machineName || `Máy số ${newMachineId}`;
+        newSearchParams.set('machineName', newMachineName);
+
         // Navigate to new machine dashboard
         router.push(`/dashboard/machine/${newMachineId}?${newSearchParams.toString()}`);
+    };
+
+    // Handler for machine selection from dropdown
+    const handleMachineSelection = (machineId: string) => {
+        setSelectedMachine(machineId);
+        const searchParams = new URLSearchParams();
+        if (selectedStartDate) searchParams.set('startDate', selectedStartDate);
+        if (selectedEndDate) searchParams.set('endDate', selectedEndDate);
+        if (selectedGroup) searchParams.set('groupId', selectedGroup);
+        searchParams.set('machineId', machineId);
+
+        router.push(`/dashboard/machine/${machineId}?${searchParams.toString()}`);
     };
 
     useEffect(() => {
@@ -66,40 +114,78 @@ const MachineIdDashboard = () => {
             month,
             year
         });
-
-        // Update page title based on machine name
-        if (typeof document !== 'undefined') {
-            document.title = `${machineName} - Thống kê máy móc`;
-        }
     }, [machineId, machineName, groupId, startDate, endDate, mode, week, month, year]);
 
     return (
         <>
-            <div className="m-2 my-1.5 px-4 py-3 bg-white rounded-[10px] shadow">
-                <div className="flex flex-wrap items-center justify-end mb-4">
-                    {/* Vùng chọn ngày */}
-                    <div className="flex flex-wrap gap-4 items-center">
-                        <DateRangeSelector />
+            <div className="m-2 px-4 py-5 bg-white rounded-[10px] shadow" >
+                <div>
+                    <div className="flex justify-between items-center mr-5">
+                        <p className="text-3xl font-semibold">Thống kê chi tiết máy {machineName}</p>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="items-center cursor-pointer !text-white border-gray-200 hover:border-gray-300 h-9 bg-blue-900 hover:bg-blue-650"
+                        >
+                            Xuất file
+                            <Download className="h-4 w-4" />
+                        </Button>
+                    </div>
+                    <div className="flex flex-row py-3 gap-15 justify-end">
+                        <DateRangeSelector
+                            onChange={({ startDate, endDate }) => {
+                                setStartDate(startDate);
+                                setSelectedEndDate(endDate);
+                            }}
+                        />
+                        <div className="space-y-1">
+                            <label className="text-sm font-medium text-gray-600 tracking-wide">Nhóm</label>
+                            <Select value={selectedGroup ?? ""} onValueChange={(val) => setSelectedGroup(val)}>
+                                <SelectTrigger className="w-[180px] text-lg ">
+                                    <SelectValue placeholder="Nhóm" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        {groupList.map((m) => (
+                                            <SelectItem className="text-lg text-blue-950" key={m.groupId} value={String(m.groupId)}>
+                                                {m.groupName}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
 
-                        {/* Bộ lọc máy */}
-                        <Select value={machineId} onValueChange={handleMachineChange}>
-                            <SelectTrigger className="w-[180px] text-xl bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
-                                <SelectValue placeholder={groupId} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectItem value="1" className="text-lg">Nhóm 1</SelectItem>
-                                    <SelectItem value="2" className="text-lg">Nhóm 2</SelectItem>
-                                    <SelectItem value="3" className="text-lg">Nhóm 3</SelectItem>
-                                    <SelectItem value="4" className="text-lg">Nhóm 4</SelectItem>
-                                    <SelectItem value="5" className="text-lg">Nhóm 5</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                        <div className="space-y-1">
+                            <label className="text-sm font-medium text-gray-600 tracking-wide">Máy móc</label>
+                            <Select
+                                value={selectedMachine}
+                                onValueChange={handleMachineSelection}
+                            >
+                                <SelectTrigger className="w-fit text-lg px-4 rounded-md transition ">
+                                    <SelectValue
+                                        placeholder={machineName || `Máy số ${machineId}`}
+                                    />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        {machineList?.map((machine) => (
+                                            <SelectItem
+                                                className="text-xl text-blue-950"
+                                                key={machine.machineId}
+                                                value={String(machine.machineId)}
+                                            >
+                                                {machine.machineName}
+                                            </SelectItem>
+                                        )) || []}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
                 </div>
 
-                <ReportTimeMachine title={"Thống kê máy móc"} description={machineName} />
+                <ReportTimeMachine />
 
                 <div className="my-5 grid grid-cols-2 gap-3">
                     <RunningTimePieChart />
@@ -110,9 +196,9 @@ const MachineIdDashboard = () => {
                     </div>
                 </div>
                 <MachineLogTable />
-            </div>
+            </div >
         </>
     );
 }
 
-export default MachineIdDashboard;
+export default MachineDetailOverview;

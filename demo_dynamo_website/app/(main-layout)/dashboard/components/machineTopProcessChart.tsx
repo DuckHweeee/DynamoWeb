@@ -1,23 +1,19 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
+import { useState, useMemo } from "react"
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
 import {
     Select,
     SelectContent,
     SelectGroup,
     SelectItem,
-    SelectLabel,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardFooter,
     CardHeader,
-    CardTitle,
 } from "@/components/ui/card"
 import {
     ChartConfig,
@@ -46,6 +42,24 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function MachineTopProcessChart({ title, description }: { title: string; description: string }) {
+    const [sortOrder, setSortOrder] = useState<string>("")
+
+    // Sort chart data based on selected sort order
+    const sortedChartData = useMemo(() => {
+        if (!sortOrder) return chartData
+        
+        const sorted = [...chartData].sort((a, b) => {
+            if (sortOrder === "ascending") {
+                return a.number - b.number // Low to high
+            } else if (sortOrder === "descending") {
+                return b.number - a.number // High to low
+            }
+            return 0
+        })
+        
+        return sorted
+    }, [sortOrder])
+
     return (
         <Card className="!w-full">
 
@@ -56,15 +70,14 @@ export function MachineTopProcessChart({ title, description }: { title: string; 
                         <p className="text-xl text-gray-500">{description}</p>
                     </div>
                     <div className="flex items-center">
-                        <Select>
+                        <Select value={sortOrder} onValueChange={setSortOrder}>
                             <SelectTrigger className="w-[180px] bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
-                                <SelectValue placeholder="Nhóm" />
+                                <SelectValue placeholder="Sắp xếp" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    {/* <SelectLabel>Fruits</SelectLabel> */}
-                                    <SelectItem value="apple">Cao nhất</SelectItem>
-                                    <SelectItem value="banana">Thấp nhất</SelectItem>
+                                    <SelectItem value="descending">Cao nhất</SelectItem>
+                                    <SelectItem value="ascending">Thấp nhất</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
@@ -75,7 +88,7 @@ export function MachineTopProcessChart({ title, description }: { title: string; 
                 <ChartContainer config={chartConfig}>
                     <BarChart
                         accessibilityLayer
-                        data={chartData}
+                        data={sortedChartData}
                         layout="vertical"
                         margin={{
                             left: -60,
@@ -83,10 +96,6 @@ export function MachineTopProcessChart({ title, description }: { title: string; 
                     >
                         <XAxis type="number"
                             dataKey="number"
-                            // tick={{ fontSize: 15 }}
-                            // tickLine={true}
-                            // tickMargin={10}
-                            // axisLine={true}
                             hide
                         />
                         <CartesianGrid horizontal={false} />
@@ -98,7 +107,6 @@ export function MachineTopProcessChart({ title, description }: { title: string; 
                             axisLine={false}
                             width={110}
                             tick={{ fontSize: 18 }}
-                        // tickFormatter={(value) => value.slice(0, 7)}
                         />
                         <ChartTooltip
                             cursor={false}

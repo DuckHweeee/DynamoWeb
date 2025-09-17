@@ -115,7 +115,7 @@ export default function Dashboard() {
                         </Select>
                     </div>
                 </div>
-                <ReportTimeMachine title={"Thống kê máy móc"} description={"12 máy"} />
+                <ReportTimeMachine />
                 <div className="my-5 grid grid-cols-2 gap-3">
                     {/* <MachineRunBarChart /> */}
                     <MachineRunBarChart2 title="Tổng Giờ Chạy Trong Tháng Nhóm 1" description="Tổng thời gian hoạt động của nhóm này." />

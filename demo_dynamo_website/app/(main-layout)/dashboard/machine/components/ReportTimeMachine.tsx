@@ -5,7 +5,7 @@ import { MonitorDot, TrendingDown, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export function ReportTimeMachine({ title, description }: { title: string; description: string }) {
+export function ReportTimeMachine() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [selectedMachine, setSelectedMachine] = useState<string>("");
@@ -58,35 +58,6 @@ export function ReportTimeMachine({ title, description }: { title: string; descr
     };
     return (
         <>
-            <div className="flex flex-row items-center justify-between mt-2">
-                <p className="text-3xl font-semibold">{title}</p>
-                <Select
-                    value={selectedMachine}
-                    onValueChange={handleMachineSelection}
-                >
-                    <SelectTrigger className="w-fit text-xl px-4 !py-5.5 rounded-md  transition ">
-                        <SelectValue
-                            placeholder={`Tổng số: ${machineList?.length || 0} máy`}
-                        >
-                            {selectedMachineName || `Tổng số: ${machineList?.length || 0} máy`}
-                        </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            {machineList?.map((machine) => (
-                                <SelectItem
-                                    className="text-xl text-blue-950"
-                                    key={machine.id}
-                                    value={String(machine.id)}
-                                >
-                                    {machine.name}
-                                </SelectItem>
-                            )) || []}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </div>
-
             <div className="my-5 flex gap-3 items-center justify-between">
                 <div className="inline-block rounded-sm bg-white px-5 py-4 shadow-md border w-full">
                     <div className="flex items-start justify-between">
