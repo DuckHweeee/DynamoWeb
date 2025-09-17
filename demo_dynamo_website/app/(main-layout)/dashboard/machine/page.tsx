@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/select";
 import MachineRunBarChart2 from "../components/machineRunBarChart2";
 import { MachinePieChart } from "../components/machinePieChart";
-import { SumRealTime } from "../components/sumRealTime";
 import MachineTable from "../components/machineTable";
 import { useState } from "react";
 import DateRangeSelector from "../components/DateRangeSelector";
@@ -35,7 +34,7 @@ export default function MachineDashboard() {
                     {/* Vùng chọn ngày */}
                     <div className="flex flex-wrap gap-4 items-center">
                         <DateRangeSelector />
-
+                        
                         {/* Bộ lọc nhóm */}
                         <Select>
                             <SelectTrigger className="w-[180px] text-xl bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
@@ -64,19 +63,6 @@ export default function MachineDashboard() {
                         ))}
                     </div>
                 </div>
-
-                {/* <div className="my-5 flex gap-3 justify-between">
-                <div className="w-1/2 h-[300px]">
-                    <MachineRunBarChart />
-                </div>
-
-                <div className="w-1/2 h-[300px] grid grid-cols-2 gap-4">
-                    {chartItems.map((item, index) => (
-                        <MachinePieChart key={index} data={item} />
-                    ))}
-                </div>
-                </div> */}
-
                 <SumRealTimeMachine title="Tổng Thời Gian Thực PG Của Từng Máy Trong Nhóm (Giờ)" description="Tổng giờ chạy thực so với tổng giờ chạy mục tiêu" />
                 <div className="flex gap-5 justify-between my-5">
                     {/* <MachineRunBarChart /> */}
