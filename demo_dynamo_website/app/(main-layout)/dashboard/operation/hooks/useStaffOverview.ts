@@ -8,7 +8,7 @@ export function useStaffOverview(groupId: string, startDate: string, endDate: st
     const [data, setData] = useState<StaffOverview[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    console.log("useStaffOverview called with:", { groupId, startDate, endDate });
+    // console.log("useStaffOverview called with:", { groupId, startDate, endDate });
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -47,6 +47,6 @@ export function useStaffOverview(groupId: string, startDate: string, endDate: st
             fetchData();
         }
     }, [groupId, startDate, endDate]);
-    console.log("Staff Overview Data:", data);
+    // console.log("Staff Overview Data:", data);
     return { data, loading, error };
 }
