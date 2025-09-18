@@ -12,10 +12,14 @@ export function useProcess() {
         try {
             setLoading(true);
             const res = await axios.get(`${url}/api/drawing-code-process`);
-            const filtered = res.data.filter((item: Process2) => item.isPlan === 1);
+            // Ensure we always work with arrays
+            const responseData = Array.isArray(res.data) ? res.data : [];
+            const filtered = responseData.filter((item: Process2) => item.isPlan === 1);
             setData(filtered);
         } catch (err) {
-            setError("Lỗi khi tải dữ liệu");
+            setError("Lỗi khi tải dữ liệu process");
+            setData([]) // Ensure data remains an empty array on error
+            console.error('Process API error:', err)
         } finally {
             setLoading(false);
         }

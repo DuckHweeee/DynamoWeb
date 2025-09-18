@@ -13,9 +13,12 @@ export function useMachine() {
         const fetchData = async () => {
             try {
                 const res = await axios.get<Machine2[]>(`${url}/api/machine`)
-                setData(res.data)
+                // Ensure we always set an array
+                setData(Array.isArray(res.data) ? res.data : [])
             } catch (err) {
-                setError("Lỗi khi tải danh sách nhân viên")
+                setError("Lỗi khi tải danh sách máy")
+                setData([]) // Ensure data remains an empty array on error
+                console.error('Machine API error:', err)
             } finally {
                 setLoading(false)
             }
@@ -34,18 +37,18 @@ export function useGroup() {
         const fetchData = async () => {
             try {
                 const res = await axios.get<Group[]>(`${url}/api/group`)
-                // const filtered = res.data.filter((g) => g.groupType === groupType)
-                setData(res.data)
+                // Ensure we always set an array
+                setData(Array.isArray(res.data) ? res.data : [])
             } catch (err) {
-                setError("Lỗi khi tải danh sách nhân viên")
+                setError("Lỗi khi tải danh sách nhóm")
+                setData([]) // Ensure data remains an empty array on error
+                console.error('Group API error:', err)
             } finally {
                 setLoading(false)
             }
         }
         fetchData()
     }, [])
-    // console.log("data")
-    // console.log(data)
     return { data, loading, error }
 }
 
