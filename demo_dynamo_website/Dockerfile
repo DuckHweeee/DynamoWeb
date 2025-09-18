@@ -24,6 +24,9 @@ WORKDIR /app
 COPY --from=build-deps /app/node_modules ./node_modules
 COPY . .
 
+# Copy Docker-specific environment file
+COPY .env.docker .env.local
+
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
