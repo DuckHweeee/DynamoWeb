@@ -27,7 +27,7 @@ export default function HistoryOperatorPage() {
 
     return (
         // <div className="h-screen flex flex-col p-4 bg-gray-50">
-        <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow h-screen">
+        <div className="m-2 py-3 bg-white rounded-[10px] shadow h-screen">
             <Toaster />
 
             {/* Main Content */}

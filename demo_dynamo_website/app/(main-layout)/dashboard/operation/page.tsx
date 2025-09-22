@@ -105,25 +105,25 @@ export default function Operation() {
   const chartConfigs = [
     {
       title: (groupName: string) => `Tổng giờ PG trong ${groupName}`,
-      description: "Thống kê tổng giờ PG của nhân viên trong nhóm",
+      description: "Thống kê tổng giờ PG của nhân viên",
       targetKey: "pgTimeGoal",
       realKey: "pgTime",
     },
     {
       title: (groupName: string) => `Tổng giờ máy trong ${groupName}`,
-      description: "Tổng giờ máy của từng nhân viên trong nhóm",
+      description: "Tổng giờ máy của từng nhân viên",
       targetKey: "machineTimeGoal",
       realKey: "machineTime",
     },
     {
       title: (groupName: string) => `Tổng giờ OLE trong ${groupName}`,
-      description: "OLE của từng nhân viên trong nhóm",
+      description: "OLE của từng nhân viên",
       targetKey: "oleGoal",
       realKey: "ole",
     },
     {
       title: (groupName: string) => `Tổng KPI trong ${groupName}`,
-      description: "KPI của từng nhân viên trong nhóm",
+      description: "KPI của từng nhân viên",
       targetKey: "kpiGoal",
       realKey: "kpi",
     },
@@ -136,13 +136,13 @@ export default function Operation() {
           <div className="flex justify-between items-center mr-5">
             <p className="text-3xl font-semibold">Thống kê vận hành</p>
             {/* <Button
-                            variant="outline"
-                            size="sm"
-                            className="items-center cursor-pointer !text-white border-gray-200 hover:border-gray-300 h-9 bg-blue-900 hover:bg-blue-650"
-                        >
-                            Xuất file
-                            <Download className="h-4 w-4" />
-                        </Button> */}
+              variant="outline"
+              size="sm"
+              className="items-center cursor-pointer !text-white border-gray-200 hover:border-gray-300 h-9 bg-blue-900 hover:bg-blue-650"
+            >
+              Xuất file
+              <Download className="h-4 w-4" />
+            </Button> */}
           </div>
           <div className="flex flex-row py-3 gap-15 justify-end">
             <DateRangeSelector
@@ -169,11 +169,10 @@ export default function Operation() {
                       <SelectItem
                         key={m.groupId}
                         value={String(m.groupId)}
-                        className={`text-lg text-blue-950 cursor-pointer ${
-                          String(selectedGroup) === String(m.groupId)
-                            ? "bg-gray-100"
-                            : ""
-                        }`}
+                        className={`text-lg text-blue-950 cursor-pointer ${String(selectedGroup) === String(m.groupId)
+                          ? "bg-gray-100"
+                          : ""
+                          }`}
                       >
                         {m.groupName}
                       </SelectItem>
@@ -221,7 +220,7 @@ export default function Operation() {
 
         <DivergingBarChart
           title={`Tổng điểm gia công trong ${selectedGroupName}`}
-          description="Thống kê tổng điểm của từng nhân viên trong nhóm"
+          description="Thống kê tổng điểm của từng nhân viên"
           data={transformData(
             dataOverview,
             "manufacturingPointGoal",

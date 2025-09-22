@@ -75,7 +75,8 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
                         machineId: newProcess.machineId,
                         staffId: newProcess.staffId,
                         isPlan: 1,
-                        plannerId: "d39b214c-506c-444e-ad70-8379a8720cb3",
+
+                        plannerId: "47c7f973-6a64-4544-94eb-c5df1f4201dd",
                     }),
                 }
             );

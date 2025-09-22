@@ -26,7 +26,7 @@ import { useGroups } from "@/hooks/useGroup";
 import { useMachineStatistics } from "@/app/(main-layout)/dashboard/machine/hooks/useMachineStatistics";
 
 const chartItems = [
-    { label: "Tổn thất Offset", value: 90 },
+    { label: "Tổn thất Offset", value: 55 },
     { label: "Tổn thất NG/khác", value: 36 },
     { label: "Hiệu suất khai thác máy", value: 78 },
     { label: "Hiệu suất giá trị", value: 64 },
