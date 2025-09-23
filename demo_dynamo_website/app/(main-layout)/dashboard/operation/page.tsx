@@ -5,14 +5,11 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { useGroups } from "@/hooks/useGroup";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
 import { useStaffStatistic } from "./hooks/useStaffStatistic";
 import { useStaffOverview } from "./hooks/useStaffOverview";
 import DateRangeSelector from "./components/DateRangeSelector";
@@ -128,6 +125,35 @@ export default function Operation() {
       realKey: "kpi",
     },
   ];
+
+  // Optimize groupList and selectedGroupName calculations
+  const memoizedGroupList = useMemo(() => groupList || [], [groupList]);
+  const memoizedSelectedGroupName = useMemo(
+    () =>
+      memoizedGroupList.find((g) => String(g.groupId) === selectedGroup)
+        ?.groupName,
+    [memoizedGroupList, selectedGroup]
+  );
+
+  // Optimize staffList calculation
+  const memoizedStaffList = useMemo(() => dataStatistic?.staffDto || [], [
+    dataStatistic,
+  ]);
+
+  // Optimize chart data transformation
+  const memoizedChartData = useMemo(
+    () =>
+      chartConfigs.map((cfg) => ({
+        title: cfg.title(memoizedSelectedGroupName ?? ""),
+        description: cfg.description,
+        data: transformData(
+          dataOverview,
+          cfg.targetKey as keyof StaffOverview,
+          cfg.realKey as keyof StaffOverview
+        ),
+      })),
+    [dataOverview, memoizedSelectedGroupName]
+  );
 
   return (
     <>
