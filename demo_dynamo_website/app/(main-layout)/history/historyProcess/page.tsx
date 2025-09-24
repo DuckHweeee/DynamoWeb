@@ -176,34 +176,35 @@ export default function HistoryProcessPage() {
     // Filter the data based on selected filters
     const filteredData = React.useMemo(() => {
         if (!processData) return []
-        
+
         return processData.filter(item => {
             // Date filter
             if (date?.from || date?.to) {
                 const startTime = item.startTime ? new Date(item.startTime) : null
                 const endTime = item.endTime ? new Date(item.endTime) : null
-                
+
                 if (date.from && startTime && startTime < date.from) return false
                 if (date.to && endTime && endTime > date.to) return false
             }
-            
+
             // Process type filter
             if (selectedProcessType !== "all" && item.processType !== selectedProcessType) return false
-            
+
             // Machine filter
             if (selectedMachine !== "all" && item.machineDto?.machineName !== selectedMachine) return false
-            
+
             // Staff filter
             if (selectedStaff !== "all" && !item.staffDtos?.some(staff => staff.staffName === selectedStaff)) return false
-            
+
             return true
         })
     }, [processData, date, selectedProcessType, selectedMachine, selectedStaff])
 
     return (
-        <div className="h-screen flex flex-col p-4 bg-gray-50">
+        <div className="m-2 py-3 bg-white rounded-[10px] shadow h-screen">
+            {/* <div className="h-screen flex flex-col p-4 bg-gray-50"> */}
             {/* Filters Section */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4 flex-shrink-0">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4 mx-4 flex-shrink-0">
                 <div className="flex flex-col xl:flex-row gap-4 items-start xl:items-center">
                     {/* Date Range Picker */}
                     <div className="flex-1 min-w-0">
@@ -294,8 +295,8 @@ export default function HistoryProcessPage() {
                         <label className="block text-sm font-medium text-transparent mb-2">Actions</label>
                         <div className="flex gap-2">
                             {hasFilters && (
-                                <Button 
-                                    variant="outline" 
+                                <Button
+                                    variant="outline"
                                     onClick={clearFilters}
                                     size="sm"
                                     className="h-10 flex-1"
@@ -303,8 +304,8 @@ export default function HistoryProcessPage() {
                                     Xóa bộ lọc
                                 </Button>
                             )}
-                            <Button 
-                                variant="default" 
+                            <Button
+                                variant="default"
                                 size="sm"
                                 className="h-10 flex-1"
                                 onClick={() => refetch()}

@@ -85,10 +85,10 @@ const data = {
             url: "/operator",
             icon: UserCog,
             items: [
-                {
-                    title: "OP Status",
-                    url: "/operator/status",
-                },
+                // {
+                //     title: "OP Status",
+                //     url: "/operator/status",
+                // },
                 {
                     title: "Danh sách nhân viên",
                     url: "/operator",
@@ -104,10 +104,10 @@ const data = {
             url: "/machine",
             icon: MonitorCog,
             items: [
-                {
-                    title: "MC Status",
-                    url: "/machine/status",
-                },
+                // {
+                //     title: "MC Status",
+                //     url: "/machine/status",
+                // },
                 {
                     title: "Danh sách máy móc",
                     url: "/machine/table",

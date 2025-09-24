@@ -38,15 +38,15 @@ export function ClientHeader() {
                         {/* Xin chào {user?.username}, ngày mới tốt lành! */}
                         Xin chào Dynamo, ngày mới tốt lành!
                     </h1>
-                    <p className="text-sm text-gray-500">{breadcrumb}</p>
+                    {/* <p className="text-sm text-gray-500">{breadcrumb}</p> */}
                 </div>
             </div>
 
             <div className="flex items-center gap-6">
-                <div className="relative">
+                {/* <div className="relative">
                     <Bell className="w-6 h-6 text-gray-700" />
                     <span className="absolute top-0 right-0 h-2.5 w-2.5 bg-red-500 rounded-full" />
-                </div>
+                </div> */}
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

@@ -78,27 +78,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (username: string, password: string): Promise<boolean> => {
     setIsLoading(true);
-    
+
     // Mock authentication - replace with real API call
     const mockUser = MOCK_USERS.find(
       (u) => u.username === username && password === "dynamo"
     );
 
     if (mockUser) {
-      setUser(mockUser);
-      localStorage.setItem("auth-user", JSON.stringify(mockUser));
-      
-      // Redirect based on role
-      if (mockUser.role === "Admin") {
-        router.push("/");
-      } else if (mockUser.role === "Operator") {
-        router.push("/tablet/process");
-      }
-      
-      setIsLoading(false);
-      return true;
+        // Optimize by reducing redundant operations
+        const userData = JSON.stringify(mockUser);
+        setUser(mockUser);
+        localStorage.setItem("auth-user", userData);
+        document.cookie = `auth-user=${userData}; path=/; max-age=${7 * 24 * 60 * 60}`;
+
+        // Redirect based on role
+        router.push(mockUser.role === "Admin" ? "/" : "/tablet/process");
+
+        setIsLoading(false);
+        return true;
     }
-    
+
     setIsLoading(false);
     return false;
   };

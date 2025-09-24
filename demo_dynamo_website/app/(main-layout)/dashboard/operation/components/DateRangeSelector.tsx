@@ -88,14 +88,14 @@ export default function DateRangeSelector({ onChange }: Props) {
             <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-600 tracking-wide">Loại</label>
                 <Select value={mode} onValueChange={(val) => setMode(val as Mode)}>
-                    <SelectTrigger className="w-[150px] text-lg">
+                    <SelectTrigger className="w-[150px] text-lg cursor-pointer">
                         <SelectValue placeholder="Chọn chế độ" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="day" className="text-lg">Ngày</SelectItem>
-                        <SelectItem value="week" className="text-lg">Tuần</SelectItem>
-                        <SelectItem value="month" className="text-lg">Tháng</SelectItem>
-                        <SelectItem value="year" className="text-lg">Năm</SelectItem>
+                        <SelectItem value="day" className="text-lg cursor-pointer">Ngày</SelectItem>
+                        <SelectItem value="week" className="text-lg cursor-pointer">Tuần</SelectItem>
+                        <SelectItem value="month" className="text-lg cursor-pointer">Tháng</SelectItem>
+                        <SelectItem value="year" className="text-lg cursor-pointer">Năm</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -138,7 +138,7 @@ export default function DateRangeSelector({ onChange }: Props) {
                                 <SelectItem
                                     key={w.week}
                                     value={String(w.week)}
-                                    className={`text-lg ${selectedWeek === w.week ? "bg-blue-100 text-blue-900" : ""}`}
+                                    className={`text-lg cursor-pointer ${selectedWeek === w.week ? "bg-blue-100 text-blue-900" : ""}`}
                                 >
                                     Tuần {w.week}: {w.start} - {w.end}
                                 </SelectItem>
@@ -161,7 +161,7 @@ export default function DateRangeSelector({ onChange }: Props) {
                                 <SelectItem
                                     key={m}
                                     value={String(m)}
-                                    className={`text-lg ${selectedMonth === m ? "bg-blue-100 text-blue-900" : ""}`}
+                                    className={`text-lg cursor-pointer ${selectedMonth === m ? "bg-blue-100 text-blue-900" : ""}`}
                                 >
                                     Tháng {m}
                                 </SelectItem>
@@ -190,7 +190,7 @@ export default function DateRangeSelector({ onChange }: Props) {
                         </SelectContent> */}
                         <SelectContent className="max-h-[300px]">
                             {Array.from({ length: 3 }, (_, i) => dayjs().year() - 2 + i).map((year) => (
-                                <SelectItem key={year} value={String(year)} className="text-lg">
+                                <SelectItem key={year} value={String(year)} className="text-lg cursor-pointer">
                                     {year}
                                 </SelectItem>
                             ))}

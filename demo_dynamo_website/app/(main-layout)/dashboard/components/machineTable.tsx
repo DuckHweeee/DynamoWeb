@@ -68,7 +68,7 @@ const columns: ColumnDef<HistoryMachine>[] = [
     {
         accessorKey: "tgt",
         header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-xl">Thời Gian Tắt <ArrowUpDown /></Button>
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-xl">Thời Gian Trống <ArrowUpDown /></Button>
         ),
         cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#B5B5B5] text-[#FFFFFF] px-4 py-1 rounded-md">{formatSecondsToTime(row.getValue("tgt"))}</span></div>,
         // cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("tgt"))}</div>,
