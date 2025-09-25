@@ -15,45 +15,35 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart"
 
-export const description = "A horizontal bar chart"
-
-// Extended chart data for pagination demo
-const chartData = [
-    { name: "I-01", number: 186 },
-    { name: "I-02", number: 305 },
-    { name: "I-03", number: 237 },
-    { name: "I-04", number: 73 },
-    { name: "I-05", number: 200 },
-    { name: "I-06", number: 150 },
-    { name: "I-07", number: 320 },
-    { name: "I-08", number: 180 },
-    { name: "I-09", number: 95 },
-    { name: "I-10", number: 275 },
-    { name: "I-11", number: 165 },
-    { name: "I-12", number: 290 },
-    { name: "I-13", number: 210 },
-    { name: "I-14", number: 145 },
-    { name: "I-15", number: 330 },
-]
+import { MachineOverview } from "../lib/type"
 
 const chartConfig = {
-    name: {
-        color: "#074695",
+    machineName: {
+        label: "Máy",
     },
-    number: {
+    numberOfProcesses: {
         label: "Tổng số",
+        color: "#074695",
     },
 } satisfies ChartConfig
 
-export function MachineProcessBarChart({ title, description }: { title: string; description: string }) {
+export function MachineProcessBarChart({
+    title,
+    description,
+    dataOverview,
+}: {
+    title: string
+    description: string
+    dataOverview: MachineOverview[]
+}) {
     const [currentPage, setCurrentPage] = useState(0)
     const [isScrolling, setIsScrolling] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
     const itemsPerPage = 5
-    const totalPages = Math.ceil(chartData.length / itemsPerPage)
+    const totalPages = Math.ceil(dataOverview.length / itemsPerPage)
 
     // Get current page data
-    const currentData = chartData.slice(
+    const currentData = dataOverview.slice(
         currentPage * itemsPerPage,
         (currentPage + 1) * itemsPerPage
     )
@@ -62,13 +52,13 @@ export function MachineProcessBarChart({ title, description }: { title: string; 
     useEffect(() => {
         const handleWheel = (e: WheelEvent) => {
             if (!containerRef.current?.contains(e.target as Node)) return
-            
+
             e.preventDefault()
-            
+
             if (isScrolling) return
-            
+
             setIsScrolling(true)
-            
+
             if (e.deltaY > 0 && currentPage < totalPages - 1) {
                 // Scroll down - next page
                 setCurrentPage(prev => prev + 1)
@@ -76,7 +66,7 @@ export function MachineProcessBarChart({ title, description }: { title: string; 
                 // Scroll up - previous page
                 setCurrentPage(prev => prev - 1)
             }
-            
+
             // Reset scrolling flag after a delay
             setTimeout(() => setIsScrolling(false), 300)
         }
@@ -101,9 +91,6 @@ export function MachineProcessBarChart({ title, description }: { title: string; 
                         <p className="text-2xl font-bold">{title}</p>
                         <p className="text-xl text-gray-500">{description}</p>
                     </div>
-                    <div className="text-sm text-gray-500">
-                        Page {currentPage + 1} of {totalPages} | Scroll to navigate
-                    </div>
                 </div>
             </CardHeader>
             <CardContent>
@@ -113,11 +100,11 @@ export function MachineProcessBarChart({ title, description }: { title: string; 
                         data={currentData}
                         layout="vertical"
                         margin={{
-                            left: -60,
+                            left: -50,
                         }}
                     >
                         <XAxis type="number"
-                            dataKey="number"
+                            dataKey="numberOfProcesses"
                             // tick={{ fontSize: 15 }}
                             // tickLine={false}
                             // tickMargin={10}
@@ -126,7 +113,7 @@ export function MachineProcessBarChart({ title, description }: { title: string; 
                         />
                         {/* <CartesianGrid horizontal={false} /> */}
                         <YAxis
-                            dataKey="name"
+                            dataKey="machineName"
                             type="category"
                             tickLine={false}
                             tickMargin={5}
@@ -137,31 +124,30 @@ export function MachineProcessBarChart({ title, description }: { title: string; 
                         />
                         <ChartTooltip
                             cursor={false}
-                            content={<ChartTooltipContent indicator="line" />}
+                            content={<ChartTooltipContent indicator="dashed" />}
                         />
-                        <Bar dataKey="number" fill="var(--color-name)" radius={5}>
+                        <Bar dataKey="numberOfProcesses" fill={chartConfig.numberOfProcesses.color} radius={5}>
                             <LabelList
-                                dataKey="number"
-                                position="right"
+                                dataKey="numberOfProcesses"
+                                position="insideRight"
                                 offset={8}
-                                className="fill-foreground"
-                                fontSize={16}
+                                className="fill-white"
+                                fontSize={18}
                             />
                         </Bar>
                     </BarChart>
                 </ChartContainer>
-                
+
                 {/* Pagination dots */}
                 <div className="flex justify-center mt-4 space-x-2">
                     {Array.from({ length: totalPages }, (_, index) => (
                         <button
                             key={index}
                             onClick={() => setCurrentPage(index)}
-                            className={`w-3 h-3 rounded-full transition-colors ${
-                                index === currentPage 
-                                    ? 'bg-blue-600' 
-                                    : 'bg-gray-300 hover:bg-gray-400'
-                            }`}
+                            className={`w-3 h-3 rounded-full transition-colors cursor-pointer ${index === currentPage
+                                ? 'bg-blue-600'
+                                : 'bg-gray-300 hover:bg-gray-400'
+                                }`}
                             aria-label={`Go to page ${index + 1}`}
                         />
                     ))}

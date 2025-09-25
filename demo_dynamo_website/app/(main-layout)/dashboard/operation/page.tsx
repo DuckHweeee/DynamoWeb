@@ -57,8 +57,9 @@ export default function Operation() {
   );
 
   // console.log("Data Overview:", dataOverview);
-  // Lấy danh sách nhân viên từ tất cả các nhóm
+  // Lấy danh sách nhân viên từ tất nhóm
   const staffList = dataStatistic?.staffDto;
+
   // Lấy danh sách nhóm
   const { data: groupList } = useGroups();
 

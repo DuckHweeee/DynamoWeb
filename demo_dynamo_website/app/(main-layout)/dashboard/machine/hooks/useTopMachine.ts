@@ -1,0 +1,88 @@
+import { useEffect, useState } from "react";
+import { TopMachine } from "../lib/type";
+
+const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+export function useTopHighMachine(groupId: string, startDate: string, endDate: string) {
+    const [data, setData] = useState<TopMachine[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const res = await fetch(`${url}/api/machine-group-statistic/top-5`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        groupId: groupId,
+                        startDate: startDate,
+                        endDate: endDate,
+                    }),
+                });
+
+                if (!res.ok) {
+                    throw new Error("Lỗi mạng hoặc server");
+                }
+
+                const json: TopMachine[] = await res.json();
+                setData(json);
+                setError(null);
+            } catch (err) {
+                console.error("Fetch error:", err);
+                setError("Lỗi khi tải dữ liệu");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (groupId && startDate && endDate) {
+            fetchData();
+        }
+    }, [groupId, startDate, endDate]);
+    return { data, loading, error };
+}
+
+export function useTopLowMachine(groupId: string, startDate: string, endDate: string) {
+    const [data, setData] = useState<TopMachine[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const res = await fetch(`${url}/api/machine-group-statistic/top-5-lowest`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        groupId: groupId,
+                        startDate: startDate,
+                        endDate: endDate,
+                    }),
+                });
+
+                if (!res.ok) {
+                    throw new Error("Lỗi mạng hoặc server");
+                }
+
+                const json: TopMachine[] = await res.json();
+                setData(json);
+                setError(null);
+            } catch (err) {
+                console.error("Fetch error:", err);
+                setError("Lỗi khi tải dữ liệu");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (groupId && startDate && endDate) {
+            fetchData();
+        }
+    }, [groupId, startDate, endDate]);
+    return { data, loading, error };
+}

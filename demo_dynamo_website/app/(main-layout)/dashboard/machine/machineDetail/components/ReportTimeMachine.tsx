@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { MonitorDot, TrendingDown, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { MachineStatistic } from "../lib/type";
+import { MachineStatistic } from "../../lib/type";
 function convertHoursToHM(hours: number): string {
     const h = Math.floor(hours);
     const m = Math.round((hours - h) * 60);
