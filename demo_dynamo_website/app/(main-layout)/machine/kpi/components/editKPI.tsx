@@ -8,6 +8,15 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { toast } from "sonner"
 import { Staff } from "@/lib/type"
 import { KPI } from "../../lib/type"
+import { 
+    validateMachineKPIYear, 
+    validateMachineKPIMonth, 
+    validateMachineKPIOEE, 
+    validateMachineKPIMachineMiningTarget, 
+    validateMachineKPIMachineId, 
+    validateMachineKPIGroupId,
+    machineKPISchema 
+} from "../lib/validation"
 
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 type EditKPIMachineFormProps = {
@@ -37,6 +46,40 @@ export default function EditKPIMachineForm({
         groupId: ""
     })
 
+    const [errors, setErrors] = useState<Record<string, string>>({})
+
+    const updateField = (field: keyof EditKPIMachine, value: any) => {
+        setUpdateMachine(prev => ({ ...prev, [field]: value }))
+        
+        // Validate field immediately
+        let fieldError = ""
+        switch (field) {
+            case 'year':
+                fieldError = validateMachineKPIYear(value) || ""
+                break
+            case 'month':
+                fieldError = validateMachineKPIMonth(value) || ""
+                break
+            case 'oee':
+                fieldError = validateMachineKPIOEE(value) || ""
+                break
+            case 'machineMiningTarget':
+                fieldError = validateMachineKPIMachineMiningTarget(value) || ""
+                break
+            case 'machineId':
+                fieldError = validateMachineKPIMachineId(value) || ""
+                break
+            case 'groupId':
+                fieldError = validateMachineKPIGroupId(value) || ""
+                break
+        }
+        
+        setErrors(prev => ({
+            ...prev,
+            [field]: fieldError
+        }))
+    }
+
     useEffect(() => {
         if (inforKPI) {
             setUpdateMachine({
@@ -65,9 +108,6 @@ export default function EditKPIMachineForm({
         }
 
         try {
-            console.log("updateStaff")
-            console.log(updateMachine)
-            alert("ahihi")
             const response = await fetch(
                 `${urlLink}/api/machine-kpi/${inforKPI.id}`,
                 {
