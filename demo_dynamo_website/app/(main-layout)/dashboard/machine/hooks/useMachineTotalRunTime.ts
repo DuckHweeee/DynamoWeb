@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { MachineStatistic } from "../lib/type";
+import { TotalRunTime } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-export function useMachineStatistics(groupId: string, startDate: string, endDate: string) {
-    const [data, setData] = useState<MachineStatistic | null>(null);
+export function useMachineTotalRuntime(groupId: string, startDate: string, endDate: string) {
+    const [data, setData] = useState<TotalRunTime | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     // console.log(groupId, startDate, endDate)
@@ -13,7 +13,7 @@ export function useMachineStatistics(groupId: string, startDate: string, endDate
         const fetchData = async () => {
             setLoading(true);
             try {
-                const res = await fetch(`${url}/api/machine-group-statistic/statistic`, {
+                const res = await fetch(`${url}/api/machine-group-statistic/totalTime`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ groupId, startDate, endDate }),

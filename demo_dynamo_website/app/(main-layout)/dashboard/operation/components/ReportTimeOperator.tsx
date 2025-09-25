@@ -1,22 +1,5 @@
 import { MonitorDot, TrendingDown, TrendingUp } from "lucide-react";
 import { StaffStatistic } from "../lib/type";
-interface Props {
-    staffCount: number;
-
-    workingHours: number;
-    workingRate: number;
-
-    manufacturingPoints: number;
-    mpRate: number;
-
-    processCount: number;
-    processRate: number;
-
-    totalKpi: number;
-    kpiRate: number;
-
-    timeType: string;
-}
 function convertHoursToHM(hours: number): string {
     const h = Math.floor(hours);
     const m = Math.round((hours - h) * 60);

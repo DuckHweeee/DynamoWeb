@@ -62,22 +62,22 @@ const data = {
             icon: LayoutGrid,
             isActive: true,
             items: [
-                // {
-                //     title: "Máy móc",
-                //     url: "/dashboard/machine",
-                // },
+                {
+                    title: "Máy móc",
+                    url: "/dashboard/machine",
+                },
                 {
                     title: "Vận hành",
                     url: "/dashboard/operation",
                 },
-                // {
-                //     title: "Gia công chi tiết",
-                //     url: "/dashboard/process",
-                // },
-                // {
-                //     title: "Bản vẽ",
-                //     url: "/dashboard/drawingCode",
-                // },
+                {
+                    title: "Gia công chi tiết",
+                    url: "/dashboard/process",
+                },
+                {
+                    title: "Bản vẽ",
+                    url: "/dashboard/drawingCode",
+                },
             ],
         },
         {
@@ -85,10 +85,10 @@ const data = {
             url: "/operator",
             icon: UserCog,
             items: [
-                // {
-                //     title: "OP Status",
-                //     url: "/operator/status",
-                // },
+                {
+                    title: "OP Status",
+                    url: "/operator/status",
+                },
                 {
                     title: "Danh sách nhân viên",
                     url: "/operator",
@@ -104,10 +104,10 @@ const data = {
             url: "/machine",
             icon: MonitorCog,
             items: [
-                // {
-                //     title: "MC Status",
-                //     url: "/machine/status",
-                // },
+                {
+                    title: "MC Status",
+                    url: "/machine/status",
+                },
                 {
                     title: "Danh sách máy móc",
                     url: "/machine/table",
@@ -189,25 +189,25 @@ const data = {
                 },
             ],
         },
-        // {
-        //     title: "Tablet",
-        //     url: "/tablet",
-        //     icon: Tablet,
-        //     items: [
-        //         {
-        //             title: "Kế hoạch",
-        //             url: "/tablet/process",
-        //         },
-        //         {
-        //             title: "Vận hành",
-        //             url: "/tablet/operation",
-        //         },
-        //         {
-        //             title: "Khai báo",
-        //             url: "/tablet/newProcess",
-        //         },
-        //     ],
-        // },
+        {
+            title: "Tablet",
+            url: "/tablet",
+            icon: Tablet,
+            items: [
+                {
+                    title: "Kế hoạch",
+                    url: "/tablet/process",
+                },
+                {
+                    title: "Vận hành",
+                    url: "/tablet/operation",
+                },
+                {
+                    title: "Khai báo",
+                    url: "/tablet/newProcess",
+                },
+            ],
+        },
     ],
     // projects: [
     //     {

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
-import { MachinePieChart } from "../../components/machinePieChart";
+
 import MachineLogTable from "../../components/machineLogTable";
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
@@ -20,6 +20,7 @@ import { ReportTimeMachine } from "../components/ReportTimeMachine";
 import { RunningTimePieChart } from "../../components/runningTimePieChart";
 import { useMachine } from "@/hooks/useMachine";
 import { useGroups } from "@/hooks/useGroup";
+import { MachinePieChart } from "./components/machinePieChart";
 
 const chartItems = [
     { label: "Tổn thất Offset", value: 90 },
@@ -80,7 +81,7 @@ const MachineDetailOverview = () => {
         // Preserve existing URL parameters
         const newSearchParams = new URLSearchParams(searchParams.toString());
         newSearchParams.set('machineId', newMachineId);
-        
+
         // Find machine name from the list
         const machine = machineList?.find(m => String(m.machineId) === newMachineId);
         const newMachineName = machine?.machineName || `Máy số ${newMachineId}`;
@@ -185,16 +186,16 @@ const MachineDetailOverview = () => {
                     </div>
                 </div>
 
-                <ReportTimeMachine />
+                {/* <ReportTimeMachine data={undefined} type={""} /> */}
 
-                <div className="my-5 grid grid-cols-2 gap-3">
+                {/* <div className="my-5 grid grid-cols-2 gap-3">
                     <RunningTimePieChart />
                     <div className="grid grid-cols-3 gap-3">
                         {chartItems.map((item, index) => (
                             <MachinePieChart key={index} data={item} />
                         ))}
                     </div>
-                </div>
+                </div> */}
                 <MachineLogTable />
             </div >
         </>

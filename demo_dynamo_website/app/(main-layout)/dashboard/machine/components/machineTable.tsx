@@ -28,6 +28,7 @@ import { useState } from "react"
 
 import { HistoryMachine } from "@/lib/type"
 import { mockHistoryMachines } from "@/lib/dataDemo"
+import { MachineOverview } from "../lib/type"
 
 function formatSecondsToTime(seconds: number): string {
     const hours = Math.floor(seconds / 3600)
@@ -35,83 +36,63 @@ function formatSecondsToTime(seconds: number): string {
     return `${hours}h ${minutes}m`
 }
 
-const columns: ColumnDef<HistoryMachine>[] = [
+const columns: ColumnDef<MachineOverview>[] = [
     {
-        accessorKey: "ten_may",
+        accessorKey: "machineName",
         header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-xl">Tên Máy <ArrowUpDown /></Button>
         ),
         cell: ({ row }) => (
             <div>
-                <div className="text-lg">{row.getValue("ten_may")}</div>
+                <div className="text-lg">{row.getValue("machineName")}</div>
                 {/* <div className="text-sm text-muted-foreground font-normal">#{row.original.id}</div> */}
             </div>
         ),
     },
     {
-        accessorKey: "tgc",
+        accessorKey: "runTime",
         header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-xl">Tổng Giờ Chạy <ArrowUpDown /></Button>
         ),
-        cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#E6FFE6] text-[#00A90B] px-4 py-1 rounded-md">{formatSecondsToTime(row.getValue("tgc"))}</span></div>,
+        cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#E6FFE6] text-[#00A90B] px-4 py-1 rounded-md">{formatSecondsToTime(row.getValue("runTime"))}</span></div>,
         // cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("tgc"))}</div>,
     },
     {
-        accessorKey: "tgd",
+        accessorKey: "stopTime",
         header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-xl">Tổng Giờ Dừng <ArrowUpDown /></Button>
         ),
-        cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#FAFFAF] text-[#C3B300] px-4 py-1 rounded-md">{formatSecondsToTime(row.getValue("tgd"))}</span></div>,
+        cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#FAFFAF] text-[#C3B300] px-4 py-1 rounded-md">{formatSecondsToTime(row.getValue("stopTime"))}</span></div>,
 
         // cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("tgd"))}</div>,
     },
     {
-        accessorKey: "tgt",
+        accessorKey: "emptyTime",
         header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-xl">Thời Gian Trống <ArrowUpDown /></Button>
         ),
-        cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#B5B5B5] text-[#FFFFFF] px-4 py-1 rounded-md">{formatSecondsToTime(row.getValue("tgt"))}</span></div>,
+        cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#B5B5B5] text-[#FFFFFF] px-4 py-1 rounded-md">{formatSecondsToTime(row.getValue("emptyTime"))}</span></div>,
         // cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("tgt"))}</div>,
     },
     {
-        accessorKey: "tgl",
+        accessorKey: "errorTime",
         header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-xl">Thời Gian Lỗi <ArrowUpDown /></Button>
         ),
-        cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#FFE6E6] text-[#FE4A4A]  px-4 py-1 rounded-md">{formatSecondsToTime(row.getValue("tgl"))}</span></div>,
+        cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#FFE6E6] text-[#FE4A4A]  px-4 py-1 rounded-md">{formatSecondsToTime(row.getValue("errorTime"))}</span></div>,
 
         // cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("tgl"))}</div>,
     },
-    // {
-    //     id: "actions",
-    //     enableHiding: false,
-    //     cell: ({ row }) => {
-    //         const item = row.original
-    //         return (
-    //             <div className="flex items-center justify-center">
-    //                 <DropdownMenu>
-    //                     <DropdownMenuTrigger asChild>
-    //                         <Button variant="ghost" className="h-8 w-8 p-0">
-    //                             <span className="sr-only">Open menu</span>
-    //                             <MoreHorizontal />
-    //                         </Button>
-    //                     </DropdownMenuTrigger>
-    //                     <DropdownMenuContent align="end">
-    //                         <DropdownMenuItem onClick={() => alert(`Xem chi tiết máy ${item.ten_may}`)}>
-    //                             Xem chi tiết
-    //                         </DropdownMenuItem>
-    //                         <DropdownMenuItem onClick={() => alert(`Xóa máy ${item.ten_may}`)}>
-    //                             Xóa
-    //                         </DropdownMenuItem>
-    //                     </DropdownMenuContent>
-    //                 </DropdownMenu>
-    //             </div>
-    //         )
-    //     },
-    // },
 ]
 
-export default function MachineTable({ title, description }: { title: string; description: string }) {
+export default function MachineTable({
+    title,
+    dataOverview,
+}: {
+    title: string
+    description: string
+    dataOverview: MachineOverview[]
+}) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -119,7 +100,7 @@ export default function MachineTable({ title, description }: { title: string; de
     const [globalFilter, setGlobalFilter] = useState("")
 
     const table = useReactTable({
-        data: mockHistoryMachines,
+        data: dataOverview,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
