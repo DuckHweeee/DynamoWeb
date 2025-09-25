@@ -14,6 +14,20 @@ import { officeList } from "../../lib/data"
 import { KPI } from "../lib/type"
 import { FlexibleCombobox } from "./FlexibleCombobox"
 import { useStaff } from "../hooks/useStaff"
+import { 
+    validateStaffKPI, 
+    StaffKPIFormData,
+    validateStaffKPIStaffId,
+    validateStaffKPIGroupId,
+    validateStaffKPIYear,
+    validateStaffKPIMonth,
+    validateStaffKPIKPI,
+    validateStaffKPIWorkGoal,
+    validateStaffKPIPgTimeGoal,
+    validateStaffKPIMachineTimeGoal,
+    validateStaffKPIManufacturingPoint,
+    validateStaffKPIOleGoal
+} from "../lib/validation"
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 type AddKPIStaffFormProps = {
     onAdd: (staff: KPI) => void
@@ -45,25 +59,92 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
         oleGoal: null,
         groupId: ""
     })
-    const handleSubmit = async () => {
-        if (
-            !newKPIStaff.staffId ||
-            !newKPIStaff.groupId ||
-            !newKPIStaff.year ||
-            !newKPIStaff.month ||
-            !newKPIStaff.pgTimeGoal ||
-            !newKPIStaff.machineTimeGoal ||
-            !newKPIStaff.manufacturingPoint ||
-            !newKPIStaff.oleGoal ||
-            !newKPIStaff.workGoal ||
-            !newKPIStaff.kpi
-        ) {
-            toast.error("Vui lòng nhập đầy đủ thông tin.");
-            return;
+
+    // Validation errors state
+    const [errors, setErrors] = useState<{[key: string]: string | null}>({})
+
+    // Function to update field and validate
+    const updateField = (field: keyof NewKPIStaff, value: any) => {
+        setNewKPIStaff(prev => ({ ...prev, [field]: value }))
+        
+        // Validate field immediately
+        let error: string | null = null
+        switch (field) {
+            case 'staffId':
+                error = validateStaffKPIStaffId(value)
+                break
+            case 'groupId':
+                error = validateStaffKPIGroupId(value)
+                break
+            case 'year':
+                error = validateStaffKPIYear(value)
+                break
+            case 'month':
+                error = validateStaffKPIMonth(value)
+                break
+            case 'kpi':
+                error = validateStaffKPIKPI(value)
+                break
+            case 'workGoal':
+                error = validateStaffKPIWorkGoal(value)
+                break
+            case 'pgTimeGoal':
+                error = validateStaffKPIPgTimeGoal(value)
+                break
+            case 'machineTimeGoal':
+                error = validateStaffKPIMachineTimeGoal(value)
+                break
+            case 'manufacturingPoint':
+                error = validateStaffKPIManufacturingPoint(value)
+                break
+            case 'oleGoal':
+                error = validateStaffKPIOleGoal(value)
+                break
         }
+        
+        setErrors(prev => ({ ...prev, [field]: error }))
+    }
+    const handleSubmit = async () => {
+        // Validate all fields individually first
+        const fieldValidations = {
+            staffId: validateStaffKPIStaffId(newKPIStaff.staffId),
+            groupId: validateStaffKPIGroupId(newKPIStaff.groupId),
+            year: validateStaffKPIYear(newKPIStaff.year),
+            month: validateStaffKPIMonth(newKPIStaff.month),
+            kpi: validateStaffKPIKPI(newKPIStaff.kpi),
+            workGoal: validateStaffKPIWorkGoal(newKPIStaff.workGoal),
+            pgTimeGoal: validateStaffKPIPgTimeGoal(newKPIStaff.pgTimeGoal),
+            machineTimeGoal: validateStaffKPIMachineTimeGoal(newKPIStaff.machineTimeGoal),
+            manufacturingPoint: validateStaffKPIManufacturingPoint(newKPIStaff.manufacturingPoint),
+            oleGoal: validateStaffKPIOleGoal(newKPIStaff.oleGoal),
+        }
+
+        // Check for any validation errors
+        const hasErrors = Object.values(fieldValidations).some(error => error !== null)
+        
+        if (hasErrors) {
+            // Update errors state with all validation results
+            setErrors(fieldValidations)
+            return
+        }
+
+        // All fields validated - now prepare data for submission
+        // Since validation passed, we know all required fields have valid values
+        const dataToSubmit = {
+            staffId: newKPIStaff.staffId,
+            kpi: newKPIStaff.kpi!,
+            year: newKPIStaff.year!,
+            month: newKPIStaff.month!,
+            workGoal: newKPIStaff.workGoal!,
+            pgTimeGoal: newKPIStaff.pgTimeGoal!,
+            machineTimeGoal: newKPIStaff.machineTimeGoal!,
+            manufacturingPoint: newKPIStaff.manufacturingPoint!,
+            oleGoal: newKPIStaff.oleGoal!,
+            groupId: newKPIStaff.groupId,
+        }
+
         try {
-            console.log("newKPIStaff")
-            console.log(newKPIStaff)
+        
             const response = await fetch(
                 `${urlLink}/api/staff-kpi`,
                 {
@@ -71,18 +152,7 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({
-                        staffId: newKPIStaff.staffId,
-                        kpi: newKPIStaff.kpi,
-                        year: newKPIStaff.year,
-                        month: newKPIStaff.month,
-                        workGoal: newKPIStaff.workGoal,
-                        pgTimeGoal: newKPIStaff.pgTimeGoal,
-                        machineTimeGoal: newKPIStaff.machineTimeGoal,
-                        manufacturingPoint: newKPIStaff.manufacturingPoint,
-                        oleGoal: newKPIStaff.oleGoal,
-                        groupId: newKPIStaff.groupId,
-                    }),
+                    body: JSON.stringify(dataToSubmit),
                 }
             );
 
@@ -105,6 +175,7 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
                 oleGoal: null,
                 groupId: "",
             });
+            setErrors({})
         } catch (error) {
             toast.error("Đã xảy ra lỗi khi gửi.");
         }
@@ -124,21 +195,24 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
                         <FlexibleCombobox
                             options={staff || []}
                             value={newKPIStaff.staffId}
-                            onChange={(val) => setNewKPIStaff({ ...newKPIStaff, staffId: val })}
+                            onChange={(val) => updateField('staffId', val)}
                             displayField="staffName"
                             valueField="id"
                             placeholder="Tên nhân viên"
                             allowCustom={false}
                         />
+                        {errors.staffId && (
+                            <span className="text-red-500 text-sm">{errors.staffId}</span>
+                        )}
                     </div>
 
                     <div className="grid">
                         <Label htmlFor="nhom" className="text-lg !font-normal">Nhóm</Label>
                         <Select
                             value={newKPIStaff.groupId?.toString() ?? ""}
-                            onValueChange={(value) => setNewKPIStaff({ ...newKPIStaff, groupId: value })}
+                            onValueChange={(value) => updateField('groupId', value)}
                         >
-                            <SelectTrigger className="w-auto text-lg [&>span]:text-[16px]">
+                            <SelectTrigger className={`w-auto text-lg [&>span]:text-[16px] ${errors.groupId ? 'border-red-500' : ''}`}>
                                 <SelectValue placeholder="Chọn nhóm" />
                             </SelectTrigger>
                             <SelectContent id="nhom">
@@ -151,6 +225,9 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
+                        {errors.groupId && (
+                            <span className="text-red-500 text-sm">{errors.groupId}</span>
+                        )}
                     </div>
                 </div>
                 <div className="grid gap-4 grid-cols-2 pb-3">
@@ -158,22 +235,24 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
                         <Label htmlFor="year" className="text-lg !font-normal">Năm</Label>
                         <SelectYear
                             value={newKPIStaff.year?.toString() ?? undefined}
-                            onChange={(value) =>
-                                setNewKPIStaff({ ...newKPIStaff, year: Number(value) })
-                            }
+                            onChange={(value) => updateField('year', Number(value))}
                             totalYears={5}
                             placeholder="Chọn năm"
                         />
+                        {errors.year && (
+                            <span className="text-red-500 text-sm">{errors.year}</span>
+                        )}
                     </div>
                     <div className="grid">
                         <Label htmlFor="name" className="text-lg !font-normal">Tháng</Label>
                         <SelectMonth
                             value={newKPIStaff.month?.toString() ?? undefined}
-                            onChange={(value) =>
-                                setNewKPIStaff({ ...newKPIStaff, month: Number(value) })
-                            }
+                            onChange={(value) => updateField('month', Number(value))}
                         // showAllOption={true}
                         />
+                        {errors.month && (
+                            <span className="text-red-500 text-sm">{errors.month}</span>
+                        )}
                     </div>
                 </div>
 
@@ -186,29 +265,28 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
                             type="number"
                             inputMode="numeric"
                             value={newKPIStaff.kpi !== null ? newKPIStaff.kpi.toString() : ""}
-                            onChange={(e) =>
-                                setNewKPIStaff({
-                                    ...newKPIStaff,
-                                    kpi: e.target.value === "" ? null : Number(e.target.value),
-                                })
-                            }
-                            className="!text-lg placeholder:text-[16px]"
+                            onChange={(e) => updateField('kpi', e.target.value === "" ? null : Number(e.target.value))}
+                            className={`!text-lg placeholder:text-[16px] ${errors.kpi ? 'border-red-500' : ''}`}
                         />
+                        {errors.kpi && (
+                            <span className="text-red-500 text-sm">{errors.kpi}</span>
+                        )}
                     </div>
 
                     <div className="grid gap-1">
                         <Label htmlFor="workGoal" className="text-lg !font-normal">Mục tiêu nhân viên làm việc</Label>
                         <Input
-                            className="!text-lg placeholder:text-[16px]"
+                            className={`!text-lg placeholder:text-[16px] ${errors.workGoal ? 'border-red-500' : ''}`}
                             id="workGoal"
                             placeholder="Mục tiêu làm việc"
                             type="number"
                             inputMode="numeric"
                             value={newKPIStaff.workGoal !== null ? newKPIStaff.workGoal.toString() : ""}
-                            onChange={(e) =>
-                                setNewKPIStaff({ ...newKPIStaff, workGoal: Number(e.target.value) })
-                            }
+                            onChange={(e) => updateField('workGoal', e.target.value === "" ? null : Number(e.target.value))}
                         />
+                        {errors.workGoal && (
+                            <span className="text-red-500 text-sm">{errors.workGoal}</span>
+                        )}
                     </div>
 
                     <div className="grid">
@@ -218,12 +296,13 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
                             placeholder="Mục tiêu giờ PG"
                             type="number"
                             inputMode="numeric"
-                            className="!text-lg placeholder:text-[16px]"
+                            className={`!text-lg placeholder:text-[16px] ${errors.pgTimeGoal ? 'border-red-500' : ''}`}
                             value={newKPIStaff.pgTimeGoal !== null ? newKPIStaff.pgTimeGoal.toString() : ""}
-                            onChange={(e) =>
-                                setNewKPIStaff({ ...newKPIStaff, pgTimeGoal: Number(e.target.value) })
-                            }
+                            onChange={(e) => updateField('pgTimeGoal', e.target.value === "" ? null : Number(e.target.value))}
                         />
+                        {errors.pgTimeGoal && (
+                            <span className="text-red-500 text-sm">{errors.pgTimeGoal}</span>
+                        )}
                     </div>
                     <div className="grid">
                         <Label htmlFor="machineTimeGoal" className="text-lg !font-normal">Mục tiêu giờ máy</Label>
@@ -232,12 +311,13 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
                             placeholder="Mục tiêu giờ máy"
                             type="number"
                             inputMode="numeric"
-                            className="!text-lg placeholder:text-[16px]"
+                            className={`!text-lg placeholder:text-[16px] ${errors.machineTimeGoal ? 'border-red-500' : ''}`}
                             value={newKPIStaff.machineTimeGoal !== null ? newKPIStaff.machineTimeGoal.toString() : ""}
-                            onChange={(e) =>
-                                setNewKPIStaff({ ...newKPIStaff, machineTimeGoal: Number(e.target.value) })
-                            }
+                            onChange={(e) => updateField('machineTimeGoal', e.target.value === "" ? null : Number(e.target.value))}
                         />
+                        {errors.machineTimeGoal && (
+                            <span className="text-red-500 text-sm">{errors.machineTimeGoal}</span>
+                        )}
                     </div>
                     <div className="grid">
                         <Label htmlFor="manufacturingPoint" className="text-lg !font-normal">Mục tiêu điểm gia công</Label>
@@ -246,12 +326,13 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
                             placeholder="Mục tiêu điểm gia công"
                             type="number"
                             inputMode="numeric"
-                            className="!text-lg placeholder:text-[16px]"
+                            className={`!text-lg placeholder:text-[16px] ${errors.manufacturingPoint ? 'border-red-500' : ''}`}
                             value={newKPIStaff.manufacturingPoint !== null ? newKPIStaff.manufacturingPoint.toString() : ""}
-                            onChange={(e) =>
-                                setNewKPIStaff({ ...newKPIStaff, manufacturingPoint: Number(e.target.value) })
-                            }
+                            onChange={(e) => updateField('manufacturingPoint', e.target.value === "" ? null : Number(e.target.value))}
                         />
+                        {errors.manufacturingPoint && (
+                            <span className="text-red-500 text-sm">{errors.manufacturingPoint}</span>
+                        )}
                     </div>
                     <div className="grid">
                         <Label htmlFor="oleGoal" className="text-lg !font-normal">Mục tiêu Ole</Label>

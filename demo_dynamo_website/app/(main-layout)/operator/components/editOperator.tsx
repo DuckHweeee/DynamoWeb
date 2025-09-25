@@ -10,6 +10,26 @@ import { toast } from "sonner"
 import { Staff } from "@/lib/type"
 import { useStaffWithKPI } from "../hooks/useStaffWithKPI"
 import { officeList, statusList } from "../lib/data"
+import { 
+    validateEditStaff, 
+    EditStaffFormData, 
+    formatValidationErrors,
+    validateStaffId,
+    validateStaffName,
+    validateShortName,
+    validateStaffOffice,
+    validateStaffSection,
+    validateGroupId,
+    validateKPIField,
+    validateYear,
+    validateMonth,
+    validateWorkGoal,
+    validatePgTimeGoal,
+    validateMachineTimeGoal,
+    validateManufacturingPoint,
+    validateOleGoal,
+    validateStatus
+} from "../lib/validation"
 
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 type EditStaffFormProps = {
@@ -66,6 +86,66 @@ export default function EditStaffForm({
         status: null,
     })
 
+    // Validation errors state
+    const [errors, setErrors] = useState<{[key: string]: string | null}>({})
+
+    // Function to update field and validate
+    const updateField = (field: keyof EditStaff, value: any) => {
+        setUpdateStaff(prev => ({ ...prev, [field]: value }))
+        
+        // Validate field immediately
+        let error: string | null = null
+        switch (field) {
+            case 'staffId':
+                error = validateStaffId(value)
+                break
+            case 'staffName':
+                error = validateStaffName(value)
+                break
+            case 'shortName':
+                error = validateShortName(value)
+                break
+            case 'staffOffice':
+                error = validateStaffOffice(value)
+                break
+            case 'staffSection':
+                error = validateStaffSection(value)
+                break
+            case 'groupId':
+                error = validateGroupId(value)
+                break
+            case 'kpi':
+                error = validateKPIField(value)
+                break
+            case 'year':
+                error = validateYear(value)
+                break
+            case 'month':
+                error = validateMonth(value)
+                break
+            case 'workGoal':
+                error = validateWorkGoal(value)
+                break
+            case 'pgTimeGoal':
+                error = validatePgTimeGoal(value)
+                break
+            case 'machineTimeGoal':
+                error = validateMachineTimeGoal(value)
+                break
+            case 'manufacturingPoint':
+                error = validateManufacturingPoint(value)
+                break
+            case 'oleGoal':
+                error = validateOleGoal(value)
+                break
+            case 'status':
+                error = validateStatus(value)
+                break
+        }
+        
+        setErrors(prev => ({ ...prev, [field]: error }))
+    }
+
     useEffect(() => {
         if (staffWithKPI) {
             setUpdateStaff({
@@ -89,30 +169,52 @@ export default function EditStaffForm({
     }, [staffWithKPI])
 
     const handleUpdate = async () => {
-        // Kiểm tra thông tin bắt buộc của Staff
-        if (
-            !updateStaff.staffId ||
-            !updateStaff.staffName.trim() ||
-            !updateStaff.staffOffice.trim() ||
-            !updateStaff.groupId ||
-            !updateStaff.staffSection.trim()
-        ) {
-            toast.error("Vui lòng nhập đầy đủ thông tin nhân viên.");
-            return;
+        // Validate all fields individually first
+        const fieldValidations = {
+            staffId: validateStaffId(updateStaff.staffId),
+            staffName: validateStaffName(updateStaff.staffName),
+            shortName: validateShortName(updateStaff.shortName),
+            staffOffice: validateStaffOffice(updateStaff.staffOffice),
+            staffSection: validateStaffSection(updateStaff.staffSection),
+            groupId: validateGroupId(updateStaff.groupId),
+            kpi: validateKPIField(updateStaff.kpi),
+            year: validateYear(updateStaff.year),
+            month: validateMonth(updateStaff.month),
+            workGoal: validateWorkGoal(updateStaff.workGoal),
+            pgTimeGoal: validatePgTimeGoal(updateStaff.pgTimeGoal),
+            machineTimeGoal: validateMachineTimeGoal(updateStaff.machineTimeGoal),
+            manufacturingPoint: validateManufacturingPoint(updateStaff.manufacturingPoint),
+            oleGoal: validateOleGoal(updateStaff.oleGoal),
+            status: validateStatus(updateStaff.status),
         }
 
+        // Check for any validation errors
+        const hasErrors = Object.values(fieldValidations).some(error => error !== null)
+        
+        if (hasErrors) {
+            // Update errors state with all validation results
+            setErrors(fieldValidations)
+            return
+        }
 
-        // Kiểm tra thông tin bắt buộc của StaffKPI
-        if (
-            updateStaff.pgTimeGoal === null ||
-            updateStaff.machineTimeGoal === null ||
-            updateStaff.manufacturingPoint === null ||
-            updateStaff.oleGoal === null ||
-            updateStaff.workGoal === null ||
-            updateStaff.kpi === null
-        ) {
-            toast.error("Vui lòng nhập đầy đủ thông tin mục tiêu nhân viên.");
-            return;
+        // All fields validated - now prepare data for submission
+        // Since validation passed, we know all required fields have valid values
+        const dataToSubmit = {
+            staffId: updateStaff.staffId!,
+            staffName: updateStaff.staffName.trim(),
+            shortName: updateStaff.shortName.trim(),
+            staffOffice: updateStaff.staffOffice,
+            staffSection: updateStaff.staffSection.trim(),
+            groupId: updateStaff.groupId,
+            kpi: updateStaff.kpi!,
+            year: updateStaff.year!,
+            month: updateStaff.month!,
+            workGoal: updateStaff.workGoal!,
+            pgTimeGoal: updateStaff.pgTimeGoal!,
+            machineTimeGoal: updateStaff.machineTimeGoal!,
+            manufacturingPoint: updateStaff.manufacturingPoint!,
+            oleGoal: updateStaff.oleGoal!,
+            status: updateStaff.status!,
         }
 
         try {
@@ -123,24 +225,7 @@ export default function EditStaffForm({
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({
-                        staffId: updateStaff.staffId,
-                        staffName: updateStaff.staffName,
-                        shortName: updateStaff.shortName,
-                        staffOffice: updateStaff.staffOffice,
-                        staffSection: updateStaff.staffSection,
-                        kpi: updateStaff.kpi,
-
-                        year: updateStaff.year,
-                        month: updateStaff.month,
-                        workGoal: updateStaff.workGoal,
-                        pgTimeGoal: updateStaff.pgTimeGoal,
-                        machineTimeGoal: updateStaff.machineTimeGoal,
-                        manufacturingPoint: updateStaff.manufacturingPoint,
-                        oleGoal: updateStaff.oleGoal,
-                        groupId: updateStaff.groupId,
-                        status: updateStaff.status,
-                    }),
+                    body: JSON.stringify(dataToSubmit),
                 }
             );
             if (!response.ok) {
@@ -185,16 +270,15 @@ export default function EditStaffForm({
                                                         return;
                                                     }
                                                 }
-                                                setUpdateStaff({
-                                                    ...updateStaff,
-                                                    staffId: newId,
-                                                });
+                                                updateField('staffId', newId);
                                             }
                                         }}
-                                        className="!text-lg placeholder:text-[16px]"
+                                        className={`!text-lg placeholder:text-[16px] ${errors.staffId ? 'border-red-500' : ''}`}
                                         maxLength={4}
                                     />
-
+                                    {errors.staffId && (
+                                        <span className="text-red-500 text-sm mt-1">{errors.staffId}</span>
+                                    )}
                                 </div>
                                 <div className="grid">
                                     <Label htmlFor="name" className="text-lg !font-normal">Họ và tên</Label>
@@ -202,31 +286,25 @@ export default function EditStaffForm({
                                         id="name"
                                         placeholder="Tên nhân viên"
                                         value={updateStaff.staffName}
-                                        onChange={(e) =>
-                                            setUpdateStaff({
-                                                ...updateStaff,
-                                                staffName: e.target.value,
-                                            })
-                                        }
-                                        className="!text-lg placeholder:text-[16px]"
+                                        onChange={(e) => updateField('staffName', e.target.value)}
+                                        className={`!text-lg placeholder:text-[16px] ${errors.staffName ? 'border-red-500' : ''}`}
                                     />
+                                    {errors.staffName && (
+                                        <span className="text-red-500 text-sm mt-1">{errors.staffName}</span>
+                                    )}
                                 </div>
                                 <div className="grid">
                                     <Label htmlFor="shortName" className="text-lg !font-normal">Tên tắt</Label>
                                     <Input
                                         id="shortName"
                                         placeholder="Tên tắt"
-                                        // value={staff?.shortName}
-                                        // onChange={(e) => setUpdateStaff({ ...updateStaff, shortName: e.target.value })}
                                         value={updateStaff.shortName}
-                                        onChange={(e) =>
-                                            setUpdateStaff({
-                                                ...updateStaff,
-                                                shortName: e.target.value,
-                                            })
-                                        }
-                                        className="!text-lg placeholder:text-[16px]"
+                                        onChange={(e) => updateField('shortName', e.target.value)}
+                                        className={`!text-lg placeholder:text-[16px] ${errors.shortName ? 'border-red-500' : ''}`}
                                     />
+                                    {errors.shortName && (
+                                        <span className="text-red-500 text-sm mt-1">{errors.shortName}</span>
+                                    )}
                                 </div>
                                 <div className="grid">
                                     <Label htmlFor="phong_ban" className="text-lg !font-normal">Phòng ban</Label>
@@ -288,10 +366,6 @@ export default function EditStaffForm({
                                     <Input
                                         id="cong_viec"
                                         placeholder="Công Việc"
-                                        // value={staff?.staffSection}
-                                        // onChange={(e) =>
-                                        //     setUpdateStaff({ ...updateStaff, staffSection: e.target.value })
-                                        // }
                                         value={updateStaff.staffSection ?? ""}
                                         onChange={(e) =>
                                             setUpdateStaff({
@@ -356,8 +430,6 @@ export default function EditStaffForm({
                                             type="number"
                                             inputMode="numeric"
                                             className="!text-lg"
-                                            // value={kpi.workGoal ?? ""}
-                                            // onChange={(e) => setUpdateStaffKPI("workGoal", Number(e.target.value))}
                                             value={updateStaff.workGoal ?? ""}
                                             onChange={(e) =>
                                                 setUpdateStaff({ ...updateStaff, workGoal: e.target.value === "" ? null : Number(e.target.value) })
@@ -372,8 +444,6 @@ export default function EditStaffForm({
                                             type="number"
                                             inputMode="numeric"
                                             className="!text-lg"
-                                            // value={kpi.pgTimeGoal ?? ""}
-                                            // onChange={(e) => updateKPIField("pgTimeGoal", Number(e.target.value))}
                                             value={updateStaff.pgTimeGoal ?? ""}
                                             onChange={(e) =>
                                                 setUpdateStaff({ ...updateStaff, pgTimeGoal: e.target.value === "" ? null : Number(e.target.value) })
@@ -388,8 +458,6 @@ export default function EditStaffForm({
                                             type="number"
                                             inputMode="numeric"
                                             className="!text-lg"
-                                            // value={kpi.machineTimeGoal ?? ""}
-                                            // onChange={(e) => updateKPIField("machineTimeGoal", Number(e.target.value))}
                                             value={updateStaff.machineTimeGoal ?? ""}
                                             onChange={(e) =>
                                                 setUpdateStaff({ ...updateStaff, machineTimeGoal: e.target.value === "" ? null : Number(e.target.value) })
@@ -404,8 +472,6 @@ export default function EditStaffForm({
                                             type="number"
                                             inputMode="numeric"
                                             className="!text-lg"
-                                            // value={kpi.manufacturingPoint ?? ""}
-                                            // onChange={(e) => updateKPIField("manufacturingPoint", Number(e.target.value))}
                                             value={updateStaff.manufacturingPoint ?? ""}
                                             onChange={(e) =>
                                                 setUpdateStaff({ ...updateStaff, manufacturingPoint: e.target.value === "" ? null : Number(e.target.value) })
@@ -421,8 +487,6 @@ export default function EditStaffForm({
                                             type="number"
                                             inputMode="numeric"
                                             className="!text-lg"
-                                            // value={kpi.oleGoal ?? ""}
-                                            // onChange={(e) => updateKPIField("oleGoal", Number(e.target.value))}
                                             value={updateStaff.oleGoal ?? ""}
                                             onChange={(e) =>
                                                 setUpdateStaff({ ...updateStaff, oleGoal: e.target.value === "" ? null : Number(e.target.value) })
