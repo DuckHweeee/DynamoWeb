@@ -12,9 +12,12 @@ export function useStaff() {
         const fetchData = async () => {
             try {
                 const res = await axios.get<Staff[]>(`${url}/api/staff`);
-                setData(res.data)
+                // Ensure we always set an array
+                setData(Array.isArray(res.data) ? res.data : [])
             } catch (err) {
-                setError("Lỗi khi tải dữ liệu")
+                setError("Lỗi khi tải dữ liệu nhân viên")
+                setData([]) // Ensure data remains an empty array on error
+                console.error('Staff API error:', err)
             } finally {
                 setLoading(false)
             }

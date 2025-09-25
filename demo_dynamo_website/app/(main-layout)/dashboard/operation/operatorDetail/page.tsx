@@ -75,7 +75,6 @@ export default function OperationDetail() {
     const selectedStaffName = staffList?.find((st) => st.id === selectedStaff)?.staffName;
     // const selectedGroupName = groupList?.find((g) => String(g.groupId) === selectedGroup)?.groupName;
     const handleSubmit = async () => {
-        console.log("Data gửi: ", selectedGroup, selectedStartDate, selectedEndDate)
         try {
             const response = await fetch(`${url}/api/staff-detail/detail`, {
                 method: "POST",
@@ -96,10 +95,10 @@ export default function OperationDetail() {
 
             const result = await response.json();
             setDataOverviewNew(result); // Ghi đè data
-            const newUrl = `?startDate=${selectedStartDate}&endDate=${selectedEndDate}groupId=${selectedGroup}&staffId=${selectedStaff}`;
+            const newUrl = `?groupId=${selectedGroup}&startDate=${selectedStartDate}&endDate=${selectedEndDate}&staffId=${selectedStaff}`;
             router.push(newUrl);
         } catch (error) {
-            toast.error("Không có dữ liệu đã chọn vui lòng chọn thông tin mới!");
+            toast.error("Đã xảy ra lỗi khi gửi.");
         }
     };
 

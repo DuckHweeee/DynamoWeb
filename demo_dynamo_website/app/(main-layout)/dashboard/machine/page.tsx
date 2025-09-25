@@ -23,10 +23,10 @@ import { MachineTopProcessChart } from "../components/machineTopProcessChart";
 import { DivergingBarChart } from "../operation/components/DivergingBarChart";
 import { useMachine } from "@/hooks/useMachine";
 import { useGroups } from "@/hooks/useGroup";
-import { useMachineStatistics } from "@/hooks/useMachineStatistics";
+import { useMachineStatistics } from "@/app/(main-layout)/dashboard/machine/hooks/useMachineStatistics";
 
 const chartItems = [
-    { label: "Tổn thất Offset", value: 90 },
+    { label: "Tổn thất Offset", value: 55 },
     { label: "Tổn thất NG/khác", value: 36 },
     { label: "Hiệu suất khai thác máy", value: 78 },
     { label: "Hiệu suất giá trị", value: 64 },
@@ -57,16 +57,19 @@ export default function MachineOverview() {
         };
     }, [selectedGroup, selectedStartDate, selectedEndDate]);
 
-    // Get groups data
-    const { data: groupList } = useGroups()
-    const { data: machineList } = useMachine()
-
     // Get machine statistics from API
     const { data: machineStatistics, loading: statisticsLoading, error: statisticsError } = useMachineStatistics(
         queryParams?.groupId ?? "",
         queryParams?.startDate ?? "",
         queryParams?.endDate ?? ""
     );
+
+    // Get groups data
+    const { data: groupList } = useGroups()
+
+    const { data: machineList } = useMachine()
+
+
 
     // Set default group when data loads
     useEffect(() => {
@@ -154,14 +157,24 @@ export default function MachineOverview() {
                         />
                         <div className="space-y-1">
                             <label className="text-sm font-medium text-gray-600 tracking-wide">Nhóm</label>
-                            <Select value={selectedGroup ?? ""} onValueChange={(val) => setSelectedGroup(val)}>
-                                <SelectTrigger className="w-[180px] text-lg ">
+                            <Select
+                                value={selectedGroup ?? ""}
+                                onValueChange={(val) => setSelectedGroup(val)}
+                            >
+                                <SelectTrigger className="w-[180px] text-lg cursor-pointer">
                                     <SelectValue placeholder="Nhóm" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
                                         {groupList.map((m) => (
-                                            <SelectItem className="text-lg text-blue-950" key={m.groupId} value={String(m.groupId)}>
+                                            <SelectItem
+                                                key={m.groupId}
+                                                value={String(m.groupId)}
+                                                className={`text-lg text-blue-950 cursor-pointer ${String(selectedGroup) === String(m.groupId)
+                                                    ? "bg-gray-200"
+                                                    : ""
+                                                    }`}
+                                            >
                                                 {m.groupName}
                                             </SelectItem>
                                         ))}

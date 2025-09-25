@@ -99,7 +99,7 @@ export default function EditProcessForm({
                         orderCode: updateProcess.orderCode,
                         machineId: updateProcess.machineId,
                         staffId: updateProcess.staffId,
-                        plannerId: "597eaaad-543c-483f-b948-24f568b346a0",
+                        plannerId: "47c7f973-6a64-4544-94eb-c5df1f4201dd",
                     }),
                 }
             );

@@ -15,9 +15,10 @@ const legendItems = [
     { name: "Giờ chạy SP_Chính", value: 0.79, fill: "#00E676" },
     { name: "Giờ chạy NG_Chạy lại", value: 0.5, fill: "#FF0000" },
     { name: "Giờ chạy LK_Đồ giá", value: 1.18, fill: "#D9D9D9" },
+    { name: "Giờ chạy điện cực", value: 0.9, fill: "#1e44" },
     { name: "Giờ chạy Dự bị", value: 1.26, fill: "#ABCAFB" },
     { name: "Giờ dừng", value: 1.8, fill: "#6BF2E5" },
-    { name: "Giờ trống", value: 0.9, fill: "#00EAFF" },
+    { name: "Giờ lỗi", value: 0.9, fill: "#00EAFF" },
 ]
 
 export default function MachineRunBarChart2({ title, description }: { title: string; description: string }) {
@@ -27,9 +28,10 @@ export default function MachineRunBarChart2({ title, description }: { title: str
         { name: "Giờ chạy SP_Chính", value: 0.79, fill: "#00E676" },
         { name: "Giờ chạy NG_Chạy lại", value: 0.5, fill: "#FF0000" },
         { name: "Giờ chạy LK_Đồ giá", value: 1.18, fill: "#D9D9D9" },
+        { name: "Giờ chạy điện cực", value: 0.9, fill: "#1e44" },
         { name: "Giờ chạy Dự bị", value: 1.26, fill: "#ABCAFB" },
         { name: "Giờ dừng", value: 1.8, fill: "#6BF2E5" },
-        { name: "Giờ trống", value: 0.9, fill: "#00EAFF" },
+        { name: "Giờ lỗi", value: 0.9, fill: "#00EAFF" },
     ]
     const { open } = useSidebar()
     let persent = open ? 56 : 62;
@@ -72,7 +74,7 @@ export default function MachineRunBarChart2({ title, description }: { title: str
                     </div>
                 ))}
             </div> */}
-            <div className="mx-6 grid grid-cols-2 gap-4 bg-white p-3">
+            <div className="mx-6 grid grid-cols-3 gap-4 bg-white p-3">
                 {legendItems.map((item, index) => (
                     <div key={index} className="flex items-center gap-2">
                         <div

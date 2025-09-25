@@ -80,14 +80,6 @@ export function LoginForm({
           {isLoading ? "Logging in..." : "Login"}
         </Button>
       </div>
-      
-      <div className="text-center text-sm text-gray-600">
-        <div className="bg-gray-50 p-3 rounded-md">
-          <p className="font-medium mb-2">Demo Credentials:</p>
-          <p><strong>Admin:</strong> username: admin, password: password123</p>
-          <p><strong>Operator:</strong> username: operator, password: password123</p>
-        </div>
-      </div>
     </form>
   );
 }
