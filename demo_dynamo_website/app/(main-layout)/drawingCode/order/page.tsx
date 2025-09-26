@@ -13,7 +13,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Plus, Search } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, Plus, Search, Upload } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -38,6 +38,8 @@ import { DrawingCode, Order } from "@/lib/type"
 import { useOrder } from "../hooks/useOrder"
 import EditOrderForm from "../components/editOrder"
 import AddOrderForm from "../components/addOrder"
+import { ImportDialog } from "@/components/ImportDialog"
+import { toast } from "sonner"
 
 function getColumns({
     setEditingOrder,
@@ -152,6 +154,12 @@ export default function DrawingCodeTable() {
 
     const [showForm, setShowForm] = useState(false)
     const [editingOrder, setEditingOrder] = useState<Order | null>(null)
+    const [showImportDialog, setShowImportDialog] = useState(false)
+
+    const handleImportSuccess = () => {
+        toast.success("Import thành công!")
+        window.location.reload()
+    }
 
     const columns = getColumns({ setEditingOrder, setShowForm })
 
@@ -181,7 +189,7 @@ export default function DrawingCodeTable() {
         <>
             <div className="flex flex-row items-center justify-between py-4">
                 <div className="w-2/3">
-                    <p className="text-2xl font-bold">Danh Sách Bản Vẽ</p>
+                    <p className="text-2xl font-bold">Danh Sách Đơn Hàng</p>
                 </div>
                 <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
                     <div className="relative max-w-sm w-full">
@@ -193,6 +201,16 @@ export default function DrawingCodeTable() {
                             className="pl-10 py-5"
                         />
                     </div>
+
+                    <Button
+                        variant="outline"
+                        size="lg"
+                        className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
+                        onClick={() => setShowImportDialog(true)}
+                    >
+                        <Upload className="mr-2 h-4 w-4" />
+                        Import Excel
+                    </Button>
 
                     <Button
                         variant="secondary" size="icon" className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
@@ -276,6 +294,16 @@ export default function DrawingCodeTable() {
                     )}
                 </DialogContent>
             </Dialog>
+
+            {/* Import Dialog */}
+            <ImportDialog
+                isOpen={showImportDialog}
+                onClose={() => setShowImportDialog(false)}
+                onImportSuccess={handleImportSuccess}
+                endpoint="order/upload"
+                title="Import Đơn Hàng từ Excel"
+                description="Chọn file Excel để import danh sách đơn hàng"
+            />
 
             <div className="flex items-center justify-end space-x-2 py-4">
                 {/* <div className="text-muted-foreground flex-1 text-sm">

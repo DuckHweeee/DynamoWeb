@@ -17,6 +17,9 @@ import { ReportTimeOperator } from "./components/ReportTimeOperator";
 import { DivergingBarChart } from "./components/DivergingBarChart";
 import { StaffOverview } from "./lib/type";
 import StaffTable from "./components/StaffTable";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
+import { useExportExcel } from "../../../../hooks/useExportExcel";
 
 export default function Operation() {
   const router = useRouter();
@@ -156,20 +159,23 @@ export default function Operation() {
     [dataOverview, memoizedSelectedGroupName]
   );
 
+  // const { exportExcel, loading, error } = useExportExcel(selectedGroup, selectedStartDate, selectedEndDate);
+
   return (
     <>
       <div className="m-2 px-4 py-5 bg-white rounded-[10px] shadow">
         <div>
           <div className="flex justify-between items-center mr-5">
             <p className="text-3xl font-semibold">Thống kê vận hành</p>
-            {/* <Button
+            <Button
               variant="outline"
               size="sm"
               className="items-center cursor-pointer !text-white border-gray-200 hover:border-gray-300 h-9 bg-blue-900 hover:bg-blue-650"
+            // onClick={exportExcel}
             >
               Xuất file
-              <Download className="h-4 w-4" />
-            </Button> */}
+              {/* <Download className="h-4 w-4" /> */}
+            </Button>
           </div>
           <div className="flex flex-row py-3 gap-15 justify-end">
             <DateRangeSelector

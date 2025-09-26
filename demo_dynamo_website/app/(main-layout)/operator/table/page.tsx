@@ -10,9 +10,13 @@ import DetailStaffForm from "../components/detailOperator"
 
 export default function OperatorTablePage() {
     const router = useRouter()
-    
+
     // Staff Data
     const { data: staff, loading, error } = useStaff()
+
+    const handleImportSuccess = () => {
+        window.location.reload()
+    }
 
     // Add new Staff
     const [showAddForm, setShowAddForm] = useState(false)
@@ -98,6 +102,8 @@ export default function OperatorTablePage() {
                 showDetailDialog={showDetailForm}
                 onCloseEditDialog={handleCloseEditDialog}
                 onCloseDetailDialog={handleCloseDetailDialog}
+                showImportButton={true}
+                onImportSuccess={handleImportSuccess}
             />
 
             {/* Add Dialog */}

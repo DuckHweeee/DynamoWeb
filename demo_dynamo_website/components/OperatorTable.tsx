@@ -12,7 +12,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Plus, Search, Eye } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Plus, Search, Eye, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -39,6 +39,8 @@ import {
 } from "@/components/ui/dialog";
 import { Staff } from "@/lib/type";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ImportDialog } from "@/components/ImportDialog"
+import { toast } from "sonner";
 
 interface OperatorTableProps {
   data: Staff[];
@@ -58,6 +60,8 @@ interface OperatorTableProps {
   showDetailDialog?: boolean;
   onCloseEditDialog?: () => void;
   onCloseDetailDialog?: () => void;
+  onImportSuccess?: () => void;
+  showImportButton?: boolean;
 }
 
 function getColumns({
@@ -173,11 +177,10 @@ function getColumns({
         return (
           <div
             className={`w-full px-4 py-1.5 rounded-sm text-center capitalize
-        ${
-          isWorking
-            ? "bg-[#E7F7EF] text-[#0CAF60]"
-            : "bg-[#FFE6E6] text-[#FE4A4A]"
-        }`}
+        ${isWorking
+                ? "bg-[#E7F7EF] text-[#0CAF60]"
+                : "bg-[#FFE6E6] text-[#FE4A4A]"
+              }`}
           >
             {isWorking ? "Đang Làm" : "Đã Nghỉ"}
           </div>
@@ -266,6 +269,8 @@ export function OperatorTable({
   showDetailDialog = false,
   onCloseEditDialog,
   onCloseDetailDialog,
+  showImportButton = true,
+  onImportSuccess,
 }: OperatorTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -275,6 +280,7 @@ export function OperatorTable({
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [globalFilter, setGlobalFilter] = useState("");
+  const [showImportDialog, setShowImportDialog] = useState(false)
 
   const columns = getColumns({
     showActions,
@@ -317,6 +323,13 @@ export function OperatorTable({
     );
   }
 
+  const handleImportSuccess = () => {
+    if (onImportSuccess) {
+      toast.success("Thêm mới thành công!");
+      onImportSuccess()
+    }
+  }
+
   return (
     <div className="bg-white rounded-[10px] px-6 mx-2 h-screen">
       <div className="flex flex-row items-center justify-between py-4 bg-white">
@@ -344,6 +357,18 @@ export function OperatorTable({
               <Plus size={60} strokeWidth={5} color="white" />
             </Button>
           )}
+
+          {showImportButton && (
+            <Button
+              variant="outline"
+              size="lg"
+              className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
+              onClick={() => setShowImportDialog(true)}
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              Import Excel
+            </Button>
+          )}
         </div>
       </div>
       <div className="rounded-md border">
@@ -357,9 +382,9 @@ export function OperatorTable({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
@@ -438,6 +463,15 @@ export function OperatorTable({
           </DialogContent>
         </Dialog>
       )}
+
+      <ImportDialog
+        isOpen={showImportDialog}
+        onClose={() => setShowImportDialog(false)}
+        onImportSuccess={handleImportSuccess}
+        endpoint="staff/upload"
+        title="Import dữ liệu nhân viên"
+        description="Chọn file Excel để import dữ liệu nhân viên vào hệ thống"
+      />
 
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="space-x-2">

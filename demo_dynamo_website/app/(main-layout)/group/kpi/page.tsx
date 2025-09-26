@@ -12,7 +12,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Plus, Search, X } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Plus, Search, X, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -56,6 +56,7 @@ import AddNewGroupKPI from "./components/addNewGroupKPI";
 import EditGroupKPIForm from "./components/editGroupKPI";
 import WeekPicker from "./components/WeekPicker";
 import DatePicker from "./components/DatePicker";
+import { ImportDialog } from "@/components/ImportDialog";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -209,8 +210,8 @@ function getColumns({
                 {groupKPI.isMonth === 0
                   ? "Hàng tháng"
                   : groupKPI.isMonth === 1
-                  ? "Hàng tuần"
-                  : "Hàng ngày"}
+                    ? "Hàng tuần"
+                    : "Hàng ngày"}
               </span>
             </div>
           </div>
@@ -281,9 +282,8 @@ function getColumns({
         return (
           <div className="pl-5 font-medium text-[16px]">
             <div
-              className={`text-lg font-semibold ${
-                isPositive ? "text-green-600" : "text-red-600"
-              }`}
+              className={`text-lg font-semibold ${isPositive ? "text-green-600" : "text-red-600"
+                }`}
             >
               {isPositive ? "+" : ""}
               {difference.toFixed(1)}
@@ -339,6 +339,8 @@ export default function GroupKPIPage() {
   const [rowSelection, setRowSelection] = React.useState({});
   const [showForm, setShowForm] = useState(false);
   const [editingGroupKPI, setEditingGroupKPI] = useState<GroupKPI | null>(null);
+  const [showImportDialogWeek, setShowImportDialogWeek] = useState(false);
+  const [showImportDialogMonth, setShowImportDialogMonth] = useState(false);
   const [periodFilter, setPeriodFilter] = useState<
     "all" | "month" | "week" | "day"
   >("all");
@@ -362,9 +364,9 @@ export default function GroupKPIPage() {
 
     // Filter by period type
     if (periodFilter === "month")
-      filtered = filtered.filter((kpi) => kpi.isMonth === 0);
-    else if (periodFilter === "week")
       filtered = filtered.filter((kpi) => kpi.isMonth === 1);
+    else if (periodFilter === "week")
+      filtered = filtered.filter((kpi) => kpi.isMonth === 0);
     else if (periodFilter === "day")
       filtered = filtered.filter((kpi) => kpi.isMonth === 2);
 
@@ -440,6 +442,13 @@ export default function GroupKPIPage() {
     setShowForm(false);
     setEditingGroupKPI(null);
     refetch();
+  };
+
+  const handleImportSuccess = () => {
+    toast.success("Import KPI nhóm thành công!");
+    refetch();
+    if (showImportDialogWeek === true) setShowImportDialogWeek(false);
+    if (showImportDialogMonth === true) setShowImportDialogMonth(false);
   };
 
   const clearFilters = () => {
@@ -534,6 +543,20 @@ export default function GroupKPIPage() {
             >
               <Plus className="h-5 w-5 mr-2" />
               Thêm KPI
+            </Button>
+            <Button
+              onClick={() => setShowImportDialogMonth(true)}
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md transition mr-2"
+            >
+              <Upload className="h-5 w-5 mr-2" />
+              KPI Tháng
+            </Button>
+            <Button
+              onClick={() => setShowImportDialogWeek(true)}
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md transition mr-2"
+            >
+              <Upload className="h-5 w-5 mr-2" />
+              KPI Tuần
             </Button>
           </div>
         </div>
@@ -719,8 +742,8 @@ export default function GroupKPIPage() {
                   {periodFilter === "month"
                     ? "Theo tháng"
                     : periodFilter === "week"
-                    ? "Theo tuần"
-                    : "Theo ngày"}
+                      ? "Theo tuần"
+                      : "Theo ngày"}
                 </span>
               )}
               {yearFilter && (
@@ -765,9 +788,9 @@ export default function GroupKPIPage() {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
@@ -865,6 +888,23 @@ export default function GroupKPIPage() {
           )}
         </DialogContent>
       </Dialog>
+
+      <ImportDialog
+        isOpen={showImportDialogWeek}
+        onClose={() => setShowImportDialogWeek(false)}
+        onImportSuccess={handleImportSuccess}
+        endpoint="groupKpi/upload/week"
+        title="Import KPI Nhóm từ Excel"
+        description="Chọn file Excel để import danh sách KPI nhóm"
+      />
+      <ImportDialog
+        isOpen={showImportDialogMonth}
+        onClose={() => setShowImportDialogMonth(false)}
+        onImportSuccess={handleImportSuccess}
+        endpoint="groupKpi/upload/month"
+        title="Import KPI Nhóm từ Excel"
+        description="Chọn file Excel để import danh sách KPI nhóm"
+      />
     </div>
   );
 }
