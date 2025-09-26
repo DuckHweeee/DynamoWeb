@@ -12,9 +12,9 @@ import {
     CardContent,
 } from "@/components/ui/card"
 import { ChartConfig, ChartContainer } from "@/components/ui/chart"
-import { GroupEfficiency } from "../../lib/type";
+import { MachineEfficiencyDetail } from "../lib/type";
 
-const mapData = (raw: GroupEfficiency) => [
+const mapData = (raw: MachineEfficiencyDetail) => [
     { name: "Hiệu suất khai thác máy", value: raw.operationalEfficiency },
     { name: "Hiệu suất PG", value: raw.pgEfficiency },
     { name: "Hiệu suất giá trị", value: raw.valueEfficiency },
@@ -23,11 +23,11 @@ const mapData = (raw: GroupEfficiency) => [
     { name: "Tổn thất NG/khác", value: raw.otherLoss }
 ];
 export function MachinePieChart({
-    dataRunTime,
+    dataDetail,
 }: {
-    dataRunTime: GroupEfficiency;
+    dataDetail: MachineEfficiencyDetail;
 }) {
-    const data = mapData(dataRunTime);
+    const data = mapData(dataDetail);
     return (
         <div className="grid grid-cols-3 gap-4">
             {data.map((item, index) => {

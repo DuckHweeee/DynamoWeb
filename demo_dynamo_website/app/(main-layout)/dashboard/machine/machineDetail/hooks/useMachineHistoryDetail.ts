@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { MachineStatisticDetail } from "../lib/type";
+import { MachineHistoryDetail } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-export function useMachineStatisticDetail(id: number, startDate: string, endDate: string) {
-    const [data, setData] = useState<MachineStatisticDetail | null>(null);
+export function useMachineHistoryDetail(groupId: string, id: number, startDate: string, endDate: string) {
+    const [data, setData] = useState<MachineHistoryDetail[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     useEffect(() => {
@@ -12,11 +12,10 @@ export function useMachineStatisticDetail(id: number, startDate: string, endDate
         const fetchData = async () => {
             setLoading(true);
             try {
-                const res = await fetch(`${url}/api/machine-detail/statistic`, {
+                const res = await fetch(`${url}/api/machine-detail/history`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ id, startDate, endDate }),
-                    // body: JSON.stringify({ id: 3, startDate: "2025-07-01", endDate: "2025-07-31" }),
+                    body: JSON.stringify({ groupId, id, startDate, endDate }),
                     signal: controller.signal,
                 });
                 if (!res.ok) throw new Error("Lỗi mạng hoặc server");
@@ -33,8 +32,8 @@ export function useMachineStatisticDetail(id: number, startDate: string, endDate
             }
         };
 
-        if (id && startDate && endDate) fetchData();
+        if (groupId && id && startDate && endDate) fetchData();
         return () => controller.abort();
-    }, [id, startDate, endDate]);
+    }, [groupId, id, startDate, endDate]);
     return { data, loading, error };
 }

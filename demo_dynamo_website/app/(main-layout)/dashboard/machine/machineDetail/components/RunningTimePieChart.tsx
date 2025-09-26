@@ -25,41 +25,62 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { MachineStatisticDetail } from "../lib/type"
 
-export const description = "Machine running time breakdown pie chart"
-
-const machineTimeData = [
-  { category: "running", hours: 450, fill: "var(--color-running)" },
-  { category: "stopped", hours: 120, fill: "var(--color-stopped)" },
-  { category: "error", hours: 80, fill: "var(--color-error)" },
-  { category: "pg", hours: 60, fill: "var(--color-pg)" },
-]
+// const machineTimeData = [
+//   { category: "running", hours: 40, fill: "var(--color-running)" },
+//   { category: "stopped", hours: 120, fill: "var(--color-stopped)" },
+//   { category: "error", hours: 80, fill: "var(--color-error)" },
+//   { category: "pg", hours: 60, fill: "var(--color-pg)" },
+// ]
 
 const chartConfig = {
   hours: {
     label: "Giờ",
-    color: "#1F3EB4", // Default color (e.g., slate)
+    color: "#1F3EB4",
   },
   running: {
     label: "Tổng số giờ chạy",
-    color: "#1D4AE1", // Green
+    color: "#1D4AE1",
   },
   stopped: {
     label: "Tổng số giờ dừng",
-    color: "#225FF6", // Red
+    color: "#F59E0B",
   },
   error: {
     label: "Tổng giờ lỗi",
-    color: "#91C6FF", // Orange
+    color: "#E11D48",
   },
   pg: {
     label: "Tổng giờ PG",
-    color: "#3b82f6", // Blue
+    color: "#3b82f6",
+  },
+  process: {
+    label: "Tổng gia công",
+    color: "#023e8a",
   },
 } satisfies ChartConfig
 
-export function RunningTimePieChart() {
+const mapData = (raw: MachineStatisticDetail) => [
+  { category: "running", hours: Math.round(raw.totalRunTime), fill: "#1D4AE1" },
+  { category: "stopped", hours: Math.round(raw.totalStopTime), fill: "#F59E0B" },
+  { category: "error", hours: Math.round(raw.totalErrorTime), fill: "#E11D48" },
+  { category: "pg", hours: Math.round(raw.totalPgTime), fill: "#3b82f6" },
+  { category: "process", hours: Math.round(raw.numberOfProcesses), fill: "#023e8a" },
+];
+
+export function RunningTimePieChart({
+  title,
+  description,
+  dataRunTime,
+}: {
+  title: string;
+  description: string;
+  dataRunTime: MachineStatisticDetail
+}) {
   const id = "running-time-pie"
+  const machineTimeData = mapData(dataRunTime);
+
   const [activeCategory, setActiveCategory] = React.useState(machineTimeData[0].category)
 
   const activeIndex = React.useMemo(
@@ -79,8 +100,8 @@ export function RunningTimePieChart() {
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <CardTitle className="font-bold text-xl">Thống kê thời gian hoạt động máy</CardTitle>
-          <CardDescription>Phân tích thời gian trong tháng này</CardDescription>
+          <CardTitle className="font-bold text-xl">{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
         </div>
         <Select value={activeCategory} onValueChange={setActiveCategory}>
           <SelectTrigger
@@ -155,7 +176,7 @@ export function RunningTimePieChart() {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                     const activeData = machineTimeData[activeIndex]
                     const percentage = ((activeData.hours / totalHours) * 100).toFixed(1)
-                    
+
                     return (
                       <text
                         x={viewBox.cx}
