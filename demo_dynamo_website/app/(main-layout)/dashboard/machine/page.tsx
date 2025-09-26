@@ -28,6 +28,7 @@ import { useMachineTotalRuntime } from "./hooks/useMachineTotalRunTime";
 import { useGroupEfficiency } from "./hooks/useGroupEfficiency";
 import { MachinePieChart } from "./components/machinePieChart";
 import { useTopHighMachine, useTopLowMachine } from "./hooks/useTopMachine";
+import { useExportExcel } from "@/hooks/useExportExcel";
 
 export default function MachineOverview() {
     const router = useRouter();
@@ -118,6 +119,7 @@ export default function MachineOverview() {
 
         router.push(`/dashboard/machine/machineDetail?${searchParams.toString()}`);
     };
+    const { exportExcel } = useExportExcel("/machine-group-statistic/export-excel", selectedGroup, selectedGroupName, selectedStartDate, selectedEndDate);
 
     return (
         <>
@@ -129,9 +131,10 @@ export default function MachineOverview() {
                             variant="outline"
                             size="sm"
                             className="items-center cursor-pointer !text-white border-gray-200 hover:border-gray-300 h-9 bg-blue-900 hover:bg-blue-650"
-                        >
+
+                            onClick={exportExcel}>
                             Xuất file
-                            <Download className="h-4 w-4" />
+                            {/* <Download className="h-4 w-4" /> */}
                         </Button>
                     </div>
                     <div className="flex flex-row py-3 gap-15 justify-end">

@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import { useMachine } from "../../../../hooks/useMachine"
 import { MachineTable } from "@/components/MachineTable"
 import EditMachineForm from "../components/editMachine"
@@ -8,8 +8,11 @@ import AddMachineForm from "../components/addNewMachine"
 import DetailMachineForm from "../components/detailMachine"
 
 export default function MachineTablePage() {
-    // Machine Data
-    const { data: machine } = useMachine()
+    const { data: machine, loading, error } = useMachine()
+
+    const handleImportSuccess = () => {
+        window.location.reload()
+    }
 
     return (
         <MachineTable
@@ -18,6 +21,8 @@ export default function MachineTablePage() {
             showAddButton={true}
             showActions={true}
             showViewHistory={false}
+            showImportButton={true}
+            onImportSuccess={handleImportSuccess}
             AddComponent={AddMachineForm}
             EditComponent={EditMachineForm}
             DetailComponent={DetailMachineForm}

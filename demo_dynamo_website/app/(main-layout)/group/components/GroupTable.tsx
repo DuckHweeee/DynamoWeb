@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { MoreHorizontal, Plus, Search, Eye, Edit, Trash2 } from "lucide-react";
+import { MoreHorizontal, Plus, Search, Eye, Edit, Trash2, Upload } from "lucide-react";
 import { useGroups, useGroupMutations } from "../../../../hooks/useGroup";
 import { Group } from "@/lib/type";
 import { toast } from "sonner";
@@ -33,6 +33,7 @@ import { EditGroupForm } from "./EditGroupForm";
 import { ViewGroupDetails } from "./ViewGroupDetails";
 import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
 import { GroupTableSkeleton } from "./GroupTableSkeleton";
+import { ImportDialog } from "@/components/ImportDialog";
 
 export function GroupTable() {
     const { data: groups, loading, error, refetch } = useGroups();
@@ -43,6 +44,7 @@ export function GroupTable() {
     const [showEditDialog, setShowEditDialog] = useState(false);
     const [showViewDialog, setShowViewDialog] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [showImportDialog, setShowImportDialog] = useState(false);
     const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
 
     // Filter groups based on search term
@@ -50,7 +52,7 @@ export function GroupTable() {
         const groupName = group.groupName?.toLowerCase() || "";
         const groupId = group.groupId?.toLowerCase() || "";
         const searchTermLower = searchTerm?.toLowerCase() || "";
-        
+
         return groupName.includes(searchTermLower) || groupId.includes(searchTermLower);
     });
 
@@ -96,6 +98,12 @@ export function GroupTable() {
         setShowDeleteDialog(true);
     };
 
+    const handleImportSuccess = () => {
+        refetch();
+        setShowImportDialog(false);
+        toast.success("Import nhóm thành công!");
+    };
+
     if (loading) {
         return <GroupTableSkeleton />;
     }
@@ -125,6 +133,15 @@ export function GroupTable() {
                             className="pl-10 w-64 md:w-80"
                         />
                     </div>
+                    <Button
+                        variant="outline"
+                        size="lg"
+                        className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
+                        onClick={() => setShowImportDialog(true)}
+                    >
+                        <Upload className="mr-2 h-4 w-4" />
+                        Import Excel
+                    </Button>
                     <Button
                         onClick={() => setShowCreateDialog(true)}
                         className="bg-[#004799] hover:bg-[#003b80] text-white px-6 py-2 rounded-md transition"
@@ -277,6 +294,15 @@ export function GroupTable() {
                 onOpenChange={setShowDeleteDialog}
                 onConfirm={handleDeleteConfirm}
                 groupName={selectedGroup?.groupName || ""}
+            />
+
+            <ImportDialog
+                isOpen={showImportDialog}
+                onClose={() => setShowImportDialog(false)}
+                onImportSuccess={handleImportSuccess}
+                endpoint="group/upload"
+                title="Import Nhóm từ Excel"
+                description="Chọn file Excel để import danh sách nhóm"
             />
         </div>
     );
