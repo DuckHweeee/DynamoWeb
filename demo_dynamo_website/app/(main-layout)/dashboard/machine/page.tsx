@@ -57,7 +57,6 @@ export default function MachineOverview() {
         queryParams?.startDate ?? "",
         queryParams?.endDate ?? ""
     );
-    console.log(machineStatistics)
     // Lấy danh sách máy từ nhóm
     const machineList = machineStatistics?.machines;
 

@@ -29,7 +29,9 @@ export default function OperationDetail() {
     const [selectedStartDate, setSelectedStartDate] = useState<string>(startDateFromUrl);
     const [selectedEndDate, setSelectedEndDate] = useState<string>(endDateFromUrl);
     const [selectedGroup, setSelectedGroup] = useState<string>(groupIdFromUrl);
-    const [selectedStaff, setSelectedStaff] = useState<number>(Number(staffIdFromUrl));
+    const [selectedStaff, setSelectedStaff] = useState<number | null>(
+        staffIdFromUrl ? Number(staffIdFromUrl) : null
+    );
 
     // Sync từ URL
     useEffect(() => {
@@ -50,13 +52,19 @@ export default function OperationDetail() {
     // }, [selectedGroup, selectedStartDate, selectedEndDate, selectedStaff]);
 
     const { data: groupList = [] } = useGroups();
-    const [dataOverviewNew, setDataOverviewNew] = useState<StaffStatistic | null>(null);
+
+    const [dataOverview, setDataOverview] = useState<StaffStatistic | null>(null);
+
     const { data: dataOverviewDefault } = useStaffStatisticWorking(
         selectedStaff ?? 0,
         startDateFromUrl ?? "",
         endDateFromUrl ?? ""
     );
-    const dataOverview = dataOverviewDefault ?? dataOverviewNew;
+    useEffect(() => {
+        if (dataOverviewDefault) {
+            setDataOverview(dataOverviewDefault);
+        }
+    }, [dataOverviewDefault]);
 
     const { data: dataWorkingDetail } = useStaffStatisticWorkingDetail(
         groupIdFromUrl ?? "",
@@ -64,7 +72,7 @@ export default function OperationDetail() {
         startDateFromUrl ?? "",
         endDateFromUrl ?? ""
     );
-    const staffList = dataWorkingDetail?.staffDto;
+    let staffList = dataWorkingDetail?.staffDto;
     const { data: dataHistoryProcess } = useStaffStatisticHistoryProcess(
         selectedStaff ?? 0,
         startDateFromUrl ?? "",
@@ -94,14 +102,13 @@ export default function OperationDetail() {
             }
 
             const result = await response.json();
-            setDataOverviewNew(result); // Ghi đè data
-            const newUrl = `?groupId=${selectedGroup}&startDate=${selectedStartDate}&endDate=${selectedEndDate}&staffId=${selectedStaff}`;
-            router.push(newUrl);
+            setDataOverview(result);
+            const newUrl = `?groupId=${selectedGroup}&startDate=${selectedStartDate}&endDate=${selectedEndDate}&staffId=${result.staffId}`;
+            router.replace(newUrl);
         } catch (error) {
             toast.error("Đã xảy ra lỗi khi gửi.");
         }
     };
-
 
     return (
         <div className="m-2 px-4 py-5 bg-white rounded-[10px] shadow">
@@ -149,7 +156,7 @@ export default function OperationDetail() {
                             Nhân viên
                         </label>
                         <Select
-                            value={String(selectedStaff)}
+                            value={selectedStaff ? String(selectedStaff) : ""}
                             onValueChange={(val) => setSelectedStaff(val ? Number(val) : 0)}
                         >
                             <SelectTrigger className="w-fit text-lg rounded-md transition cursor-pointer">

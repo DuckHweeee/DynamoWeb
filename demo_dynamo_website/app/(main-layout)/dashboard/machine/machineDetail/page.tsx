@@ -10,119 +10,116 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import { Download, UserRoundSearch } from "lucide-react";
 
-import MachineLogTable from "../../components/machineLogTable";
+import MachineLogTable from "./components/MachineHistoryTable";
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import DateRangeSelector from "../../components/DateRangeSelector";
 import { ReportTimeMachine } from "../components/ReportTimeMachine";
-import { RunningTimePieChart } from "../../components/runningTimePieChart";
+import { RunningTimePieChart } from "./components/RunningTimePieChart";
 import { useMachine } from "@/hooks/useMachine";
 import { useGroups } from "@/hooks/useGroup";
-import { MachinePieChart } from "./components/machinePieChart";
-
-const chartItems = [
-    { label: "Tổn thất Offset", value: 90 },
-    { label: "Tổn thất NG/khác", value: 36 },
-    { label: "Hiệu suất khai thác máy", value: 78 },
-    { label: "Hiệu suất giá trị", value: 64 },
-    { label: "Hiệu suất PG", value: 58 },
-    { label: "OEE", value: 34 },
-]
+import { MachineEfficiencyDetail, MachineStatisticDetail } from "./lib/type";
+import { useMachineEfficiencyDetail } from "./hooks/useMachineEfficiencyDetail";
+import { useMachineStatisticDetail } from "./hooks/useMachineStatisticDetail";
+import { useMachineHistoryDetail } from "./hooks/useMachineHistoryDetail";
+import { toast } from "sonner";
+import DateRangeSelectorDetail from "./hooks/DateRangeSelectorDetail";
+import { ReportTimeMachineDetail } from "./components/ReportTimeMachineDetail";
+import { MachinePieChart } from "./components/MachinePieChart";
+import MachineHistoryTable from "./components/MachineHistoryTable";
+const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const MachineDetailOverview = () => {
-    const params = useParams();
-    const searchParams = useSearchParams();
     const router = useRouter();
-    const [date, setDate] = useState<DateRange | undefined>();
+    const searchParams = useSearchParams();
+    const [selectedTimeType, setSelectedTimeType] = useState<string>("day");
 
-    // State management similar to main machine page
-    const [selectedStartDate, setStartDate] = useState<string>()
-    const [selectedEndDate, setSelectedEndDate] = useState<string>()
-    const [selectedGroup, setSelectedGroup] = useState<string>()
-    const [selectedMachine, setSelectedMachine] = useState<string>("");
+    const startDateFromUrl = searchParams.get("startDate") || "";
+    const endDateFromUrl = searchParams.get("endDate") || "";
+    const groupIdFromUrl = searchParams.get("groupId") || "";
+    const machineIdFromUrl = searchParams.get("machineId") || "";
+
+    const [selectedStartDate, setSelectedStartDate] = useState<string>(startDateFromUrl);
+    const [selectedEndDate, setSelectedEndDate] = useState<string>(endDateFromUrl);
+    const [selectedGroup, setSelectedGroup] = useState<string>(groupIdFromUrl);
+    const [selectedMachine, setSelectedMachine] = useState<number>(Number(machineIdFromUrl));
+
+    useEffect(() => {
+        setSelectedStartDate(startDateFromUrl);
+        setSelectedEndDate(endDateFromUrl);
+        setSelectedGroup(groupIdFromUrl);
+        setSelectedMachine(Number(machineIdFromUrl));
+    }, [startDateFromUrl, endDateFromUrl, groupIdFromUrl, machineIdFromUrl]);
 
     // Get data
     const { data: groupList } = useGroups()
-    const { data: machineList } = useMachine()
 
-    // Get machine data from URL parameters
-    const machineId = params.machineId as string;
-    const machineName = searchParams.get('machineName') || `Máy số ${machineId}`;
-    const groupId = searchParams.get('groupId');
-    const startDate = searchParams.get('startDate');
-    const endDate = searchParams.get('endDate');
-    const mode = searchParams.get('mode');
-    const week = searchParams.get('week');
-    const month = searchParams.get('month');
-    const year = searchParams.get('year');
+    const { data: dataStatistic } = useMachineStatisticDetail(
+        selectedMachine ?? 0,
+        startDateFromUrl ?? "",
+        endDateFromUrl ?? ""
+    );
+    console.log("dataStatistic", dataStatistic)
+    const { data: dataHistory } = useMachineHistoryDetail(
+        groupIdFromUrl ?? "",
+        selectedMachine ?? 0,
+        startDateFromUrl ?? "",
+        endDateFromUrl ?? ""
+    );
 
-    // Set initial state from URL parameters
+    const [dataEfficiency, setDataEfficiency] = useState<MachineEfficiencyDetail | null>(null);
+
+    const { data: dataEfficiencyDefault } = useMachineEfficiencyDetail(
+        selectedMachine ?? 0,
+        startDateFromUrl ?? "",
+        endDateFromUrl ?? ""
+    );
     useEffect(() => {
-        if (startDate) setStartDate(startDate);
-        if (endDate) setSelectedEndDate(endDate);
-        if (groupId) setSelectedGroup(groupId);
-        if (machineId) setSelectedMachine(machineId);
-    }, [startDate, endDate, groupId, machineId]);
-
-    // Set default group when data loads
-    useEffect(() => {
-        if (groupList.length > 0 && !selectedGroup && !groupId) {
-            setSelectedGroup(String(groupList[0].groupId))
+        if (dataEfficiencyDefault) {
+            setDataEfficiency(dataEfficiencyDefault);
         }
-    }, [groupList, selectedGroup, groupId])
+    }, [dataEfficiencyDefault]);
 
-    // Get selected group name
-    const selectedGroupName = groupList?.find((g) => String(g.groupId) === selectedGroup)?.groupName;
 
-    // Handle machine selection change
-    const handleMachineChange = (newMachineId: string) => {
-        // Preserve existing URL parameters
-        const newSearchParams = new URLSearchParams(searchParams.toString());
-        newSearchParams.set('machineId', newMachineId);
+    const machineList = dataEfficiency?.machines;
+    const selectedMachineName = machineList?.find((m) => m.machineId === selectedMachine)?.machineName;
 
-        // Find machine name from the list
-        const machine = machineList?.find(m => String(m.machineId) === newMachineId);
-        const newMachineName = machine?.machineName || `Máy số ${newMachineId}`;
-        newSearchParams.set('machineName', newMachineName);
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch(`${url}/api/machine-detail/detail`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    groupId: selectedGroup,
+                    startDate: selectedStartDate,
+                    endDate: selectedEndDate,
+                }),
+            });
 
-        // Navigate to new machine dashboard
-        router.push(`/dashboard/machine/${newMachineId}?${newSearchParams.toString()}`);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Không thể lấy dữ liệu");
+            }
+
+            const result = await response.json();
+            setDataEfficiency(result);
+            const newUrl = `?groupId=${selectedGroup}&startDate=${selectedStartDate}&endDate=${selectedEndDate}&machineId=${result.machineId}`;
+            router.replace(newUrl);
+        } catch (error) {
+            toast.error("Đã xảy ra lỗi khi gửi.");
+        }
     };
-
-    // Handler for machine selection from dropdown
-    const handleMachineSelection = (machineId: string) => {
-        setSelectedMachine(machineId);
-        const searchParams = new URLSearchParams();
-        if (selectedStartDate) searchParams.set('startDate', selectedStartDate);
-        if (selectedEndDate) searchParams.set('endDate', selectedEndDate);
-        if (selectedGroup) searchParams.set('groupId', selectedGroup);
-        searchParams.set('machineId', machineId);
-
-        router.push(`/dashboard/machine/${machineId}?${searchParams.toString()}`);
-    };
-
-    useEffect(() => {
-        console.log('Machine Dashboard loaded with params:', {
-            machineId,
-            machineName,
-            groupId,
-            startDate,
-            endDate,
-            mode,
-            week,
-            month,
-            year
-        });
-    }, [machineId, machineName, groupId, startDate, endDate, mode, week, month, year]);
 
     return (
         <>
             <div className="m-2 px-4 py-5 bg-white rounded-[10px] shadow" >
                 <div>
                     <div className="flex justify-between items-center mr-5">
-                        <p className="text-3xl font-semibold">Thống kê chi tiết máy {machineName}</p>
+                        <p className="text-3xl font-semibold">Thống kê chi tiết máy {selectedMachineName}</p>
                         <Button
                             variant="outline"
                             size="sm"
@@ -133,10 +130,13 @@ const MachineDetailOverview = () => {
                         </Button>
                     </div>
                     <div className="flex flex-row py-3 gap-15 justify-end">
-                        <DateRangeSelector
-                            onChange={({ startDate, endDate }) => {
-                                setStartDate(startDate);
+                        <DateRangeSelectorDetail
+                            startDate={selectedStartDate}
+                            endDate={selectedEndDate}
+                            onChange={({ startDate, endDate, timeType }) => {
+                                setSelectedStartDate(startDate);
                                 setSelectedEndDate(endDate);
+                                setSelectedTimeType(timeType);
                             }}
                         />
                         <div className="space-y-1">
@@ -160,12 +160,12 @@ const MachineDetailOverview = () => {
                         <div className="space-y-1">
                             <label className="text-sm font-medium text-gray-600 tracking-wide">Máy móc</label>
                             <Select
-                                value={selectedMachine}
-                                onValueChange={handleMachineSelection}
+                                value={selectedMachine.toString()}
+                                onValueChange={(val) => setSelectedMachine(val ? Number(val) : 0)}
                             >
                                 <SelectTrigger className="w-fit text-lg px-4 rounded-md transition ">
                                     <SelectValue
-                                        placeholder={machineName || `Máy số ${machineId}`}
+                                        placeholder={selectedMachineName}
                                     />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -183,20 +183,34 @@ const MachineDetailOverview = () => {
                                 </SelectContent>
                             </Select>
                         </div>
+                        <div className="flex flex-col pt-6">
+                            <Button
+                                onClick={handleSubmit}
+                                variant="outline"
+                                size="lg"
+                                className="text-lg font-normal cursor-pointer text-gray-600 hover:text-gray-700 border-gray-200 hover:border-gray-300 h-9"
+                            >
+                                <UserRoundSearch className="h-4 w-4 mr-1" />
+                                Lọc nhóm mới
+                            </Button>
+                        </div>
                     </div>
                 </div>
+                {dataStatistic && (
+                    <ReportTimeMachineDetail data={dataStatistic} type={selectedTimeType} />
+                )}
 
-                {/* <ReportTimeMachine data={undefined} type={""} /> */}
-
-                {/* <div className="my-5 grid grid-cols-2 gap-3">
-                    <RunningTimePieChart />
-                    <div className="grid grid-cols-3 gap-3">
-                        {chartItems.map((item, index) => (
-                            <MachinePieChart key={index} data={item} />
-                        ))}
-                    </div>
-                </div> */}
-                <MachineLogTable />
+                <div className="my-5 grid grid-cols-2 gap-3">
+                    {dataStatistic && (
+                        <RunningTimePieChart dataRunTime={dataStatistic} title={"Thống kê thời gian hoạt động máy"} description={"Phân tích thời gian trong tháng này"} />
+                    )}
+                    {dataEfficiency && (
+                        <MachinePieChart dataDetail={dataEfficiency} />
+                    )}
+                </div>
+                {dataHistory && (
+                    <MachineHistoryTable title={"Lịch sử máy chạy"} dataHistory={dataHistory} />
+                )}
             </div >
         </>
     );
