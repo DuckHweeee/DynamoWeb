@@ -5,6 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Process } from "../lib/type";
 import ProgressSteps from "./ProgressSteps";
 import dayjs from "dayjs";
+import Steps from "../../orderDetail/components/steps";
 
 export interface OrderDetailProps {
     openDetail: boolean;
@@ -15,6 +16,29 @@ const screenScrollArea = "max-[1550px]:!max-h-[75vh] min-[1550px]:!max-h-[90vh]"
 export default function DetailProcess({ openDetail, onClose, process }: OrderDetailProps) {
     console.log("process")
     console.log(process)
+
+    // Calculate progress based on process status and time
+    const calculateProgress = (process: Process | null): number => {
+        if (process?.processStatus === 3) {
+            return 100;
+        }
+
+        if (process?.processStatus === 1) {
+            return 0;
+        }
+
+        if (process?.startTime && process?.pgTime) {
+            const currentTime = new Date().getTime();
+            const startTime = new Date(process.startTime).getTime();
+            const progress = ((currentTime - startTime) / (process.pgTime * 3600000)) * 100;
+
+            return Math.max(0, Math.min(100, progress));
+        }
+
+        return 0;
+    };
+
+    const progress = calculateProgress(process);
     return (
         <Dialog open={openDetail} onOpenChange={onClose}>
             <DialogContent
@@ -119,7 +143,7 @@ export default function DetailProcess({ openDetail, onClose, process }: OrderDet
                             </div> */}
                             <div className="flex flex-col">
                                 <div className="flex text-lg text-[#c0c0c0]">Thực thi</div>
-                                <div className="flex text-[16px] font-medium">{process?.status === 1 ? "Yes" : "No"}</div>
+                                <div className="flex text-[16px] font-medium">{process?.processStatus === 2 ? "Yes" : "No"}</div>
                             </div>
                             <div className="flex flex-col">
                                 <div className="flex text-lg text-[#c0c0c0]">Người đánh giá</div>
@@ -130,11 +154,11 @@ export default function DetailProcess({ openDetail, onClose, process }: OrderDet
                                 <div className="flex text-[16px] font-medium">{process?.planDto?.remarkTime ?? "-"}</div>
                             </div>
                         </div>
-                        <ProgressSteps progress={Number(process?.planDto?.inProgress)} />
+                        <Steps stepNumber={progress} />
                     </div>
 
                     {/* Tổng giờ hoạt động */}
-                    <div className="bg-gray-50 rounded-xl py-2 px-4">
+                    {/* <div className="bg-gray-50 rounded-xl py-2 px-4">
                         <div className="flex items-center gap-2 mb-1">
                             <div className="w-1 h-5 bg-blue-800 rounded"></div>
                             <h3 className="text-blue-800 font-bold text-xl">Tổng giờ hoạt động</h3>
@@ -161,7 +185,7 @@ export default function DetailProcess({ openDetail, onClose, process }: OrderDet
                                 <div className="flex text-[16px] font-medium">Đợi thông tin</div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </ScrollArea>
 
                 <div className="flex justify-end py-2">
