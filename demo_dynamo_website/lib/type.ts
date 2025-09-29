@@ -309,3 +309,18 @@ export interface DrawingCodeProcessHistory {
     planDto: any;
     processTimeDto: any;
 }
+
+export type Role = {
+    id: number;
+    name: string;
+}
+
+export type Admin = {
+    id: string;
+    email: string;
+    username: string;
+    fullname: string;
+    role: Role[];
+    createdDate: string;
+    updatedDate: string;
+}

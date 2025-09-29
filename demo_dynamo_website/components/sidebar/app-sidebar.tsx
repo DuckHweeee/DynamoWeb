@@ -20,6 +20,7 @@ import {
     SquarePen,
     SquareTerminal,
     Tablet,
+    User,
     UserCog,
 } from "lucide-react"
 
@@ -31,30 +32,9 @@ import {
 import { NavMain } from "./nav-main"
 import { Logo } from "./logo"
 import { useAuth } from "@/contexts/AuthContext"
+import { it } from "node:test"
 // This is sample data.
 const data = {
-    user: {
-        name: "shadcn",
-        email: "m@example.com",
-        avatar: "",
-    },
-    teams: [
-        {
-            name: "Acme Inc123",
-            logo: GalleryVerticalEnd,
-            plan: "Enterprise",
-        },
-        {
-            name: "Acme Corp.",
-            logo: AudioWaveform,
-            plan: "Startup",
-        },
-        {
-            name: "Evil Corp.",
-            logo: Command,
-            plan: "Free",
-        },
-    ],
     navMain: [
         {
             title: "Thống kê",
@@ -208,24 +188,18 @@ const data = {
                 },
             ],
         },
+        {
+            title: "Tài khoản",
+            url: "/account",
+            icon: UserCog,
+            items: [
+                { title: "Quản lý tài khoản", url: "/account" },
+                { title: "Thông tin cá nhân", url: "/account/profile" },
+                { title: "Đăng ký tài khoản", url: "/account/register" },
+                { title: "Đổi mật khẩu", url: "/account/change-password" }
+            ]
+        }
     ],
-    // projects: [
-    //     {
-    //         name: "Design Engineering",
-    //         url: "#",
-    //         icon: Frame,
-    //     },
-    //     {
-    //         name: "Sales & Marketing",
-    //         url: "#",
-    //         icon: PieChart,
-    //     },
-    //     {
-    //         name: "Travel",
-    //         url: "#",
-    //         icon: Map,
-    //     },
-    // ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
