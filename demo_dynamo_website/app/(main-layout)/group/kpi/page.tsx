@@ -75,6 +75,50 @@ function getColumns({
 }): ColumnDef<GroupKPI>[] {
   return [
     {
+      accessorKey: "year",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="text-lg font-bold"
+          >
+            Năm
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="pl-5 font-medium text-[16px] text-[#888888]">
+          <div className="text-lg font-semibold text-[#074695]">
+            {row.getValue("year")}
+          </div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "month",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="text-lg font-bold"
+          >
+            Tháng
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="pl-5 font-medium text-[16px] text-[#888888]">
+          <div className="text-lg font-semibold text-[#074695]">
+            {row.getValue("month") || "N/A"}
+          </div>
+        </div>
+      ),
+    },
+    {
       accessorKey: "office",
       header: ({ column }) => {
         return (
@@ -83,7 +127,7 @@ function getColumns({
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             className="text-lg font-bold"
           >
-            Văn Phòng
+            Phòng ban
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -91,10 +135,6 @@ function getColumns({
       cell: ({ row }) => (
         <div className="pl-5 font-medium text-[16px] text-[#888888]">
           <div className="text-lg font-semibold">{row.getValue("office")}</div>
-          {/* <div className="text-sm text-muted-foreground font-normal flex items-center">
-            <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
-            ID: {row.original.groupId.substring(0, 8)}
-          </div> */}
         </div>
       ),
     },
@@ -107,7 +147,7 @@ function getColumns({
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             className="text-lg font-bold"
           >
-            Tên Nhóm
+            Nhóm
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -129,95 +169,11 @@ function getColumns({
                 "Nhóm không xác định"
               )}
             </div>
-            {/* <div className="text-sm text-muted-foreground font-normal flex items-center mt-1">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-              ID: {groupId ? groupId.substring(0, 12) : "N/A"}
-            </div> */}
           </div>
         );
       },
     },
-    {
-      accessorKey: "year",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
-          >
-            Năm
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="pl-5 font-medium text-[16px] text-[#888888]">
-          <div className="text-lg font-semibold text-[#074695]">
-            {row.getValue("year")}
-          </div>
-          {/* <div className="text-sm text-muted-foreground">
-            {new Date().getFullYear() === row.getValue("year") ? (
-              <span className="text-green-600 font-medium">Năm hiện tại</span>
-            ) : (
-              "Năm trước"
-            )}
-          </div> */}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "period",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
-          >
-            Chu Kỳ
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => {
-        const groupKPI = row.original;
-        const getPeriodColor = (isMonth: number) => {
-          if (isMonth === 0) return "bg-purple-100 text-purple-700";
-          if (isMonth === 1) return "bg-orange-100 text-orange-700";
-          return "bg-pink-100 text-pink-700";
-        };
 
-        return (
-          <div className="pl-5 font-medium text-[16px] text-[#888888]">
-            {groupKPI.isMonth === 0 ? (
-              <div className="text-lg font-semibold">
-                Tháng {groupKPI.month}
-              </div>
-            ) : groupKPI.isMonth === 1 ? (
-              <div className="text-lg font-semibold">Tuần {groupKPI.week}</div>
-            ) : (
-              <div className="text-lg font-semibold">
-                Ngày {groupKPI.day}/{groupKPI.month}
-              </div>
-            )}
-            <div className="text-sm mt-1">
-              <span
-                className={`px-2 py-1 rounded text-xs font-medium ${getPeriodColor(
-                  groupKPI.isMonth
-                )}`}
-              >
-                {groupKPI.isMonth === 0
-                  ? "Hàng tháng"
-                  : groupKPI.isMonth === 1
-                    ? "Hàng tuần"
-                    : "Hàng ngày"}
-              </span>
-            </div>
-          </div>
-        );
-      },
-    },
     {
       accessorKey: "workingHourGoal",
       header: ({ column }) => {
@@ -227,7 +183,7 @@ function getColumns({
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             className="text-lg font-bold"
           >
-            Mục Tiêu (Giờ)
+            Mục tiêu làm việc
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -235,29 +191,7 @@ function getColumns({
       cell: ({ row }) => (
         <div className="pl-5 font-medium text-[16px] text-[#888888]">
           <div className="text-lg font-semibold text-[#074695]">
-            {Number(row.getValue("workingHourGoal")).toFixed(1)}
-          </div>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "workingHour",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
-          >
-            Thực Tế (Giờ)
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="pl-5 font-medium text-[16px] text-[#888888]">
-          <div className="text-lg">
-            {Number(row.getValue("workingHour")).toFixed(1)}
+            {Number(row.getValue("workingHourGoal") || 0).toFixed(0)}
           </div>
         </div>
       ),
@@ -271,26 +205,43 @@ function getColumns({
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             className="text-lg font-bold"
           >
-            Chênh Lệch
+            Giờ tăng giảm thực
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => {
-        const difference = Number(row.getValue("workingHourDifference"));
-        const isPositive = difference >= 0;
+        const difference = Number(row.getValue("workingHourDifference") || 0);
         return (
-          <div className="pl-5 font-medium text-[16px]">
-            <div
-              className={`text-lg font-semibold ${isPositive ? "text-green-600" : "text-red-600"
-                }`}
-            >
-              {isPositive ? "+" : ""}
-              {difference.toFixed(1)}
+          <div className="pl-5 font-medium text-[16px] text-[#888888]">
+            <div className="text-lg font-semibold text-[#074695]">
+              {difference.toFixed(0)}
             </div>
           </div>
         );
       },
+    },
+    {
+      accessorKey: "workingHour",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="text-lg font-bold"
+          >
+            Giờ làm việc thực
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="pl-5 font-medium text-[16px] text-[#888888]">
+          <div className="text-lg font-semibold text-[#074695]">
+            {Number(row.getValue("workingHour") || 0).toFixed(0)}
+          </div>
+        </div>
+      ),
     },
     {
       id: "actions",
@@ -531,7 +482,7 @@ export default function GroupKPIPage() {
         {/* Title and Add Button */}
         <div className="flex items-center justify-between">
           <div className="flex justify-start">
-            <h1 className="text-2xl font-bold">Quản Lý KPI Nhóm</h1>
+            <h1 className="text-2xl font-bold">DANH SÁCH KPI NHÓM THEO THÁNG</h1>
           </div>
           <div className="flex items-center gap-3">
             <Button
