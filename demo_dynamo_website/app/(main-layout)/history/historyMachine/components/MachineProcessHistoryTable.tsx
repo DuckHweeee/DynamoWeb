@@ -80,8 +80,8 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
         {
             accessorKey: "createdDate",
             header: ({ column }) => (
-                <Button 
-                    variant="ghost" 
+                <Button
+                    variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     className="h-auto p-0 hover:bg-transparent text-xs"
                 >
@@ -131,16 +131,16 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
             header: () => <div className="font-semibold text-xs">Trạng Thái</div>,
             cell: ({ row }) => {
                 const rawStatus = row.getValue("status")
-                console.log("Raw status value:", rawStatus, "Type:", typeof rawStatus)
-                
+                // console.log("Raw status value:", rawStatus, "Type:", typeof rawStatus)
+
                 // Convert to number and handle different data types
                 const status = Number(rawStatus)
-                console.log("Converted status:", status)
-                
+                // console.log("Converted status:", status)
+
                 // Determine status text and variant
                 let statusText = "Lỗi"
                 let variant: "default" | "secondary" | "destructive" = "destructive"
-                
+
                 if (status === 1) {
                     statusText = "Hoàn thành"
                     variant = "default"
@@ -148,7 +148,7 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
                     statusText = "Chờ xử lý"
                     variant = "secondary"
                 }
-                
+
                 return (
                     <Badge variant={variant} className="text-xs px-2 py-1">
                         {statusText}
@@ -334,8 +334,8 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
                                         ))
                                     ) : table.getRowModel().rows?.length ? (
                                         table.getRowModel().rows.map((row) => (
-                                            <TableRow 
-                                                key={row.id} 
+                                            <TableRow
+                                                key={row.id}
                                                 className="hover:bg-gray-50 transition-colors border-b border-gray-100"
                                             >
                                                 {row.getVisibleCells().map((cell) => (
@@ -351,9 +351,9 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
                                                 <div className="flex flex-col items-center justify-center gap-2">
                                                     <Search className="h-8 w-8 text-gray-400" />
                                                     <p>
-                                                        {error ? "Có lỗi xảy ra khi tải dữ liệu" : 
-                                                         hasFilters ? "Không tìm thấy dữ liệu phù hợp" : 
-                                                         "Chưa có lịch sử quy trình"}
+                                                        {error ? "Có lỗi xảy ra khi tải dữ liệu" :
+                                                            hasFilters ? "Không tìm thấy dữ liệu phù hợp" :
+                                                                "Chưa có lịch sử quy trình"}
                                                     </p>
                                                 </div>
                                             </TableCell>

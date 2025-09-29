@@ -18,8 +18,6 @@ import { DivergingBarChart } from "./components/DivergingBarChart";
 import { StaffOverview } from "./lib/type";
 import StaffTable from "./components/StaffTable";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
-import { useExportExcel } from "../../../../hooks/useExportExcel";
 
 export default function Operation() {
   const router = useRouter();
@@ -56,9 +54,8 @@ export default function Operation() {
     queryParams?.endDate ?? ""
   );
 
-  // console.log("Data Overview:", dataOverview);
   // Lấy danh sách nhân viên từ tất nhóm
-  const staffList = dataStatistic?.staffDto;
+  const staffList = dataStatistic?.staffDto ?? [];
 
   // Lấy danh sách nhóm
   const { data: groupList } = useGroups();
@@ -139,26 +136,6 @@ export default function Operation() {
     [memoizedGroupList, selectedGroup]
   );
 
-  // Optimize staffList calculation
-  const memoizedStaffList = useMemo(() => dataStatistic?.staffDto || [], [
-    dataStatistic,
-  ]);
-
-  // Optimize chart data transformation
-  const memoizedChartData = useMemo(
-    () =>
-      chartConfigs.map((cfg) => ({
-        title: cfg.title(memoizedSelectedGroupName ?? ""),
-        description: cfg.description,
-        data: transformData(
-          dataOverview,
-          cfg.targetKey as keyof StaffOverview,
-          cfg.realKey as keyof StaffOverview
-        ),
-      })),
-    [dataOverview, memoizedSelectedGroupName]
-  );
-
   // const { exportExcel, loading, error } = useExportExcel(selectedGroup, selectedStartDate, selectedEndDate);
 
   return (
@@ -235,7 +212,7 @@ export default function Operation() {
                     {staffList?.map((st) => (
                       <SelectItem
                         className="text-xl text-blue-950 cursor-pointer"
-                        key={st.staffName}
+                        key={st.id}
                         value={String(st.id)}
                       >
                         {st.staffName}
@@ -255,11 +232,12 @@ export default function Operation() {
           title={`Tổng điểm gia công trong ${selectedGroupName}`}
           description="Thống kê tổng điểm của từng nhân viên"
           data={transformData(
-            dataOverview,
+            dataOverview ?? [],
             "manufacturingPointGoal",
             "totalManufacturingPoint"
           )}
         />
+
         <div className="grid grid-cols-2 gap-4 my-5">
           {chartConfigs.map((cfg, idx) => (
             <DivergingBarChart
@@ -267,13 +245,14 @@ export default function Operation() {
               title={cfg.title(selectedGroupName ?? "")}
               description={cfg.description}
               data={transformData(
-                dataOverview,
+                dataOverview ?? [],
                 cfg.targetKey as keyof StaffOverview,
                 cfg.realKey as keyof StaffOverview
               )}
             />
           ))}
         </div>
+
         <StaffTable
           title="Danh sách thống kê người vận hành"
           description="Danh sách người vận hành"

@@ -80,7 +80,7 @@ export function ImportDialog({
 
         try {
             const result = await importExcel(selectedFile)
-            console.log("Import successful:", result)
+            // console.log("Import successful:", result)
 
             if (onImportSuccess) {
                 onImportSuccess("")
