@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
+import { useAuth } from "@/contexts/AuthContext"
 
 import { FlexibleCombobox } from "./FlexibleCombobox"
 import DatePicker from "react-datepicker"
@@ -22,6 +23,7 @@ type AddProcessFormProps = {
 }
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
+    const { user } = useAuth()
     const [newProcess, setNewProcess] = useState({
         processType: "",
         partNumber: "",
@@ -29,7 +31,6 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
         manufacturingPoint: "",
         pgTime: "",
         orderCode: "",
-        plannerId: "",
         machineId: "",
         staffId: "",
     });
@@ -49,7 +50,8 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
             !startDate ||
             !endDate ||
             !newProcess.machineId ||
-            !newProcess.staffId
+            !newProcess.staffId ||
+            !user?.id
         ) {
             toast.error("Vui lòng nhập đầy đủ thông tin nhân viên.");
             return;
@@ -74,7 +76,7 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
                         orderCode: newProcess.orderCode,
                         machineId: newProcess.machineId,
                         staffId: newProcess.staffId,
-                        plannerId: "47c7f973-6a64-4544-94eb-c5df1f4201dd",
+                        plannerId: user.id,
                     }),
                 }
             );
@@ -93,7 +95,6 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
                 manufacturingPoint: "",
                 pgTime: "",
                 orderCode: "",
-                plannerId: "",
                 machineId: "",
                 staffId: "",
             });

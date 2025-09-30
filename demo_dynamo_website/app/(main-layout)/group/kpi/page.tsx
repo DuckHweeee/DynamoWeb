@@ -60,6 +60,33 @@ import { ImportDialog } from "@/components/ImportDialog";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+// Helper function to get week date range
+function getWeekDateRange(year: number, weekNumber: number): { start: string; end: string } {
+  const firstDayOfYear = new Date(year, 0, 1);
+  const daysToFirstThursday = (11 - firstDayOfYear.getDay()) % 7;
+  const firstThursday = new Date(year, 0, 1 + daysToFirstThursday);
+  
+  // Calculate the start of the target week (Monday)
+  const weekStart = new Date(firstThursday);
+  weekStart.setDate(firstThursday.getDate() - 3 + (weekNumber - 1) * 7);
+  
+  // Calculate the end of the target week (Sunday)
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6);
+  
+  // Format dates as dd/mm
+  const formatDate = (date: Date) => {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    return `${day}/${month}`;
+  };
+  
+  return {
+    start: formatDate(weekStart),
+    end: formatDate(weekEnd)
+  };
+}
+
 function getColumns({
   setEditingGroupKPI,
   setShowForm,
@@ -105,18 +132,48 @@ function getColumns({
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             className="text-lg font-bold"
           >
-            Tháng
+            Chu kỳ thời gian
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="pl-5 font-medium text-[16px] text-[#888888]">
-          <div className="text-lg font-semibold text-[#074695]">
-            {row.getValue("month") || "N/A"}
+      cell: ({ row }) => {
+        const isMonth = row.original.isMonth;
+        const year = row.original.year;
+        const month = row.original.month;
+        const week = row.original.week;
+        const day = row.original.day;
+
+        let displayContent = "N/A";
+
+        if (isMonth === 1) {
+          // Monthly KPI
+          displayContent = month ? `Tháng ${month}` : "N/A";
+        } else if (isMonth === 0) {
+          // Weekly KPI
+          if (week && year) {
+            const weekRange = getWeekDateRange(year, week);
+            displayContent = `Tuần ${week} (${weekRange.start} - ${weekRange.end})`;
+          } else {
+            displayContent = week ? `Tuần ${week}` : "N/A";
+          }
+        } else if (isMonth === 2) {
+          // Daily KPI
+          if (day && month) {
+            displayContent = `${day}/${month}`;
+          } else {
+            displayContent = "N/A";
+          }
+        }
+
+        return (
+          <div className="pl-5 font-medium text-[16px] text-[#888888]">
+            <div className="text-lg font-semibold text-[#074695]">
+              {displayContent}
+            </div>
           </div>
-        </div>
-      ),
+        );
+      },
     },
     {
       accessorKey: "office",
