@@ -27,12 +27,6 @@ import {
 } from "@/components/ui/select"
 import { MachineStatisticDetail } from "../lib/type"
 
-// const machineTimeData = [
-//   { category: "running", hours: 40, fill: "var(--color-running)" },
-//   { category: "stopped", hours: 120, fill: "var(--color-stopped)" },
-//   { category: "error", hours: 80, fill: "var(--color-error)" },
-//   { category: "pg", hours: 60, fill: "var(--color-pg)" },
-// ]
 
 const chartConfig = {
   hours: {

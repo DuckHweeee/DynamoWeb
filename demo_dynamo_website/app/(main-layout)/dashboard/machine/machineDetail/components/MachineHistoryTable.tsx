@@ -102,7 +102,7 @@ const columns: ColumnDef<MachineHistoryDetail>[] = [
 
             let bg = ""
             let text = ""
-            let label = status // mặc định giữ nguyên
+            let label = status
 
             switch (status?.charAt(0)) {
                 case "C":

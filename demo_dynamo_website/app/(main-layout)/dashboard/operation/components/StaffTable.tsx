@@ -26,11 +26,7 @@ import {
 } from "@/components/ui/table"
 import { useState } from "react"
 import { StaffOverview } from "../lib/type"
-// function formatSecondsToTime(seconds: number): string {
-//     const hours = Math.floor(seconds / 3600)
-//     const minutes = Math.floor((seconds % 3600) / 60)
-//     return `${hours}h ${minutes}m`
-// }
+
 function convertHoursToHM(hours: number): string {
     const h = Math.floor(hours);
     const m = Math.round((hours - h) * 60);

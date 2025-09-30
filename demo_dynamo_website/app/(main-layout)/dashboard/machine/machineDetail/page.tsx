@@ -25,10 +25,10 @@ import { useMachineEfficiencyDetail } from "./hooks/useMachineEfficiencyDetail";
 import { useMachineStatisticDetail } from "./hooks/useMachineStatisticDetail";
 import { useMachineHistoryDetail } from "./hooks/useMachineHistoryDetail";
 import { toast } from "sonner";
-import DateRangeSelectorDetail from "./hooks/DateRangeSelectorDetail";
+import DateRangeSelectorDetail from "./components/DateRangeSelectorDetail";
 import { ReportTimeMachineDetail } from "./components/ReportTimeMachineDetail";
-import { MachinePieChart } from "./components/MachinePieChart";
 import MachineHistoryTable from "./components/MachineHistoryTable";
+import { MachinePieChart } from "./components/machinePieChart";
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const MachineDetailOverview = () => {

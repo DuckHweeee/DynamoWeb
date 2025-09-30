@@ -50,6 +50,10 @@ export function DivergingBarChart({
         ...data,
     ];
 
+    const formatNumber = (value: number): string => {
+        return Number.isInteger(value) ? value.toString() : value.toFixed(2);
+    };
+
     return (
         <Card>
             <CardHeader>
@@ -83,6 +87,7 @@ export function DivergingBarChart({
                                 position="insideRight"
                                 fill="#fff"
                                 fontSize={16}
+                                formatter={(value: number) => formatNumber(value)}
                             />
                         </Bar>
 
@@ -93,7 +98,7 @@ export function DivergingBarChart({
                                     key={`cell-${index}`}
                                     fill={
                                         index === 0
-                                            ? chartConfig.real.color // luôn xanh cho "Trung bình"
+                                            ? chartConfig.real.color
                                             : entry.real < entry.target
                                                 ? "#ff4d4d"
                                                 : chartConfig.real.color
@@ -105,6 +110,7 @@ export function DivergingBarChart({
                                 position="insideRight"
                                 fill="#fff"
                                 fontSize={16}
+                                formatter={(value: number) => formatNumber(value)}
                             />
                         </Bar>
 
@@ -113,21 +119,23 @@ export function DivergingBarChart({
                                 <ChartTooltipContent
                                     hideLabel
                                     className="w-[180px]"
-                                    formatter={(value, name) => (
-                                        <>
-                                            <div
-                                                className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
-                                                style={{
-                                                    background: `var(--color-${name})`,
-                                                }}
-                                            />
-                                            {chartConfig[name as keyof typeof chartConfig]?.label ||
-                                                name}
-                                            <div className="ml-auto font-mono font-medium">
-                                                {value}
-                                            </div>
-                                        </>
-                                    )}
+                                    formatter={(value, name) => {
+                                        const num = typeof value === "number" ? formatNumber(value) : value;
+                                        return (
+                                            <>
+                                                <div
+                                                    className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
+                                                    style={{
+                                                        background: `var(--color-${name})`,
+                                                    }}
+                                                />
+                                                {chartConfig[name as keyof typeof chartConfig]?.label || name}
+                                                <div className="ml-auto font-mono font-medium">
+                                                    {num}
+                                                </div>
+                                            </>
+                                        );
+                                    }}
                                 />
                             }
                             cursor={false}

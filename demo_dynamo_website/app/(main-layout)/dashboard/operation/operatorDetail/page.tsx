@@ -196,12 +196,10 @@ export default function OperationDetail() {
                 </div>
             </div>
 
-            {/* Các component con */}
             {dataOverview && (
                 <ReportTimeOperatorDetail type={selectedTimeType} data={dataOverview} />
             )}
 
-            {/* Render charts chỉ khi có data */}
             {dataWorkingDetail && (
                 <BarChartOperatorDetail
                     title="Thống kê công việc người vận hành"

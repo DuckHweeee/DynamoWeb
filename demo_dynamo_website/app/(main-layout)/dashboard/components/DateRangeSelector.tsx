@@ -79,7 +79,7 @@ export default function DateRangeSelector({ onChange }: Props) {
         }
 
         if (startDate && endDate && onChange) {
-            onChange({ startDate, endDate, timeType: mode }); // Thêm timeType
+            onChange({ startDate, endDate, timeType: mode });
         }
     }, [mode, selectedDate, selectedWeek, selectedMonth, selectedYear, onChange])
 
@@ -175,19 +175,9 @@ export default function DateRangeSelector({ onChange }: Props) {
                         value={String(selectedYear ?? "")}
                         onValueChange={(val) => setSelectedYear(Number(val))}
                     >
-                        <SelectTrigger className="cursor-pointer text-xl ">                            <SelectValue placeholder="Chọn năm" />
+                        <SelectTrigger className="cursor-pointer text-xl ">
+                            <SelectValue placeholder="Chọn năm" />
                         </SelectTrigger>
-                        {/* <SelectContent className="max-h-[300px]">
-                            {Array.from({ length: 3 }, (_, i) => dayjs().year() - (2 - i)).map((year) => (
-                                <SelectItem
-                                    key={year}
-                                    value={String(year)}
-                                    className={`text-lg ${selectedYear === year ? "bg-blue-100 text-blue-900" : ""}`}
-                                >
-                                    {year}
-                                </SelectItem>
-                            ))}
-                        </SelectContent> */}
                         <SelectContent className="max-h-[300px]">
                             {Array.from({ length: 3 }, (_, i) => dayjs().year() - 2 + i).map((year) => (
                                 <SelectItem key={year} value={String(year)} className="text-lg cursor-pointer">

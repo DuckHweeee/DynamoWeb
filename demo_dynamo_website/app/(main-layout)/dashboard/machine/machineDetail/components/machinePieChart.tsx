@@ -65,7 +65,6 @@ export function MachinePieChart({
                                         <Label
                                             content={({ viewBox }) => {
                                                 if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                                                    // Hàm chia text thành nhiều dòng
                                                     const wrapText = (text: string, maxChars: number) => {
                                                         const words = text.split(" ")
                                                         const lines: string[] = []
@@ -83,7 +82,7 @@ export function MachinePieChart({
                                                         return lines
                                                     }
 
-                                                    const lines = wrapText(item.name, 15) // chỉnh số ký tự tối đa 1 dòng ở đây
+                                                    const lines = wrapText(item.name, 15) // chỉnh số ký tự tối đa 1 dòng
 
                                                     return (
                                                         <text

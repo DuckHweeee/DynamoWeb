@@ -19,9 +19,6 @@ export function useStaffOverview(groupId: string, startDate: string, endDate: st
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        // endDate: "2025-07-26",
-                        // groupId: "894727a1-a574-456a-87d8-bfee92dc722c",
-                        // startDate: "2025-07-21"
                         groupId: groupId,
                         startDate: startDate,
                         endDate: endDate,

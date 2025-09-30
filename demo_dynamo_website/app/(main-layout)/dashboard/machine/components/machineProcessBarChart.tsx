@@ -60,14 +60,10 @@ export function MachineProcessBarChart({
             setIsScrolling(true)
 
             if (e.deltaY > 0 && currentPage < totalPages - 1) {
-                // Scroll down - next page
                 setCurrentPage(prev => prev + 1)
             } else if (e.deltaY < 0 && currentPage > 0) {
-                // Scroll up - previous page
                 setCurrentPage(prev => prev - 1)
             }
-
-            // Reset scrolling flag after a delay
             setTimeout(() => setIsScrolling(false), 300)
         }
 

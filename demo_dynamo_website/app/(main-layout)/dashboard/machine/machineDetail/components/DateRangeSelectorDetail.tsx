@@ -32,7 +32,6 @@ interface Props {
 export default function DateRangeSelectorDetail({ startDate, endDate, onChange }: Props) {
     const [mode, setMode] = useState<Mode>("day")
 
-    // Khởi tạo state với giá trị từ props hoặc mặc định
     const [selectedDate, setSelectedDate] = useState<Date | null>(() =>
         startDate ? dayjs(startDate).toDate() : null
     );
@@ -59,7 +58,6 @@ export default function DateRangeSelectorDetail({ startDate, endDate, onChange }
 
     const months = Array.from({ length: 12 }, (_, i) => i + 1)
 
-    // đồng bộ khi cha truyền props
     useEffect(() => {
         if (startDate && endDate) {
             const start = dayjs(startDate);
@@ -102,7 +100,6 @@ export default function DateRangeSelectorDetail({ startDate, endDate, onChange }
         }
     }, [startDate, endDate])
 
-    // gọi onChange khi chọn lại
     useEffect(() => {
         let s = ""
         let e = ""
