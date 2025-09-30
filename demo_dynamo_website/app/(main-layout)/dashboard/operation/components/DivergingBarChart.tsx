@@ -35,17 +35,20 @@ export function DivergingBarChart({
     description,
     data,
 }: DivergingBarChartProps) {
-    // 👉 Tính trung bình
     const avgtarget =
-        data.reduce((sum, d) => sum + d.target, 0) / data.length
-    const avgReal =
-        data.reduce((sum, d) => sum + d.real, 0) / data.length
+        data.length > 0
+            ? data.reduce((sum, d) => sum + d.target, 0) / data.length
+            : 0;
 
-    // 👉 Thêm record "Trung bình" vào đầu
+    const avgReal =
+        data.length > 0
+            ? data.reduce((sum, d) => sum + d.real, 0) / data.length
+            : 0;
+
     const chartData = [
         { name: "TB", target: avgtarget, real: avgReal },
         ...data,
-    ]
+    ];
 
     return (
         <Card>

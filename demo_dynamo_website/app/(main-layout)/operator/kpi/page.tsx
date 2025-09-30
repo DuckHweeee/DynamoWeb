@@ -205,9 +205,6 @@ function getColumns({
                 )
             },
         }
-
-
-
     ]
 }
 
@@ -239,8 +236,8 @@ export default function OperatorTable() {
         setShowImportDialog(false)
     }
 
-    console.log("editingOperator")
-    console.log(editingOperator)
+    // console.log("editingOperator")
+    // console.log(editingOperator)
     const columns = getColumns({ setEditingOperator, setShowForm })
     const table = useReactTable({
         data: staffKPI,

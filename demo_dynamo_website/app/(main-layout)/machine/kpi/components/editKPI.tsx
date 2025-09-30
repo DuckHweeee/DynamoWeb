@@ -8,15 +8,18 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { toast } from "sonner"
 import { Staff } from "@/lib/type"
 import { KPI } from "../../lib/type"
-import { 
-    validateMachineKPIYear, 
-    validateMachineKPIMonth, 
-    validateMachineKPIOEE, 
-    validateMachineKPIMachineMiningTarget, 
-    validateMachineKPIMachineId, 
+import {
+    validateMachineKPIYear,
+    validateMachineKPIMonth,
+    validateMachineKPIOEE,
+    validateMachineKPIMachineMiningTarget,
+    validateMachineKPIMachineId,
     validateMachineKPIGroupId,
-    machineKPISchema 
+    machineKPISchema
 } from "../lib/validation"
+import { useGroup } from "@/hooks/useMachine"
+import { SelectYear } from "../../components/SelectYear"
+import { SelectMonth } from "../../components/SelectMonth"
 
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 type EditKPIMachineFormProps = {
@@ -45,12 +48,12 @@ export default function EditKPIMachineForm({
         machineId: null,
         groupId: ""
     })
-
+    const { data: group } = useGroup()
     const [errors, setErrors] = useState<Record<string, string>>({})
 
     const updateField = (field: keyof EditKPIMachine, value: any) => {
         setUpdateMachine(prev => ({ ...prev, [field]: value }))
-        
+
         // Validate field immediately
         let fieldError = ""
         switch (field) {
@@ -73,7 +76,7 @@ export default function EditKPIMachineForm({
                 fieldError = validateMachineKPIGroupId(value) || ""
                 break
         }
-        
+
         setErrors(prev => ({
             ...prev,
             [field]: fieldError
@@ -160,13 +163,30 @@ export default function EditKPIMachineForm({
 
                             <div className="grid">
                                 <Label htmlFor="nhom" className="text-lg !font-normal">Nhóm</Label>
-                                <Input
+                                {/* <Input
                                     id="nhom"
                                     placeholder="Nhóm"
                                     readOnly
                                     value={inforKPI.groupName?.toString() ?? ""}
                                     className="!text-lg placeholder:text-[16px]"
-                                />
+                                /> */}
+                                <Select
+                                    value={updateMachine.groupId?.toString() ?? ""}
+                                    onValueChange={(value) => updateField('groupId', value)}
+                                >
+                                    <SelectTrigger className={`w-auto text-lg [&>span]:text-[16px] ${errors.groupId ? 'border-red-500' : ''}`}>
+                                        <SelectValue placeholder="Chọn nhóm" />
+                                    </SelectTrigger>
+                                    <SelectContent id="nhom">
+                                        <SelectGroup>
+                                            {group.map((g) => (
+                                                <SelectItem className="text-lg" key={g.groupId} value={g.groupId.toString()}>
+                                                    {g.groupName}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </div>
                         <div className="grid gap-4 grid-cols-2 pb-3">
@@ -174,22 +194,33 @@ export default function EditKPIMachineForm({
                                 <Label htmlFor="name" className="text-lg !font-normal">
                                     Năm
                                 </Label>
-                                <Input
+                                {/* <Input
                                     type="number"
                                     value={inforKPI.year ?? ""}
                                     placeholder="Năm"
                                     readOnly
                                     className="placeholder:text-[10px] !text-xl"
+                                /> */}
+                                <SelectYear
+                                    value={updateMachine.year?.toString() ?? undefined}
+                                    onChange={(value) => updateField('year', Number(value))}
+                                    totalYears={5}
+                                    placeholder="Chọn năm"
                                 />
                             </div>
                             <div className="grid">
                                 <Label htmlFor="name" className="text-lg !font-normal">Tháng</Label>
-                                <Input
+                                {/* <Input
                                     type="number"
                                     value={inforKPI.month ?? ""}
                                     readOnly
                                     placeholder="Tháng"
                                     className="placeholder:text-[10px] !text-lg"
+                                /> */}
+                                <SelectMonth
+                                    value={updateMachine.month?.toString() ?? undefined}
+                                    onChange={(value) => updateField('month', Number(value))}
+                                // showAllOption={true}
                                 />
                             </div>
                         </div>
@@ -257,13 +288,30 @@ export default function EditKPIMachineForm({
 
                             <div className="grid">
                                 <Label htmlFor="nhom" className="text-lg !font-normal">Nhóm</Label>
-                                <Input
+                                {/* <Input
                                     id="nhom"
                                     placeholder="Nhóm"
                                     readOnly
                                     value={inforKPI.groupName?.toString() ?? ""}
                                     className="!text-lg placeholder:text-[16px]"
-                                />
+                                /> */}
+                                <Select
+                                    value={updateMachine.groupId?.toString() ?? ""}
+                                    onValueChange={(value) => updateField('groupId', value)}
+                                >
+                                    <SelectTrigger className={`w-auto text-lg [&>span]:text-[16px] ${errors.groupId ? 'border-red-500' : ''}`}>
+                                        <SelectValue placeholder="Chọn nhóm" />
+                                    </SelectTrigger>
+                                    <SelectContent id="nhom">
+                                        <SelectGroup>
+                                            {group.map((g) => (
+                                                <SelectItem className="text-lg" key={g.groupId} value={g.groupId.toString()}>
+                                                    {g.groupName}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </div>
                         <div className="grid gap-4 grid-cols-2 pb-3">
@@ -271,22 +319,33 @@ export default function EditKPIMachineForm({
                                 <Label htmlFor="name" className="text-lg !font-normal">
                                     Năm
                                 </Label>
-                                <Input
+                                {/* <Input
                                     type="number"
                                     value={inforKPI.year ?? ""}
                                     placeholder="Năm"
                                     readOnly
                                     className="placeholder:text-[10px] !text-xl"
+                                /> */}
+                                <SelectYear
+                                    value={updateMachine.year?.toString() ?? undefined}
+                                    onChange={(value) => updateField('year', Number(value))}
+                                    totalYears={5}
+                                    placeholder="Chọn năm"
                                 />
                             </div>
                             <div className="grid">
                                 <Label htmlFor="name" className="text-lg !font-normal">Tháng</Label>
-                                <Input
+                                {/* <Input
                                     type="number"
                                     value={inforKPI.month ?? ""}
                                     readOnly
                                     placeholder="Tháng"
                                     className="placeholder:text-[10px] !text-lg"
+                                /> */}
+                                <SelectMonth
+                                    value={updateMachine.month?.toString() ?? undefined}
+                                    onChange={(value) => updateField('month', Number(value))}
+                                // showAllOption={true}
                                 />
                             </div>
                         </div>

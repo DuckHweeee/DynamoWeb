@@ -23,8 +23,8 @@ export default function EditOrderDetailForm({
     onUpdate,
     onCancel,
 }: EditOrderDetailFormProps) {
-    console.log("initialData")
-    console.log(initialData)
+    // console.log("initialData")
+    // console.log(initialData)
     const { data: orderList } = useOrder()
     const { data: drawingCodeList } = useDrawingCode()
     const { data: groupList } = useGroup()
@@ -50,8 +50,8 @@ export default function EditOrderDetailForm({
             })
         }
     }, [initialData])
-    console.log("updateOrderDetail")
-    console.log(updateOrderDetail)
+    // console.log("updateOrderDetail")
+    // console.log(updateOrderDetail)
     const handleUpdate = async () => {
         if (
             !updateOrderDetail.drawingCodeId ||

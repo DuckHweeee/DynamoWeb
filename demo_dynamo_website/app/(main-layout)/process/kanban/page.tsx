@@ -84,20 +84,15 @@ const KanbanPage = () => {
   // Transform process data for kanban
   const transformedData = processData.map((process) => ({
     id: process.processId,
-    name: `${process.orderDetailDto?.orderCode || "N/A"} - Bước ${
-      process.stepNumber
-    }`,
+    name: `${process.orderDetailDto?.orderCode || "N/A"} - Bước ${process.stepNumber
+      }`,
     column: getColumnByStatus(process.processStatus),
     processData: process,
   }));
 
   const handleDataChange = (newData: any[]) => {
-    // Handle drag and drop - you might want to call an API to update process status
-    console.log("Data changed:", newData);
-    // TODO: Implement API call to update processStatus when items are moved
   };
 
-  // Return loading state
   if (isLoading) {
     return (
       <div className="m-2 my-1.5 px-4 py-3 bg-white rounded-[10px] shadow">
@@ -109,8 +104,6 @@ const KanbanPage = () => {
       </div>
     );
   }
-
-  // Return error state
   if (error) {
     return (
       <div className="m-2 my-1.5 px-4 py-3 bg-white rounded-[10px] shadow">
@@ -226,8 +219,8 @@ const KanbanPage = () => {
                                 Bắt đầu:{" "}
                                 {process.startTime
                                   ? dateFormatter.format(
-                                      new Date(process.startTime)
-                                    )
+                                    new Date(process.startTime)
+                                  )
                                   : "Chưa bắt đầu"}
                               </span>
                               {process.endTime && (
@@ -251,20 +244,19 @@ const KanbanPage = () => {
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-1 text-xs">
                                 <div
-                                  className={`h-2 w-2 rounded-full ${
-                                    process.processStatus === 1
+                                  className={`h-2 w-2 rounded-full ${process.processStatus === 1
                                       ? "bg-gray-500"
                                       : process.processStatus === 2
-                                      ? "bg-blue-500"
-                                      : "bg-green-500"
-                                  }`}
+                                        ? "bg-blue-500"
+                                        : "bg-green-500"
+                                    }`}
                                 ></div>
                                 <span className="text-muted-foreground">
                                   {process.processStatus === 1
                                     ? "Chờ xử lý"
                                     : process.processStatus === 2
-                                    ? "Đang thực hiện"
-                                    : "Hoàn thành"}
+                                      ? "Đang thực hiện"
+                                      : "Hoàn thành"}
                                 </span>
                               </div>
                               <span className="text-xs text-muted-foreground">

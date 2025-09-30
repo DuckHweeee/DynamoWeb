@@ -8,19 +8,22 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { toast } from "sonner"
 import { Staff } from "@/lib/type"
 import { KPI } from "../lib/type"
-import { 
-    validateStaffKPIStaffId, 
-    validateStaffKPIKPI, 
-    validateStaffKPIYear, 
-    validateStaffKPIMonth, 
-    validateStaffKPIWorkGoal, 
-    validateStaffKPIPgTimeGoal, 
-    validateStaffKPIMachineTimeGoal, 
-    validateStaffKPIManufacturingPoint, 
-    validateStaffKPIOleGoal, 
+import {
+    validateStaffKPIStaffId,
+    validateStaffKPIKPI,
+    validateStaffKPIYear,
+    validateStaffKPIMonth,
+    validateStaffKPIWorkGoal,
+    validateStaffKPIPgTimeGoal,
+    validateStaffKPIMachineTimeGoal,
+    validateStaffKPIManufacturingPoint,
+    validateStaffKPIOleGoal,
     validateStaffKPIGroupId,
-    staffKPISchema 
+    staffKPISchema
 } from "../lib/validation"
+import { SelectYear } from "../../components/SelectYear"
+import { SelectMonth } from "../../components/SelectMonth"
+import { useGroup } from "@/hooks/useMachine"
 
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 type EditKPIStaffFormProps = {
@@ -57,12 +60,12 @@ export default function EditKPIStaffForm({
         oleGoal: null,
         groupId: "",
     })
-
+    const { data: group, loading, error } = useGroup()
     const [errors, setErrors] = useState<Record<string, string>>({})
 
     const updateField = (field: keyof EditKPIStaff, value: any) => {
         setUpdateStaff(prev => ({ ...prev, [field]: value }))
-        
+
         // Clear existing error for this field
         if (errors[field]) {
             setErrors(prev => ({ ...prev, [field]: "" }))
@@ -102,7 +105,7 @@ export default function EditKPIStaffForm({
                 fieldError = validateStaffKPIGroupId(value) || ""
                 break
         }
-        
+
         if (fieldError) {
             setErrors(prev => ({ ...prev, [field]: fieldError }))
         }
@@ -127,37 +130,37 @@ export default function EditKPIStaffForm({
     const handleUpdate = async () => {
         // Validate all fields before submission
         const validationErrors: Record<string, string> = {}
-        
+
         const staffIdError = validateStaffKPIStaffId(updateStaff.staffId)
         if (staffIdError) validationErrors.staffId = staffIdError
-        
+
         const kpiError = validateStaffKPIKPI(updateStaff.kpi)
         if (kpiError) validationErrors.kpi = kpiError
-        
+
         const yearError = validateStaffKPIYear(updateStaff.year)
         if (yearError) validationErrors.year = yearError
-        
+
         const monthError = validateStaffKPIMonth(updateStaff.month)
         if (monthError) validationErrors.month = monthError
-        
+
         const workGoalError = validateStaffKPIWorkGoal(updateStaff.workGoal)
         if (workGoalError) validationErrors.workGoal = workGoalError
-        
+
         const pgTimeGoalError = validateStaffKPIPgTimeGoal(updateStaff.pgTimeGoal)
         if (pgTimeGoalError) validationErrors.pgTimeGoal = pgTimeGoalError
-        
+
         const machineTimeGoalError = validateStaffKPIMachineTimeGoal(updateStaff.machineTimeGoal)
         if (machineTimeGoalError) validationErrors.machineTimeGoal = machineTimeGoalError
-        
+
         const manufacturingPointError = validateStaffKPIManufacturingPoint(updateStaff.manufacturingPoint)
         if (manufacturingPointError) validationErrors.manufacturingPoint = manufacturingPointError
-        
+
         const oleGoalError = validateStaffKPIOleGoal(updateStaff.oleGoal)
         if (oleGoalError) validationErrors.oleGoal = oleGoalError
-        
+
         const groupIdError = validateStaffKPIGroupId(updateStaff.groupId)
         if (groupIdError) validationErrors.groupId = groupIdError
-        
+
         try {
             const response = await fetch(
                 `${urlLink}/api/staff-kpi/${inforKPI.kpiId}`,
@@ -214,13 +217,33 @@ export default function EditKPIStaffForm({
 
                             <div className="grid">
                                 <Label htmlFor="nhom" className="text-lg !font-normal">Nhóm</Label>
-                                <Input
+                                {/* <Input
                                     id="nhom"
                                     placeholder="Nhóm"
                                     readOnly
                                     value={inforKPI.groupName?.toString() ?? ""}
                                     className="!text-lg placeholder:text-[16px]"
-                                />
+                                /> */}
+                                <Select
+                                    value={updateStaff.groupId?.toString() ?? ""}
+                                    onValueChange={(value) => updateField('groupId', value)}
+                                >
+                                    <SelectTrigger className={`w-auto text-lg [&>span]:text-[16px] ${errors.groupId ? 'border-red-500' : ''}`}>
+                                        <SelectValue placeholder="Chọn nhóm" />
+                                    </SelectTrigger>
+                                    <SelectContent id="nhom">
+                                        <SelectGroup>
+                                            {group?.map((g) => (
+                                                <SelectItem className="text-lg" key={g.groupId} value={g.groupId.toString()}>
+                                                    {g.groupName}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                                {errors.groupId && (
+                                    <span className="text-red-500 text-sm">{errors.groupId}</span>
+                                )}
                             </div>
                         </div>
                         <div className="grid gap-4 grid-cols-2 pb-3">
@@ -228,22 +251,33 @@ export default function EditKPIStaffForm({
                                 <Label htmlFor="name" className="text-lg !font-normal">
                                     Năm
                                 </Label>
-                                <Input
+                                {/* <Input
                                     type="number"
                                     value={inforKPI.year ?? ""}
                                     placeholder="Năm"
                                     readOnly
                                     className="placeholder:text-[10px] !text-xl"
+                                /> */}
+                                <SelectYear
+                                    value={updateStaff.year?.toString() ?? ""}
+                                    onChange={(value) => updateField('year', Number(value))}
+                                    totalYears={5}
+                                    placeholder="Chọn năm"
                                 />
                             </div>
                             <div className="grid">
                                 <Label htmlFor="name" className="text-lg !font-normal">Tháng</Label>
-                                <Input
+                                {/* <Input
                                     type="number"
                                     value={inforKPI.month ?? ""}
                                     readOnly
                                     placeholder="Tháng"
                                     className="placeholder:text-[10px] !text-lg"
+                                /> */}
+                                <SelectMonth
+                                    value={updateStaff.month?.toString() ?? ""}
+                                    onChange={(value) => updateField('month', Number(value))}
+                                // showAllOption={true}
                                 />
                             </div>
                         </div>
@@ -368,13 +402,33 @@ export default function EditKPIStaffForm({
 
                             <div className="grid">
                                 <Label htmlFor="nhom" className="text-lg !font-normal">Nhóm</Label>
-                                <Input
+                                {/* <Input
                                     id="nhom"
                                     placeholder="Nhóm"
                                     readOnly
                                     value={inforKPI.groupName?.toString() ?? ""}
                                     className="!text-lg placeholder:text-[16px]"
-                                />
+                                /> */}
+                                <Select
+                                    value={updateStaff.groupId?.toString() ?? ""}
+                                    onValueChange={(value) => updateField('groupId', value)}
+                                >
+                                    <SelectTrigger className={`w-auto text-lg [&>span]:text-[16px] ${errors.groupId ? 'border-red-500' : ''}`}>
+                                        <SelectValue placeholder="Chọn nhóm" />
+                                    </SelectTrigger>
+                                    <SelectContent id="nhom">
+                                        <SelectGroup>
+                                            {group?.map((g) => (
+                                                <SelectItem className="text-lg" key={g.groupId} value={g.groupId.toString()}>
+                                                    {g.groupName}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                                {errors.groupId && (
+                                    <span className="text-red-500 text-sm">{errors.groupId}</span>
+                                )}
                             </div>
                         </div>
                         <div className="grid gap-4 grid-cols-2 pb-3">
@@ -382,22 +436,33 @@ export default function EditKPIStaffForm({
                                 <Label htmlFor="name" className="text-lg !font-normal">
                                     Năm
                                 </Label>
-                                <Input
+                                {/* <Input
                                     type="number"
                                     value={inforKPI.year ?? ""}
                                     placeholder="Năm"
                                     readOnly
                                     className="placeholder:text-[10px] !text-xl"
+                                /> */}
+                                <SelectYear
+                                    value={updateStaff.year?.toString() ?? ""}
+                                    onChange={(value) => updateField('year', Number(value))}
+                                    totalYears={5}
+                                    placeholder="Chọn năm"
                                 />
                             </div>
                             <div className="grid">
                                 <Label htmlFor="name" className="text-lg !font-normal">Tháng</Label>
-                                <Input
+                                {/* <Input
                                     type="number"
                                     value={inforKPI.month ?? ""}
                                     readOnly
                                     placeholder="Tháng"
                                     className="placeholder:text-[10px] !text-lg"
+                                /> */}
+                                <SelectMonth
+                                    value={updateStaff.month?.toString() ?? ""}
+                                    onChange={(value) => updateField('month', Number(value))}
+                                // showAllOption={true}
                                 />
                             </div>
                         </div>

@@ -54,7 +54,7 @@ const data = {
             icon: UserCog,
             items: [
                 {
-                    title: "OP Status",
+                    title: "Trạng thái nhân viên",
                     url: "/operator/status",
                 },
                 {
@@ -73,7 +73,7 @@ const data = {
             icon: MonitorCog,
             items: [
                 {
-                    title: "MC Status",
+                    title: "Trạng thái máy móc",
                     url: "/machine/status",
                 },
                 {

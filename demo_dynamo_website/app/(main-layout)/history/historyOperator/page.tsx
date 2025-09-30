@@ -13,8 +13,8 @@ export default function HistoryOperatorPage() {
     const [isHistoryOpen, setIsHistoryOpen] = useState(false)
 
     const handleViewHistory = (id: string, name: string) => {
-        console.log("handleViewHistory called with:", { id, name })
-        console.log("ID type:", typeof id, "ID value:", id)
+        // console.log("handleViewHistory called with:", { id, name })
+        // console.log("ID type:", typeof id, "ID value:", id)
         setSelectedStaff({ id, name })
         setIsHistoryOpen(true)
     }
@@ -23,7 +23,7 @@ export default function HistoryOperatorPage() {
         setIsHistoryOpen(false)
         setSelectedStaff(null)
     }
-    console.log("Selected Staff:", selectedStaff)
+    // console.log("Selected Staff:", selectedStaff)
 
     return (
         // <div className="h-screen flex flex-col p-4 bg-gray-50">
