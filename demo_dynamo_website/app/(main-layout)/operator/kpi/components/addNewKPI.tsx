@@ -14,8 +14,8 @@ import { officeList } from "../../lib/data"
 import { KPI } from "../lib/type"
 import { FlexibleCombobox } from "./FlexibleCombobox"
 import { useStaff } from "../hooks/useStaff"
-import { 
-    validateStaffKPI, 
+import {
+    validateStaffKPI,
     StaffKPIFormData,
     validateStaffKPIStaffId,
     validateStaffKPIGroupId,
@@ -61,12 +61,12 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
     })
 
     // Validation errors state
-    const [errors, setErrors] = useState<{[key: string]: string | null}>({})
+    const [errors, setErrors] = useState<{ [key: string]: string | null }>({})
 
     // Function to update field and validate
     const updateField = (field: keyof NewKPIStaff, value: any) => {
         setNewKPIStaff(prev => ({ ...prev, [field]: value }))
-        
+
         // Validate field immediately
         let error: string | null = null
         switch (field) {
@@ -101,7 +101,7 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
                 error = validateStaffKPIOleGoal(value)
                 break
         }
-        
+
         setErrors(prev => ({ ...prev, [field]: error }))
     }
     const handleSubmit = async () => {
@@ -121,7 +121,7 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
 
         // Check for any validation errors
         const hasErrors = Object.values(fieldValidations).some(error => error !== null)
-        
+
         if (hasErrors) {
             // Update errors state with all validation results
             setErrors(fieldValidations)
@@ -144,7 +144,7 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
         }
 
         try {
-        
+
             const response = await fetch(
                 `${urlLink}/api/staff-kpi`,
                 {
@@ -157,8 +157,20 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
             );
 
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || "Gửi thất bại.");
+                let errorMessage = "Gửi thất bại.";
+
+                try {
+                    const errorData = await response.json();
+                    // Use the backend message directly
+                    errorMessage = errorData.message || errorData.error || "Gửi thất bại.";
+                } catch (parseError) {
+                    // If JSON parsing fails, use status text
+                    errorMessage = response.statusText || `Lỗi ${response.status}`;
+                }
+                if (errorMessage === "Goal of this staff is already set") {
+                    toast.error("Nhân viên này đã có KPI!");
+                }
+                return; // Don't proceed further
             }
             toast.success("Thêm nhân viên và KPI thành công!");
             location.reload()
@@ -177,7 +189,8 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
             });
             setErrors({})
         } catch (error) {
-            toast.error("Đã xảy ra lỗi khi gửi.");
+            console.error("Network or unexpected error:", error);
+            toast.error("Đã xảy ra lỗi. Vui lòng thử lại.");
         }
     };
 
@@ -351,6 +364,7 @@ export default function AddNewKPI({ onAdd, onCancel }: AddKPIStaffFormProps) {
                 </div>
             </div>
             {/* </div> */}
+
             <div className="flex gap-4 justify-end">
                 <Button variant="outline" onClick={onCancel} className="text-xl py-6 px-10 cursor-pointer">
                     Hủy
