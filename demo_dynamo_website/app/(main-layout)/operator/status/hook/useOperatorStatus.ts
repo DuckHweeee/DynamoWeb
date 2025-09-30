@@ -38,6 +38,5 @@ export function useOperatorStatus(groupId: string) {
             fetchData();
         }
     }, [groupId]);
-    console.log(data)
     return { data, loading, error };
 }

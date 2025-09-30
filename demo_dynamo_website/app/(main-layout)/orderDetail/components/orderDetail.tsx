@@ -14,8 +14,8 @@ export interface OrderDetailProps {
 }
 const screenScrollArea = "max-[1550px]:!max-h-[75vh] min-[1550px]:!max-h-[90vh]"
 export default function DetailOrderDetail({ openDetail, onClose, orderDetail }: OrderDetailProps) {
-    console.log("process")
-    console.log(orderDetail)
+    // console.log("process")
+    // console.log(orderDetail)
     return (
         <Dialog open={openDetail} onOpenChange={onClose}>
             <DialogContent

@@ -38,6 +38,6 @@ export function useMachineStatus(groupId: string) {
             fetchData();
         }
     }, [groupId]);
-    console.log(data)
+    // console.log(data)
     return { data, loading, error };
 }

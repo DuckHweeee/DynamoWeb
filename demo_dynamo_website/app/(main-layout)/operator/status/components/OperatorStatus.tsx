@@ -5,13 +5,13 @@ import { User } from "lucide-react";
 import { useMemo, useState } from "react";
 import { OperatorStatusType } from "../lib/type";
 
-type MachineStatus = "Đang Chạy" | "Dừng" | "Lỗi" | "Tắt";
+type MachineStatus = "Đang Chạy" | "Dừng" | "Lỗi" | "Trống";
 
 const statusColors: Record<MachineStatus, string> = {
     "Đang Chạy": "green-500",
     "Dừng": "yellow-500",
     "Lỗi": "red-500",
-    "Tắt": "gray-500",
+    "Trống": "gray-500",
 };
 
 // Map status code từ API → trạng thái hiển thị
@@ -19,7 +19,7 @@ const mapStatus = (status: string): MachineStatus => {
     if (status.startsWith("R")) return "Đang Chạy";
     if (status.startsWith("S")) return "Dừng";
     if (status.startsWith("E")) return "Lỗi";
-    return "Tắt";
+    return "Trống";
 };
 
 
@@ -28,14 +28,12 @@ export default function OperatorStatus({
 }: {
     dataOperatorStatus: OperatorStatusType[];
 }) {
-    console.log("dataOperatorStatus", dataOperatorStatus)
-    // === Summary tính toán tổng theo status ===
     const summary = useMemo(() => {
         let grouped: Record<MachineStatus, number> = {
             "Đang Chạy": 0,
             "Dừng": 0,
             "Lỗi": 0,
-            "Tắt": 0,
+            "Trống": 0,
         };
 
         dataOperatorStatus.forEach((staff) => {
@@ -49,7 +47,7 @@ export default function OperatorStatus({
         return { total, grouped };
     }, [dataOperatorStatus]);
 
-    const statusList: MachineStatus[] = ["Đang Chạy", "Dừng", "Lỗi", "Tắt"];
+    const statusList: MachineStatus[] = ["Đang Chạy", "Dừng", "Lỗi", "Trống"];
     const summaryItems = statusList.map((status) => ({
         title: `Tổng Số Máy ${status}`,
         value: summary.grouped[status],

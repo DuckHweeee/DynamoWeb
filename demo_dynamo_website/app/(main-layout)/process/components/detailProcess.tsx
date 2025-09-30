@@ -14,8 +14,6 @@ export interface OrderDetailProps {
 }
 const screenScrollArea = "max-[1550px]:!max-h-[75vh] min-[1550px]:!max-h-[90vh]"
 export default function DetailProcess({ openDetail, onClose, process }: OrderDetailProps) {
-    console.log("process")
-    console.log(process)
 
     // Calculate progress based on process status and time
     const calculateProgress = (process: Process | null): number => {
@@ -39,6 +37,7 @@ export default function DetailProcess({ openDetail, onClose, process }: OrderDet
     };
 
     const progress = calculateProgress(process);
+  
     return (
         <Dialog open={openDetail} onOpenChange={onClose}>
             <DialogContent
