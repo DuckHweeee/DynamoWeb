@@ -205,9 +205,6 @@ function getColumns({
                 )
             },
         }
-
-
-
     ]
 }
 
