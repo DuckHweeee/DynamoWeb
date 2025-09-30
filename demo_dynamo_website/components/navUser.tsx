@@ -35,8 +35,7 @@ export function ClientHeader() {
                 <SidebarTrigger className="-ml-1" />
                 <div className="flex flex-col">
                     <h1 className="text-2xl font-semibold text-[#369FFF]">
-                        {/* Xin chào {user?.username}, ngày mới tốt lành! */}
-                        Xin chào Dynamo, ngày mới tốt lành!
+                        Xin chào {user?.fullname || user?.username || "Dynamo"}, ngày mới tốt lành!
                     </h1>
                     {/* <p className="text-sm text-gray-500">{breadcrumb}</p> */}
                 </div>
@@ -55,13 +54,12 @@ export function ClientHeader() {
                                 <Avatar className="h-10 w-10">
                                     <AvatarImage src="/dynamo.png" />
                                     <AvatarFallback>
-                                        {user?.username?.charAt(0).toUpperCase() || "D"}
+                                        {user?.fullname?.charAt(0).toUpperCase() || user?.username?.charAt(0).toUpperCase() || "D"}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="flex flex-col text-lg">
                                     <span className="text-black font-medium capitalize">
-                                        {/* {user?.username || "Dynamo"} */}
-                                        {"Dynamo"}
+                                        {user?.fullname || user?.username || "Dynamo"}
                                     </span>
                                     <span className="text-blue-600">
                                         Vai trò {user?.role === "Admin" ? "Quản lý" : "Người vận hành"}

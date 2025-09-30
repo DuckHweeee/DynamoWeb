@@ -141,18 +141,33 @@ function getColumns({
       ),
       cell: ({ row }) => {
         const roles = row.original.role;
+        
+        const getRoleDisplay = (roleId: string) => {
+          switch (roleId.toUpperCase()) {
+            case 'ROLE_ADMIN':
+              return { text: 'Quản lý', variant: 'admin' as const }
+            case 'ROLE_USER':
+              return { text: 'Người vận hành', variant: 'operator' as const }
+            default:
+              return { text: roleId.replace('ROLE_', ''), variant: 'secondary' as const }
+          }
+        }
+        
         return (
           <div className="flex flex-wrap gap-1">
             {roles && roles.length > 0 ? (
-              roles.map((role, index) => (
-                <Badge 
-                  key={index} 
-                  variant="secondary" 
-                  className="text-xs"
-                >
-                  {role.name.replace('ROLE_', '')}
-                </Badge>
-              ))
+              roles.map((role, index) => {
+                const { text, variant } = getRoleDisplay(role.name)
+                return (
+                  <Badge 
+                    key={index} 
+                    variant={variant}
+                    className="text-xs"
+                  >
+                    {text}
+                  </Badge>
+                )
+              })
             ) : (
               <span className="text-gray-500 text-sm">Chưa có vai trò</span>
             )}
@@ -435,7 +450,7 @@ export function AdminTable({
           <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
             <DialogHeader>
               <DialogTitle className="text-3xl text-[#084188] font-semibold">
-                Chỉnh sửa quản trị viên
+                Chỉnh sửa người dùng
               </DialogTitle>
             </DialogHeader>
             {editForm}
@@ -449,7 +464,7 @@ export function AdminTable({
           <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
             <DialogHeader>
               <DialogTitle className="text-3xl text-[#084188] font-semibold">
-                Thông tin chi tiết quản trị viên
+                Thông tin chi tiết người dùng
               </DialogTitle>
             </DialogHeader>
             {detailForm}

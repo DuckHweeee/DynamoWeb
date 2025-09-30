@@ -2,25 +2,14 @@
 
 import * as React from "react"
 import {
-    AudioWaveform,
-    BookOpen,
-    Bot,
-    Command,
     FolderClock,
     FolderMinus,
-    Frame,
-    GalleryVerticalEnd,
     LayoutGrid,
-    Map,
     MessageCircleMore,
     MonitorCog,
     PencilRuler,
-    PieChart,
-    Settings2,
     SquarePen,
-    SquareTerminal,
     Tablet,
-    User,
     UserCog,
 } from "lucide-react"
 
@@ -32,8 +21,7 @@ import {
 import { NavMain } from "./nav-main"
 import { Logo } from "./logo"
 import { useAuth } from "@/contexts/AuthContext"
-import { it } from "node:test"
-// This is sample data.
+
 const data = {
     navMain: [
         {
@@ -194,9 +182,6 @@ const data = {
             icon: UserCog,
             items: [
                 { title: "Quản lý tài khoản", url: "/account" },
-                { title: "Thông tin cá nhân", url: "/account/profile" },
-                { title: "Đăng ký tài khoản", url: "/account/register" },
-                { title: "Đổi mật khẩu", url: "/account/change-password" }
             ]
         }
     ],
@@ -223,12 +208,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarHeader>
             <SidebarContent>
                 <NavMain items={getNavItemsForRole()} />
-                {/* <NavProjects projects={data.projects} /> */}
             </SidebarContent>
-            {/* <SidebarFooter>
-                <IIC />
-            </SidebarFooter> */}
-            {/* <SidebarRail /> */}
         </Sidebar>
     )
 }
