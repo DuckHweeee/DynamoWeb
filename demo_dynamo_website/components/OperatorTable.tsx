@@ -201,7 +201,7 @@ function getColumns({
           onClick={() =>
             onViewHistory(row.original.id, row.getValue("staffName"))
           }
-          className="h-8 px-3"
+          className="h-8 px-3 cursor-pointer"
         >
           <Eye className="h-4 w-4 mr-1" />
           Xem Lịch Sử

@@ -32,11 +32,11 @@ export function CreateGroupForm({ onSuccess, onCancel }: CreateGroupFormProps) {
         const newErrors: Partial<CreateGroupData> = {};
 
         if (!formData.groupName.trim()) {
-            newErrors.groupName = "Group name is required";
+            newErrors.groupName = "Phải có tên nhóm";
         }
 
         if (!formData.groupType) {
-            newErrors.groupType = "Group type is required";
+            newErrors.groupType = "Phải có loại nhóm";
         }
 
         setErrors(newErrors);
@@ -54,7 +54,7 @@ export function CreateGroupForm({ onSuccess, onCancel }: CreateGroupFormProps) {
             await createGroup(formData);
             onSuccess();
         } catch (error) {
-            toast.error("Failed to create group");
+            toast.error("Lỗi khi tạo nhóm");
         }
     };
 
@@ -68,12 +68,12 @@ export function CreateGroupForm({ onSuccess, onCancel }: CreateGroupFormProps) {
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-                <Label htmlFor="groupName">Group Name *</Label>
+                <Label htmlFor="groupName">Tên nhóm *</Label>
                 <Input
                     id="groupName"
                     value={formData.groupName}
                     onChange={(e) => handleInputChange("groupName", e.target.value)}
-                    placeholder="Enter group name"
+                    placeholder="Điền tên nhóm"
                     className={errors.groupName ? "border-red-500" : ""}
                 />
                 {errors.groupName && (
@@ -82,17 +82,17 @@ export function CreateGroupForm({ onSuccess, onCancel }: CreateGroupFormProps) {
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="groupType">Group Type *</Label>
+                <Label htmlFor="groupType">Loại nhóm *</Label>
                 <Select
                     value={formData.groupType}
                     onValueChange={(value) => handleInputChange("groupType", value)}
                 >
                     <SelectTrigger className={errors.groupType ? "border-red-500" : ""}>
-                        <SelectValue placeholder="Select group type" />
+                        <SelectValue placeholder="Chọn loại nhóm" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="staff">Staff</SelectItem>
-                        <SelectItem value="machine">Machine</SelectItem>
+                        <SelectItem value="staff">Nhân viên</SelectItem>
+                        <SelectItem value="machine">Máy móc</SelectItem>
                     </SelectContent>
                 </Select>
                 {errors.groupType && (
@@ -101,11 +101,11 @@ export function CreateGroupForm({ onSuccess, onCancel }: CreateGroupFormProps) {
             </div>
 
             <div className="flex justify-end space-x-2 pt-4">
-                <Button type="button" variant="outline" onClick={onCancel}>
-                    Cancel
+                <Button className="cursor-pointer" type="button" variant="outline" onClick={onCancel}>
+                    Hủy
                 </Button>
-                <Button type="submit" disabled={loading}>
-                    {loading ? "Creating..." : "Create Group"}
+                <Button className="cursor-pointer" type="submit" disabled={loading}>
+                    {loading ? "Đang tạo..." : "Tạo nhóm"}
                 </Button>
             </div>
         </form>

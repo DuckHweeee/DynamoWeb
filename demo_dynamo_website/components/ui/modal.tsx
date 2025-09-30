@@ -28,12 +28,12 @@ interface ModalTitleProps {
     className?: string
 }
 
-export function Modal({ 
-    isOpen, 
-    onClose, 
-    children, 
+export function Modal({
+    isOpen,
+    onClose,
+    children,
     className,
-    showCloseButton = true 
+    showCloseButton = true
 }: ModalProps) {
     // Close modal on escape key
     React.useEffect(() => {
@@ -59,13 +59,13 @@ export function Modal({
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
             {/* Backdrop */}
-            <div 
+            <div
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm"
                 onClick={onClose}
             />
-            
+
             {/* Modal Content */}
-            <div 
+            <div
                 className={cn(
                     "relative bg-white rounded-lg shadow-xl max-h-[95vh] w-[99vw] max-w-none flex flex-col overflow-hidden",
                     className
@@ -73,11 +73,11 @@ export function Modal({
                 onClick={(e) => e.stopPropagation()}
             >
                 {children}
-                
+
                 {showCloseButton && (
                     <button
                         onClick={onClose}
-                        className="absolute top-4 right-4 p-2 rounded-lg border hover:bg-gray-100 transition-colors z-10"
+                        className="absolute top-4 right-4 p-2 rounded-lg border hover:bg-gray-100 transition-colors z-1 0 cursor-pointer"
                     >
                         <XIcon className="h-4 w-4" />
                         <span className="sr-only">Close</span>

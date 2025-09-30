@@ -81,7 +81,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-lg font-bold cursor-pointer"
           >
             Năm
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -103,7 +103,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-lg font-bold cursor-pointer"
           >
             Tháng
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -125,7 +125,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-lg font-bold cursor-pointer"
           >
             Phòng ban
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -145,7 +145,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-lg font-bold cursor-pointer"
           >
             Nhóm
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -181,7 +181,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-lg font-bold cursor-pointer"
           >
             Mục tiêu làm việc
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -203,7 +203,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-lg font-bold cursor-pointer"
           >
             Giờ tăng giảm thực
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -228,7 +228,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-lg font-bold cursor-pointer"
           >
             Giờ làm việc thực
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -252,13 +252,14 @@ function getColumns({
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
+              <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
                 <span className="sr-only">Mở menu</span>
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem
+                className="cursor-pointer"
                 onClick={() => {
                   setEditingGroupKPI(groupKPI);
                   setShowForm(true);
@@ -268,7 +269,7 @@ function getColumns({
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => handleDelete(groupKPI.id)}
-                className="text-red-600"
+                className="text-red-600 cursor-pointer"
               >
                 Xóa
               </DropdownMenuItem>
@@ -490,21 +491,21 @@ export default function GroupKPIPage() {
                 setEditingGroupKPI(null);
                 setShowForm(true);
               }}
-              className="bg-[#004799] hover:bg-[#003b80] text-white px-6 py-2 rounded-md transition"
+              className="bg-[#004799] hover:bg-[#003b80] text-white px-6 py-2 rounded-md transition cursor-pointer"
             >
               <Plus className="h-5 w-5 mr-2" />
               Thêm KPI
             </Button>
             <Button
               onClick={() => setShowImportDialogMonth(true)}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md transition mr-2"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md transition mr-2 cursor-pointer"
             >
               <Upload className="h-5 w-5 mr-2" />
               KPI Tháng
             </Button>
             <Button
               onClick={() => setShowImportDialogWeek(true)}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md transition mr-2"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md transition mr-2 cursor-pointer"
             >
               <Upload className="h-5 w-5 mr-2" />
               KPI Tuần
@@ -525,14 +526,14 @@ export default function GroupKPIPage() {
                 setPeriodFilter(value)
               }
             >
-              <SelectTrigger className="h-9">
+              <SelectTrigger className="h-9 cursor-pointer">
                 <SelectValue placeholder="Chọn loại" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tất cả</SelectItem>
-                <SelectItem value="month">Theo tháng</SelectItem>
-                <SelectItem value="week">Theo tuần</SelectItem>
-                <SelectItem value="day">Theo ngày</SelectItem>
+                <SelectItem value="all" className="cursor-pointer">Tất cả</SelectItem>
+                <SelectItem value="month" className="cursor-pointer">Theo tháng</SelectItem>
+                <SelectItem value="week" className="cursor-pointer">Theo tuần</SelectItem>
+                <SelectItem value="day" className="cursor-pointer">Theo ngày</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -548,13 +549,13 @@ export default function GroupKPIPage() {
                 setYearFilter(value === "all" ? null : parseInt(value))
               }
             >
-              <SelectTrigger className="h-9">
+              <SelectTrigger className="h-9 cursor-pointer">
                 <SelectValue placeholder="Chọn năm" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Tất cả năm</SelectItem>
                 {years.map((year) => (
-                  <SelectItem key={year} value={year.toString()}>
+                  <SelectItem className="cursor-pointer" key={year} value={year.toString()}>
                     {year}
                   </SelectItem>
                 ))}
@@ -574,13 +575,13 @@ export default function GroupKPIPage() {
                   setMonthFilter(value === "all" ? null : parseInt(value))
                 }
               >
-                <SelectTrigger className="h-9">
+                <SelectTrigger className="h-9 cursor-pointer">
                   <SelectValue placeholder="Chọn tháng" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tất cả tháng</SelectItem>
+                  <SelectItem className="cursor-pointer" value="all">Tất cả tháng</SelectItem>
                   {months.map((month) => (
-                    <SelectItem key={month} value={month.toString()}>
+                    <SelectItem className="cursor-pointer" key={month} value={month.toString()}>
                       Tháng {month}
                     </SelectItem>
                   ))}
@@ -668,7 +669,7 @@ export default function GroupKPIPage() {
                 variant="outline"
                 size="sm"
                 onClick={clearFilters}
-                className="text-red-600 hover:text-red-700 border-red-200 hover:border-red-300 h-9"
+                className="text-red-600 hover:text-red-700 border-red-200 hover:border-red-300 h-9 cursor-pointer"
               >
                 <X className="h-4 w-4 mr-1" />
                 Xóa bộ lọc

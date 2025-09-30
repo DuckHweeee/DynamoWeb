@@ -201,21 +201,18 @@ export default function DrawingCodeTable() {
                             className="pl-10 py-5"
                         />
                     </div>
-
-                    <Button
-                        variant="outline"
-                        size="lg"
-                        className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
-                        onClick={() => setShowImportDialog(true)}
-                    >
-                        <Upload className="mr-2 h-4 w-4" />
-                        Import Excel
-                    </Button>
-
                     <Button
                         variant="secondary" size="icon" className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
                         onClick={() => setShowForm(true)}>
                         <Plus size={60} strokeWidth={5} color="white" />
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        className="px-10 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
+                        onClick={() => setShowImportDialog(true)}
+                    >
+                        <Upload size={60} strokeWidth={4} color="white" />
                     </Button>
                 </div>
             </div>
@@ -301,8 +298,8 @@ export default function DrawingCodeTable() {
                 onClose={() => setShowImportDialog(false)}
                 onImportSuccess={handleImportSuccess}
                 endpoint="drawing-code/upload"
-                title="Import dữ liệu bản vẽ"
-                description="Chọn file Excel để import dữ liệu bản vẽ vào hệ thống"
+                title="Tải dữ liệu bản vẽ"
+                description="Chọn file Excel để tải dữ liệu bản vẽ vào hệ thống"
             />
 
             <div className="flex items-center justify-end space-x-2 py-4">

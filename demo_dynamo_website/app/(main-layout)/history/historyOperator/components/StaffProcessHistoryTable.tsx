@@ -82,7 +82,7 @@ export function StaffProcessHistoryTable({
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="h-auto p-0 hover:bg-transparent text-xs"
+                    className="h-auto p-0 hover:bg-transparent text-xs cursor-pointer"
                 >
                     <span className="font-semibold">Thời Gian</span>
                     <ArrowUpDown className="ml-1 h-3 w-3" />
@@ -297,7 +297,7 @@ export function StaffProcessHistoryTable({
                                     <Button
                                         variant="outline"
                                         className={cn(
-                                            "justify-start text-left font-normal w-[140px]",
+                                            "justify-start text-left font-normal w-[140px] cursor-pointer",
                                             !startDate && "text-muted-foreground"
                                         )}
                                     >
@@ -320,7 +320,7 @@ export function StaffProcessHistoryTable({
                                     <Button
                                         variant="outline"
                                         className={cn(
-                                            "justify-start text-left font-normal w-[140px]",
+                                            "justify-start text-left font-normal w-[140px] cursor-pointer",
                                             !endDate && "text-muted-foreground"
                                         )}
                                     >
@@ -338,7 +338,7 @@ export function StaffProcessHistoryTable({
                                 </PopoverContent>
                             </Popover>
 
-                            <Button variant="outline" onClick={handleRefresh} className="px-3">
+                            <Button variant="outline" onClick={handleRefresh} className="px-3 cursor-pointer">
                                 <RefreshCw className="h-4 w-4" />
                             </Button>
                         </div>
@@ -359,7 +359,7 @@ export function StaffProcessHistoryTable({
                             <div className="text-center">
                                 <p className="text-red-500 mb-2">Có lỗi xảy ra</p>
                                 <p className="text-gray-600 mb-4">{error}</p>
-                                <Button onClick={handleRefresh} variant="outline">
+                                <Button className="cursor-pointer" onClick={handleRefresh} variant="outline">
                                     Thử lại
                                 </Button>
                             </div>
@@ -419,6 +419,7 @@ export function StaffProcessHistoryTable({
                             </div>
                             <div className="flex items-center space-x-2">
                                 <Button
+                                    className="cursor-pointer"
                                     variant="outline"
                                     size="sm"
                                     onClick={() => table.previousPage()}
@@ -430,6 +431,7 @@ export function StaffProcessHistoryTable({
                                     Trang {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
                                 </div>
                                 <Button
+                                    className="cursor-pointer"
                                     variant="outline"
                                     size="sm"
                                     onClick={() => table.nextPage()}

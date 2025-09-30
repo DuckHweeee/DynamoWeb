@@ -26,7 +26,7 @@ const getHistoryProcessColumns = (): ColumnDef<any>[] => [
     {
         accessorKey: "orderDetailDto.orderCode",
         header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="h-auto p-0 hover:bg-transparent">
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="h-auto p-0 hover:bg-transparent cursor-pointer">
                 <span className="font-bold">Mã Đơn Hàng</span>
                 <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
@@ -240,13 +240,13 @@ export default function HistoryProcessPage() {
                     <div className="w-full xl:w-48">
                         <label className="block text-sm font-medium text-gray-700 mb-2">Loại quy trình</label>
                         <Select value={selectedProcessType} onValueChange={setSelectedProcessType}>
-                            <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10">
-                                <SelectValue placeholder="Chọn loại quy trình" />
+                            <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10 cursor-pointer">
+                                <SelectValue className="cursor-pointer" placeholder="Chọn loại quy trình" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">Tất cả loại</SelectItem>
                                 {processTypes.map((type) => (
-                                    <SelectItem key={type} value={type}>
+                                    <SelectItem className="cursor-pointer" key={type} value={type}>
                                         {type}
                                     </SelectItem>
                                 ))}
@@ -258,13 +258,13 @@ export default function HistoryProcessPage() {
                     <div className="w-full xl:w-48">
                         <label className="block text-sm font-medium text-gray-700 mb-2">Máy</label>
                         <Select value={selectedMachine} onValueChange={setSelectedMachine}>
-                            <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10">
-                                <SelectValue placeholder="Chọn máy" />
+                            <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10 cursor-pointer">
+                                <SelectValue className="cursor-pointer" placeholder="Chọn máy" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">Tất cả máy</SelectItem>
                                 {machines.map((machine) => (
-                                    <SelectItem key={machine} value={machine}>
+                                    <SelectItem className="cursor-pointer" key={machine} value={machine}>
                                         {machine}
                                     </SelectItem>
                                 ))}
@@ -276,13 +276,13 @@ export default function HistoryProcessPage() {
                     <div className="w-full xl:w-48">
                         <label className="block text-sm font-medium text-gray-700 mb-2">Nhân viên</label>
                         <Select value={selectedStaff} onValueChange={setSelectedStaff}>
-                            <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10">
-                                <SelectValue placeholder="Chọn nhân viên" />
+                            <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10 cursor-pointer">
+                                <SelectValue className="cursor-pointer" placeholder="Chọn nhân viên" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">Tất cả nhân viên</SelectItem>
                                 {staffMembers.map((staff) => (
-                                    <SelectItem key={staff} value={staff}>
+                                    <SelectItem className="cursor-pointer" key={staff} value={staff}>
                                         {staff}
                                     </SelectItem>
                                 ))}
@@ -299,7 +299,7 @@ export default function HistoryProcessPage() {
                                     variant="outline"
                                     onClick={clearFilters}
                                     size="sm"
-                                    className="h-10 flex-1"
+                                    className="h-10 flex-1 cursor-pointer"
                                 >
                                     Xóa bộ lọc
                                 </Button>
@@ -307,7 +307,7 @@ export default function HistoryProcessPage() {
                             <Button
                                 variant="default"
                                 size="sm"
-                                className="h-10 flex-1"
+                                className="h-10 flex-1 cursor-pointer"
                                 onClick={() => refetch()}
                                 disabled={loading}
                             >

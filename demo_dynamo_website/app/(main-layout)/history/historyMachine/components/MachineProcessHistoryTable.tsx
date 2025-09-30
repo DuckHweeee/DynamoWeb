@@ -83,7 +83,7 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="h-auto p-0 hover:bg-transparent text-xs"
+                    className="h-auto p-0 hover:bg-transparent text-xs cursor-pointer"
                 >
                     <span className="font-semibold">Thời Gian</span>
                     <ArrowUpDown className="ml-1 h-3 w-3" />
@@ -291,11 +291,11 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
                         {/* Actions */}
                         <div className="flex gap-2">
                             {hasFilters && (
-                                <Button variant="outline" size="sm" onClick={clearFilters}>
+                                <Button className="cursor-pointer" variant="outline" size="sm" onClick={clearFilters}>
                                     Xóa bộ lọc
                                 </Button>
                             )}
-                            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loading}>
+                            <Button className="cursor-pointer" variant="outline" size="sm" onClick={handleRefresh} disabled={loading}>
                                 <RefreshCw className={cn("h-4 w-4 mr-2", loading && "animate-spin")} />
                                 Làm mới
                             </Button>
@@ -372,6 +372,7 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
                             </div>
                             <div className="flex items-center space-x-2">
                                 <Button
+                                    className="cursor-pointer"
                                     variant="outline"
                                     size="sm"
                                     onClick={() => table.previousPage()}
@@ -383,6 +384,7 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
                                     Trang {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
                                 </span>
                                 <Button
+                                    className="cursor-pointer"
                                     variant="outline"
                                     size="sm"
                                     onClick={() => table.nextPage()}

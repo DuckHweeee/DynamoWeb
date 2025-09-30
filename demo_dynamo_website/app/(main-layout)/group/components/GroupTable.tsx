@@ -134,19 +134,18 @@ export function GroupTable() {
                         />
                     </div>
                     <Button
-                        variant="outline"
-                        size="lg"
-                        className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
-                        onClick={() => setShowImportDialog(true)}
-                    >
-                        <Upload className="mr-2 h-4 w-4" />
-                        Import Excel
-                    </Button>
-                    <Button
                         onClick={() => setShowCreateDialog(true)}
-                        className="bg-[#004799] hover:bg-[#003b80] text-white px-6 py-2 rounded-md transition"
+                        variant="secondary" size="icon" className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
                     >
                         <Plus size={60} strokeWidth={5} color="white" />
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        className="px-10 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
+                        onClick={() => setShowImportDialog(true)}
+                    >
+                        <Upload size={60} strokeWidth={4} color="white" />
                     </Button>
                 </div>
             </div>
@@ -157,17 +156,17 @@ export function GroupTable() {
                     <TableHeader>
                         <TableRow className="text-lg font-bold">
                             <TableHead>
-                                <Button className="text-lg font-bold" variant="ghost">
+                                <Button className="text-lg font-bold cursor-pointer" variant="ghost">
                                     Tên Nhóm
                                 </Button>
                             </TableHead>
                             <TableHead>
-                                <Button className="text-lg font-bold" variant="ghost">
+                                <Button className="text-lg font-bold cursor-pointer" variant="ghost">
                                     Ngày Tạo
                                 </Button>
                             </TableHead>
                             <TableHead>
-                                <Button className="text-lg font-bold" variant="ghost">
+                                <Button className="text-lg font-bold cursor-pointer" variant="ghost">
                                     Cập Nhật
                                 </Button>
                             </TableHead>
@@ -204,22 +203,22 @@ export function GroupTable() {
                                     <TableCell className="text-right pr-5">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                                <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
                                                     <MoreHorizontal className="h-4 w-4" />
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
-                                                <DropdownMenuItem onClick={() => handleView(group)}>
+                                                <DropdownMenuItem className="cursor-pointer" onClick={() => handleView(group)}>
                                                     <Eye className="mr-2 h-4 w-4" />
                                                     Xem Chi Tiết
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => handleEdit(group)}>
+                                                <DropdownMenuItem className="cursor-pointer" onClick={() => handleEdit(group)}>
                                                     <Edit className="mr-2 h-4 w-4" />
                                                     Chỉnh Sửa
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onClick={() => handleDelete(group)}
-                                                    className="text-red-600"
+                                                    className="text-red-600 cursor-pointer"
                                                 >
                                                     <Trash2 className="mr-2 h-4 w-4" />
                                                     Xóa

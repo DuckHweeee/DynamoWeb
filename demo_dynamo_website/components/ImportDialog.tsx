@@ -177,15 +177,15 @@ export function ImportDialog({
                     )}
 
                     <div className="flex justify-end space-x-2">
-                        <Button variant="outline" onClick={handleClose} disabled={loading}>
+                        <Button variant="outline" onClick={handleClose} disabled={loading} className='cursor-pointer'>
                             Hủy
                         </Button>
                         <Button
                             onClick={handleUpload}
                             disabled={!selectedFile || loading}
-                            className="bg-green-600 hover:bg-green-700"
+                            className="bg-green-600 hover:bg-green-700 cursor-pointer"
                         >
-                            {loading ? "Đang import..." : "Import"}
+                            {loading ? "Đang tải lên..." : "Tải lên"}
                         </Button>
                     </div>
                 </div>

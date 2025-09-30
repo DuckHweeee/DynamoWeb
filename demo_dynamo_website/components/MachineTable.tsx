@@ -366,7 +366,7 @@ export function MachineTable({
                             onClick={() => setShowImportDialog(true)}
                         >
                             <Upload className="mr-2 h-4 w-4" />
-                            Import Excel
+                            Tải Excel
                         </Button>
                     )}
 
@@ -514,11 +514,11 @@ export function MachineTable({
                     {table.getFilteredRowModel().rows.length} row(s) selected.
                 </div> */}
                 <div className="space-x-2">
-                    <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+                    <Button className="cursor-pointer" variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
                         Trước
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-                        Tiếp
+                    <Button className="cursor-pointer" variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+                        Sau
                     </Button>
                 </div>
             </div>
