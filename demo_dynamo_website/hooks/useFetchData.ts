@@ -4,16 +4,6 @@ import axios from "axios"
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-// export function useFetchProcesses() {
-//     const [processes, setProcesses] = useState<Process2[]>([])
-//     useEffect(() => {
-//         axios.get(`${url}/api/drawing-code-process`)
-//             .then((res) => setProcesses(res.data))
-//             .catch((err) => console.error("Error fetching processes:", err))
-//     }, [])
-//     return processes
-// }
-
 //Cần viết dạng này nhiều hơn (phát triển nếu kịp thời gian) 
 export const useFetchProcesses = () => {
     const [data, setData] = useState<Process2[]>([]);
