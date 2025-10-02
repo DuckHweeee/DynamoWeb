@@ -9,6 +9,8 @@ import {
 import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ProcessData, StaffDto } from "@/lib/type";
+import { ScrollArea } from "@/components/ui/scroll-area"
+
 
 // Define columns based on processStatus
 const processColumns = [
@@ -123,7 +125,8 @@ const KanbanPage = () => {
           Quản lý và theo dõi tiến độ các quy trình sản xuất
         </p>
       </div>
-      <div className="flex gap-6 overflow-x-auto pb-4">
+      <ScrollArea className="w-full h-[calc(100vh-200px)]">
+        <div className="flex gap-6 pb-4 min-w-max">
         <KanbanProvider
           columns={columns}
           data={transformedData}
@@ -273,7 +276,8 @@ const KanbanPage = () => {
             </div>
           )}
         </KanbanProvider>
-      </div>
+        </div>
+      </ScrollArea>
     </div>
   );
 };
