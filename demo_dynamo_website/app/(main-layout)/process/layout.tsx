@@ -21,6 +21,7 @@ export default function TbaletLayout({
 
   return (
     <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+
       <div className="m-2 px-4 py-1 bg-white rounded-[10px] shadow">
         {children}
       </div>

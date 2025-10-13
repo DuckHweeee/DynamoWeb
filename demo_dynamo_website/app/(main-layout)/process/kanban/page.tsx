@@ -10,6 +10,8 @@ import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ProcessData, StaffDto } from "@/lib/type";
 
+
+
 // Define columns based on processStatus
 const processColumns = [
   { id: "status-1", name: "Chờ Xử Lý", color: "#f6ee0aff", status: 1 }, // Waiting
@@ -123,14 +125,15 @@ const KanbanPage = () => {
           Quản lý và theo dõi tiến độ các quy trình sản xuất
         </p>
       </div>
-      <div className="flex gap-6 overflow-x-auto pb-4">
+      <div className="w-full h-[calc(100vh-200px)] overflow-x-auto">
+        <div className="flex gap-6 min-w-max h-full">
         <KanbanProvider
           columns={columns}
           data={transformedData}
           onDataChange={handleDataChange}
         >
           {(column: any) => (
-            <div key={column.id} className="min-w-[350px]">
+            <div key={column.id} className="min-w-[350px] flex flex-col h-[calc(100vh-250px)]">
               <KanbanBoard id={column.id}>
                 <KanbanHeader>
                   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-t-lg border-b">
@@ -151,8 +154,9 @@ const KanbanPage = () => {
                       }
                     </div>
                   </div>
-                </KanbanHeader>
-                <KanbanCards id={column.id}>
+                 </KanbanHeader>
+                 <div className="flex-1 overflow-hidden">
+                   <KanbanCards id={column.id}>
                   {(item: (typeof transformedData)[number]) => {
                     const process = item.processData;
                     const staffNames = getStaffNames(process.staffDtos);
@@ -267,12 +271,14 @@ const KanbanPage = () => {
                         </div>
                       </KanbanCard>
                     );
-                  }}
-                </KanbanCards>
+                   }}
+                   </KanbanCards>
+                 </div>
               </KanbanBoard>
             </div>
           )}
         </KanbanProvider>
+        </div>
       </div>
     </div>
   );
