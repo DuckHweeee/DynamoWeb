@@ -4,12 +4,13 @@ import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { toast } from "sonner"
+import { useAuth } from "@/contexts/AuthContext"
 import { FlexibleCombobox } from "./FlexibleCombobox"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { vi } from "date-fns/locale"
 import dayjs from "dayjs";
-import { toast } from "sonner"
 import { Process, UpdateProcess } from "../../lib/type"
 import { useOrderDetail } from "../../hooks/useOrderDetail"
 import { useMachine } from "../../hooks/useMachine"
@@ -26,6 +27,7 @@ export default function EditProcessForm({
     onUpdate,
     onCancel,
 }: EditProcessFormProps) {
+    const { user } = useAuth()
 
     const { data: orderList } = useOrderDetail()
     const { data: machineList } = useMachine()
@@ -74,7 +76,8 @@ export default function EditProcessForm({
             !startDate ||
             !endDate ||
             !updateProcess.machineId ||
-            !updateProcess.staffId
+            !updateProcess.staffId ||
+            !user?.id
         ) {
             toast.error("Vui lòng nhập đầy đủ thông tin nhân viên.");
             return;
@@ -99,7 +102,7 @@ export default function EditProcessForm({
                         orderCode: updateProcess.orderCode,
                         machineId: updateProcess.machineId,
                         staffId: updateProcess.staffId,
-                        plannerId: "47c7f973-6a64-4544-94eb-c5df1f4201dd",
+                        plannerId: user.id,
                     }),
                 }
             );

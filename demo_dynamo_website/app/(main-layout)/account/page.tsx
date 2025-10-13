@@ -1,11 +1,12 @@
 "use client";
 
-import AdminDataTable from "./_components/adminDataTable";
+import UserDataTable from "./_components/userDataTable";
+
 
 const AdminPage = () => {
     return (
         <div className="w-full h-full">
-            <AdminDataTable />
+            <UserDataTable />
         </div>
     );
 }

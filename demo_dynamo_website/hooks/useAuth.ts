@@ -32,12 +32,15 @@ export function useRole() {
   const hasAnyRole = (roles: string[]) => user?.role && roles.includes(user.role);
   const isAdmin = () => user?.role === "Admin";
   const isOperator = () => user?.role === "Operator";
+  const hasSpecificRole = (roleName: string) => user?.roles?.some(role => role.name === roleName);
 
   return {
     hasRole,
     hasAnyRole,
     isAdmin,
     isOperator,
+    hasSpecificRole,
     currentRole: user?.role,
+    userRoles: user?.roles,
   };
 }

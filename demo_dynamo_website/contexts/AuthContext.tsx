@@ -9,12 +9,14 @@ export interface User {
   id: string;
   username: string;
   email: string;
-  role: UserRole;
+  fullname: string;
+  role: UserRole;  // Simplified role for compatibility
+  roles: Array<{ id: number; name: string }>; // Full role array from API
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -29,21 +31,18 @@ export function useAuth() {
   return context;
 }
 
-// Mock users for demonstration - replace with real API
-const MOCK_USERS: User[] = [
-  {
-    id: "1",
-    username: "admin",
-    email: "admin@dynamo.com",
-    role: "Admin",
-  },
-  {
-    id: "2",
-    username: "operator",
-    email: "operator@dynamo.com",
-    role: "Operator",
-  },
-];
+const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+// Helper function to determine user role from role array
+function getUserRole(roles: Array<{ id: number; name: string }> = []): UserRole {
+  const hasAdmin = roles.some(role => role.name === "ROLE_ADMIN");
+
+  if (hasAdmin) {
+    return "Admin";
+  }
+  
+  return "Operator";
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -76,30 +75,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [user]);
 
-  const login = async (username: string, password: string): Promise<boolean> => {
+  const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
 
-    // Mock authentication - replace with real API call
-    const mockUser = MOCK_USERS.find(
-      (u) => u.username === username && password === "dynamo"
-    );
+    try {
+      const response = await fetch(`${urlLink}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (mockUser) {
-        // Optimize by reducing redundant operations
-        const userData = JSON.stringify(mockUser);
-        setUser(mockUser);
-        localStorage.setItem("auth-user", userData);
-        document.cookie = `auth-user=${userData}; path=/; max-age=${7 * 24 * 60 * 60}`;
-
-        // Redirect based on role
-        router.push(mockUser.role === "Admin" ? "/" : "/tablet/process");
-
+      if (!response.ok) {
         setIsLoading(false);
-        return true;
-    }
+        return false;
+      }
 
-    setIsLoading(false);
-    return false;
+      const userData = await response.json();
+      
+      // Transform API response to match our User interface
+      const user: User = {
+        id: userData.id,
+        username: userData.username,
+        email: userData.email,
+        fullname: userData.fullname,
+        role: getUserRole(userData.role), // Transform role array to simple role
+        roles: userData.role || [],
+      };
+
+      setUser(user);
+      localStorage.setItem("auth-user", JSON.stringify(user));
+      document.cookie = `auth-user=${JSON.stringify(user)}; path=/; max-age=${7 * 24 * 60 * 60}`;
+
+      // Redirect based on role
+      router.push(user.role === "Admin" ? "/" : "/tablet/process");
+
+      setIsLoading(false);
+      return true;
+    } catch (error) {
+      console.error('Login error:', error);
+      setIsLoading(false);
+      return false;
+    }
   };
 
   const logout = () => {

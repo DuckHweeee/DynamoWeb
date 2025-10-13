@@ -21,6 +21,8 @@ const badgeVariants = cva(
         inProgress: "bg-yellow-100 text-yellow-800 border-yellow-200",
         pending: "bg-blue-100 text-blue-800 border-blue-200",
         canceled: "bg-red-100 text-red-800 border-red-200",
+        admin: "bg-gray-300 font-bold text-red-500 border-gray-200",
+        operator: "bg-indigo-100 text-indigo-800 border-indigo-200",
       },
     },
     defaultVariants: {
