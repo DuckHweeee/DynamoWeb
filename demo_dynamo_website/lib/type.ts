@@ -1,3 +1,5 @@
+import { off } from "process"
+
 export type Operator = {
     stt: string
     id: string
@@ -315,6 +317,50 @@ export type Role = {
     name: string;
 }
 
+export interface DailyReport {
+    id: number;
+    dateTime: string; // ngày
+    office: string; // phòng ban
+    reportType: string; // loại khai báo
+    hourDiff: number; // giờ tăng giảm thực
+    createdDate: string; // ngày khai báo
+    groupId: string; // nhóm ID
+    adminId: string; // người khai báo ID
+}
+
+export interface NewDailyReport {
+    dateTime: string;
+    office: string;
+    reportType: string;
+    hourDiff: number;
+    groupId: string;
+}
+
+// Type for report types based on the image
+export type ReportType = 'off' | 'overtime' | 'extra' | 'leave';
+
+export const REPORT_TYPE_LABELS: Record<ReportType, string> = {
+    'off': 'Nghỉ ngày làm',
+    'overtime': 'Tăng ca thêm',
+    'extra': 'Làm ngày nghỉ',
+    'leave': 'Về sớm giờ'
+};
+
+export const REPORT_TYPE_OPTIONS = [
+    { value: 'off', label: 'Nghỉ ngày làm' },
+    { value: 'overtime', label: 'Tăng ca thêm' },
+    { value: 'extra', label: 'Làm ngày nghỉ' },
+    { value: 'leave', label: 'Về sớm giờ' }
+];
+
+// Office options
+export type OfficeType = 'pin' | 'insert' | 'mold';
+
+export const OFFICE_OPTIONS = [
+    { value: 'pin', label: 'Pin' },
+    { value: 'insert', label: 'Insert' },
+    { value: 'mold', label: 'Mold' }
+];
 export type Admin = {
     id: string;
     email: string;
