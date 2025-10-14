@@ -135,6 +135,10 @@ const data = {
                 {
                     title: "Cài đặt KPI",
                     url: "/group/kpi",
+                },
+                {
+                    title: "Báo cáo hàng ngày",
+                    url: "/group/dailyReport",
                 }
             ],
         },
