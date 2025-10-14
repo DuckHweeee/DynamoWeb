@@ -3,20 +3,16 @@
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Staff } from "@/lib/type"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
 import { useGroup } from "../../hooks/useStaff"
 import { SelectYear } from "../../components/SelectYear"
 import { SelectMonth } from "../../components/SelectMonth"
-import { officeList } from "../../lib/data"
 import { KPI } from "../lib/type"
 import { FlexibleCombobox } from "./FlexibleCombobox"
 import { useStaff } from "../hooks/useStaff"
 import {
-    validateStaffKPI,
-    StaffKPIFormData,
     validateStaffKPIStaffId,
     validateStaffKPIGroupId,
     validateStaffKPIYear,

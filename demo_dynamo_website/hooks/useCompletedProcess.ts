@@ -21,7 +21,7 @@ export function useCompletedProcess() {
             console.log("Completed process response:", res.data)
             setData(res.data)
         } catch (err) {
-            setError("Lỗi khi tải dữ liệu lịch sử quy trình hoàn thành")
+            setError("Lỗi khi tải dữ liệu lịch sử quy trình hoàn thành.")
             console.error("Error fetching completed process history:", err)
         } finally {
             setLoading(false)

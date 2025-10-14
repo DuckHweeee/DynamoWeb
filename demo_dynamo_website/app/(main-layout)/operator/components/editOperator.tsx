@@ -11,9 +11,6 @@ import { Staff } from "@/lib/type"
 import { useStaffWithKPI } from "../hooks/useStaffWithKPI"
 import { officeList, statusList } from "../lib/data"
 import { 
-    validateEditStaff, 
-    EditStaffFormData, 
-    formatValidationErrors,
     validateStaffId,
     validateStaffName,
     validateShortName,

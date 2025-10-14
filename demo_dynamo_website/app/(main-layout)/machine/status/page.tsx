@@ -1,6 +1,5 @@
 "use client"
-import { Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
+
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import MachineStatus from "./components/MachineStatus"
 import { useGroups } from "@/hooks/useGroup"

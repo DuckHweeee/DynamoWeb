@@ -2,7 +2,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogOverlay, DialogPortal, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import ProgressSteps from "./ProgressSteps";
 import dayjs from "dayjs";
 import { Process } from "../../lib/type";
 import Steps from "@/app/(main-layout)/orderDetail/components/steps";

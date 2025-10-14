@@ -1,10 +1,11 @@
 "use client"
+
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useGroups } from "@/hooks/useGroup";
 import { ReportTimeOperatorDetail } from "./components/ReportTimeOperatorDetail";
 import TableOperatorDetail from "./components/TableOperatorDetail";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import DateRangeSelectorDetail from "./components/DateRangeSelectorDetail";
 import { Button } from "@/components/ui/button";
 import { Download, UserRoundSearch, } from "lucide-react";

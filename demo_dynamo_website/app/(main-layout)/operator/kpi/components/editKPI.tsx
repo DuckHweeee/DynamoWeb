@@ -19,7 +19,6 @@ import {
     validateStaffKPIManufacturingPoint,
     validateStaffKPIOleGoal,
     validateStaffKPIGroupId,
-    staffKPISchema
 } from "../lib/validation"
 import { SelectYear } from "../../components/SelectYear"
 import { SelectMonth } from "../../components/SelectMonth"

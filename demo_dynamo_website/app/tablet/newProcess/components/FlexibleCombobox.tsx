@@ -16,7 +16,6 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface FlexibleComboboxProps<T> {
     options: T[]
@@ -48,17 +47,10 @@ export function FlexibleCombobox<T>({
     const selectedItem = options.find(
         (item) => String(item[valueField]) === value
     )
-    // const selectedItem = options.find(
-    //     (item) => String(item[valueField]) === value // so sánh machineId với value
-    // );
 
     const filteredOptions = options.filter((item) =>
         String(item[displayField]).toLowerCase().includes(inputValue.toLowerCase())
     )
-    // const filteredOptions = options.filter((item) =>
-    //     fuzzyMatch(String(item[displayField]), inputValue)
-    // );
-
 
     return (
         <Popover open={open} onOpenChange={setOpen}>

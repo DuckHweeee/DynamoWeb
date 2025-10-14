@@ -1,3 +1,5 @@
+"use client";
+
 import { MonitorDot, TrendingDown, TrendingUp } from "lucide-react";
 import { StaffStatistic } from "../../lib/type";
 interface Props {

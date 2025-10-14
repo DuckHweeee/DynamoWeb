@@ -1,5 +1,5 @@
 "use client"
-import { DateRange } from "react-day-picker"
+
 import {
     Select,
     SelectContent,
@@ -9,7 +9,6 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
 import MachineTable from "./components/machineTable";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from 'next/navigation';
@@ -17,8 +16,6 @@ import { ReportTimeMachine } from "./components/ReportTimeMachine";
 import { SumRealTimeMachine } from "./components/SumRealTimeMachine";
 import { MachineProcessBarChart } from "./components/machineProcessBarChart";
 import { MachineTopProcessChart } from "./components/machineTopProcessChart";
-import { DivergingBarChart } from "../operation/components/DivergingBarChart";
-import { useMachine } from "@/hooks/useMachine";
 import { useGroups } from "@/hooks/useGroup";
 import { useMachineStatistics } from "@/app/(main-layout)/dashboard/machine/hooks/useMachineStatistics";
 import { useMachineOverview } from "./hooks/useMachineOverview";

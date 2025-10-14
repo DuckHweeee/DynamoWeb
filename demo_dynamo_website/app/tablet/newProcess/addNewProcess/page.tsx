@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Machine2, OrderDetailDto, Staff } from "@/lib/type";
+import { OrderDetailDto } from "@/lib/type";
 import axios from "axios";
 import { toast } from "sonner";
-import { useMachine } from "./hooks/useMachine";
+import { useMachine } from "@/hooks/useMachine";
 import { FlexibleCombobox } from "./components/FlexibleCombobox";
 import { processingObjectList } from "../../lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -18,7 +18,6 @@ const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 export default function CreateProcessPage() {
     const router = useRouter()
     const { data: machineList } = useMachine();
-    // const [staffList, setStaffList] = useState<Staff[]>([]);
     const [orderDetail, setOrderDetail] = useState<OrderDetailDto[] | null>(null);
 
     const [formData, setFormData] = useState({
@@ -31,19 +30,6 @@ export default function CreateProcessPage() {
         orderCode: "",
         machineId: "",
     });
-
-    // Chưa test
-    // useEffect(() => {
-    //     const fetchStaff = async () => {
-    //         try {
-    //             const res = await axios.get<Staff[]>(`${urlLink}/api/staff`);
-    //             setStaffList(res.data);
-    //         } catch (error) {
-    //             console.error("Lỗi khi lấy staff:", error);
-    //         }
-    //     };
-    //     fetchStaff();
-    // }, []);
     const { data: staffList } = useFetchOperators()
 
     // Fetch order detail

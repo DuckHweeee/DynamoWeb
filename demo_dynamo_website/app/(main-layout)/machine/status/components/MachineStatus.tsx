@@ -91,24 +91,24 @@ export default function MachineStatus({
 
     const getRemainingPgTime = (
         startTime: number,
-        pgTime: number // đơn vị giờ
+        pgTime: number // đơn vị phút (minutes)
     ): { isOver: boolean; text: string } => {
         const now = Date.now();
         const elapsedMs = now - startTime;
         const elapsedMinutes = Math.floor(elapsedMs / (1000 * 60));
 
-        const pgMinutes = Math.round(pgTime * 60);
+        const pgMinutes = Math.round(pgTime); // pgTime đã là phút
         const remaining = pgMinutes - elapsedMinutes;
 
         if (remaining >= 0) {
             return {
                 isOver: false,
-                text: `Thời gian PG còn lại: ${formatMinutes(remaining)}`,
+                text: `Còn lại: ${formatMinutes(remaining)}`,
             };
         } else {
             return {
                 isOver: true,
-                text: `Quá thời gian PG dự kiến: ${formatMinutes(Math.abs(remaining))}`,
+                text: `Quá thời gian: ${formatMinutes(Math.abs(remaining))}`,
             };
         }
     };
@@ -155,11 +155,20 @@ export default function MachineStatus({
                             </p>
                             <p className="text-sm">
                                 {(() => {
+                                    const now = Date.now();
+                                    const elapsedMs = now - machine.startTime;
+                                    const elapsedMinutes = Math.floor(elapsedMs / (1000 * 60));
                                     const result = getRemainingPgTime(machine.startTime, machine.pg);
                                     return (
-                                        <strong className={result.isOver ? "text-red-400" : ""}>
-                                            {result.text}
-                                        </strong>
+                                        <span>
+                                            <strong className={result.isOver ? "text-red-400" : "text-green-600"}>
+                                                {result.text}
+                                            </strong>
+                                            <br />
+                                            <span className="text-xs text-gray-500">
+                                                PG: {formatMinutes(machine.pg)} | Đã chạy: {formatMinutes(elapsedMinutes)}
+                                            </span>
+                                        </span>
                                     );
                                 })()}
                             </p>

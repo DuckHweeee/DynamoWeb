@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/table"
 import { Fragment, useEffect, useState } from "react"
 import { useFetchMachines, useFetchOperators, useFetchProcesses } from "@/hooks/useFetchData"
-import { Machine2, Process2, Staff } from "@/lib/type"
+import { Process2 } from "@/lib/type"
 import axios from "axios"
 import { OrbitProgress } from "@/node_modules/react-loading-indicators"
 import Link from "next/link"
@@ -39,25 +39,7 @@ export default function TabletProcess() {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
-    // Phần chọn máy và nhân viên
-    // const [selectedMachineId, setSelectedMachineId] = useState<string>("");
-    // const [selectedOperatorId, setSelectedOperatorId] = useState<string>("");
-
-    // Chưa test
-    // const fetchedOperator = useFetchOperators()
-    // const [staff, setStaff] = useState<Staff[]>([])
-    // useEffect(() => {
-    //     setStaff(fetchedOperator)
-    // }, [fetchedOperator])
     const { data: staff } = useFetchOperators()
-
-
-    // Chưa test
-    // const fetchedMachine = useFetchMachines()
-    // const [machine2, setMachine2] = useState<Machine2[]>([])
-    // useEffect(() => {
-    //     setMachine2(fetchedMachine)
-    // }, [fetchedMachine])
     const { data: machine2 } = useFetchMachines()
 
 
@@ -79,35 +61,9 @@ export default function TabletProcess() {
         };
         fetchProcess();
     }, []);
-    // useEffect(() => {
-    //     setProcessData2(fetchedProcesses)
-    // }, [fetchedProcesses])
 
     // Handle Submit
     const [loading, setLoading] = useState(false);
-
-    // const handleSubmit = async (processId: string) => {
-    //     if (!selectedMachineId || !selectedOperatorId) {
-    //         toast.error("Vui lòng chọn đầy đủ thông tin.");
-    //         return;
-    //     }
-
-    //     setLoading(true);
-    //     try {
-    //         const url = `${URL}/api/drawing-code-process/receive?drawingCodeProcess_id=${processId}&&staffId=${selectedOperatorId}&&machineId=${selectedMachineId}`;
-    //         await axios.post(url);
-    //         toast.success("Gửi thành công!");
-    //         // Refetch lại dữ liệu
-    //         await refetch();
-
-    //     } catch (error) {
-    //         toast.error("Gửi thất bại. Vui lòng thử lại.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-
     //Column
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>({})
