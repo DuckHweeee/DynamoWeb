@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React from "react"
 import { useMachine } from "../../../../hooks/useMachine"
 import { MachineTable } from "@/components/MachineTable"
 import EditMachineForm from "../components/editMachine"

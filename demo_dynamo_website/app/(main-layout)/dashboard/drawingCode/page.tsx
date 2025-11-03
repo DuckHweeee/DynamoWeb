@@ -1,10 +1,6 @@
 "use client"
-import { Calendar } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar as DatePicker } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
+
 import { DateRange } from "react-day-picker"
-import { format } from "date-fns";
 import {
     Select,
     SelectContent,
@@ -15,11 +11,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { ReportTime } from "../components/reporTime";
-import MachineRunBarChart2 from "../components/machineRunBarChart2";
-import { MachinePieChart } from "../components/machinePieChart";
 import { SumRealTime } from "../components/sumRealTime";
-import { MachineProcessBarChart } from "../machine/components/machineProcessBarChart";
-import MachineTable from "../machine/components/machineTable";
 import { useState } from "react";
 import DrawingCodeTable from "../components/drawingTable";
 import DateRangeSelector from "../components/DateRangeSelector";

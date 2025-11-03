@@ -10,12 +10,12 @@ import {
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Machine2, OrderDetailDto, Staff } from "@/lib/type"
+import { OrderDetailDto, Staff } from "@/lib/type"
 import axios from "axios"
 import { toast } from "sonner"
 import { FlexibleCombobox } from "./FlexibleCombobox"
 import { processingObjectList } from "../../lib/data"
-import { useMachine } from "../hooks/useMachine"
+import { useMachine } from "@/hooks/useMachine"
 
 
 interface Props {
@@ -259,15 +259,6 @@ export default function CreateProcessDialog({
 
                     <div className="grid gap-1">
                         <Label htmlFor="operator" className="text-2xl">Máy</Label>
-                        {/* <FlexibleCombobox
-                            options={machineList}
-                            value={formData.machineId}
-                            onChange={(val) => setFormData({ ...formData, machineId: val })}
-                            displayField="machineId"
-                            valueField="machineId"
-                            placeholder="Chọn Máy"
-                            allowCustom={false}
-                        /> */}
                         <FlexibleCombobox
                             options={machineList}
                             value={

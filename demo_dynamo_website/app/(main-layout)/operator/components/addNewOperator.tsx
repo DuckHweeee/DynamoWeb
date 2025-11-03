@@ -12,8 +12,6 @@ import { SelectMonth } from "./SelectMonth"
 import { toast } from "sonner"
 import { officeList } from "../lib/data"
 import { 
-    validateNewStaff, 
-    NewStaffFormData, 
     validateStaffId,
     validateStaffName,
     validateShortName,

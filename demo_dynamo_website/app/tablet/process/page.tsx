@@ -13,7 +13,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, Search, SquareArrowOutUpRight } from "lucide-react"
+import { ArrowUpDown, Search } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -25,10 +25,10 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useState } from "react"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useFetchMachines, useFetchOperators, useFetchProcesses } from "@/hooks/useFetchData"
-import { Machine2, Operator2, Process2, Staff } from "@/lib/type"
+import {  Process2 } from "@/lib/type"
 import { toast } from "sonner"
 import axios from "axios"
 import { OrbitProgress } from "@/node_modules/react-loading-indicators"
@@ -42,21 +42,7 @@ export default function TabletProcess() {
     // Phần chọn máy và nhân viên
     const [selectedMachineId, setSelectedMachineId] = useState<string>("");
     const [selectedStaffId, setSelectedStaffId] = useState<string>("");
-
-    // Chưa test
-    // const fetchedOperator = useFetchOperators()
-    // const [staff, setStaff] = useState<Staff[]>([])
-    // useEffect(() => {
-    //     setStaff(fetchedOperator)
-    // }, [fetchedOperator])
-    const { data: staff } = useFetchOperators()
-
-    // Chưa test
-    // const fetchedMachine = useFetchMachines()
-    // const [machine2, setMachine2] = useState<Machine2[]>([])
-    // useEffect(() => {
-    //     setMachine2(fetchedMachine)
-    // }, [fetchedMachine])
+    const { data: staff } = useFetchOperators();
     const { data: machine2 } = useFetchMachines()
 
     const { data: processData2, refetch } = useProcess()

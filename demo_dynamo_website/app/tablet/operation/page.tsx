@@ -80,16 +80,7 @@ export default function TabletOperation() {
         };
         fetchOrderDetail();
     }, []);
-
-    // Chưa test máy
-    // const [machine, setMachine] = useState<Machine2[]>([]);
-    // const fetchedMachine = useFetchMachines();
-    // useEffect(() => {
-    //     if (fetchedMachine.length > 0) {
-    //         setMachine(fetchedMachine);
-    //         setSelectedMachineId((prev) => prev || fetchedMachine[0].machineId.toString());
-    //     }
-    // }, [fetchedMachine]);
+    
     const { data: machine } = useFetchMachines()
     // Thêm useEffect để thiết lập máy đầu tiên
     useEffect(() => {
@@ -98,14 +89,7 @@ export default function TabletOperation() {
         }
     }, [machine, selectedMachineId]);
 
-    // Chưa test
-    // const [staff, setstaff] = useState<Staff[]>([]);
-    // const fetchedOperator = useFetchOperators();
-    // useEffect(() => {
-    //     setstaff(fetchedOperator);
-    // }, [fetchedOperator]);
     const { data: staff } = useFetchOperators()
-
 
     // Process
     // Đang tách ra từng phần của Process
@@ -640,89 +624,6 @@ export default function TabletOperation() {
                                                 </TableCell>
                                             </TableRow>
 
-                                            {/* <TableRow className="border-0 bg-gray-100 h-[50px]">
-                                                <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-[32px]">
-                                                    Nhân Viên
-                                                </TableCell>
-                                                <TableCell className="w-1/2 p-0 text-center text-3xl">
-                                                    {(() => {
-                                                        let operatorName =
-                                                            staff.find((st) => st.staffId === currentStaffId)?.staffName || "";
-
-                                                        // 1. Trường hợp đang edit → dùng setUpdateInfor
-                                                        if (isEditing) {
-                                                            return (
-                                                                <div className="flex w-full h-full items-center justify-center">
-                                                                    <Select
-                                                                        value={currentStaffId ? String(currentStaffId) : undefined}
-                                                                        onValueChange={(val) =>
-                                                                            setUpdateInfor((prev) => ({
-                                                                                ...prev,
-                                                                                updateStaffId: Number(val),
-                                                                            }))
-                                                                        }
-                                                                    >
-                                                                        <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
-                                                                            <SelectValue placeholder="Chọn nhân viên" />
-                                                                        </SelectTrigger>
-                                                                        <SelectContent>
-                                                                            <SelectGroup>
-                                                                                {staff.map((st) => (
-                                                                                    <SelectItem
-                                                                                        className="text-2xl font-bold text-blue-950"
-                                                                                        key={st.staffId}
-                                                                                        value={String(st.staffId)}
-                                                                                    >
-                                                                                        {st.shortName} - {st.staffId}
-                                                                                    </SelectItem>
-                                                                                ))}
-                                                                            </SelectGroup>
-                                                                        </SelectContent>
-                                                                    </Select>
-                                                                </div>
-                                                            );
-                                                        }
-
-                                                        // 2. Trường hợp chưa có nhân viên → cho chọn và gửi đi bằng handleSubmit
-                                                        if (isAddnew && !operatorName) {
-                                                            return (
-                                                                <div className="flex w-full h-full items-center justify-center gap-2">
-                                                                    <Select
-                                                                        value={selectStaff ? String(selectStaff) : undefined}
-                                                                        onValueChange={(val) =>
-                                                                            setSelectStaff(Number(val))
-                                                                        }
-                                                                    >
-                                                                        <SelectTrigger className="w-sm h-full min-h-[45px] text-3xl font-bold flex items-center justify-center border-black border-0 border-b-1 rounded-none !shadow-none text-blue-950">
-                                                                            <SelectValue placeholder="Chọn nhân viên" />
-                                                                        </SelectTrigger>
-                                                                        <SelectContent>
-                                                                            <SelectGroup>
-                                                                                {staff.map((st) => (
-                                                                                    <SelectItem
-                                                                                        className="text-2xl font-bold text-blue-950"
-                                                                                        key={st.staffId}
-                                                                                        value={String(st.staffId)}
-                                                                                    >
-                                                                                        {st.shortName} - {st.staffId}
-                                                                                    </SelectItem>
-                                                                                ))}
-                                                                            </SelectGroup>
-                                                                        </SelectContent>
-                                                                    </Select>
-                                                                </div>
-                                                            );
-                                                        }
-
-                                                        // 3. Trường hợp đã có nhân viên → hiển thị tên
-                                                        return (
-                                                            <div className="flex items-center justify-center text-3xl font-bold h-full text-blue-950">
-                                                                {operatorName}
-                                                            </div>
-                                                        );
-                                                    })()}
-                                                </TableCell>                                                
-                                            </TableRow> */}
                                             {/* Chưa test */}
                                             <TableRow className="border-0 bg-gray-100 h-[50px]">
                                                 <TableCell className="w-1/2 text-3xl font-bold text-left text-blue-950 pl-3 max-[1300px]:text-[32px]">

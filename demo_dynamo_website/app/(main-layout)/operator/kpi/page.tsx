@@ -32,10 +32,6 @@ import {
 } from "@/components/ui/table"
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-// import { Staff } from "@/lib/type"
-import EditOperatorForm from "../components/editOperator"
-import AddOperatorForm from "../components/addNewOperator"
-import { useStaff } from "../hooks/useStaff"
 import { useRouter } from 'next/navigation'
 import { toast } from "sonner"
 import { useStaffKPI } from "./hooks/useStaffKPI"
@@ -54,11 +50,6 @@ function getColumns({
     setShowForm: (show: boolean) => void
 }): ColumnDef<KPI>[] {
     return [
-        // {
-        //     id: "stt",
-        //     header: () => (<span className="text-lg font-bold ">STT</span>),
-        //     cell: ({ row }) => <div>{row.index + 1}</div>,
-        // },
         {
             accessorKey: "staffName",
             header: ({ column }) => (
@@ -68,15 +59,6 @@ function getColumns({
             ),
             cell: ({ row }) => <div className="capitalize">{row.getValue("staffName")}</div>,
         },
-        // {
-        //     accessorKey: "id",
-        //     header: ({ column }) => (
-        //         <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-        //             Mã nhân viên <ArrowUpDown />
-        //         </Button>
-        //     ),
-        //     cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
-        // },
         {
             accessorKey: "groupName",
             header: ({ column }) => (
@@ -188,9 +170,6 @@ function getColumns({
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            {/* <DropdownMenuItem className="text-lg cursor-pointer">
-                                Thông tin chi tiết
-                            </DropdownMenuItem> */}
                             <DropdownMenuItem
                                 className="text-lg cursor-pointer"
                                 onClick={() => {
@@ -235,9 +214,6 @@ export default function OperatorTable() {
         router.refresh()
         setShowImportDialog(false)
     }
-
-    // console.log("editingOperator")
-    // console.log(editingOperator)
     const columns = getColumns({ setEditingOperator, setShowForm })
     const table = useReactTable({
         data: staffKPI,
@@ -387,13 +363,6 @@ export default function OperatorTable() {
                         {editingOperator ? (
                             <EditKPIStaffForm
                                 inforKPI={editingOperator}
-                                // onUpdate={(updated) => {
-                                //     const index = staff.findIndex(op => op.id === updated.id)
-                                //     if (index !== -1) staff[index] = updated
-                                //     table.setOptions(prev => ({ ...prev, data: [...staff] }))
-                                //     setShowForm(false)
-                                //     setEditingOperator(null)
-                                // }}
                                 onCancel={() => {
                                     setShowForm(false)
                                     setEditingOperator(null)
@@ -426,10 +395,6 @@ export default function OperatorTable() {
                 />
 
                 <div className="flex items-center justify-end space-x-2 py-4">
-                    {/* <div className="text-muted-foreground flex-1 text-sm">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div> */}
                     <div className="space-x-2">
                         <Button
                             className="cursor-pointer"

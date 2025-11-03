@@ -1,6 +1,5 @@
 "use client";
 
-import { DateRange } from "react-day-picker"
 import {
     Select,
     SelectContent,
@@ -12,22 +11,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Download, UserRoundSearch } from "lucide-react";
 
-import MachineLogTable from "./components/MachineHistoryTable";
 import { useState, useEffect } from "react";
-import { useParams, useSearchParams, useRouter } from "next/navigation";
-import DateRangeSelector from "../../components/DateRangeSelector";
-import { ReportTimeMachine } from "../components/ReportTimeMachine";
+import { useSearchParams, useRouter } from "next/navigation"
 import { RunningTimePieChart } from "./components/RunningTimePieChart";
-import { useMachine } from "@/hooks/useMachine";
 import { useGroups } from "@/hooks/useGroup";
-import { MachineEfficiencyDetail, MachineStatisticDetail } from "./lib/type";
+import { MachineEfficiencyDetail } from "./lib/type";
 import { useMachineEfficiencyDetail } from "./hooks/useMachineEfficiencyDetail";
 import { useMachineStatisticDetail } from "./hooks/useMachineStatisticDetail";
 import { useMachineHistoryDetail } from "./hooks/useMachineHistoryDetail";
 import { toast } from "sonner";
 import DateRangeSelectorDetail from "./hooks/DateRangeSelectorDetail";
 import { ReportTimeMachineDetail } from "./components/ReportTimeMachineDetail";
-import { MachinePieChart } from "./components/MachinePieChart";
+import { MachinePieChart } from "./components/machinePieChart";
 import MachineHistoryTable from "./components/MachineHistoryTable";
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
