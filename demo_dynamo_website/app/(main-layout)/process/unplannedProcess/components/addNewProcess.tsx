@@ -181,7 +181,7 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
                 </div>
 
                 <div className="grid gap-1">
-                    <Label htmlFor="pgTime" className="text-lg">Giờ PG</Label>
+                    <Label htmlFor="pgTime" className="text-lg">Giờ PG (Phút)</Label>
                     <Input
                         id="pgTime"
                         type="number"

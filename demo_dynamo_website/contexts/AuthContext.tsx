@@ -96,25 +96,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       // Transform API response to match our User interface
       const user: User = {
-        id: userData.id,
+        id: userData.userId,
         username: userData.username,
         email: userData.email,
         fullname: userData.fullname,
         role: getUserRole(userData.role), // Transform role array to simple role
         roles: userData.role || [],
       };
-
       setUser(user);
       localStorage.setItem("auth-user", JSON.stringify(user));
       document.cookie = `auth-user=${JSON.stringify(user)}; path=/; max-age=${7 * 24 * 60 * 60}`;
-
       // Redirect based on role
       router.push(user.role === "Admin" ? "/" : "/tablet/process");
-
+      console.log('Logged in user:', user.id);
       setIsLoading(false);
       return true;
     } catch (error) {
-      console.error('Login error:', error);
       setIsLoading(false);
       return false;
     }

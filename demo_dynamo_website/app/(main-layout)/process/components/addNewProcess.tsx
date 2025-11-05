@@ -51,7 +51,7 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
             !endDate ||
             !newProcess.machineId ||
             !newProcess.staffId ||
-            !user?.id
+            !user?.username
         ) {
             toast.error("Vui lòng nhập đầy đủ thông tin nhân viên.");
             return;
@@ -77,7 +77,7 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
                         machineId: newProcess.machineId,
                         staffId: newProcess.staffId,
                         isPlan: 1,
-                        plannerId: user.id,
+                        plannerId: user?.username,
                     }),
                 }
             );
@@ -182,7 +182,7 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
                 </div>
 
                 <div className="grid gap-1">
-                    <Label htmlFor="pgTime" className="text-lg">Giờ PG</Label>
+                    <Label htmlFor="pgTime" className="text-lg">Giờ PG (Phút)</Label>
                     <Input
                         id="pgTime"
                         type="number"
