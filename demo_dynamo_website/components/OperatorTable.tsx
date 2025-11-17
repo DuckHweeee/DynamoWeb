@@ -12,7 +12,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Plus, Search, Eye, Upload } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Plus, Search, Eye } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -39,7 +39,7 @@ import {
 } from "@/components/ui/dialog";
 import { Staff } from "@/lib/type";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ImportDialog } from "@/components/ImportDialog"
+import { ImportButton } from "@/components/ImportButton"
 import { toast } from "sonner";
 
 interface OperatorTableProps {
@@ -280,7 +280,6 @@ export function OperatorTable({
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [globalFilter, setGlobalFilter] = useState("");
-  const [showImportDialog, setShowImportDialog] = useState(false)
 
   const columns = getColumns({
     showActions,
@@ -359,15 +358,15 @@ export function OperatorTable({
           )}
 
           {showImportButton && (
-            <Button
+            <ImportButton
+              endpoint="staff/upload"
+              title="Import dữ liệu nhân viên"
+              description="Chọn file Excel để import dữ liệu nhân viên vào hệ thống"
+              onImportSuccess={handleImportSuccess}
               variant="outline"
               size="lg"
               className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
-              onClick={() => setShowImportDialog(true)}
-            >
-              <Upload className="mr-2 h-4 w-4" />
-              Import Excel
-            </Button>
+            />
           )}
         </div>
       </div>
@@ -464,14 +463,7 @@ export function OperatorTable({
         </Dialog>
       )}
 
-      <ImportDialog
-        isOpen={showImportDialog}
-        onClose={() => setShowImportDialog(false)}
-        onImportSuccess={handleImportSuccess}
-        endpoint="staff/upload"
-        title="Import dữ liệu nhân viên"
-        description="Chọn file Excel để import dữ liệu nhân viên vào hệ thống"
-      />
+
 
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="space-x-2">

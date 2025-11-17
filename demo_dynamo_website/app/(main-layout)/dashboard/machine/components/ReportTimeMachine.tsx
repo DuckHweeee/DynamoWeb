@@ -41,7 +41,6 @@ export function ReportTimeMachine({ data, type }: ReportTimeOperatorProps) {
         month: "Tháng",
         year: "Năm",
     };
-    console.log(data?.totalRunTime)
     return (
         <>
             <div className="my-5 flex gap-3 items-center justify-between">

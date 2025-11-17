@@ -13,7 +13,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Plus, Search } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, Plus, Search, Upload } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -39,6 +39,8 @@ import AddOrderDetailForm from "./components/addOrderDetail"
 import EditOrderDetailForm from "./components/editOrderDetail"
 import DetailOrderDetail from "./components/orderDetail"
 import { Progress } from "@/components/ui/progress"
+import { ImportButton } from "@/components/ImportButton"
+import { toast } from "sonner"
 
 function getColumns({
     setEditingOrderDetail,
@@ -194,6 +196,11 @@ export default function OrderDetailTable() {
     const [detailOrderDetail, setDetailOrderDetail] = useState<OrderDetail | null>(null)
     const [openDetail, setOpenDetail] = useState(false);
 
+    const handleImportSuccess = () => {
+        toast.success("Import thành công!")
+        window.location.reload()
+    }
+
 
     const columns = getColumns({
         setEditingOrderDetail,
@@ -241,6 +248,16 @@ export default function OrderDetailTable() {
                                 className="pl-10 py-5"
                             />
                         </div>
+
+                        <ImportButton 
+                            endpoint="order-detail/upload"
+                            title="Import Mã Hàng Gia Công"
+                            description="Chọn file Excel để import mã hàng gia công"
+                            onImportSuccess={handleImportSuccess}
+                            variant="outline"
+                            size="lg"
+                            className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
+                        />
 
                         <Button
                             variant="secondary" size="icon" className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"

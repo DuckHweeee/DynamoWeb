@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { MachineOverview } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -7,40 +8,61 @@ export function useMachineOverview(groupId: string, startDate: string, endDate: 
     const [data, setData] = useState<MachineOverview[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const res = await fetch(`${url}/api/machine-group-statistic/overview`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        groupId: groupId,
-                        startDate: startDate,
-                        endDate: endDate,
-                    }),
-                });
 
-                if (!res.ok) {
-                    throw new Error("Lỗi mạng hoặc server");
-                }
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            console.log("Fetching machine overview data with params:", {
+                groupId,
+                startDate,
+                endDate
+            });
 
-                const json: MachineOverview[] = await res.json();
-                setData(json);
-                setError(null);
-            } catch (err) {
-                console.error("Fetch error:", err);
-                setError("Lỗi khi tải dữ liệu");
-            } finally {
-                setLoading(false);
+            const response = await axios.post(`${url}/api/machine-group-statistic/overview`, {
+                groupId: groupId,
+                startDate: startDate,
+                endDate: endDate,
+            });
+
+            console.log("Machine overview API response:", response.data);
+
+            // Ensure the response data is an array
+            const machineOverviewData: MachineOverview[] = Array.isArray(response.data) 
+                ? response.data 
+                : [];
+
+            setData(machineOverviewData);
+            setError(null);
+        } catch (err) {
+            console.error("Machine overview fetch error:", err);
+            
+            if (axios.isAxiosError(err)) {
+                const errorMessage = err.response?.data?.message || err.message || "Lỗi khi tải dữ liệu máy móc";
+                setError(errorMessage);
+            } else {
+                setError("Lỗi khi tải dữ liệu máy móc");
             }
-        };
-
+            
+            setData([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+    useEffect(() => {
+        if (groupId && startDate && endDate) {
+            fetchData();
+        } else {
+            // Reset data when parameters are missing
+            setData([]);
+            setLoading(false);
+            setError(null);
+        }
+    }, [groupId, startDate, endDate]);
+    const refetch = () => {
         if (groupId && startDate && endDate) {
             fetchData();
         }
-    }, [groupId, startDate, endDate]);
-    return { data, loading, error };
+    };
+
+    return { data, loading, error, refetch };
 }

@@ -7,26 +7,28 @@ export function useMachineTotalRuntime(groupId: string, startDate: string, endDa
     const [data, setData] = useState<TotalRunTime | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    // console.log(groupId, startDate, endDate)
     useEffect(() => {
         const controller = new AbortController();
         const fetchData = async () => {
             setLoading(true);
+            setError(null);
             try {
-                const res = await fetch(`${url}/api/machine-group-statistic/totalTime`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ groupId, startDate, endDate }),
-                    signal: controller.signal,
+                const response = await axios.post(`${url}/api/machine-group-statistic/totalTime`, {
+                    groupId,
+                    startDate,
+                    endDate
+                }, {
+                    signal: controller.signal
                 });
-                if (!res.ok) throw new Error("Lỗi mạng hoặc server");
-                const json = await res.json();
-                setData(json);
-                setError(null);
+                setData(response.data);
             } catch (err: any) {
-                if (err.name !== "AbortError") {
-                    console.error(err);
-                    setError("Lỗi khi tải dữ liệu");
+                if (err.name !== "AbortError" && !axios.isCancel(err)) {
+                    console.error("Error fetching total runtime data:", err);
+                    if (axios.isAxiosError(err)) {
+                        setError(err.response?.data?.message || "Lỗi khi tải dữ liệu từ server");
+                    } else {
+                        setError("Lỗi khi tải dữ liệu");
+                    }
                 }
             } finally {
                 setLoading(false);
@@ -37,5 +39,33 @@ export function useMachineTotalRuntime(groupId: string, startDate: string, endDa
         return () => controller.abort();
     }, [groupId, startDate, endDate]);
 
-    return { data, loading, error };
+    const refetch = () => {
+        if (groupId && startDate && endDate) {
+            const controller = new AbortController();
+            const fetchData = async () => {
+                setLoading(true);
+                setError(null);
+                try {
+                    const response = await axios.post(`${url}/api/machine-group-statistic/totalTime`, {
+                        groupId,
+                        startDate,
+                        endDate
+                    });
+                    setData(response.data);
+                } catch (err: any) {
+                    console.error("Error fetching total runtime data:", err);
+                    if (axios.isAxiosError(err)) {
+                        setError(err.response?.data?.message || "Lỗi khi tải dữ liệu từ server");
+                    } else {
+                        setError("Lỗi khi tải dữ liệu");
+                    }
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchData();
+        }
+    };
+
+    return { data, loading, error, refetch };
 }

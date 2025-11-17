@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DatePicker } from "@/components/ui/date-picker";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGroups } from "@/hooks/useGroup";
@@ -32,7 +33,7 @@ export default function EditDailyReportForm({ report, onUpdate, onCancel }: Edit
     admins?.find(admin => admin.fullname === user?.fullname);
 
   const [formData, setFormData] = useState({
-    dateTime: "",
+    dateTime: new Date(),
     office: "",
     reportType: "",
     hourDiff: "",
@@ -87,9 +88,9 @@ export default function EditDailyReportForm({ report, onUpdate, onCancel }: Edit
   useEffect(() => {
     if (report && report.id) {
       const formDataToSet = {
-        dateTime: report.dateTime ? new Date(report.dateTime).toISOString().split('T')[0] : "",
+        dateTime: report.dateTime ? new Date(report.dateTime) : new Date(),
         office: report.office || "",
-        reportType: report.reportType || "", 
+        reportType: report.reportType || "",
         hourDiff: report.hourDiff?.toString() || "",
         groupId: report.groupId || "",
       };
@@ -129,7 +130,7 @@ export default function EditDailyReportForm({ report, onUpdate, onCancel }: Edit
 
     try {
       const reportData = {
-        dateTime: formData.dateTime,
+        dateTime: formData.dateTime.toISOString().split('T')[0],
         office: formData.office,
         reportType: formData.reportType,
         hourDiff: parseInt(formData.hourDiff),
@@ -155,14 +156,23 @@ export default function EditDailyReportForm({ report, onUpdate, onCancel }: Edit
           <Label htmlFor="dateTime" className="text-lg font-semibold text-gray-700 flex items-center">
             Ngày báo cáo <span className="text-red-500 ml-1">*</span>
           </Label>
-          <Input
-            id="dateTime"
-            type="date"
-            value={formData.dateTime}
-            onChange={(e) => setFormData(prev => ({ ...prev, dateTime: e.target.value }))}
-            className={`h-12 text-lg border-2 transition-colors ${errors.dateTime ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-blue-500"}`}
-            disabled={isLoading}
-          />
+          <div className={`border-2 rounded-md transition-colors ${errors.dateTime ? "border-red-500" : "border-gray-300"}`}>
+            <DatePicker
+            />
+            <div className="relative flex gap-2">
+              <Input
+                id="date"
+                value={formData.dateTime.toISOString().split('T')[0]} // Format date for display
+                placeholder="YYYY-MM-DD"
+                onChange={(e) => {
+                  const date = new Date(e.target.value);
+                  if (!isNaN(date.getTime())) {
+                    setFormData((prev) => ({ ...prev, dateTime: date }));
+                  }
+                }}
+              />
+            </div>
+          </div>
           {errors.dateTime && (
             <p className="text-red-500 text-sm font-medium">{errors.dateTime}</p>
           )}

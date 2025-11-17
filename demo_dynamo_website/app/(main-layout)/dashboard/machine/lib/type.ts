@@ -30,8 +30,8 @@ export interface MachineOverview {
     runTime: number;
     stopTime: number;
     pgTime: number;
-    offsetTime: number;
-    spanTime: number;
+    emptyTime: number;
+    errorTime: number;
     pgTimeExpect: number;
     numberOfProcesses: number;
     groupTarget: number;

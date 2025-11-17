@@ -28,21 +28,5 @@ export function useProcess() {
     useEffect(() => {
         fetchData();
     }, [fetchData]);
-    // console.log(data)
-    // const fetchData = async () => {
-    //     const res = await fetch(`${url}/api/drawing-code-process`);
-    //     const filtered = res.data.filter((item: any) => item.isPlan == 1);
-    //     const result = await res.json();
-    //     setData(result);
-    // };
-
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
-
-    // return {
-    //     data,
-    //     refetch: fetchData,
-    // };
     return { data, loading, error, refetch: fetchData };
 }

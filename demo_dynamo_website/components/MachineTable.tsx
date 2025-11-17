@@ -13,7 +13,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Plus, Search, Upload } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, Plus, Search } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -34,7 +34,7 @@ import {
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Machine2 } from "@/lib/type"
-import { ImportDialog } from "@/components/ImportDialog"
+import { ImportButton } from "@/components/ImportButton"
 import { toast } from "sonner"
 
 interface MachineTableProps {
@@ -279,7 +279,6 @@ export function MachineTable({
     const [editingMachine, setEditingMachine] = useState<Machine2 | null>(null)
     const [detailMachine, setDetailMachine] = useState<Machine2 | null>(null)
     const [showDetail, setShowDetail] = useState(false)
-    const [showImportDialog, setShowImportDialog] = useState(false)
 
     const columns = getColumns({
         setEditingMachine,
@@ -359,15 +358,15 @@ export function MachineTable({
                     )}
 
                     {showImportButton && (
-                        <Button
+                        <ImportButton
+                            endpoint="machine/upload"
+                            title="Import dữ liệu máy móc"
+                            description="Chọn file Excel để import dữ liệu máy móc vào hệ thống"
+                            onImportSuccess={handleImportSuccess}
                             variant="outline"
                             size="lg"
                             className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
-                            onClick={() => setShowImportDialog(true)}
-                        >
-                            <Upload className="mr-2 h-4 w-4" />
-                            Import Excel
-                        </Button>
+                        />
                     )}
 
                 </div>
@@ -498,15 +497,7 @@ export function MachineTable({
                 </Dialog>
             )}
 
-            {/* Import Dialog */}
-            <ImportDialog
-                isOpen={showImportDialog}
-                onClose={() => setShowImportDialog(false)}
-                onImportSuccess={handleImportSuccess}
-                endpoint="machine/upload"
-                title="Import dữ liệu máy móc"
-                description="Chọn file Excel để import dữ liệu máy móc vào hệ thống"
-            />
+
 
             <div className="flex items-center justify-end space-x-2 py-4">
                 {/* <div className="text-muted-foreground flex-1 text-sm">

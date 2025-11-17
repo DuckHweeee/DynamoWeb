@@ -13,7 +13,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Plus, Search } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, Plus, Search, Upload } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -35,6 +35,8 @@ import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 import { Process } from "@/app/(main-layout)/process/lib/type"
+import { ImportButton } from "@/components/ImportButton"
+import { toast } from "sonner"
 
 function formatSeconds(seconds: string): string {
     const total = parseInt(seconds)
@@ -51,6 +53,8 @@ interface ProcessTableProps<T = any> {
     showAddButton?: boolean
     showActions?: boolean
     showViewHistory?: boolean
+    showImportButton?: boolean
+    onImportSuccess?: () => void
     AddComponent?: React.ComponentType<{
         onAdd: (newProcess: T) => void
         onCancel: () => void
@@ -227,6 +231,8 @@ export default function ProcessTable<T = any>({
     showAddButton = true,
     showActions = true,
     showViewHistory = false,
+    showImportButton = true,
+    onImportSuccess,
     AddComponent,
     EditComponent,
     DetailComponent,
@@ -245,6 +251,13 @@ export default function ProcessTable<T = any>({
     // Detail
     const [detailProcess, setDetailProcess] = useState<T | null>(null)
     const [openDetail, setOpenDetail] = useState(false)
+
+    const handleImportSuccess = () => {
+        if (onImportSuccess) {
+            toast.success("Import thành công!")
+            onImportSuccess()
+        }
+    }
 
     const columns = customColumns || getDefaultColumns({
         setEditingProcess,
@@ -309,6 +322,18 @@ export default function ProcessTable<T = any>({
                             className="pl-10 py-5"
                         />
                     </div>
+
+                    {showImportButton && (
+                        <ImportButton
+                            endpoint="process/upload"
+                            title="Import Quy Trình"
+                            description="Chọn file Excel để import quy trình"
+                            onImportSuccess={handleImportSuccess}
+                            variant="outline"
+                            size="lg"
+                            className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
+                        />
+                    )}
 
                     {showAddButton && (
                         <Button

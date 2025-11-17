@@ -141,7 +141,22 @@ export default function OperatorStatus({
                                                     );
                                                 })()}
                                             </p>
+                                            <p className="text-sm">
+                                                {(() => {
+                                                    const now = Date.now();
+                                                    const elapsedMs = now - op.startTime;
+                                                    const elapsedMinutes = Math.floor(elapsedMs / (1000 * 60));
+                                                    return (
+                                                        <span>
+                                                            <span className="text-xs text-gray-500">
+                                                                PG: {formatMinutes(op.pgTime)} | Đã chạy: {formatMinutes(elapsedMinutes)}
+                                                            </span>
+                                                        </span>
+                                                    );
+                                                })()}
+                                            </p>
                                         </div>
+
                                     </div>
                                 );
                             })}

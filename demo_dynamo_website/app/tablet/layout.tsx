@@ -46,7 +46,7 @@ export default function TabletLayout({
                     </div>
                     {/* Tắt tạm thời */}
                     <div className="flex gap-x-5">
-                        {/* <Link href={"/dashboard"}>
+                        <Link href={"/dashboard/machine"}>
                             <Button
                                 className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
                                     ${!isProcess && !isNewProcess && !isOperation ? "text-blue-950 border-blue-950 border-3 bg-white" : " bg-white text-blue-950"}
@@ -54,7 +54,7 @@ export default function TabletLayout({
                             >
                                 Thống Kê
                             </Button>
-                        </Link> */}
+                        </Link>
                         <Link href={"/tablet/process"}>
                             <Button
                                 className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
