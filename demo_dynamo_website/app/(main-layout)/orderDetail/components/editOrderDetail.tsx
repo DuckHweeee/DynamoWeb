@@ -30,41 +30,41 @@ export default function EditOrderDetailForm({
     const { data: groupList } = useGroup()
 
     const [updateOrderDetail, setUpdateOrderDetail] = useState<UpdateOrderDetail>({
-        drawingCodeId: "",
-        orderId: "",
+        orderCode: "",
+        office: "",
         managerGroupId: "",
         orderType: "",
         quantity: 0,
-        pgTimeGoal: 0
+        pgTimeGoal: 0,
+        numberOfSteps: 0
     })
 
     useEffect(() => {
         if (initialData) {
             setUpdateOrderDetail({
-                drawingCodeId: initialData.drawingCodeId ?? "",
-                orderId: initialData.orderId ?? "",
+                orderCode: initialData.orderCode ?? "",
+                office: initialData.office ?? "",
                 managerGroupId: initialData.managerGroupId ?? "",
                 orderType: initialData.orderType ?? "",
                 quantity: initialData.quantity ?? null,
                 pgTimeGoal: initialData.pgTimeGoal ?? null,
+                numberOfSteps: initialData.numberOfSteps ?? null,
             })
         }
     }, [initialData])
-    // console.log("updateOrderDetail")
-    // console.log(updateOrderDetail)
     const handleUpdate = async () => {
         if (
-            !updateOrderDetail.drawingCodeId ||
-            !updateOrderDetail.orderId ||
+            !updateOrderDetail.orderCode ||
+            !updateOrderDetail.office ||
             !updateOrderDetail.managerGroupId ||
             !updateOrderDetail.orderType ||
             !updateOrderDetail.quantity ||
-            !updateOrderDetail.pgTimeGoal
+            !updateOrderDetail.pgTimeGoal ||
+            !updateOrderDetail.numberOfSteps
         ) {
             toast.error("Vui lòng nhập đầy đủ thông tin.");
             return;
         }
-
         try {
             const response = await fetch(
                 `${urlLink}/api/order-detail/${initialData.orderDetailId}`,
@@ -74,16 +74,17 @@ export default function EditOrderDetailForm({
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        drawingCodeId: updateOrderDetail.drawingCodeId,
-                        orderId: updateOrderDetail.orderId,
+                        orderCode: updateOrderDetail.orderCode,
+                        office: updateOrderDetail.office,
                         managerGroupId: updateOrderDetail.managerGroupId,
                         orderType: updateOrderDetail.orderType,
                         pgTimeGoal: Number(updateOrderDetail.pgTimeGoal),
                         quantity: Number(updateOrderDetail.quantity),
+                        numberOfSteps: Number(updateOrderDetail.numberOfSteps),
                     }),
                 }
             );
-
+            
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || "Gửi thất bại.");
@@ -92,12 +93,13 @@ export default function EditOrderDetailForm({
             location.reload()
             onCancel();
             setUpdateOrderDetail({
-                drawingCodeId: "",
-                orderId: "",
+                orderCode: "",
+                office: "",
                 managerGroupId: "",
                 orderType: "",
                 quantity: 0,
-                pgTimeGoal: 0
+                pgTimeGoal: 0,
+                numberOfSteps: 0
             });
         } catch (error) {
             toast.error("Đã xảy ra lỗi khi gửi.");
@@ -107,8 +109,8 @@ export default function EditOrderDetailForm({
         <div className="space-y-3">
             <div className="grid gap-2 grid-cols-2">
                 <div className="grid gap-1">
-                    <Label htmlFor="process" className="text-lg">Mã Đơn Hàng</Label>
-                    <FlexibleCombobox
+                    <Label htmlFor="process" className="text-lg">ID mã hàng</Label>
+                    {/* <FlexibleCombobox
                         options={orderList}
                         value={updateOrderDetail.orderId}
                         onChange={(val) => setUpdateOrderDetail({ ...updateOrderDetail, orderId: val })}
@@ -117,9 +119,22 @@ export default function EditOrderDetailForm({
                         placeholder="Chọn mã đơn hàng"
                         allowCustom={false}
                         widthSelect={"w-[320]"}
+                    /> */}
+                    <Input
+                        id="orderDetailId"
+                        type="text"
+                        placeholder="Nhập ID mã hàng"
+                        className="!text-xl !placeholder-gray-300"
+                        value={updateOrderDetail.orderCode}
+                        onChange={(e) =>
+                            setUpdateOrderDetail({
+                                ...updateOrderDetail,
+                                orderCode: e.target.value,
+                            })
+                        }
                     />
                 </div>
-                <div className="grid gap-1">
+                {/* <div className="grid gap-1">
                     <Label htmlFor="staff" className="text-lg">Mã Bản Vẽ</Label>
                     <FlexibleCombobox
                         options={drawingCodeList}
@@ -131,7 +146,7 @@ export default function EditOrderDetailForm({
                         allowCustom={false}
                         widthSelect={"w-[320]"}
                     />
-                </div>
+                </div> */}
                 <div className="grid gap-1">
                     <Label htmlFor="partNumber" className="text-lg">Đối Tượng Gia Công</Label>
                     <FlexibleCombobox
@@ -145,7 +160,22 @@ export default function EditOrderDetailForm({
                         widthSelect={"w-[320]"}
                     />
                 </div>
-
+                  <div className="grid gap-1">
+                    <Label htmlFor="quantity" className="text-lg">Số lượng nguyên công</Label>
+                    <Input
+                        id="quantity"
+                        type="number"
+                        placeholder="Số Lượng"
+                        className="!text-xl !placeholder-gray-300"
+                        value={updateOrderDetail.numberOfSteps}
+                        onChange={(e) =>
+                            setUpdateOrderDetail({
+                                ...updateOrderDetail,
+                                numberOfSteps: Number(e.target.value),
+                            })
+                        }
+                    />
+                </div>   
                 <div className="grid gap-1">
                     <Label htmlFor="quantity" className="text-lg">Số Lượng</Label>
                     <Input
@@ -176,9 +206,22 @@ export default function EditOrderDetailForm({
                         widthSelect={"w-[320]"}
                     />
                 </div>
+                 <div className="grid gap-1">
+                    <Label htmlFor="managerGroupName" className="text-lg">Phòng sản xuất</Label>
+                    <FlexibleCombobox
+                        options={groupList}
+                        value={updateOrderDetail.office}
+                        onChange={(val) => setUpdateOrderDetail({ ...updateOrderDetail, office: val })}
+                        displayField="groupName"
+                        valueField="groupId"
+                        placeholder="Chọn nhóm"
+                        allowCustom={false}
+                        widthSelect={"w-[320]"}
+                    />
+                </div>
 
                 <div className="grid gap-1">
-                    <Label htmlFor="pgTime" className="text-lg">PG Dự Kiến</Label>
+                    <Label htmlFor="pgTime" className="text-lg">PG Dự Kiến(Phút)</Label>
                     <Input
                         id="pgTime"
                         type="number"

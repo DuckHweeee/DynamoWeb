@@ -12,6 +12,8 @@ export interface OrderDetail {
     pgTimeGoal: number;
     managerGroupId: string;
     managerGroupName: string;
+    numberOfSteps: number;
+    office: string;
     processTimeSummaryDto: ProcessTimeSummaryDto;
 }
 
@@ -53,10 +55,11 @@ export interface Group {
 }
 
 export interface UpdateOrderDetail {
-    drawingCodeId: string,
-    orderId: string,
+    orderCode: string,
+    office: string,
     managerGroupId: string,
     orderType: string,
     quantity: number,
-    pgTimeGoal: number
+    pgTimeGoal: number,
+    numberOfSteps: number
 }

@@ -66,8 +66,7 @@ function getColumns({
             header: ({ column }) => (
                 <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>ID Mã hàng <ArrowUpDown /></Button>
             ),
-            cell: ({ row }) => <div>
-                <div>{row.getValue("orderCode") ?? "—"}</div></div>,
+            cell: ({ row }) => <div>{row.getValue("orderCode") ?? "—"}</div>,
         },
 
         {
@@ -77,12 +76,28 @@ function getColumns({
             ),
             cell: ({ row }) => <div>{row.getValue("quantity")}</div>,
         },
+        //
+        {
+            accessorKey: "numberOfSteps",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>SL Nguyên công <ArrowUpDown /></Button>
+            ),
+            cell: ({ row }) => <div>{row.getValue("numberOfSteps")}</div>,
+        },
         {
             accessorKey: "managerGroupName",
             header: ({ column }) => (
                 <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Nhóm quản lý<ArrowUpDown /></Button>
             ),
             cell: ({ row }) => <div>{row.getValue("managerGroupName")}</div>,
+        },
+        //
+        {
+            accessorKey: "office",
+            header: ({ column }) => (
+                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Phòng ban<ArrowUpDown /></Button>
+            ),
+            cell: ({ row }) => <div>{row.getValue("office")}</div>,
         },
         {
             accessorKey: "pgTimeGoal",
@@ -249,7 +264,7 @@ export default function OrderDetailTable() {
                             />
                         </div>
 
-                        <ImportButton 
+                        <ImportButton
                             endpoint="order-detail/upload"
                             title="Import Mã Hàng Gia Công"
                             description="Chọn file Excel để import mã hàng gia công"

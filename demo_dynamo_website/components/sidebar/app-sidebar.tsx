@@ -86,14 +86,25 @@ const data = {
                 },
             ],
         },
+        // {
+        //     title: "Bản vẽ & Đơn",
+        //     url: "/drawingCode",
+        //     icon: PencilRuler,
+        //     items: [
+        //         {
+        //             title: "Bản vẽ & Đơn hàng",
+        //             url: "/drawingCode",
+        //         },
+        //     ],
+        // },
         {
-            title: "Bản vẽ & Đơn",
-            url: "/drawingCode",
-            icon: PencilRuler,
+            title: "Mã hàng",
+            url: "#",
+            icon: MessageCircleMore,
             items: [
                 {
-                    title: "Bản vẽ & Đơn hàng",
-                    url: "/drawingCode",
+                    title: "Mã hàng gia công",
+                    url: "/orderDetail",
                 },
             ],
         },
@@ -112,17 +123,7 @@ const data = {
                 },
             ],
         },
-        {
-            title: "Mã hàng",
-            url: "#",
-            icon: MessageCircleMore,
-            items: [
-                {
-                    title: "Mã hàng gia công",
-                    url: "/orderDetail",
-                },
-            ],
-        },
+
         {
             title: "Nhóm",
             url: "/group",

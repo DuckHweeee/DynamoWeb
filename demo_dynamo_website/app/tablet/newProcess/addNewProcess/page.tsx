@@ -30,6 +30,10 @@ export default function CreateProcessPage() {
         orderCode: "",
         machineId: "",
     });
+    // 👉 Thêm đoạn này ngay đây
+    useEffect(() => {
+        setFormData((prev) => ({ ...prev, staffId: "0" }));
+    }, []);
     const { data: staffList } = useFetchOperators()
 
     // Fetch order detail
@@ -224,7 +228,7 @@ export default function CreateProcessPage() {
                         </div>
 
                         {/* Nhân viên */}
-                        <div className="flex flex-col gap-2">
+                        {/* <div className="flex flex-col gap-2">
                             <Label className="text-2xl font-semibold text-gray-700">Nhân viên</Label>
                             <FlexibleCombobox
                                 options={staffList}
@@ -235,7 +239,7 @@ export default function CreateProcessPage() {
                                 placeholder="Chọn nhân viên"
                                 allowCustom={false}
                             />
-                        </div>
+                        </div> */}
 
                         {/* Máy */}
                         <div className="flex flex-col gap-2">
