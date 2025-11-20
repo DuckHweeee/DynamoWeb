@@ -91,6 +91,8 @@ export default function TabletOperation() {
 
     const { data: staff } = useFetchOperators()
 
+    console.log("staff: ", staff);
+
     // Process
     // Đang tách ra từng phần của Process
     const [todo, setTodo] = useState<Process2[]>([]);
@@ -159,8 +161,9 @@ export default function TabletOperation() {
         ? (updateInfor.updateStaffId || matchedStaff?.staffIdNumber || selectedProcess?.planDto?.staffId)
         : (matchedStaff?.staffIdNumber || selectedProcess?.planDto?.staffId);
 
-    // console.log("currentStaffId")
-    // console.log(currentStaffId)
+        console.log("matchedStaff: ", matchedStaff);
+        console.log("selectedProcess: ", selectedProcess);
+    console.log("currentStaffId: ", currentStaffId);
 
     // Test
     const handleSave = async () => {

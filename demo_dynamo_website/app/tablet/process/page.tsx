@@ -115,7 +115,7 @@ export default function TabletProcess() {
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
-                        Thứ Tự sản phẩm
+                        Thứ Tự Nguyên Công
                         <ArrowUpDown />
                     </Button>
                 )

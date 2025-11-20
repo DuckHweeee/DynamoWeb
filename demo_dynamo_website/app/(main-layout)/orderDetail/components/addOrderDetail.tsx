@@ -133,7 +133,22 @@ export default function AddOrderDetailForm({ onCancel }: AddOrderDetailFormProps
                         widthSelect={"w-[320]"}
                     />
                 </div>
-
+                <div className="grid gap-1">
+                    <Label htmlFor="quantity" className="text-lg">Số lượng nguyên công</Label>
+                    <Input
+                        id="quantity"
+                        type="number"
+                        placeholder="Số Lượng nguyên công"
+                        className="!text-xl !placeholder-gray-300"
+                        value={newNewOrderDetail.numberOfSteps}
+                        onChange={(e) =>
+                            setNewOrderDetail({
+                                ...newNewOrderDetail,
+                                numberOfSteps: e.target.value,
+                            })
+                        }
+                    />
+                </div>        
                 <div className="grid gap-1">
                     <Label htmlFor="quantity" className="text-lg">Số Lượng</Label>
                     <Input
@@ -150,22 +165,7 @@ export default function AddOrderDetailForm({ onCancel }: AddOrderDetailFormProps
                         }
                     />
                 </div>
-                <div className="grid gap-1">
-                    <Label htmlFor="quantity" className="text-lg">Số lượng nguyên công</Label>
-                    <Input
-                        id="quantity"
-                        type="number"
-                        placeholder="Số Lượng nguyên công"
-                        className="!text-xl !placeholder-gray-300"
-                        value={newNewOrderDetail.numberOfSteps}
-                        onChange={(e) =>
-                            setNewOrderDetail({
-                                ...newNewOrderDetail,
-                                numberOfSteps: e.target.value,
-                            })
-                        }
-                    />
-                </div>
+                
                 <div className="grid gap-1">
                     <Label htmlFor="managerGroupName" className="text-lg">Nhóm</Label>
                     <FlexibleCombobox
