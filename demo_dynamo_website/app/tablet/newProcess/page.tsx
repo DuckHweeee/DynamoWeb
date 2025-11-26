@@ -44,6 +44,7 @@ import axios from "axios";
 import { OrbitProgress } from "@/node_modules/react-loading-indicators";
 import Link from "next/link";
 import { toast } from "sonner";
+import { OrderDetail } from "@/app/(main-layout)/orderDetail/lib/type";
 
 const URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const tabletCSS = "max-[1300px]:text-3xl max-[1300px]:!py-7 max-[1300px]:!px-8";
@@ -63,16 +64,16 @@ export default function TabletProcess() {
 
   // Fetch ToDo Progress
   const { data: fetchedProcesses, refetch } = useFetchProcesses();
-  const [todo, setTodo] = useState<Process2[]>([]);
+  const [todo, setTodo] = useState<OrderDetail[]>([]);
 
   // Fetch and update todo data
   const fetchProcess = async () => {
     try {
-      const res = await axios.get<Process2[]>(
-        `${URL}/api/drawing-code-process`
+      const res = await axios.get<OrderDetail[]>(
+        `${URL}/api/order-detail`
       );
-      const filteredData = res.data.filter((item) => item.isPlan === 0);
-      setTodo(filteredData);
+      // const filteredData = res.data.filter((item) => item.isPlan === 0);
+      setTodo(res.data);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu process:", error);
     }
@@ -81,6 +82,9 @@ export default function TabletProcess() {
   useEffect(() => {
     fetchProcess();
   }, []);
+  console.log("todo", todo);
+  //ge† process
+  const [subProcesses, setSubProcesses] = useState<Process2[]>([]);
 
   // Handle Submit
   const [loading, setLoading] = useState(false);
@@ -121,9 +125,9 @@ export default function TabletProcess() {
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const columns: ColumnDef<Process2>[] = [
+  const columns: ColumnDef<OrderDetail>[] = [
     {
-      accessorKey: "processType",
+      accessorKey: "orderType",
       header: ({ column }) => {
         return (
           <Button
@@ -131,16 +135,16 @@ export default function TabletProcess() {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            ĐTGC
+            Đối tượng gia công
             <ArrowUpDown />
           </Button>
         );
       },
-      cell: ({ row }) => <div>{row.getValue("processType")}</div>,
+      cell: ({ row }) => <div>{row.getValue("orderType")}</div>,
     },
     {
-      accessorKey: "orderDetailDto.orderCode",
-      accessorFn: (row) => row.orderDetailDto?.orderCode ?? "",
+      accessorKey: "orderCode",
+      // accessorFn: (row) => row.orderDetailDto?.orderCode ?? "",
       header: ({ column }) => (
         <Button
           className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
@@ -151,12 +155,10 @@ export default function TabletProcess() {
           <ArrowUpDown />
         </Button>
       ),
-      cell: ({ row }) => (
-        <div>{row.original.orderDetailDto?.orderCode ?? "—"}</div>
-      ),
+      cell: ({ row }) => <div>{row.getValue("orderCode")}</div>,
     },
     {
-      accessorKey: "partNumber",
+      accessorKey: "numberOfSteps",
       header: ({ column }) => {
         return (
           <Button
@@ -164,15 +166,15 @@ export default function TabletProcess() {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            TTNC
+            Số lượng nguyên công
             <ArrowUpDown />
           </Button>
         );
       },
-      cell: ({ row }) => <div>{row.getValue("partNumber")}</div>,
+      cell: ({ row }) => <div>{row.getValue("numberOfSteps")}</div>,
     },
     {
-      accessorKey: "stepNumber",
+      accessorKey: "quantity",
       header: ({ column }) => {
         return (
           <Button
@@ -180,31 +182,31 @@ export default function TabletProcess() {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            TTGC
+            Số lượng
             <ArrowUpDown />
           </Button>
         );
       },
-      cell: ({ row }) => <div>{row.getValue("stepNumber")}</div>,
+      cell: ({ row }) => <div>{row.getValue("quantity")}</div>,
     },
+    // {
+    //   accessorKey: "manufacturingPoint",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
+    //         variant="ghost"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         ĐGC
+    //         <ArrowUpDown />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => <div>{row.getValue("manufacturingPoint")}</div>,
+    // },
     {
-      accessorKey: "manufacturingPoint",
-      header: ({ column }) => {
-        return (
-          <Button
-            className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            ĐGC
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      cell: ({ row }) => <div>{row.getValue("manufacturingPoint")}</div>,
-    },
-    {
-      accessorKey: "pgTime",
+      accessorKey: "pgTimeGoal",
       header: ({ column }) => {
         return (
           <Button
@@ -212,12 +214,12 @@ export default function TabletProcess() {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Giờ PG
+            Giờ PG dư kiến
             <ArrowUpDown />
           </Button>
         );
       },
-      cell: ({ row }) => <div>{row.getValue("pgTime")}</div>,
+      cell: ({ row }) => <div>{row.getValue("pgTimeGoal")}</div>,
     },
     // {
     //     accessorKey: "planDto.machineId",
@@ -356,29 +358,45 @@ export default function TabletProcess() {
                           className={`${
                             isOdd ? "bg-gray-100" : ""
                           } text-2xl font-semibold !border-none`}
-                          onClick={() => {
-                            setExpandedRowId((prev) =>
-                              prev === row.original.processId
-                                ? null
-                                : row.original.processId
-                            );
-                            const may = machine2.find(
-                              (m) =>
-                                m.machineId ===
-                                row.original.machineDto?.machineId
-                            )?.machineId;
-                            const nhanvien = staff.find(
-                              (s) => s.staffId === row.original.planDto?.staffId
-                            )?.id;
-                            const point = row.original.manufacturingPoint;
-                            const pgTime = row.original.pgTime;
+                          // onClick={() => {
+                          //   setExpandedRowId((prev) =>
+                          //     prev === row.original.orderDetailId
+                          //       ? null
+                          //       : row.original.orderDetailId
+                          //   );
+                          //   // const may = machine2.find(
+                          //   //   (m) =>
+                          //   //     m.machineId ===
+                          //   //     row.original.machineDto?.machineId
+                          //   // )?.machineId;
+                          //   // const nhanvien = staff.find(
+                          //   //   (s) => s.staffId === row.original.planDto?.staffId
+                          //   // )?.id;
+                          //   // const point = row.original.manufacturingPoint;
+                          //   // const pgTime = row.original.pgTime;
 
-                            setSelectedMachineId(may ? String(may) : "");
-                            setSelectedPGTime(pgTime ? String(pgTime) : "");
-                            setSelectedPoint(point ? String(point) : "");
+                          //   // setSelectedMachineId(may ? String(may) : "");
+                          //   // setSelectedPGTime(pgTime ? String(pgTime) : "");
+                          //   // setSelectedPoint(point ? String(point) : "");
 
-                            // console.log(may ? String(may) : "");
-                            // console.log(nhanvien ? String(nhanvien) : "");
+                          //   // console.log(may ? String(may) : "");
+                          //   // console.log(nhanvien ? String(nhanvien) : "");
+                          // }}
+                          onClick={async () => {
+                            const id = row.original.orderDetailId;
+
+                            setExpandedRowId((prev) => (prev === id ? null : id));
+
+                            if (id !== expandedRowId) {
+                              try {
+                                const res = await axios.get<Process2[]>(
+                                  `${URL}/api/drawing-code-process/orderDetail/${id}`
+                                );
+                                setSubProcesses(res.data);
+                              } catch (e) {
+                                console.error("Lỗi gọi API processByOrderDetailId", e);
+                              }
+                            }
                           }}
                         >
                           {row.getVisibleCells().map((cell) => (
@@ -390,116 +408,107 @@ export default function TabletProcess() {
                             </TableCell>
                           ))}
                         </TableRow>
-                        {row.original.processId === expandedRowId && (
-                          <TableRow
-                            className={`${
-                              isOdd ? "bg-gray-100" : ""
-                            } text-2xl font-semibold !border-none`}
-                          >
-                            <TableCell colSpan={6}>
-                              <div className="pb-3 max-2xl:pl-6 max-2xl:pr-3  min-2xl:pr-3 min-2xl:pl-10 flex items-center gap-3">
-                                <div className="flex gap-6 w-full">
-                                  <div className="w-1/2 flex items-center gap-2">
-                                    <p className="font-bold text-2xl whitespace-nowrap">
-                                      Chọn máy:
-                                    </p>
-                                    <Select
-                                      value={
-                                        selectedMachineId ||
-                                        row.original.machineDto?.machineId?.toString()
-                                      }
-                                      onValueChange={(value) =>
-                                        setSelectedMachineId(value)
-                                      }
-                                    >
-                                      <SelectTrigger className="w-full text-2xl">
-                                        <SelectValue placeholder="Máy" />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                        <SelectGroup>
-                                          {machine2
-                                            // .filter(
-                                            //   (m) =>
-                                            //     m.status === 0 ||
-                                            //     m.machineId ===
-                                            //       row.original.machineDto
-                                            //         ?.machineId
-                                            // ) // giữ máy cũ dù status khác 0
-                                            .map((m) => (
-                                              <SelectItem
-                                                className="text-2xl"
-                                                key={m.machineId}
-                                                value={m.machineId.toString()}
-                                              >
-                                                {m.machineName}
-                                              </SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                      </SelectContent>
-                                    </Select>
-                                  </div>
-                                  <div className="w-1/2 flex items-center gap-2">
-                                    <p className="font-bold text-2xl whitespace-nowrap">
-                                      Nhập điểm gia công:
-                                    </p>
-                                    <Input
-                                      type="number"
-                                      className="w-full"
-                                      placeholder="Nhập điểm gia công"
-                                      value={
-                                        selectedPoint ??
-                                        row.original.manufacturingPoint?.toString() ??
-                                        ""
-                                      }
-                                      onChange={(e) =>
-                                        setSelectedPoint(e.target.value)
-                                      }
-                                    />
-                                  </div>
-                                  <div className="w-1/2 flex items-center gap-2">
-                                    <p className="font-bold text-2xl whitespace-nowrap">
-                                      Nhập giờ PG(phút):
-                                    </p>
-                                    <Input
-                                      type="number"
-                                      className="w-full"
-                                      placeholder="Nhập giờ PG"
-                                      value={
-                                        selectedPGTime ??
-                                        row.original.pgTime?.toString() ??
-                                        ""
-                                      }
-                                      onChange={(e) =>
-                                        setSelectedPGTime(e.target.value)
-                                      }
-                                    />
-                                  </div>
-                                </div>
-                                <div>
-                                  <Button
-                                    className="bg-green-700 hover:bg-green-600 px-10 py-6 text-xl font-bold"
-                                    onClick={() =>
-                                      handleSubmit(row.original.processId)
-                                    }
-                                  >
-                                    Cập nhật
-                                  </Button>
-                                </div>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        )}
-                      </Fragment>
-                    );
-                  })
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      Không có dữ liệu!
-                    </TableCell>
+                        {row.original.orderDetailId=== expandedRowId && (
+                          <TableRow>
+                          <TableCell colSpan={6} className="bg-gray-50">
+                            <div className="p-4 border rounded-lg">
+                              <table className="w-full border-collapse border">
+                                <thead className="bg-blue-900 text-white">
+                                  <tr>
+                                    <th className="p-2 border text-center">ID mã hàng</th>
+                                    <th className="p-2 border text-center">Thứ tự nguyên công</th>
+                                    <th className="p-2 border text-center">Thứ tự sản phẩm</th>
+                                    <th className="p-2 border text-center">Máy</th>
+                                    <th className="p-2 border text-center">Điểm</th>
+                                    <th className="p-2 border text-center">PG (phút)</th>
+                                    <th className="p-2 border text-center">Thao tác</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {subProcesses.length > 0 ? (
+                                    subProcesses.map((p: any) => (
+                                      <tr key={p.processId} className="text-center">
+                                        <td className="border p-2">{row.original.orderCode}</td>
+                                        <td className="border p-2">{p.partNumber}</td>
+                                       <td className="border p-2">{p.stepNumber}</td>
+                                        <td className="border p-2">
+                                          {/* <Select
+                                            value={p.machineId?.toString() || ""}
+                                            onValueChange={(value) =>
+                                              updateProcessField(p.processId, "machineId", value)
+                                            }
+                                          >
+                                            <SelectTrigger className="w-[150px]">
+                                              <SelectValue placeholder="Chọn máy" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                              <SelectGroup>
+                                                {machine2.map((m) => (
+                                                  <SelectItem key={m.machineId} value={m.machineId.toString()}>
+                                                    {m.machineName}
+                                                  </SelectItem>
+                                                ))}
+                                              </SelectGroup>
+                                            </SelectContent>
+                                          </Select> */}
+                                        </td>
+
+                                        {/* <td className="border p-2">
+                                          <Input
+                                            type="number"
+                                            className="w-[120px]"
+                                            value={p.manufacturingPoint ?? ""}
+                                            onChange={(e) =>
+                                              updateProcessField(p.processId, "manufacturingPoint", e.target.value)
+                                            }
+                                          />
+                                        </td> */}
+
+                                        <td className="border p-2">
+                                          {/* <Input
+                                            type="number"
+                                            className="w-[120px]"
+                                            value={p.pgTime ?? ""}
+                                            onChange={(e) =>
+                                              updateProcessField(p.processId, "pgTime", e.target.value)
+                                            }
+                                          /> */}
+                                        </td>
+
+                                        <td className="border p-2">
+                                          {/* <Button
+                                            className="bg-green-700 hover:bg-green-600 text-white px-6 py-2"
+                                            onClick={() => handleUpdateProcess(p.processId)}
+                                          >
+                                            Lưu
+                                          </Button> */}
+                                        </td>
+                                      </tr>
+                                    ))
+                                  ) : (
+                                    <tr>
+                                      <td colSpan={6} className="border p-2 text-center">
+                                        Không có dữ liệu process!
+                                      </td>
+                                    </tr>
+                                  )}
+                                </tbody>
+                              </table>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                          )}
+                        </Fragment>
+                      );
+                    })
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length}
+                        className="h-24 text-center"
+                      >
+                        Không có dữ liệu!
+                      </TableCell>
                   </TableRow>
                 )}
               </TableBody>

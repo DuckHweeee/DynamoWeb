@@ -102,6 +102,7 @@ export interface OrderDetailDto {
     createdDate: string;
     updatedDate: string;
     pgTimeGoal: number;
+    numberOfSteps: number;
 }
 export interface Machine2 {
     machineId: number;
