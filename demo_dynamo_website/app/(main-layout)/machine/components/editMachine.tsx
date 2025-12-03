@@ -187,7 +187,7 @@ export default function EditMachineForm({
                         <div className="grid">
                             <Label htmlFor="cong_viec" className="text-lg !font-normal">Phòng quản lý</Label>
                             <Select
-                                value={updateMachine.machineOffice?.toLowerCase() ?? ""}
+                                value={updateMachine.machineOffice ?? ""}
                                 onValueChange={(value) => updateField('machineOffice', value)}
                             >
                                 <SelectTrigger className={`w-auto text-lg [&>span]:text-[16px] ${errors.machineOffice ? 'border-red-500' : ''}`}>
@@ -199,7 +199,7 @@ export default function EditMachineForm({
                                             <SelectItem
                                                 className="text-lg"
                                                 key={g.name}
-                                                value={g.name.toLowerCase()}
+                                                value={g.name}
                                             >
                                                 {g.name}
                                             </SelectItem>

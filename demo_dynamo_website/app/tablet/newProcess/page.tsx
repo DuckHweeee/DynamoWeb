@@ -131,12 +131,13 @@ export default function TabletProcess() {
         p.processId === processId
           ? {
               ...p,
-              [field]: value === "" ? p[field] : value, // giữ nguyên giá trị gốc
+              [field]: value, // cho phép value === ""
             }
           : p
       )
     );
   };
+
   const updateProcessMachine = (
     processId: string,
     machineId: number | string

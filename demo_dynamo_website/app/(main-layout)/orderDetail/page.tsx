@@ -243,6 +243,7 @@ function getColumns({
       enableHiding: false,
       cell: ({ row }) => {
         const orderDetail = row.original;
+        const progress = row.getValue("progress") as number;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -270,19 +271,18 @@ function getColumns({
               >
                 Chỉnh sửa
               </DropdownMenuItem>
-              <DropdownMenuItem
-                className="text-lg cursor-pointer pr-6"
-                onClick={() => {
-                  setEditingOrderDetail(orderDetail);
-                  deleteOrderDetail(
-                    orderDetail.orderDetailId,
-                    refetch
-                  );     
-                  console.log("delete", orderDetail.orderDetailId);
-                }}
-              >
-                Xóa
-              </DropdownMenuItem>
+              {progress !== 2 && progress !== 3 && (
+                <DropdownMenuItem
+                  className="text-lg cursor-pointer pr-6"
+                  onClick={() => {
+                    setEditingOrderDetail(orderDetail);
+                    deleteOrderDetail(orderDetail.orderDetailId, refetch);
+                    console.log("delete", orderDetail.orderDetailId);
+                  }}
+                >
+                  Xóa
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );

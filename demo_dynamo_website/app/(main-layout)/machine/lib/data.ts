@@ -5,7 +5,7 @@ export const officeList: Office[] = [
         name: "Pin",
     },
     {
-        name: "Insert",
+        name: "D_INSERT1",
     },
     {
         name: "Mold",

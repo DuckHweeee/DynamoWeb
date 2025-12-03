@@ -34,7 +34,7 @@ export default function AddOrderDetailForm({ onCancel }: AddOrderDetailFormProps
     const officeList = [
         { name: "MOLD", value: "MOLD" },
         { name: "PIN", value: "PIN" },
-        { name: "D_INSERT", value: "D_INSERT" }
+        { name: "D_INSERT1", value: "D_INSERT1" }
     ];
     const handleSubmit = async () => {
         if (

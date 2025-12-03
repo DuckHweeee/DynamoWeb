@@ -306,10 +306,12 @@ export default function EditStaffForm({
                                 <div className="grid">
                                     <Label htmlFor="phong_ban" className="text-lg !font-normal">Phòng ban</Label>
                                     <Select
-                                        value={updateStaff.staffOffice?.toLowerCase() ?? ""}
+                                        value={updateStaff.staffOffice?? ""}
                                         onValueChange={(value) =>
                                             setUpdateStaff({ ...updateStaff, staffOffice: value })
+                                            
                                         }
+                                        
                                     >
                                         <SelectTrigger className="w-auto text-lg [&>span]:text-[16px]">
                                             <SelectValue placeholder="Chọn nhóm" />
@@ -320,7 +322,7 @@ export default function EditStaffForm({
                                                     <SelectItem
                                                         className="text-lg"
                                                         key={g.name}
-                                                        value={g.name.toLowerCase()}
+                                                        value={g.name}
                                                     >
                                                         {g.name}
                                                     </SelectItem>
@@ -329,7 +331,6 @@ export default function EditStaffForm({
                                         </SelectContent>
                                     </Select>
                                 </div>
-
                                 <div className="grid">
                                     <Label htmlFor="nhom" className="text-lg !font-normal">Nhóm</Label>
                                     <Select
@@ -613,7 +614,7 @@ export default function EditStaffForm({
                                 <div className="grid">
                                     <Label htmlFor="phong_ban" className="text-lg !font-normal">Phòng ban</Label>
                                     <Select
-                                        value={updateStaff.staffOffice?.toLowerCase() ?? ""}
+                                        value={updateStaff.staffOffice ?? ""}
                                         onValueChange={(value) =>
                                             setUpdateStaff({ ...updateStaff, staffOffice: value })
                                         }
@@ -627,7 +628,7 @@ export default function EditStaffForm({
                                                     <SelectItem
                                                         className="text-lg"
                                                         key={g.name}
-                                                        value={g.name.toLowerCase()}
+                                                        value={g.name}
                                                     >
                                                         {g.name}
                                                     </SelectItem>
