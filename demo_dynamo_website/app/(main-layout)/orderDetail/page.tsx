@@ -53,6 +53,7 @@ import { Progress } from "@/components/ui/progress";
 import { ImportButton } from "@/components/ImportButton";
 import { toast } from "sonner";
 import axios from "axios";
+import { deleteOrderDetail } from "./components/deleteOrderDetail";
 
 function getColumns({
   setEditingOrderDetail,
@@ -273,7 +274,10 @@ function getColumns({
                 className="text-lg cursor-pointer pr-6"
                 onClick={() => {
                   setEditingOrderDetail(orderDetail);
-                  deleteOrderDetail(orderDetail.orderDetailId, refetch);
+                  deleteOrderDetail(
+                    orderDetail.orderDetailId,
+                    refetch
+                  );     
                   console.log("delete", orderDetail.orderDetailId);
                 }}
               >
@@ -291,28 +295,28 @@ const statusList = [
   { name: "Đang thực hiện", value: 2 },
   { name: "Đã hoàn thành", value: 3 },
 ];
-export async function deleteOrderDetail(
-  orderDetailId: number | string,
-  refetch: () => void
-) {
-  if (!orderDetailId) return;
-  const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
-  try {
-    const confirmed = window.confirm("Bạn có chắc muốn xóa mục này không?");
-    if (!confirmed) return;
+// export async function deleteOrderDetail(
+//   orderDetailId: number | string,
+//   refetch: () => void
+// ) {
+//   if (!orderDetailId) return;
+//   const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
+//   try {
+//     const confirmed = window.confirm("Bạn có chắc muốn xóa mục này không?");
+//     if (!confirmed) return;
 
-    await axios.delete(`${urlLink}/api/order-detail/${orderDetailId}`);
+//     await axios.delete(`${urlLink}/api/order-detail/${orderDetailId}`);
 
-    toast.success("Xóa thành công!");
+//     toast.success("Xóa thành công!");
 
-    // ❗ optional: call your reload function here
-    // await fetchData();
-    await refetch();
-  } catch (error) {
-    console.error(error);
-    toast.error("Xóa thất bại, vui lòng thử lại.");
-  }
-}
+//     // ❗ optional: call your reload function here
+//     // await fetchData();
+//     await refetch();
+//   } catch (error) {
+//     console.error(error);
+//     toast.error("Xóa thất bại, vui lòng thử lại.");
+//   }
+// }
 
 export default function OrderDetailTable() {
   const [sorting, setSorting] = useState<SortingState>([]);
