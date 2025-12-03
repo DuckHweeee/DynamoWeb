@@ -1,3 +1,5 @@
+import { off } from "process"
+
 export type Operator = {
     stt: string
     id: string
@@ -14,9 +16,6 @@ export type Machine = {
     loai_may: string
     ma_may: string
 }
-
-
-
 export type Process = {
     id: string
     ma_ban_ve: string
@@ -103,6 +102,7 @@ export interface OrderDetailDto {
     createdDate: string;
     updatedDate: string;
     pgTimeGoal: number;
+    numberOfSteps: number;
 }
 export interface Machine2 {
     machineId: number;
@@ -169,11 +169,58 @@ export interface StaffKpiDto {
 }
 
 export interface Group {
-    groupId: string,
-    groupName: string,
-    groupType: string,
+    // groupId: string,
+    // groupName: string,
+    // groupType: string,
     // "staffGroups": [],
     // "machineGroups": [],
+    groupId: string;
+    groupName: string;
+    groupType: string;
+    staffGroups: [];
+    machineGroups: any[];
+    createdDate?: string;
+    updatedDate?: string;
+}
+
+export interface CreateGroupData {
+    groupName: string;
+    groupType: string;
+}
+
+export interface UpdateGroupData {
+    groupName: string;
+    groupType: string;
+}
+
+// Group KPI Types
+export interface GroupKPI {
+    id: number;
+    year: number;
+    month: number | null;
+    week: number | null;
+    day: number | null;
+    isMonth: number; // 0 = monthly KPI, 1 = weekly KPI, 2 = daily KPI
+    office: string;
+    workingHourGoal: number;
+    workingHourDifference: number;
+    workingHour: number;
+    groupId: string;
+    createdDate: string;
+    updatedDate: string;
+}
+
+export interface NewGroupKPI {
+    year: number | null;
+    month: number | null;
+    week: number | null;
+    day: number | null;
+    isMonth: number; // 0 = monthly KPI, 1 = weekly KPI, 2 = daily KPI
+    office: string;
+    workingHourGoal: number | null;
+    workingHourDifference?: number | null; // Optional - backend will calculate
+    workingHour?: number | null; // Optional - backend will calculate
+    groupId: string;
 }
 
 
@@ -192,8 +239,16 @@ export interface MachineDto {
 }
 
 export interface StaffDto {
-    staffId?: string;
+    staffId?: number;
     staffName?: string;
+    staffOffice?: string;
+    staffSection?: string;
+    shortName?: string;
+    status?: number;
+    createdDate?: string;
+    updatedDate?: string;
+    staffKpiDtos?: any;
+    id?: string;
 }
 
 export interface ProcessData {
@@ -230,4 +285,89 @@ export interface Order {
     createdDate: string;
     updatedDate: string;
     status: number;
+}
+
+export interface DrawingCodeProcessHistory {
+    processId: string;
+    partNumber: number;
+    stepNumber: number;
+    manufacturingPoint: number;
+    processType: string;
+    processStatus: number;
+    pgTime: number;
+    startTime: string;
+    endTime: string;
+    createdDate: string;
+    updatedDate: string;
+    isPlan: number;
+    status: number;
+    orderDetailDto: {
+        orderDetailId: string;
+        orderCode: string;
+    };
+    machineDto: {
+        machineName: string;
+    };
+    staffDtos: StaffDto[];
+    planDto: any;
+    processTimeDto: any;
+}
+
+export type Role = {
+    id: number;
+    name: string;
+}
+
+export interface DailyReport {
+    id: number;
+    dateTime: string; // ngày
+    office: string; // phòng ban
+    reportType: string; // loại khai báo
+    hourDiff: number; // giờ tăng giảm thực
+    createdDate: string; // ngày khai báo
+    groupId: string; // nhóm ID
+    adminId: string; // người khai báo ID
+}
+
+export interface NewDailyReport {
+    dateTime: string;
+    office: string;
+    reportType: string;
+    hourDiff: number;
+    groupId: string;
+}
+
+// Type for report types based on the image
+export type ReportType = 'off' | 'overtime' | 'extra' | 'leave';
+
+export const REPORT_TYPE_LABELS: Record<ReportType, string> = {
+    'off': 'Nghỉ ngày làm',
+    'overtime': 'Tăng ca thêm',
+    'extra': 'Làm ngày nghỉ',
+    'leave': 'Về sớm giờ'
+};
+
+export const REPORT_TYPE_OPTIONS = [
+    { value: 'off', label: 'Nghỉ ngày làm' },
+    { value: 'overtime', label: 'Tăng ca thêm' },
+    { value: 'extra', label: 'Làm ngày nghỉ' },
+    { value: 'leave', label: 'Về sớm giờ' }
+];
+
+// Office options
+export type OfficeType = 'PIN' | 'D_INSERT' | 'MOLD';
+
+export const OFFICE_OPTIONS = [
+    { value: 'PIN', label: 'PIN' },
+    { value: 'D_INSERT', label: 'D_INSERT' },
+    { value: 'MOLD', label: 'MOLD' }
+];
+export type Admin = {
+    id: string;
+    email: string;
+    username: string;
+    fullname: string;
+    role: Role[];
+    createdDate: string;
+    updatedDate: string;
 }

@@ -58,7 +58,7 @@ export function NavMain({
                             <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
                                     <SidebarMenuButton
-                                        className={`text-xl ${isGroupActive ? "text-[#073c7e] font-bold" : ""}`}
+                                        className={`cursor-pointer text-xl ${isGroupActive ? "text-[#073c7e] font-bold" : ""}`}
                                     >
                                         <Link href={item.url}>
                                             {item.icon && <item.icon />}

@@ -2,23 +2,13 @@
 
 import * as React from "react"
 import {
-    AudioWaveform,
-    BookOpen,
-    Bot,
-    Command,
     FolderClock,
     FolderMinus,
-    Frame,
-    GalleryVerticalEnd,
     LayoutGrid,
-    Map,
     MessageCircleMore,
     MonitorCog,
     PencilRuler,
-    PieChart,
-    Settings2,
     SquarePen,
-    SquareTerminal,
     Tablet,
     UserCog,
 } from "lucide-react"
@@ -26,42 +16,13 @@ import {
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarHeader,
-    SidebarRail,
 } from "@/components/ui/sidebar"
 import { NavMain } from "./nav-main"
-// import { NavProjects } from "./nav-projects"
-// import { NavUser } from "./nav-user"
 import { Logo } from "./logo"
-import { useState } from "react"
-import { useIsMobile } from "@/hooks/use-mobile"
-import { IIC } from "./iic"
+import { useAuth } from "@/contexts/AuthContext"
 
-// This is sample data.
 const data = {
-    user: {
-        name: "shadcn",
-        email: "m@example.com",
-        avatar: "",
-    },
-    teams: [
-        {
-            name: "Acme Inc123",
-            logo: GalleryVerticalEnd,
-            plan: "Enterprise",
-        },
-        {
-            name: "Acme Corp.",
-            logo: AudioWaveform,
-            plan: "Startup",
-        },
-        {
-            name: "Evil Corp.",
-            logo: Command,
-            plan: "Free",
-        },
-    ],
     navMain: [
         {
             title: "Thống kê",
@@ -69,16 +30,12 @@ const data = {
             icon: LayoutGrid,
             isActive: true,
             items: [
-                // {
-                //     title: "Dashboard All",
-                //     url: "/dashboard",
-                // },
                 {
                     title: "Máy móc",
                     url: "/dashboard/machine",
                 },
                 {
-                    title: "Người vận hành",
+                    title: "Vận hành",
                     url: "/dashboard/operation",
                 },
                 {
@@ -97,7 +54,7 @@ const data = {
             icon: UserCog,
             items: [
                 {
-                    title: "OP Status",
+                    title: "Trạng thái nhân viên",
                     url: "/operator/status",
                 },
                 {
@@ -116,7 +73,7 @@ const data = {
             icon: MonitorCog,
             items: [
                 {
-                    title: "MC Status",
+                    title: "Trạng thái máy móc",
                     url: "/machine/status",
                 },
                 {
@@ -129,19 +86,30 @@ const data = {
                 },
             ],
         },
+        // {
+        //     title: "Bản vẽ & Đơn",
+        //     url: "/drawingCode",
+        //     icon: PencilRuler,
+        //     items: [
+        //         {
+        //             title: "Bản vẽ & Đơn hàng",
+        //             url: "/drawingCode",
+        //         },
+        //     ],
+        // },
         {
-            title: "Bản vẽ & Đơn",
-            url: "/drawingCode",
-            icon: PencilRuler,
+            title: "Mã hàng",
+            url: "#",
+            icon: MessageCircleMore,
             items: [
                 {
-                    title: "Bản vẽ & Đơn hàng",
-                    url: "/drawingCode",
+                    title: "Mã hàng gia công",
+                    url: "/orderDetail",
                 },
             ],
         },
         {
-            title: "Process",
+            title: "Gia công",
             url: "/process",
             icon: SquarePen,
             items: [
@@ -150,48 +118,46 @@ const data = {
                     url: "/process/kanban",
                 },
                 {
-                    title: "Process Table",
+                    title: "Gia công chi tiết",
                     url: "/process",
                 },
             ],
         },
+
         {
-            title: "Order",
-            url: "#",
-            icon: MessageCircleMore,
-            // items: [
-            //     {
-            //         title: "Introduction",
-            //         url: "#",
-            //     },
-            // ],
-        },
-        {
-            title: "Group",
-            url: "#",
+            title: "Nhóm",
+            url: "/group",
             icon: FolderMinus,
-            // items: [
-            //     {
-            //         title: "Introduction",
-            //         url: "#",
-            //     },
-            // ],
+            items: [
+                {
+                    title: "Các Nhóm",
+                    url: "/group",
+                },
+                {
+                    title: "Cài đặt KPI",
+                    url: "/group/kpi",
+                },
+                {
+                    title: "Báo cáo hàng ngày",
+                    url: "/group/dailyReport",
+                }
+            ],
         },
         {
-            title: "History",
+            title: "Lịch sử",
             url: "/history",
             icon: FolderClock,
             items: [
                 {
-                    title: "History Process",
+                    title: " Quy trình",
                     url: "/history/historyProcess",
                 },
                 {
-                    title: "History Machine",
+                    title: " Máy móc",
                     url: "/history/historyMachine",
                 },
                 {
-                    title: "History Operator",
+                    title: " Người vận hành",
                     url: "/history/historyOperator",
                 },
             ],
@@ -202,54 +168,52 @@ const data = {
             icon: Tablet,
             items: [
                 {
-                    title: "Tablet Chu Trình",
+                    title: "Kế hoạch",
                     url: "/tablet/process",
                 },
                 {
-                    title: "Tablet Vận hành",
+                    title: "Vận hành",
                     url: "/tablet/operation",
                 },
                 {
-                    title: "Tablet Khai Báo",
+                    title: "Khai báo",
                     url: "/tablet/newProcess",
                 },
             ],
         },
-    ],
-    projects: [
         {
-            name: "Design Engineering",
-            url: "#",
-            icon: Frame,
-        },
-        {
-            name: "Sales & Marketing",
-            url: "#",
-            icon: PieChart,
-        },
-        {
-            name: "Travel",
-            url: "#",
-            icon: Map,
-        },
+            title: "Tài khoản",
+            url: "/account",
+            icon: UserCog,
+            items: [
+                { title: "Quản lý tài khoản", url: "/account" },
+            ]
+        }
     ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    // const isMobile = useIsMobile()
+    const { user } = useAuth()
+
+    // Filter navigation items based on user role
+    const getNavItemsForRole = () => {
+        if (user?.role === "Operator") {
+            return data.navMain.filter(item =>
+                item.title === "Thống kê" || item.title === "Tablet"
+            )
+        }
+        // Admin sees all navigation items
+        return data.navMain
+    }
+
     return (
         <Sidebar collapsible="icon" {...props} className="bg-white">
             <SidebarHeader>
                 <Logo />
             </SidebarHeader>
             <SidebarContent>
-                <NavMain items={data.navMain} />
-                {/* <NavProjects projects={data.projects} /> */}
+                <NavMain items={getNavItemsForRole()} />
             </SidebarContent>
-            {/* <SidebarFooter>
-                <IIC />
-            </SidebarFooter> */}
-            {/* <SidebarRail /> */}
         </Sidebar>
     )
 }

@@ -10,45 +10,20 @@ import {
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Machine2, OrderDetailDto, Staff } from "@/lib/type"
+import { OrderDetailDto, Staff } from "@/lib/type"
 import axios from "axios"
 import { toast } from "sonner"
 import { FlexibleCombobox } from "./FlexibleCombobox"
+import { processingObjectList } from "../../lib/data"
+import { useMachine } from "@/hooks/useMachine"
 
 
 interface Props {
     open: boolean
     onOpenChange: (open: boolean) => void
     staffList: Staff[]
-    machineList: Machine2[]
-}
-interface ProcessingObject {
-    id: string,
-    name: string
 }
 
-const processingObjectList: ProcessingObject[] = [
-    {
-        id: "1",
-        name: "SP_Chính",
-    },
-    {
-        id: "2",
-        name: "NG_Chạy lại",
-    },
-    {
-        id: "3",
-        name: "LK-Đồ gá",
-    },
-    {
-        id: "4",
-        name: "Điện cực",
-    },
-    {
-        id: "5",
-        name: "Dự bị",
-    },
-]
 
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 const tabletCSS = "max-[1300px]:!top-2";
@@ -56,8 +31,8 @@ export default function CreateProcessDialog({
     open,
     onOpenChange,
     staffList,
-    machineList,
 }: Props) {
+    const { data: machineList } = useMachine();
     const [formData, setFormData] = useState({
         staffId: "",
         processType: "",
@@ -105,6 +80,8 @@ export default function CreateProcessDialog({
                         
                         Bạn có chắc chắn muốn gửi không?
                 `.trim();
+        // console.log("formData")
+        // console.log(formData)
         if (!window.confirm(confirmMessage)) {
             return;
         }
@@ -126,6 +103,7 @@ export default function CreateProcessDialog({
                         orderCode: formData.orderCode,
                         machineId: Number(formData.machineId),
                         staffId: formData.staffId,
+                        isPlan: 0
                     }),
                 }
             );
@@ -268,25 +246,6 @@ export default function CreateProcessDialog({
 
                     <div className="grid gap-1">
                         <Label htmlFor="operator" className="text-2xl">Nhân viên</Label>
-                        {/* <Select
-                            value={formData.staffId}
-                            onValueChange={(value) =>
-                                setFormData({ ...formData, staffId: value })
-                            }
-                        >
-                            <SelectTrigger className="w-full text-lg" id="operator">
-                                <SelectValue placeholder="Chọn nhân viên" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    {staffList.map((op) => (
-                                        <SelectItem key={op.id} value={op.id}>
-                                            {op.staffName}
-                                        </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select> */}
                         <FlexibleCombobox
                             options={staffList}
                             value={formData.staffId}
@@ -300,31 +259,20 @@ export default function CreateProcessDialog({
 
                     <div className="grid gap-1">
                         <Label htmlFor="operator" className="text-2xl">Máy</Label>
-                        {/* <Select
-                            value={formData.staffId}
-                            onValueChange={(value) =>
-                                setFormData({ ...formData, staffId: value })
-                            }
-                        >
-                            <SelectTrigger className="w-full text-lg" id="operator">
-                                <SelectValue placeholder="Chọn nhân viên" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    {staffList.map((op) => (
-                                        <SelectItem key={op.id} value={op.id}>
-                                            {op.staffName}
-                                        </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select> */}
                         <FlexibleCombobox
                             options={machineList}
-                            value={formData.machineId}
-                            onChange={(val) => setFormData({ ...formData, machineId: val })}
-                            displayField="machineName"
-                            valueField="machineId"
+                            value={
+                                machineList.find(m => Number(m.machineId) === Number(formData.machineId))?.machineName || ""
+                            } // hiển thị name theo id đang lưu
+                            onChange={(selectedName) => {
+                                const selected = machineList.find(m => m.machineName === selectedName);
+                                setFormData({
+                                    ...formData,
+                                    machineId: selected ? String(selected.machineId) : "", // lưu lại ID
+                                });
+                            }}
+                            displayField="machineName"  // hiển thị bằng name
+                            valueField="machineName"    // chọn bằng name
                             placeholder="Chọn Máy"
                             allowCustom={false}
                         />

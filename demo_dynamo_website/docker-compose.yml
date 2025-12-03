@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  dynamo-web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_BACKEND_URL=http://host.docker.internal:8080
+      - NEXT_PUBLIC_WEBSOCKET_URL=ws://host.docker.internal:8080
+      - NEXT_PUBLIC_API_BASE_URL=http://host.docker.internal:8080
+      - NEXT_TELEMETRY_DISABLED=1
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    networks:
+      - dynamo-network
+
+  # Optional: Add a reverse proxy (nginx) for production
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - dynamo-web
+    restart: unless-stopped
+    networks:
+      - dynamo-network
+    profiles:
+      - production
+
+networks:
+  dynamo-network:
+    driver: bridge
+
+volumes:
+  dynamo-data:

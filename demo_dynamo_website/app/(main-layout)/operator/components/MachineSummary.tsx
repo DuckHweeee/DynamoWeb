@@ -1,3 +1,5 @@
+"use client";
+
 import { Card } from "@/components/ui/card"
 import { UserIcon, AlertTriangleIcon, PauseCircleIcon, PowerOffIcon } from "lucide-react"
 

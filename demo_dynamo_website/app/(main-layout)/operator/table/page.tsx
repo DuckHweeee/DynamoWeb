@@ -1,416 +1,121 @@
 "use client"
-import * as React from "react"
-import {
-    ColumnDef,
-    ColumnFiltersState,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    SortingState,
-    useReactTable,
-    VisibilityState,
-} from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Plus, Search } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
 import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useRouter } from 'next/navigation'
 import { Staff } from "@/lib/type"
+import { useStaff } from "../hooks/useStaff"
+import { OperatorTable } from "@/components/OperatorTable"
 import EditOperatorForm from "../components/editOperator"
 import AddOperatorForm from "../components/addNewOperator"
-import { useStaff } from "../hooks/useStaff"
-import { useRouter } from 'next/navigation'
-import { toast } from "sonner"
 import DetailStaffForm from "../components/detailOperator"
 
-const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-function getColumns({
-    setEditingOperator,
-    setShowForm,
-    setDetailStaff,
-    setShowDetail,
-}: {
-    setEditingOperator: (operator: Staff) => void
-    setDetailStaff: (operator: Staff) => void
-    setShowForm: (show: boolean) => void
-    setShowDetail: (show: boolean) => void
-}): ColumnDef<Staff>[] {
-    return [
-        // {
-        //     id: "select",
-        //     header: ({ table }) => (
-        //         <Checkbox
-        //             checked={
-        //                 table.getIsAllPageRowsSelected() ||
-        //                 (table.getIsSomePageRowsSelected() && "indeterminate")
-        //             }
-        //             onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        //             aria-label="Select all"
-        //         />
-        //     ),
-        //     cell: ({ row }) => (
-        //         <Checkbox
-        //             checked={row.getIsSelected()}
-        //             onCheckedChange={(value) => row.toggleSelected(!!value)}
-        //             aria-label="Select row"
-        //         />
-        //     ),
-        //     enableSorting: false,
-        //     enableHiding: false,
-        // },
-        {
-            id: "stt",
-            // header: ({ column }) => (
-            //     <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            //         STT <ArrowUpDown />
-            //     </Button>
-            // ),
-            header: () => (<span className="text-lg font-bold ">STT</span>),
-            cell: ({ row }) => <div>{row.index + 1}</div>,
-        },
-        {
-            accessorKey: "staffId",
-            header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Mã nhân viên <ArrowUpDown />
-                </Button>
-            ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("staffId")}</div>,
-        },
-        {
-            accessorKey: "staffName",
-            header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Tên nhân viên <ArrowUpDown />
-                </Button>
-            ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("staffName")}</div>,
-        },
-        {
-            accessorKey: "staffOffice",
-            header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Phòng Ban <ArrowUpDown />
-                </Button>
-            ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("staffOffice")}</div>,
-        },
-        {
-            accessorKey: "staffKpiDtos.groupName",
-            header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Nhóm <ArrowUpDown />
-                </Button>
-            ),
-            // cell: ({ row }) => <div className="capitalize">{row.getValue("groupName")}</div>,
-            cell: ({ row }) => (
-                <div className="capitalize">{row.original.staffKpiDtos?.groupName ?? "Chưa Có Nhóm"}</div>
-            )
-        },
-        {
-            accessorKey: "staffSection",
-            header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Công Việc <ArrowUpDown />
-                </Button>
-            ),
-            cell: ({ row }) => <div className="capitalize">{row.getValue("staffSection")}</div>,
-        },
-        {
-            accessorKey: "status",
-            header: ({ column }) => (
-                <Button
-                    className="text-lg font-bold cursor-pointer"
-                    variant="ghost"
-                    onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === "asc")
-                    }
-                >
-                    Trạng Thái <ArrowUpDown />
-                </Button>
-            ),
-            cell: ({ getValue }) => {
-                const value = getValue<number>()
-                const isWorking = value === 1
-                return (
-                    <div
-                        className={`w-full px-4 py-1.5 rounded-sm text-center capitalize
-        ${isWorking ? "bg-[#E7F7EF] text-[#0CAF60]" : "bg-[#FFE6E6] text-[#FE4A4A]"}`}
-                    >
-                        {isWorking ? "Đang Làm" : "Đã Nghỉ"}
-                    </div>
-                )
-            }
-        },
-        {
-            id: "actions",
-            enableHiding: false,
-            cell: ({ row }) => {
-                const operator = row.original
-                return (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal size={80} strokeWidth={3} />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                                className="text-lg cursor-pointer pr-6"
-                                onClick={() => {
-                                    setDetailStaff(operator);
-                                    setShowDetail(true);
-                                }}
-                            >
-                                Thông tin chi tiết
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                className="text-lg cursor-pointer"
-                                onClick={() => {
-                                    setEditingOperator(operator);
-                                    setShowForm(true);
-                                }}
-                            >
-                                Chỉnh sửa
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu >
-                )
-            },
-        },
-    ]
-}
-
-
-
-export default function OperatorTable() {
+export default function OperatorTablePage() {
     const router = useRouter()
-    const [sorting, setSorting] = React.useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-        []
-    )
-    const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = React.useState({})
-    const [globalFilter, setGlobalFilter] = useState("")
 
     // Staff Data
-    const { data: staff } = useStaff()
+    const { data: staff, loading, error } = useStaff()
+
+    const handleImportSuccess = () => {
+        window.location.reload()
+    }
 
     // Add new Staff
-    const [showForm, setShowForm] = useState(false)
+    const [showAddForm, setShowAddForm] = useState(false)
     // Edit Staff
     const [editingOperator, setEditingOperator] = useState<Staff | null>(null)
+    const [showEditForm, setShowEditForm] = useState(false)
     // Detail Staff
     const [detailStaff, setDetailStaff] = useState<Staff | null>(null)
-    const [showDetail, setShowDetail] = useState(false);
+    const [showDetailForm, setShowDetailForm] = useState(false)
 
-    const columns = getColumns({ setEditingOperator, setShowForm, setDetailStaff, setShowDetail })
-    const table = useReactTable({
-        data: staff,
-        columns,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        onGlobalFilterChange: setGlobalFilter,
-        globalFilterFn: "includesString",
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-            globalFilter,
-        },
-    })
+    const handleAdd = () => {
+        setShowAddForm(true)
+    }
 
+    const handleEdit = (staff: Staff) => {
+        setEditingOperator(staff)
+        setShowEditForm(true)
+    }
+
+    const handleDetail = (staff: Staff) => {
+        setDetailStaff(staff)
+        setShowDetailForm(true)
+    }
+
+    const handleCloseEditDialog = () => {
+        setShowEditForm(false)
+        setEditingOperator(null)
+    }
+
+    const handleCloseDetailDialog = () => {
+        setShowDetailForm(false)
+        setDetailStaff(null)
+    }
+
+    // Forms
+    const editForm = editingOperator ? (
+        <EditOperatorForm
+            staffList={staff}
+            idStaffString={editingOperator?.id}
+            onUpdate={(updated) => {
+                const index = staff.findIndex(op => op.id === updated.id)
+                if (index !== -1) staff[index] = updated
+                handleCloseEditDialog()
+            }}
+            onCancel={handleCloseEditDialog}
+        />
+    ) : null
+
+    const detailForm = detailStaff ? (
+        <DetailStaffForm
+            staff={detailStaff}
+            onCancel={handleCloseDetailDialog}
+        />
+    ) : null
+
+    const addForm = (
+        <AddOperatorForm
+            onAdd={(newOp) => {
+                staff.push(newOp)
+                router.refresh()
+                setShowAddForm(false)
+            }}
+            onCancel={() => setShowAddForm(false)}
+        />
+    )
 
     return (
-        <div className="w-full">
-            <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
-                <div className="flex flex-row items-center justify-between py-4">
-                    <div className="w-2/3">
-                        <p className="text-2xl font-bold">Danh Sách Nhân Viên</p>
-                    </div>
-                    <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
-                        <div className="relative max-w-sm w-full">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                            <Input
-                                placeholder="Tìm kiếm"
-                                value={globalFilter}
-                                onChange={(e) => setGlobalFilter(e.target.value)}
-                                className="pl-10 py-5"
-                            />
-                        </div>
+        <>
+            <OperatorTable
+                data={staff}
+                loading={loading}
+                error={error}
+                showAddButton={true}
+                showActions={true}
+                showViewHistory={false}
+                title="Danh Sách Nhân Viên"
+                onAdd={handleAdd}
+                onEdit={handleEdit}
+                onDetail={handleDetail}
+                editForm={editForm}
+                detailForm={detailForm}
+                showEditDialog={showEditForm}
+                showDetailDialog={showDetailForm}
+                onCloseEditDialog={handleCloseEditDialog}
+                onCloseDetailDialog={handleCloseDetailDialog}
+                showImportButton={true}
+                onImportSuccess={handleImportSuccess}
+            />
 
-                        <Button
-                            variant="secondary" size="icon" className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
-                            onClick={() => setShowForm(true)}>
-                            <Plus size={60} strokeWidth={5} color="white" />
-                        </Button>
-                    </div>
-                </div>
-                <div className="rounded-md border">
-                    <Table>
-                        <TableHeader>
-                            {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} className="text-lg font-bold">
-                                    {headerGroup.headers.map((header) => {
-                                        return (
-                                            <TableHead key={header.id} className="text-center py-2">
-                                                {header.isPlaceholder
-                                                    ? null
-                                                    : flexRender(
-                                                        header.column.columnDef.header,
-                                                        header.getContext()
-                                                    )}
-                                            </TableHead>
-                                        )
-                                    })}
-                                </TableRow>
-                            ))}
-                        </TableHeader>
-                        <TableBody>
-                            {table.getRowModel().rows?.length ? (
-                                table.getRowModel().rows.map((row) => (
-                                    <TableRow
-                                        key={row.id}
-                                        data-state={row.getIsSelected() && "selected"}
-                                    >
-                                        {row.getVisibleCells().map((cell) => (
-                                            <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888]">
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={columns.length}
-                                        className="h-24 text-center"
-                                    >
-                                        Không có dữ liệu
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
-
-                <Dialog open={showForm} onOpenChange={(open) => {
-                    setShowForm(open)
-                    if (!open) setEditingOperator(null)
-                }}>
-                    <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
-                        <DialogHeader>
-                            <DialogTitle className="text-3xl text-[#084188] font-semibold">{editingOperator ? "Chỉnh sửa nhân viên" : "Thêm nhân viên mới"}</DialogTitle>
-                        </DialogHeader>
-                        {editingOperator ? (
-                            <EditOperatorForm
-                                staffList={staff}
-                                idStaffString={editingOperator?.id}
-                                onUpdate={(updated) => {
-                                    const index = staff.findIndex(op => op.id === updated.id)
-                                    if (index !== -1) staff[index] = updated
-                                    table.setOptions(prev => ({ ...prev, data: [...staff] }))
-                                    setShowForm(false)
-                                    setEditingOperator(null)
-                                }}
-                                onCancel={() => {
-                                    setShowForm(false)
-                                    setEditingOperator(null)
-                                }}
-                            />
-                        ) : (
-                            <AddOperatorForm
-                                onAdd={(newOp) => {
-                                    staff.push(newOp)
-                                    table.setOptions(prev => ({ ...prev, data: [...staff] }))
-                                    router.refresh()
-                                    setShowForm(false)
-                                }}
-                                onCancel={() => {
-                                    setShowForm(false)
-                                }}
-                            />
-                        )}
-                    </DialogContent>
-                </Dialog>
-
-                <Dialog open={showDetail} onOpenChange={(open) => {
-                    setShowDetail(open);
-                    if (!open) setDetailStaff(null);
-                }}>
-                    <DialogContent className="w-full max-[1550px]:!max-w-6xl min-[1550px]:!max-w-7xl !gap-5 pb-3 min-[1550px]:top-100">
-                        <DialogHeader>
-                            <DialogTitle className="text-3xl text-[#084188] font-semibold">
-                                Thông tin chi tiết nhân viên
-                            </DialogTitle>
-                        </DialogHeader>
-                        {detailStaff && (
-                            <DetailStaffForm
-                                staff={detailStaff}
-                                onCancel={() => {
-                                    setShowDetail(false);
-                                }}
-                            />
-                        )}
-                    </DialogContent>
-                </Dialog>
-
-                <div className="flex items-center justify-end space-x-2 py-4">
-                    {/* <div className="text-muted-foreground flex-1 text-sm">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div> */}
-                    <div className="space-x-2">
-                        <Button
-                            className="cursor-pointer"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
-                        >
-                            Trước
-                        </Button>
-                        <Button
-                            className="cursor-pointer"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
-                        >
-                            Tiếp
-                        </Button>
+            {/* Add Dialog */}
+            {showAddForm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    <div className="fixed inset-0 bg-black/50" onClick={() => setShowAddForm(false)} />
+                    <div className="relative bg-white rounded-lg shadow-xl w-full max-[1550px]:max-w-6xl min-[1550px]:max-w-7xl p-6">
+                        <h2 className="text-3xl text-[#084188] font-semibold mb-4">Thêm nhân viên mới</h2>
+                        {addForm}
                     </div>
                 </div>
-            </div>
-        </div>
+            )}
+        </>
     )
 }

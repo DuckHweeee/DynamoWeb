@@ -1,10 +1,6 @@
 "use client"
-import { Calendar } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar as DatePicker } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
+
 import { DateRange } from "react-day-picker"
-import { format } from "date-fns";
 import {
     Select,
     SelectContent,
@@ -15,13 +11,10 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { ReportTime } from "../components/reporTime";
-import MachineRunBarChart2 from "../components/machineRunBarChart2";
-import { MachinePieChart } from "../components/machinePieChart";
 import { SumRealTime } from "../components/sumRealTime";
-import { MachineProcessBarChart } from "../components/machineProcessBarChart";
-import MachineTable from "../components/machineTable";
 import { useState } from "react";
 import DrawingCodeTable from "../components/drawingTable";
+import DateRangeSelector from "../components/DateRangeSelector";
 const chartItems = [
     { label: "Máy Đang Chạy", value: 12, fill: "#0ea5e9" },     // blue
     { label: "Máy Dừng", value: 3, fill: "#facc15" },           // yellow
@@ -36,43 +29,21 @@ export default function MachineChart() {
                 <div className="flex flex-wrap items-center justify-end mb-4">
                     {/* Vùng chọn ngày */}
                     <div className="flex flex-wrap gap-4 items-center">
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <button
-                                    className={cn(
-                                        "flex items-center gap-2 bg-[#004799] text-white px-4 py-3 rounded-md hover:bg-[#003b80] transition"
-                                    )}
-                                >
-                                    <Calendar className="w-5 h-5" />
-                                    <span className="text-sm">
-                                        {date?.from ? format(date.from, "dd/MM/yyyy") : "Ngày bắt đầu"} -{" "}
-                                        {date?.to ? format(date.to, "dd/MM/yyyy") : "Ngày kết thúc"}
-                                    </span>
-                                </button>
-                            </PopoverTrigger>
-                            <PopoverContent className="flex gap-4 p-4 !w-full" align="start">
-                                <DatePicker
-                                    mode="range"
-                                    selected={date}
-                                    onSelect={setDate}
-                                    numberOfMonths={2}
-                                />
-                            </PopoverContent>
-                        </Popover>
+                        <DateRangeSelector />
 
-                        {/* Bộ lọc 1 */}
+                        {/* Bộ lọc nhóm */}
                         <Select>
-                            <SelectTrigger className="w-[180px] bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
+                            <SelectTrigger className="w-[180px] text-xl bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
                                 <SelectValue placeholder="Nhóm" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
                                     {/* <SelectLabel>Fruits</SelectLabel> */}
-                                    <SelectItem value="apple">Nhóm 1</SelectItem>
-                                    <SelectItem value="banana">Nhóm 2</SelectItem>
-                                    <SelectItem value="blueberry">Nhóm 3</SelectItem>
-                                    <SelectItem value="grapes">Nhóm 4</SelectItem>
-                                    <SelectItem value="pineapple">Nhóm 5</SelectItem>
+                                    <SelectItem value="apple" className="text-lg">Nhóm 1</SelectItem>
+                                    <SelectItem value="banana" className="text-lg">Nhóm 2</SelectItem>
+                                    <SelectItem value="blueberry" className="text-lg">Nhóm 3</SelectItem>
+                                    <SelectItem value="grapes" className="text-lg">Nhóm 4</SelectItem>
+                                    <SelectItem value="pineapple" className="text-lg">Nhóm 5</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>

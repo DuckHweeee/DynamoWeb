@@ -16,7 +16,6 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface FlexibleComboboxProps<T> {
     options: T[]
@@ -27,7 +26,12 @@ interface FlexibleComboboxProps<T> {
     valueField: keyof T
     placeholder?: string
 }
+function fuzzyMatch(text: string, pattern: string) {
+    text = text.toLowerCase();
+    pattern = pattern.toLowerCase();
 
+    return text.includes(pattern);
+}
 export function FlexibleCombobox<T>({
     options,
     value,
@@ -137,8 +141,6 @@ export function FlexibleCombobox<T>({
                     </div>
                 </Command>
             </PopoverContent>
-
-
         </Popover>
     )
 }

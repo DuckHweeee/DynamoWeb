@@ -11,6 +11,22 @@ import { SelectYear } from "./SelectYear"
 import { SelectMonth } from "./SelectMonth"
 import { toast } from "sonner"
 import { officeList } from "../lib/data"
+import { 
+    validateStaffId,
+    validateStaffName,
+    validateShortName,
+    validateStaffOffice,
+    validateStaffSection,
+    validateGroupId,
+    validateKPIField,
+    validateYear,
+    validateMonth,
+    validateWorkGoal,
+    validatePgTimeGoal,
+    validateMachineTimeGoal,
+    validateManufacturingPoint,
+    validateOleGoal
+} from "../lib/validation"
 const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
 type AddStaffFormProps = {
     onAdd: (staff: Staff) => void
@@ -50,32 +66,110 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
         oleGoal: null,
         groupId: ""
     })
+
+    // Validation errors state
+    const [errors, setErrors] = useState<{[key: string]: string | null}>({})
+
+    // Function to update field and validate
+    const updateField = (field: keyof NewStaff, value: any) => {
+        setNewStaff(prev => ({ ...prev, [field]: value }))
+        
+        // Validate field immediately
+        let error: string | null = null
+        switch (field) {
+            case 'staffId':
+                error = validateStaffId(value)
+                break
+            case 'staffName':
+                error = validateStaffName(value)
+                break
+            case 'shortName':
+                error = validateShortName(value)
+                break
+            case 'staffOffice':
+                error = validateStaffOffice(value)
+                break
+            case 'staffSection':
+                error = validateStaffSection(value)
+                break
+            case 'groupId':
+                error = validateGroupId(value)
+                break
+            case 'kpi':
+                error = validateKPIField(value)
+                break
+            case 'year':
+                error = validateYear(value)
+                break
+            case 'month':
+                error = validateMonth(value)
+                break
+            case 'workGoal':
+                error = validateWorkGoal(value)
+                break
+            case 'pgTimeGoal':
+                error = validatePgTimeGoal(value)
+                break
+            case 'machineTimeGoal':
+                error = validateMachineTimeGoal(value)
+                break
+            case 'manufacturingPoint':
+                error = validateManufacturingPoint(value)
+                break
+            case 'oleGoal':
+                error = validateOleGoal(value)
+                break
+        }
+        
+        setErrors(prev => ({ ...prev, [field]: error }))
+    }
     const handleSubmit = async () => {
-        // Kiểm tra thông tin bắt buộc của newStaff
-        if (
-            !newStaff.staffId ||
-            !newStaff.staffName.trim() ||
-            !newStaff.staffOffice.trim() ||
-            !newStaff.groupId ||
-            !newStaff.staffSection.trim()
-        ) {
-            toast.error("Vui lòng nhập đầy đủ thông tin nhân viên.");
-            return;
+        // Validate all fields individually first
+        const fieldValidations = {
+            staffId: validateStaffId(newStaff.staffId),
+            staffName: validateStaffName(newStaff.staffName),
+            shortName: validateShortName(newStaff.shortName),
+            staffOffice: validateStaffOffice(newStaff.staffOffice),
+            staffSection: validateStaffSection(newStaff.staffSection),
+            groupId: validateGroupId(newStaff.groupId),
+            kpi: validateKPIField(newStaff.kpi),
+            year: validateYear(newStaff.year),
+            month: validateMonth(newStaff.month),
+            workGoal: validateWorkGoal(newStaff.workGoal),
+            pgTimeGoal: validatePgTimeGoal(newStaff.pgTimeGoal),
+            machineTimeGoal: validateMachineTimeGoal(newStaff.machineTimeGoal),
+            manufacturingPoint: validateManufacturingPoint(newStaff.manufacturingPoint),
+            oleGoal: validateOleGoal(newStaff.oleGoal),
         }
-        // Kiểm tra thông tin bắt buộc của newStaffKPI
-        if (
-            newStaff.year === null ||
-            newStaff.month === null ||
-            newStaff.pgTimeGoal === null ||
-            newStaff.machineTimeGoal === null ||
-            newStaff.manufacturingPoint === null ||
-            newStaff.oleGoal === null ||
-            newStaff.workGoal === null ||
-            newStaff.kpi === null
-        ) {
-            toast.error("Vui lòng nhập đầy đủ thông tin mục tiêu nhân viên.");
-            return;
+
+        // Check for any validation errors
+        const hasErrors = Object.values(fieldValidations).some(error => error !== null)
+        
+        if (hasErrors) {
+            // Update errors state with all validation results
+            setErrors(fieldValidations)
+            return
         }
+
+        // All fields validated - now prepare data for submission
+        // Since validation passed, we know all required fields have valid values
+        const dataToSubmit = {
+            staffId: newStaff.staffId!,
+            staffName: newStaff.staffName.trim(),
+            shortName: newStaff.shortName.trim(),
+            staffOffice: newStaff.staffOffice,
+            staffSection: newStaff.staffSection.trim(),
+            groupId: newStaff.groupId,
+            kpi: newStaff.kpi!,
+            year: newStaff.year!,
+            month: newStaff.month!,
+            workGoal: newStaff.workGoal!,
+            pgTimeGoal: newStaff.pgTimeGoal!,
+            machineTimeGoal: newStaff.machineTimeGoal!,
+            manufacturingPoint: newStaff.manufacturingPoint!,
+            oleGoal: newStaff.oleGoal!,
+        }
+
         try {
             const response = await fetch(
                 `${urlLink}/api/staff`,
@@ -84,22 +178,7 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({
-                        staffId: newStaff.staffId,
-                        staffName: newStaff.staffName,
-                        shortName: newStaff.shortName,
-                        staffOffice: newStaff.staffOffice,
-                        staffSection: newStaff.staffSection,
-                        kpi: newStaff.kpi,
-                        year: newStaff.year,
-                        month: newStaff.month,
-                        workGoal: newStaff.workGoal,
-                        pgTimeGoal: newStaff.pgTimeGoal,
-                        machineTimeGoal: newStaff.machineTimeGoal,
-                        manufacturingPoint: newStaff.manufacturingPoint,
-                        oleGoal: newStaff.oleGoal,
-                        groupId: newStaff.groupId,
-                    }),
+                    body: JSON.stringify(dataToSubmit),
                 }
             );
 
@@ -126,6 +205,7 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                 oleGoal: null,
                 groupId: "",
             });
+            setErrors({})
         } catch (error) {
             toast.error("Đã xảy ra lỗi khi gửi.");
         }
@@ -144,22 +224,20 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                             <Input
                                 id="staffId"
                                 placeholder="Mã nhân viên"
-                                // type="number" // Dùng text để cho phép kiểm soát input
                                 inputMode="numeric"
                                 value={newStaff.staffId?.toString() ?? ""}
                                 onChange={(e) => {
                                     const val = e.target.value;
                                     if (/^\d{0,4}$/.test(val)) {
-                                        setNewStaff({
-                                            ...newStaff,
-                                            staffId: val === "" ? null : Number(val),
-                                        });
+                                        updateField('staffId', val === "" ? null : Number(val));
                                     }
                                 }}
-                                className="!text-lg placeholder:text-[16px]"
+                                className={`!text-lg placeholder:text-[16px] ${errors.staffId ? 'border-red-500' : ''}`}
                                 maxLength={4}
                             />
-
+                            {errors.staffId && (
+                                <span className="text-red-500 text-sm mt-1">{errors.staffId}</span>
+                            )}
                         </div>
                         <div className="grid">
                             <Label htmlFor="name" className="text-lg !font-normal">Họ và tên</Label>
@@ -167,9 +245,12 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 id="name"
                                 placeholder="Tên nhân viên"
                                 value={newStaff.staffName}
-                                onChange={(e) => setNewStaff({ ...newStaff, staffName: e.target.value })}
-                                className="!text-lg placeholder:text-[16px]"
+                                onChange={(e) => updateField('staffName', e.target.value)}
+                                className={`!text-lg placeholder:text-[16px] ${errors.staffName ? 'border-red-500' : ''}`}
                             />
+                            {errors.staffName && (
+                                <span className="text-red-500 text-sm mt-1">{errors.staffName}</span>
+                            )}
                         </div>
                         <div className="grid">
                             <Label htmlFor="shortName" className="text-lg !font-normal">Tên tắt</Label>
@@ -177,25 +258,21 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 id="shortName"
                                 placeholder="Tên tắt"
                                 value={newStaff.shortName}
-                                onChange={(e) => setNewStaff({ ...newStaff, shortName: e.target.value })}
-                                className="!text-lg placeholder:text-[16px]"
+                                onChange={(e) => updateField('shortName', e.target.value)}
+                                className={`!text-lg placeholder:text-[16px] ${errors.shortName ? 'border-red-500' : ''}`}
                             />
+                            {errors.shortName && (
+                                <span className="text-red-500 text-sm mt-1">{errors.shortName}</span>
+                            )}
                         </div>
 
                         <div className="grid">
                             <Label htmlFor="phong_ban" className="text-lg !font-normal">Phòng ban</Label>
-                            {/* <Input
-                                id="phong_ban"
-                                placeholder="Phòng ban"
-                                value={newStaff.staffOffice}
-                                onChange={(e) => setNewStaff({ ...newStaff, staffOffice: e.target.value })}
-                                className="!text-lg placeholder:text-[16px]"
-                            /> */}
                             <Select
                                 value={newStaff.staffOffice?.toString() ?? ""}
-                                onValueChange={(value) => setNewStaff({ ...newStaff, staffOffice: value })}
+                                onValueChange={(value) => updateField('staffOffice', value)}
                             >
-                                <SelectTrigger className="w-auto text-lg [&>span]:text-[16px]">
+                                <SelectTrigger className={`w-auto text-lg [&>span]:text-[16px] ${errors.staffOffice ? 'border-red-500' : ''}`}>
                                     <SelectValue placeholder="Chọn phòng ban" />
                                 </SelectTrigger>
                                 <SelectContent id="nhom">
@@ -208,21 +285,18 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
+                            {errors.staffOffice && (
+                                <span className="text-red-500 text-sm mt-1">{errors.staffOffice}</span>
+                            )}
                         </div>
 
                         <div className="grid">
                             <Label htmlFor="nhom" className="text-lg !font-normal">Nhóm</Label>
-                            {/* <Input
-                            id="nhom"
-                            placeholder="Nhóm"
-                            value={newStaff.groupName}
-                            onChange={(e) => setNewStaff({ ...newStaff, groupName: e.target.value })}
-                        /> */}
                             <Select
                                 value={newStaff.groupId?.toString() ?? ""}
-                                onValueChange={(value) => setNewStaff({ ...newStaff, groupId: value })}
+                                onValueChange={(value) => updateField('groupId', value)}
                             >
-                                <SelectTrigger className="w-auto text-lg [&>span]:text-[16px]">
+                                <SelectTrigger className={`w-auto text-lg [&>span]:text-[16px] ${errors.groupId ? 'border-red-500' : ''}`}>
                                     <SelectValue placeholder="Chọn nhóm" />
                                 </SelectTrigger>
                                 <SelectContent id="nhom">
@@ -235,6 +309,9 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
+                            {errors.groupId && (
+                                <span className="text-red-500 text-sm mt-1">{errors.groupId}</span>
+                            )}
                         </div>
 
                         <div className="grid">
@@ -243,9 +320,12 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 id="cong_viec"
                                 placeholder="Công Việc"
                                 value={newStaff.staffSection}
-                                onChange={(e) => setNewStaff({ ...newStaff, staffSection: e.target.value })}
-                                className="!text-lg placeholder:text-[16px]"
+                                onChange={(e) => updateField('staffSection', e.target.value)}
+                                className={`!text-lg placeholder:text-[16px] ${errors.staffSection ? 'border-red-500' : ''}`}
                             />
+                            {errors.staffSection && (
+                                <span className="text-red-500 text-sm mt-1">{errors.staffSection}</span>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -258,22 +338,23 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                             <Label htmlFor="year" className="text-lg !font-normal">Năm</Label>
                             <SelectYear
                                 value={newStaff.year?.toString() ?? undefined}
-                                onChange={(value) =>
-                                    setNewStaff({ ...newStaff, year: Number(value) })
-                                }
+                                onChange={(value) => updateField('year', Number(value))}
                                 totalYears={5}
                                 placeholder="Chọn năm"
                             />
+                            {errors.year && (
+                                <span className="text-red-500 text-sm mt-1">{errors.year}</span>
+                            )}
                         </div>
                         <div className="month">
                             <Label htmlFor="name" className="text-lg !font-normal">Tháng</Label>
                             <SelectMonth
                                 value={newStaff.month?.toString() ?? undefined}
-                                onChange={(value) =>
-                                    setNewStaff({ ...newStaff, month: Number(value) })
-                                }
-                            // showAllOption={true}
+                                onChange={(value) => updateField('month', Number(value))}
                             />
+                            {errors.month && (
+                                <span className="text-red-500 text-sm mt-1">{errors.month}</span>
+                            )}
                         </div>
                     </div>
 
@@ -286,30 +367,28 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 type="number"
                                 inputMode="numeric"
                                 value={newStaff.kpi !== null ? newStaff.kpi.toString() : ""}
-                                onChange={(e) =>
-                                    setNewStaff({
-                                        ...newStaff,
-                                        kpi: e.target.value === "" ? null : Number(e.target.value),
-                                    })
-                                }
-                                className="!text-lg placeholder:text-[16px]"
+                                onChange={(e) => updateField('kpi', e.target.value === "" ? null : Number(e.target.value))}
+                                className={`!text-lg placeholder:text-[16px] ${errors.kpi ? 'border-red-500' : ''}`}
                             />
+                            {errors.kpi && (
+                                <span className="text-red-500 text-sm mt-1">{errors.kpi}</span>
+                            )}
                         </div>
 
                         <div className="grid gap-1">
                             <Label htmlFor="workGoal" className="text-lg !font-normal">Mục tiêu nhân viên làm việc</Label>
                             <Input
-                                className="!text-lg placeholder:text-[16px]"
+                                className={`!text-lg placeholder:text-[16px] ${errors.workGoal ? 'border-red-500' : ''}`}
                                 id="workGoal"
                                 placeholder="Mục tiêu làm việc"
                                 type="number"
                                 inputMode="numeric"
                                 value={newStaff.workGoal !== null ? newStaff.workGoal.toString() : ""}
-                                // value={newStaffKPI.workGoal?.toString() ?? undefined}
-                                onChange={(e) =>
-                                    setNewStaff({ ...newStaff, workGoal: Number(e.target.value) })
-                                }
+                                onChange={(e) => updateField('workGoal', e.target.value === "" ? null : Number(e.target.value))}
                             />
+                            {errors.workGoal && (
+                                <span className="text-red-500 text-sm mt-1">{errors.workGoal}</span>
+                            )}
                         </div>
 
                         <div className="grid">
@@ -319,13 +398,13 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="Mục tiêu giờ PG"
                                 type="number"
                                 inputMode="numeric"
-                                className="!text-lg placeholder:text-[16px]"
+                                className={`!text-lg placeholder:text-[16px] ${errors.pgTimeGoal ? 'border-red-500' : ''}`}
                                 value={newStaff.pgTimeGoal !== null ? newStaff.pgTimeGoal.toString() : ""}
-                                // value={newStaffKPI.pgTimeGoal?.toString() ?? undefined}
-                                onChange={(e) =>
-                                    setNewStaff({ ...newStaff, pgTimeGoal: Number(e.target.value) })
-                                }
+                                onChange={(e) => updateField('pgTimeGoal', e.target.value === "" ? null : Number(e.target.value))}
                             />
+                            {errors.pgTimeGoal && (
+                                <span className="text-red-500 text-sm mt-1">{errors.pgTimeGoal}</span>
+                            )}
                         </div>
                         <div className="grid">
                             <Label htmlFor="machineTimeGoal" className="text-lg !font-normal">Mục tiêu giờ máy</Label>
@@ -334,13 +413,13 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="Mục tiêu giờ máy"
                                 type="number"
                                 inputMode="numeric"
-                                className="!text-lg placeholder:text-[16px]"
+                                className={`!text-lg placeholder:text-[16px] ${errors.machineTimeGoal ? 'border-red-500' : ''}`}
                                 value={newStaff.machineTimeGoal !== null ? newStaff.machineTimeGoal.toString() : ""}
-                                // value={newStaffKPI.machineTimeGoal?.toString() ?? undefined}
-                                onChange={(e) =>
-                                    setNewStaff({ ...newStaff, machineTimeGoal: Number(e.target.value) })
-                                }
+                                onChange={(e) => updateField('machineTimeGoal', e.target.value === "" ? null : Number(e.target.value))}
                             />
+                            {errors.machineTimeGoal && (
+                                <span className="text-red-500 text-sm mt-1">{errors.machineTimeGoal}</span>
+                            )}
                         </div>
                         <div className="grid">
                             <Label htmlFor="manufacturingPoint" className="text-lg !font-normal">Mục tiêu điểm gia công</Label>
@@ -349,13 +428,13 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="Mục tiêu điểm gia công"
                                 type="number"
                                 inputMode="numeric"
-                                className="!text-lg placeholder:text-[16px]"
+                                className={`!text-lg placeholder:text-[16px] ${errors.manufacturingPoint ? 'border-red-500' : ''}`}
                                 value={newStaff.manufacturingPoint !== null ? newStaff.manufacturingPoint.toString() : ""}
-                                // value={newStaffKPI.manufacturingPoint?.toString() ?? undefined}
-                                onChange={(e) =>
-                                    setNewStaff({ ...newStaff, manufacturingPoint: Number(e.target.value) })
-                                }
+                                onChange={(e) => updateField('manufacturingPoint', e.target.value === "" ? null : Number(e.target.value))}
                             />
+                            {errors.manufacturingPoint && (
+                                <span className="text-red-500 text-sm mt-1">{errors.manufacturingPoint}</span>
+                            )}
                         </div>
                         <div className="grid">
                             <Label htmlFor="oleGoal" className="text-lg !font-normal">Mục tiêu Ole</Label>
@@ -364,13 +443,13 @@ export default function AddOperatorForm({ onAdd, onCancel }: AddStaffFormProps) 
                                 placeholder="Mục tiêu Ole"
                                 type="number"
                                 inputMode="numeric"
-                                className="!text-lg placeholder:text-[16px]"
+                                className={`!text-lg placeholder:text-[16px] ${errors.oleGoal ? 'border-red-500' : ''}`}
                                 value={newStaff.oleGoal !== null ? newStaff.oleGoal.toString() : ""}
-                                // value={newStaffKPI.oleGoal?.toString() ?? undefined}
-                                onChange={(e) =>
-                                    setNewStaff({ ...newStaff, oleGoal: Number(e.target.value) })
-                                }
+                                onChange={(e) => updateField('oleGoal', e.target.value === "" ? null : Number(e.target.value))}
                             />
+                            {errors.oleGoal && (
+                                <span className="text-red-500 text-sm mt-1">{errors.oleGoal}</span>
+                            )}
                         </div>
                     </div>
                 </div>

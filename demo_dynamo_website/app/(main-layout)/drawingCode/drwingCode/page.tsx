@@ -38,6 +38,8 @@ import { DrawingCode } from "@/lib/type"
 import EditDrawingCodeForm from "../components/editDrawingCode"
 import AddDrawingCodeForm from "../components/addNewDrawingCode"
 import { useDrawingCode } from "../hooks/useDrawingCode"
+import { ImportButton } from "@/components/ImportButton"
+import { toast } from "sonner"
 
 function getColumns({
     setEditingDrawing,
@@ -177,6 +179,11 @@ export default function DrawingCodeTable() {
         },
     })
 
+    const handleImportSuccess = () => {
+        toast.success("Thêm mới thành công!");
+        window.location.reload();
+    }
+
     return (
         <>
             <div className="flex flex-row items-center justify-between py-4">
@@ -193,6 +200,13 @@ export default function DrawingCodeTable() {
                             className="pl-10 py-5"
                         />
                     </div>
+
+                    <ImportButton
+                        endpoint="drawing-code/upload"
+                        title="Import dữ liệu bản vẽ"
+                        description="Chọn file Excel để import dữ liệu bản vẽ vào hệ thống"
+                        onImportSuccess={handleImportSuccess}
+                    />
 
                     <Button
                         variant="secondary" size="icon" className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
@@ -277,10 +291,12 @@ export default function DrawingCodeTable() {
                 </DialogContent>
             </Dialog>
 
+
+
             <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="text-muted-foreground flex-1 text-sm">
+                {/* <div className="text-muted-foreground flex-1 text-sm">
                     {table.getFilteredSelectedRowModel().rows.length} / {table.getFilteredRowModel().rows.length} dòng được chọn.
-                </div>
+                </div> */}
                 <div className="space-x-2">
                     <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
                         Trước

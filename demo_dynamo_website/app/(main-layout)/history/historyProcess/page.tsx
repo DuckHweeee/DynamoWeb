@@ -1,272 +1,335 @@
 "use client"
 
 import * as React from "react"
-import {
-    ColumnDef,
-    ColumnFiltersState,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    SortingState,
-    useReactTable,
-    VisibilityState,
-} from "@tanstack/react-table"
-import { ArrowUpDown, Search } from "lucide-react"
-
+import { ColumnDef } from "@tanstack/react-table"
+import { ArrowUpDown, Search, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-
+import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
-import { HistoryProcess } from "@/lib/type"
-import { mockHistoryProcesses } from "@/lib/dataDemo"
-import { Calendar } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar as DatePicker } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
+import { useCompletedProcess } from "@/hooks/useCompletedProcess"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar as DatePicker } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils"
 import { DateRange } from "react-day-picker"
-import { format } from "date-fns";
+import { format } from "date-fns"
 import {
     Select,
     SelectContent,
-    SelectGroup,
     SelectItem,
-    SelectLabel,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select";
-function formatSeconds(seconds: number): string {
-    const hours = Math.floor(seconds / 3600)
-    const minutes = Math.floor((seconds % 3600) / 60)
-    return `${hours}h ${minutes}m`
-}
+} from "@/components/ui/select"
+import ProcessTable from "@/components/ProcessTable"
 
-const columns: ColumnDef<HistoryProcess>[] = [
+// Custom columns for DrawingCodeProcessHistory
+const getHistoryProcessColumns = (): ColumnDef<any>[] => [
     {
-        id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
-    {
-        accessorKey: "ma_ban_ve",
+        accessorKey: "orderDetailDto.orderCode",
         header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                Mã Bản Vẽ <ArrowUpDown />
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="h-auto p-0 hover:bg-transparent">
+                <span className="font-bold">Mã Đơn Hàng</span>
+                <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),
-        cell: ({ row }) => <div>{row.getValue("ma_ban_ve")}</div>,
-    },
-    {
-        accessorKey: "tsnc",
-        header: () => <div className="text-center">Tổng SNC</div>,
-        cell: ({ row }) => <div className="text-center">{row.getValue("tsnc")}</div>,
-    },
-    {
-        accessorKey: "hoan_thanh",
-        header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Hoàn thành <ArrowUpDown /></Button>
+        cell: ({ row }) => (
+            <div className="font-medium text-blue-600">
+                {row.original.orderDetailDto?.orderCode}
+            </div>
         ),
-        cell: ({ row }) => <div> <span className="bg-[#E7F7EF] text-[#0CAF60] px-4 py-1 rounded-md capitalize">{row.getValue("hoan_thanh")}</span></div>,
-
     },
     {
-        accessorKey: "chua_hoan_thanh",
-        header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Chưa hoàn thành <ArrowUpDown /></Button>
+        accessorKey: "partNumber",
+        header: () => <div className="font-bold">Số Phần</div>,
+        cell: ({ row }) => (
+            <div className="text-center font-medium">
+                {row.getValue("partNumber")}
+            </div>
         ),
-        cell: ({ row }) => <div> <span className="bg-[#FFE6E6] text-[#FE4A4A]  px-4 py-1 rounded-md capitalize">{row.getValue("chua_hoan_thanh")}</span></div>,
     },
     {
-        accessorKey: "tght",
-        header: () => <div className="text-center">TG Hoàn Thành</div>,
-        cell: ({ row }) => <div className="text-center">{formatSeconds(row.getValue("tght"))}</div>,
+        accessorKey: "stepNumber",
+        header: () => <div className="font-bold">Bước</div>,
+        cell: ({ row }) => (
+            <div className="text-center font-medium">
+                Bước {row.getValue("stepNumber")}
+            </div>
+        ),
+    },
+    {
+        accessorKey: "processType",
+        header: () => <div className="font-bold">Loại Quy Trình</div>,
+        cell: ({ row }) => (
+            <Badge variant="outline">
+                {row.getValue("processType")}
+            </Badge>
+        ),
+    },
+    {
+        accessorKey: "status",
+        header: () => <div className="font-bold">Trạng Thái</div>,
+        cell: ({ row }) => {
+            const status = row.getValue("status") as number
+            return (
+                <Badge variant={status === 1 ? "finshed" : status === 0 ? "inProgress" : "canceled"}>
+                    {status === 1 ? "Hoàn thành" : status === 0 ? "Chờ xử lý" : "Lỗi"}
+                </Badge>
+            )
+        },
+    },
+    {
+        accessorKey: "machineDto.machineName",
+        header: () => <div className="font-bold">Máy</div>,
+        cell: ({ row }) => (
+            <div className="font-medium">
+                {row.original.machineDto?.machineName || "Chưa gán"}
+            </div>
+        ),
+    },
+    {
+        accessorKey: "staffDtos",
+        header: () => <div className="font-bold">Nhân viên</div>,
+        cell: ({ row }) => (
+            <div className="font-medium">
+                {row.original.staffDtos?.map((staff: any) => staff.staffName).join(", ") || "Chưa gán"}
+            </div>
+        ),
+    },
+    {
+        accessorKey: "pgTime",
+        header: () => <div className="font-bold">Thời Gian PG</div>,
+        cell: ({ row }) => (
+            <div className="text-center">
+                {row.getValue("pgTime")} phút
+            </div>
+        ),
+    },
+    {
+        accessorKey: "startTime",
+        header: () => <div className="font-bold">Thời Gian Bắt Đầu</div>,
+        cell: ({ row }) => {
+            const startTime = row.getValue("startTime") as string
+            return (
+                <div className="text-center text-sm">
+                    {startTime ? new Date(startTime).toLocaleString("vi-VN") : "N/A"}
+                </div>
+            )
+        },
+    },
+    {
+        accessorKey: "endTime",
+        header: () => <div className="font-bold">Thời Gian Kết Thúc</div>,
+        cell: ({ row }) => {
+            const endTime = row.getValue("endTime") as string
+            return (
+                <div className="text-center text-sm">
+                    {endTime ? new Date(endTime).toLocaleString("vi-VN") : "Chưa kết thúc"}
+                </div>
+            )
+        },
     },
 ]
 
-export default function HistoryProcessTable() {
-    const [sorting, setSorting] = useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = useState({})
-    const [globalFilter, setGlobalFilter] = useState("")
+export default function HistoryProcessPage() {
+    const [date, setDate] = useState<DateRange | undefined>()
+    const [selectedProcessType, setSelectedProcessType] = useState<string>("all")
+    const [selectedMachine, setSelectedMachine] = useState<string>("all")
+    const [selectedStaff, setSelectedStaff] = useState<string>("all")
 
-    const table = useReactTable({
-        data: mockHistoryProcesses,
-        columns,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        onGlobalFilterChange: setGlobalFilter,
-        globalFilterFn: "includesString",
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-            globalFilter,
-        },
-    })
-    const [date, setDate] = useState<DateRange | undefined>();
+    // Fetch data using useCompletedProcess hook
+    const { data: processData, loading, error, refetch } = useCompletedProcess()
+
+    // Extract unique values for filters from the data
+    const processTypes = React.useMemo(() => {
+        if (!processData) return []
+        const types = [...new Set(processData.map(item => item.processType).filter(Boolean))]
+        return types.sort()
+    }, [processData])
+
+    const machines = React.useMemo(() => {
+        if (!processData) return []
+        const machineNames = [...new Set(processData.map(item => item.machineDto?.machineName).filter(Boolean))]
+        return machineNames.sort()
+    }, [processData])
+
+    const staffMembers = React.useMemo(() => {
+        if (!processData) return []
+        const staffNames: string[] = []
+        processData.forEach(item => {
+            item.staffDtos?.forEach(staff => {
+                if (staff.staffName) {
+                    staffNames.push(staff.staffName)
+                }
+            })
+        })
+        return [...new Set(staffNames)].sort()
+    }, [processData])
+
+    const clearFilters = () => {
+        setDate(undefined)
+        setSelectedProcessType("all")
+        setSelectedMachine("all")
+        setSelectedStaff("all")
+    }
+
+    const hasFilters = date || (selectedProcessType !== "all") || (selectedMachine !== "all") || (selectedStaff !== "all")
+
+    // Filter the data based on selected filters
+    const filteredData = React.useMemo(() => {
+        if (!processData) return []
+
+        return processData.filter(item => {
+            // Date filter
+            if (date?.from || date?.to) {
+                const startTime = item.startTime ? new Date(item.startTime) : null
+                const endTime = item.endTime ? new Date(item.endTime) : null
+
+                if (date.from && startTime && startTime < date.from) return false
+                if (date.to && endTime && endTime > date.to) return false
+            }
+
+            // Process type filter
+            if (selectedProcessType !== "all" && item.processType !== selectedProcessType) return false
+
+            // Machine filter
+            if (selectedMachine !== "all" && item.machineDto?.machineName !== selectedMachine) return false
+
+            // Staff filter
+            if (selectedStaff !== "all" && !item.staffDtos?.some(staff => staff.staffName === selectedStaff)) return false
+
+            return true
+        })
+    }, [processData, date, selectedProcessType, selectedMachine, selectedStaff])
+
     return (
-        <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
-            <div className="flex flex-row items-center justify-between py-4">
-                <p className="text-2xl font-bold">Lịch Sử Quy Trình</p>
-                {/* <Input
-                    placeholder="Tìm kiếm"
-                    value={globalFilter}
-                    onChange={(e) => setGlobalFilter(e.target.value)}
-                    className="max-w-sm !text-[20px]"
-                /> */}
-                <div className="relative max-w-sm w-full">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <Input
-                        placeholder="Tìm kiếm"
-                        value={globalFilter}
-                        onChange={(e) => setGlobalFilter(e.target.value)}
-                        className="pl-10"
-                    />
-                </div>
-            </div>
-            <div className="flex flex-wrap items-center justify-between mb-4">
-                {/* Vùng chọn ngày */}
-                <div className="flex flex-wrap gap-4 items-center">
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <button
-                                className={cn(
-                                    "flex items-center gap-2 bg-[#004799] text-white px-4 py-3 rounded-md hover:bg-[#003b80] transition"
-                                )}
-                            >
-                                <Calendar className="w-5 h-5" />
-                                <span className="text-sm">
-                                    {date?.from ? format(date.from, "dd/MM/yyyy") : "Ngày bắt đầu"} -{" "}
-                                    {date?.to ? format(date.to, "dd/MM/yyyy") : "Ngày kết thúc"}
-                                </span>
-                            </button>
-                        </PopoverTrigger>
-                        <PopoverContent className="flex gap-4 p-4 !w-full" align="start">
-                            <DatePicker
-                                mode="range"
-                                selected={date}
-                                onSelect={setDate}
-                                numberOfMonths={2}
-                            />
-                        </PopoverContent>
-                    </Popover>
+        <div className="m-2 py-3 bg-white rounded-[10px] shadow h-screen">
+            {/* <div className="h-screen flex flex-col p-4 bg-gray-50"> */}
+            {/* Filters Section */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4 mx-4 flex-shrink-0">
+                <div className="flex flex-col xl:flex-row gap-4 items-start xl:items-center">
+                    {/* Date Range Picker */}
+                    <div className="flex-1 min-w-0">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Thời gian</label>
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <button
+                                    className={cn(
+                                        "flex items-center justify-between gap-2 w-full bg-white border border-gray-300 text-gray-900 px-4 py-2.5 rounded-md hover:border-gray-400 transition-colors min-w-[280px]"
+                                    )}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <Calendar className="w-4 h-4 text-gray-500" />
+                                        <span className="text-sm">
+                                            {date?.from ? format(date.from, "dd/MM/yyyy") : "Ngày bắt đầu"} -{" "}
+                                            {date?.to ? format(date.to, "dd/MM/yyyy") : "Ngày kết thúc"}
+                                        </span>
+                                    </div>
+                                </button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                                <DatePicker
+                                    mode="range"
+                                    selected={date}
+                                    onSelect={setDate}
+                                    numberOfMonths={2}
+                                />
+                            </PopoverContent>
+                        </Popover>
+                    </div>
 
-                    {/* Bộ lọc 1 */}
-                    <Select>
-                        <SelectTrigger className="w-[180px] bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
-                            <SelectValue placeholder="Nhóm" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                {/* <SelectLabel>Fruits</SelectLabel> */}
-                                <SelectItem value="apple">Nhóm 1</SelectItem>
-                                <SelectItem value="banana">Nhóm 2</SelectItem>
-                                <SelectItem value="blueberry">Nhóm 3</SelectItem>
-                                <SelectItem value="grapes">Nhóm 4</SelectItem>
-                                <SelectItem value="pineapple">Nhóm 5</SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                </div>
-
-                {/* Bộ lọc 2 */}
-                <div>
-                    <Select>
-                        <SelectTrigger className="w-[180px] bg-[#004799] px-4 py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
-                            <SelectValue placeholder="Lịch sử bản vẽ" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                {/* <SelectLabel>Fruits</SelectLabel> */}
-                                <SelectItem value="apple">AC001</SelectItem>
-                                <SelectItem value="banana">AC002</SelectItem>
-                                <SelectItem value="blueberry">AC003</SelectItem>
-                                <SelectItem value="grapes">AC004</SelectItem>
-                                <SelectItem value="pineapple">AC005</SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                </div>
-            </div>
-            <div className="rounded-md border">
-                <Table>
-                    <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id} className="text-lg font-bold">
-                                {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id} className="text-center">
-                                        {flexRender(header.column.columnDef.header, header.getContext())}
-                                    </TableHead>
+                    {/* Process Type Filter */}
+                    <div className="w-full xl:w-48">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Loại quy trình</label>
+                        <Select value={selectedProcessType} onValueChange={setSelectedProcessType}>
+                            <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10">
+                                <SelectValue placeholder="Chọn loại quy trình" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Tất cả loại</SelectItem>
+                                {processTypes.map((type) => (
+                                    <SelectItem key={type} value={type}>
+                                        {type}
+                                    </SelectItem>
                                 ))}
-                            </TableRow>
-                        ))}
-                    </TableHeader>
-                    <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888]">
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    Không có kết quả.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {/* Machine Filter */}
+                    <div className="w-full xl:w-48">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Máy</label>
+                        <Select value={selectedMachine} onValueChange={setSelectedMachine}>
+                            <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10">
+                                <SelectValue placeholder="Chọn máy" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Tất cả máy</SelectItem>
+                                {machines.map((machine) => (
+                                    <SelectItem key={machine} value={machine}>
+                                        {machine}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {/* Staff Filter */}
+                    <div className="w-full xl:w-48">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Nhân viên</label>
+                        <Select value={selectedStaff} onValueChange={setSelectedStaff}>
+                            <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10">
+                                <SelectValue placeholder="Chọn nhân viên" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Tất cả nhân viên</SelectItem>
+                                {staffMembers.map((staff) => (
+                                    <SelectItem key={staff} value={staff}>
+                                        {staff}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {/* Clear Filters Button */}
+                    <div className="w-full xl:w-48">
+                        <label className="block text-sm font-medium text-transparent mb-2">Actions</label>
+                        <div className="flex gap-2">
+                            {hasFilters && (
+                                <Button
+                                    variant="outline"
+                                    onClick={clearFilters}
+                                    size="sm"
+                                    className="h-10 flex-1"
+                                >
+                                    Xóa bộ lọc
+                                </Button>
+                            )}
+                            <Button
+                                variant="default"
+                                size="sm"
+                                className="h-10 flex-1"
+                                onClick={() => refetch()}
+                                disabled={loading}
+                            >
+                                {loading ? "Đang tải..." : "Làm mới"}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="text-muted-foreground flex-1 text-sm">
-                    {table.getFilteredSelectedRowModel().rows.length} / {table.getFilteredRowModel().rows.length} dòng được chọn.
-                </div>
-                <div className="space-x-2">
-                    <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-                        Trước
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-                        Tiếp
-                    </Button>
-                </div>
+            {/* Table Section using Global ProcessTable */}
+            <div className="flex-1 min-h-0">
+                <ProcessTable
+                    data={filteredData || []}
+                    loading={loading}
+                    error={error}
+                    title="Lịch Sử Quy Trình"
+                    showAddButton={false}
+                    showActions={false}
+                    showViewHistory={false}
+                    customColumns={getHistoryProcessColumns()}
+                />
             </div>
         </div>
     )

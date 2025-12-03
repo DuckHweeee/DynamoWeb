@@ -1,489 +1,638 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
-    ColumnDef,
-    ColumnFiltersState,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    SortingState,
-    useReactTable,
-    VisibilityState,
-} from "@tanstack/react-table"
-import { ArrowUpDown, Plus, Search, SquareArrowOutUpRight } from "lucide-react"
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from "@tanstack/react-table";
+import { ArrowUpDown, Plus, Search } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-import { Fragment, useEffect, useState } from "react"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useFetchMachines, useFetchOperators, useFetchProcesses } from "@/hooks/useFetchData"
-import { CurrentStaff, Machine2, Operator2, Process2, Staff } from "@/lib/type"
-import { toast } from "sonner"
-import axios from "axios"
-import { OrbitProgress } from "@/node_modules/react-loading-indicators"
-import CreateProcessDialog from "./components/addNewProcess"
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Fragment, useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  useFetchMachines,
+  useFetchOperators,
+  useFetchProcesses,
+} from "@/hooks/useFetchData";
+import { Process2 } from "@/lib/type";
+import axios from "axios";
+import { OrbitProgress } from "@/node_modules/react-loading-indicators";
+import Link from "next/link";
+import { toast } from "sonner";
+import { OrderDetail } from "@/app/(main-layout)/orderDetail/lib/type";
 
 const URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-const tabletCSS = "max-[1300px]:text-3xl max-[1300px]:!py-7 max-[1300px]:!px-8"
+const tabletCSS = "max-[1300px]:text-3xl max-[1300px]:!py-7 max-[1300px]:!px-8";
 export default function TabletProcess() {
-    const [isCreating, setIsCreating] = useState(false);
-    const [sorting, setSorting] = useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [isCreating, setIsCreating] = useState(false);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
+  const [selectedMachineId, setSelectedMachineId] = useState<string | null>(
+    null
+  );
+  const [selectedPoint, setSelectedPoint] = useState<string | null>(null);
+  const [selectedPGTime, setSelectedPGTime] = useState<string | null>(null);
 
-    // Phần chọn máy và nhân viên
-    // const [selectedMachineId, setSelectedMachineId] = useState<string>("");
-    // const [selectedOperatorId, setSelectedOperatorId] = useState<string>("");
+  const { data: staff } = useFetchOperators();
+  const { data: machine2 } = useFetchMachines();
 
-    // Fetch Data
-    const fetchedOperator = useFetchOperators()
-    const [staff, setStaff] = useState<Staff[]>([])
-    useEffect(() => {
-        setStaff(fetchedOperator)
-    }, [fetchedOperator])
-    // console.log("staff:")
-    // console.log(fetchedOperator)
+  // Fetch ToDo Progress
+  const { data: fetchedProcesses, refetch } = useFetchProcesses();
+  const [todo, setTodo] = useState<OrderDetail[]>([]);
 
-    const fetchedMachine = useFetchMachines()
-    const [machine2, setMachine2] = useState<Machine2[]>([])
-    useEffect(() => {
-        setMachine2(fetchedMachine)
-    }, [fetchedMachine])
-    // console.log("machine2")
-    // console.log(machine2)
+  // Fetch and update todo data
+  const fetchProcess = async () => {
+    try {
+      const res = await axios.get<OrderDetail[]>(`${URL}/api/order-detail`);
+      setTodo(res.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu process:", error);
+    }
+  };
 
-    // Fetch ToDo Progress
-    const { data: fetchedProcesses, refetch } = useFetchProcesses();
-    // const [processData2, setProcessData2] = useState<Process2[]>([])
-    const [todo, setTodo] = useState<Process2[]>([]);
-    useEffect(() => {
-        const fetchProcess = async () => {
-            try {
-                const res = await axios.get<Process2[]>(
-                    `${URL}/api/drawing-code-process`
-                );
-                const filteredData = res.data.filter(item => item.planDto?.plannerId === null);
-                setTodo(filteredData);
-            } catch (error) {
-                console.error("Lỗi khi lấy dữ liệu process:", error);
+  useEffect(() => {
+    fetchProcess();
+  }, []);
+  //ge† process
+  const [subProcesses, setSubProcesses] = useState<Process2[]>([]);
+
+  // Handle Submit
+  const [loading, setLoading] = useState(false);
+  const handleSubmit = async (processId: string) => {
+    const process = subProcesses.find((p) => p.processId === processId);
+
+    if (!process) return;
+    setLoading(true);
+    try {
+      const url = `${URL}/api/drawing-code-process/update`;
+      console.log(url);
+      const body = {
+        processId: process.processId,
+        manufacturingPoint: process.manufacturingPoint,
+        pgTime: process.pgTime,
+        machineId: process.machineDto?.machineId,
+      };
+      await axios.put(url, body);
+      toast.success("Gửi thành công!");
+      // Refetch lại dữ liệu
+      // await fetchProcess();
+      // Reset selected values and close expanded row
+      // setSelectedMachineId(null);
+      // setSelectedPoint(null);
+      // setSelectedPGTime(null);
+      const res = await axios.get(
+        `${URL}/api/drawing-code-process/orderDetail/${expandedRowId}`
+      );
+      setSubProcesses(res.data);
+    } catch (error: any) {
+      // Lấy message từ backend
+      const backendMessage =
+        error?.response?.data?.message ||
+        error?.response?.data ||
+        "Cập nhật thất bại. Vui lòng thử lại.";
+      toast.error(backendMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const updateProcessField = (
+    processId: string,
+    field: keyof Process2,
+    value: any
+  ) => {
+    setSubProcesses((prev) =>
+      prev.map((p) =>
+        p.processId === processId
+          ? {
+              ...p,
+              [field]: value === "" ? p[field] : value, // giữ nguyên giá trị gốc
             }
-        };
-        fetchProcess();
-    }, []);
-    // useEffect(() => {
-    //     setProcessData2(fetchedProcesses)
-    // }, [fetchedProcesses])
+          : p
+      )
+    );
+  };
+  const updateProcessMachine = (
+    processId: string,
+    machineId: number | string
+  ) => {
+    setSubProcesses((prev) =>
+      prev.map((p) =>
+        p.processId === processId
+          ? {
+              ...p,
+              machineId: Number(machineId), // Cập nhật hiển thị
+              machineDto: {
+                ...((p.machineDto ?? {}) as any),
+                machineId: Number(machineId), // Dữ liệu gửi server
+              },
+            }
+          : p
+      )
+    );
+  };
 
-    // Handle Submit
-    const [loading, setLoading] = useState(false);
+  //Column
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+  const [globalFilter, setGlobalFilter] = useState("");
 
-    // const handleSubmit = async (processId: string) => {
-    //     if (!selectedMachineId || !selectedOperatorId) {
-    //         toast.error("Vui lòng chọn đầy đủ thông tin.");
-    //         return;
+  const columns: ColumnDef<OrderDetail>[] = [
+    {
+      accessorKey: "orderType",
+      header: ({ column }) => {
+        return (
+          <Button
+            className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Đối tượng gia công
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div>{row.getValue("orderType")}</div>,
+    },
+    {
+      accessorKey: "orderCode",
+      // accessorFn: (row) => row.orderDetailDto?.orderCode ?? "",
+      header: ({ column }) => (
+        <Button
+          className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          ID Mã Hàng
+          <ArrowUpDown />
+        </Button>
+      ),
+      cell: ({ row }) => <div>{row.getValue("orderCode")}</div>,
+    },
+    {
+      accessorKey: "numberOfSteps",
+      header: ({ column }) => {
+        return (
+          <Button
+            className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Số lượng nguyên công
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div>{row.getValue("numberOfSteps")}</div>,
+    },
+    {
+      accessorKey: "quantity",
+      header: ({ column }) => {
+        return (
+          <Button
+            className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Số lượng
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div>{row.getValue("quantity")}</div>,
+    },
+    // {
+    //   accessorKey: "manufacturingPoint",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
+    //         variant="ghost"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         ĐGC
+    //         <ArrowUpDown />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => <div>{row.getValue("manufacturingPoint")}</div>,
+    // },
+    {
+      accessorKey: "pgTimeGoal",
+      header: ({ column }) => {
+        return (
+          <Button
+            className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Giờ PG dư kiến
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div>{row.getValue("pgTimeGoal")}</div>,
+    },
+    // {
+    //     accessorKey: "planDto.machineId",
+    //     accessorFn: (row) => row.planDto?.machineId ?? "",
+    //     header: ({ column }) => {
+    //         return (
+    //             <Button
+    //                 className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
+    //                 variant="ghost"
+    //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //             >
+    //                 Máy
+    //                 <ArrowUpDown />
+    //             </Button>
+    //         )
+    //     },
+    //     cell: ({ row }) => {
+    //         const machineId = row.original.machineDto?.machineId;
+    //         const foundMachine = machine2.find(mc => mc.machineId === machineId);
+    //         return <div>{foundMachine ? foundMachine.machineName : ""}</div>;
     //     }
+    // },
+  ];
+  const table = useReactTable({
+    data: todo,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: "includesString",
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      globalFilter,
+    },
+  });
 
-    //     setLoading(true);
-    //     try {
-    //         const url = `${URL}/api/drawing-code-process/receive?drawingCodeProcess_id=${processId}&&staffId=${selectedOperatorId}&&machineId=${selectedMachineId}`;
-    //         await axios.post(url);
-    //         toast.success("Gửi thành công!");
-    //         // Refetch lại dữ liệu
-    //         await refetch();
+  return (
+    <>
+      <div className="w-full py-3 px-3 bg-white">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-3">
+          <p className="text-3xl capitalize">
+            Danh sách mã bản vẽ trong quá trình
+          </p>
+          <div className="flex flex-row justify-between items-center gap-3">
+            <div className="relative max-w-sm w-full">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Input
+                placeholder="Tìm kiếm"
+                value={globalFilter}
+                onChange={(e) => setGlobalFilter(e.target.value)}
+                className="pl-10 py-5"
+              />
+            </div>
+            <Link href="/tablet/newProcess/addNewProcess">
+              <Button
+                variant="secondary"
+                size="icon"
+                className="px-18 py-6 text-xl max-[1300px]:text-2xl text-white max-[1300px]:font-extrabold font-bold bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
+                onClick={() => setIsCreating(true)}
+              >
+                <Plus size={70} strokeWidth={6} color="white" />
+                Tạo mới
+              </Button>
+            </Link>
+          </div>
+        </div>
 
-    //     } catch (error) {
-    //         toast.error("Gửi thất bại. Vui lòng thử lại.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-
-    //Column
-    const [columnVisibility, setColumnVisibility] =
-        useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = useState({})
-    const [globalFilter, setGlobalFilter] = useState("")
-    // const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
-
-    const columns: ColumnDef<Process2>[] = [
-        {
-            accessorKey: "processType",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        ĐTGC
-                        <ArrowUpDown />
-                    </Button>
-                )
-            },
-            cell: ({ row }) => <div>{row.getValue("processType")}</div>,
-        },
-        {
-            accessorKey: "orderDetailDto.orderCode",
-            accessorFn: (row) => row.orderDetailDto?.orderCode ?? "",
-            header: ({ column }) => (
-                <Button
-                    className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    ID Mã Hàng
-                    <ArrowUpDown />
-                </Button>
-            ),
-            cell: ({ row }) => (
-                <div>{row.original.orderDetailDto?.orderCode ?? "—"}</div>
-            )
-        },
-        {
-            accessorKey: "partNumber",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        TTSP
-                        <ArrowUpDown />
-                    </Button>
-                )
-            },
-            cell: ({ row }) => <div>{row.getValue("partNumber")}</div>,
-        },
-        {
-            accessorKey: "stepNumber",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        TTGC
-                        <ArrowUpDown />
-                    </Button>
-                )
-            },
-            cell: ({ row }) => <div>{row.getValue("stepNumber")}</div>,
-        },
-        {
-            accessorKey: "manufacturingPoint",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        ĐGC
-                        <ArrowUpDown />
-                    </Button>
-                )
-            },
-            cell: ({ row }) => <div>{row.getValue("manufacturingPoint")}</div>,
-        },
-        {
-            accessorKey: "pgTime",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Giờ PG
-                        <ArrowUpDown />
-                    </Button>
-                )
-            },
-            cell: ({ row }) => <div>{row.getValue("pgTime")}</div>,
-        },
-        {
-            accessorKey: "planDto.staffId",
-            accessorFn: (row) => row.planDto?.staffId ?? "",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Nhân Viên
-                        <ArrowUpDown />
-                    </Button>
-                )
-            },
-            cell: ({ row }) => {
-                const staffId = row.original.planDto?.staffId;
-                const foundStaff = staff.find(st => st.staffId === staffId);
-                return <div>{foundStaff ? foundStaff.staffName : ""}</div>;
-            }
-
-        },
-        {
-            accessorKey: "planDto.machineId",
-            accessorFn: (row) => row.planDto?.machineId ?? "",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Máy
-                        <ArrowUpDown />
-                    </Button>
-                )
-            },
-            cell: ({ row }) => {
-                const machineId = row.original.planDto?.machineId;
-                const foundMachine = machine2.find(mc => mc.machineId === machineId);
-                return <div>{foundMachine ? foundMachine.machineName : ""}</div>;
-            }
-        },
-    ];
-    const table = useReactTable({
-        data: todo,
-        columns,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        onGlobalFilterChange: setGlobalFilter,
-        globalFilterFn: "includesString",
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-            globalFilter,
-        },
-    })
-
-
-    return (
-        <>
-            <div className="w-full py-3 px-3 bg-white">
-                {/* Header */}
-                <div className="flex items-center justify-between pb-3">
-                    <p className="text-3xl capitalize font-semibold">Danh sách mã bản vẽ trong quá trình</p>
-                    <div className="flex flex-row justify-between items-center gap-3">
-                        <div className="relative max-w-sm w-full">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                            <Input
-                                placeholder="Tìm kiếm"
-                                value={globalFilter}
-                                onChange={(e) => setGlobalFilter(e.target.value)}
-                                className="pl-10 py-5"
-                            />
-                        </div>
-                        <Button
-                            variant="secondary" size="icon" className="px-18 py-6 text-xl max-[1300px]:text-2xl text-white max-[1300px]:font-extrabold font-bold bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
-                            onClick={() => setIsCreating(true)}
+        {/* Table */}
+        <div className="border">
+          {loading ? (
+            <div className="flex justify-center mt-4">
+              <OrbitProgress
+                variant="spokes"
+                color="#b3b3b3"
+                size="medium"
+                text="Đang gửi"
+                textColor=""
+              />
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow className="" key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead
+                          key={header.id}
+                          className="text-center text-white bg-blue-950 p-2 font-semibold"
                         >
-                            <Plus size={70} strokeWidth={6} color="white" />
-                            Tạo mới
-                        </Button>
-                    </div>
-                </div>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row, index) => {
+                    const isOdd = index % 2 !== 0;
+                    // return (
+                    //     <Fragment key={row.id}>
+                    //         <TableRow
+                    //             className={`${isOdd ? "bg-gray-100" : ""} text-2xl font-semibold !border-none`}
+                    //         >
+                    //             {row.getVisibleCells().map((cell) => (
+                    //                 <TableCell key={cell.id} className="text-center">
+                    //                     {flexRender(
+                    //                         cell.column.columnDef.cell,
+                    //                         cell.getContext()
+                    //                     )}
+                    //                 </TableCell>
+                    //             ))}
+                    //         </TableRow>
+                    //     </Fragment>
+                    // );
+                    return (
+                      <Fragment key={row.id}>
+                        <TableRow
+                          className={`${
+                            isOdd ? "bg-gray-100" : ""
+                          } text-2xl font-semibold !border-none`}
+                          // onClick={() => {
+                          //   setExpandedRowId((prev) =>
+                          //     prev === row.original.orderDetailId
+                          //       ? null
+                          //       : row.original.orderDetailId
+                          //   );
+                          //   // const may = machine2.find(
+                          //   //   (m) =>
+                          //   //     m.machineId ===
+                          //   //     row.original.machineDto?.machineId
+                          //   // )?.machineId;
+                          //   // const nhanvien = staff.find(
+                          //   //   (s) => s.staffId === row.original.planDto?.staffId
+                          //   // )?.id;
+                          //   // const point = row.original.manufacturingPoint;
+                          //   // const pgTime = row.original.pgTime;
 
-                {/* Table */}
-                <div className="border">
-                    {
-                        loading ? (
-                            <div className="flex justify-center mt-4">
-                                <OrbitProgress
-                                    variant="spokes"
-                                    color="#b3b3b3"
-                                    size="medium"
-                                    text="Đang gửi"
-                                    textColor=""
-                                />
-                            </div>
-                        ) : (
-                            <Table >
-                                <TableHeader >
-                                    {table.getHeaderGroups().map((headerGroup) => (
-                                        <TableRow className="" key={headerGroup.id}>
-                                            {headerGroup.headers.map((header) => {
-                                                return (
-                                                    <TableHead key={header.id} className="text-center text-white bg-blue-950 p-2 font-semibold">
-                                                        {header.isPlaceholder
-                                                            ? null
-                                                            : flexRender(
-                                                                header.column.columnDef.header,
-                                                                header.getContext()
-                                                            )}
-                                                    </TableHead>
+                          // setSelectedMachineId(may ? String(may) : "");
+                          // setSelectedPGTime(pgTime ? String(pgTime) : "");
+                          // setSelectedPoint(point ? String(point) : "");
+
+                          //   // console.log(may ? String(may) : "");
+                          //   // console.log(nhanvien ? String(nhanvien) : "");
+                          // }}
+                          onClick={async () => {
+                            const id = row.original.orderDetailId;
+                            setExpandedRowId((prev) =>
+                              prev === id ? null : id
+                            );
+
+                            if (id !== expandedRowId) {
+                              try {
+                                const res = await axios.get<Process2[]>(
+                                  `${URL}/api/drawing-code-process/orderDetail/${id}`
+                                );
+                                setSubProcesses(res.data);
+                              } catch (e) {
+                                console.error(
+                                  "Lỗi gọi API processByOrderDetailId",
+                                  e
+                                );
+                              }
+                            }
+                          }}
+                        >
+                          {row.getVisibleCells().map((cell) => (
+                            <TableCell key={cell.id} className="text-center">
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                        {row.original.orderDetailId === expandedRowId && (
+                          <TableRow>
+                            <TableCell colSpan={6} className="bg-gray-50">
+                              <div className="p-4 border rounded-lg">
+                                <table className="w-full border-collapse border">
+                                  <thead className="bg-blue-900 text-white">
+                                    <tr>
+                                      <th className="p-2 border text-center">
+                                        ID mã hàng
+                                      </th>
+                                      <th className="p-2 border text-center">
+                                        Thứ tự nguyên công
+                                      </th>
+                                      <th className="p-2 border text-center">
+                                        Thứ tự sản phẩm
+                                      </th>
+                                      <th className="p-2 border text-center">
+                                        Máy
+                                      </th>
+                                      <th className="p-2 border text-center">
+                                        Điểm
+                                      </th>
+                                      <th className="p-2 border text-center">
+                                        PG (phút)
+                                      </th>
+                                      <th className="p-2 border text-center">
+                                        Thao tác
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {subProcesses.length > 0 ? (
+                                      subProcesses.map((p: any) => (
+                                        <tr
+                                          key={p.processId}
+                                          className="text-center"
+                                        >
+                                          <td className="border p-2">
+                                            {/* {row.original.orderCode} */}
+                                            {p.machineId?.toString()}
+                                          </td>
+                                          <td className="border p-2">
+                                            {p.partNumber}
+                                          </td>
+                                          <td className="border p-2">
+                                            {p.stepNumber}
+                                          </td>
+                                          <td className="border p-2">
+                                            <Select
+                                              value={
+                                                p.machineId?.toString() ?? ""
+                                              }
+                                              onValueChange={(value) =>
+                                                updateProcessMachine(
+                                                  p.processId,
+                                                  value
                                                 )
-                                            })}
-                                        </TableRow>
-                                    ))}
-                                </TableHeader>
-                                <TableBody>
-                                    {table.getRowModel().rows?.length ? (
-                                        table.getRowModel().rows.map((row, index) => {
-                                            const isOdd = index % 2 !== 0;
-                                            return (
-                                                <Fragment key={row.id}>
-                                                    <TableRow
-                                                        className={`${isOdd ? "bg-gray-100" : ""} text-2xl font-semibold !border-none`}
-                                                    // onClick={() => setExpandedRowId(prev =>
-                                                    //     prev === row.original.processId ? null : row.original.processId
-                                                    // )
-                                                    // }
-                                                    >
-                                                        {row.getVisibleCells().map((cell) => (
-                                                            <TableCell key={cell.id} className="text-center">
-                                                                {flexRender(
-                                                                    cell.column.columnDef.cell,
-                                                                    cell.getContext()
-                                                                )}
-                                                            </TableCell>
-                                                        ))}
-                                                    </TableRow>
-                                                    {/* {row.original.processId === expandedRowId && (
-                                                        <TableRow className={`${isOdd ? "bg-gray-100" : ""} text-2xl font-semibold !border-none`}>
-                                                            <TableCell colSpan={6}>
-                                                                <div className="pb-3 max-2xl:pl-6 max-2xl:pr-3  min-2xl:pr-3 min-2xl:pl-10 flex items-center gap-3">
-                                                                    <div className="flex gap-6 w-full">
-                                                                        <div className="w-1/2 flex items-center gap-2">
-                                                                            <p className="font-bold text-2xl whitespace-nowrap">Chọn máy:</p>
-                                                                            <Select
-                                                                                value={selectedMachineId}
-                                                                                onValueChange={(value) => setSelectedMachineId(value)}
-                                                                            >
-                                                                                <SelectTrigger className="w-full text-2xl">
-                                                                                    <SelectValue placeholder="Máy" />
-                                                                                </SelectTrigger>
-                                                                                <SelectContent>
-                                                                                    <SelectGroup>
-                                                                                        {machine2
-                                                                                            .filter((m) => m.status === 0)
-                                                                                            .map((m) => (
-                                                                                                <SelectItem className="text-2xl" key={m.machineId} value={m.machineId.toString()}>
-                                                                                                    {m.machineName}
-                                                                                                </SelectItem>
-                                                                                            ))}
-                                                                                    </SelectGroup>
-                                                                                </SelectContent>
-                                                                            </Select>
-                                                                        </div>
-
-                                                                        <div className="w-1/2 flex items-center gap-2">
-                                                                            <p className="font-bold text-2xl whitespace-nowrap">Chọn nhân viên:</p>
-                                                                            <Select
-                                                                                value={selectedOperatorId}
-                                                                                onValueChange={(value) => setSelectedOperatorId(value)}
-                                                                            >
-                                                                                <SelectTrigger className="w-full text-2xl">
-                                                                                    <SelectValue placeholder="Nhân viên" />
-                                                                                </SelectTrigger>
-                                                                                <SelectContent>
-                                                                                    <SelectGroup>
-                                                                                        {staff.map((staff) => (
-                                                                                            <SelectItem className="text-2xl" key={staff.id} value={staff.id}>
-                                                                                                {staff.staffName} - {staff.staffId}
-                                                                                            </SelectItem>
-                                                                                        ))}
-                                                                                    </SelectGroup>
-                                                                                </SelectContent>
-                                                                            </Select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <Button
-                                                                            className="bg-green-700 hover:bg-green-600 px-10 py-6 text-xl font-bold"
-                                                                            onClick={() => handleSubmit(row.original.processId)}
-                                                                        >
-                                                                            Gửi
-                                                                        </Button>
-                                                                    </div>
-                                                                </div>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    )} */}
-                                                </Fragment>
-                                            );
-                                        })
-                                    ) : (
-                                        <TableRow>
-                                            <TableCell
-                                                colSpan={columns.length}
-                                                className="h-24 text-center"
+                                              }
                                             >
-                                                Không có dữ liệu!
-                                            </TableCell>
-                                        </TableRow>
-                                    )}
-                                </TableBody>
-                            </Table>
-                        )
-                    }
-                </div>
+                                              <SelectTrigger className="w-full text-2xl">
+                                                <SelectValue placeholder="Máy" />
+                                              </SelectTrigger>
+                                              <SelectContent>
+                                                <SelectGroup>
+                                                  {machine2
+                                                    // giữ máy cũ dù status khác 0
+                                                    .map((m) => (
+                                                      <SelectItem
+                                                        className="text-2xl"
+                                                        key={m.machineId}
+                                                        value={m.machineId.toString()}
+                                                      >
+                                                        {m.machineName}
+                                                      </SelectItem>
+                                                    ))}
+                                                </SelectGroup>
+                                              </SelectContent>
+                                            </Select>
+                                          </td>
 
-                {/* Phân trang */}
-                <div className="flex items-center justify-end space-x-2 py-4">
-                    <div className="text-lg text-muted-foreground flex-1">
-                        Trang {table.getState().pagination.pageIndex + 1} /{" "}
-                        <span>{table.getPageCount()}</span>
-                    </div>
-                    <div className="space-x-2">
-                        <Button
-                            variant="outline"
-                            size="lg"
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
-                            className="text-lg"
-                        >
-                            Trước
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="lg"
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
-                            className="text-lg"
-                        >
-                            Tiếp
-                        </Button>
-                    </div>
-                </div>
-            </div >
-            <CreateProcessDialog
-                open={isCreating}
-                onOpenChange={async (open) => {
-                    setIsCreating(open);
-                    if (!open) {
-                        const res = await axios.get<Process2[]>(
-                            `${URL}/api/drawing-code-process`
-                        );
-                        const filteredData = res.data.filter(item => item.planDto?.plannerId === null);
-                        setTodo(filteredData);
-                    }
-                }}
-                machineList={machine2} staffList={staff}
-            />
-        </>
-    )
+                                          <td className="border p-2">
+                                            <Input
+                                              type="number"
+                                              value={p.manufacturingPoint ?? ""}
+                                              onChange={(e) => {
+                                                const val = e.target.value;
+                                                updateProcessField(
+                                                  p.processId,
+                                                  "manufacturingPoint",
+                                                  val === "" ? "" : Number(val)
+                                                );
+                                              }}
+                                            />
+                                          </td>
+
+                                          <td className="border p-2">
+                                            <Input
+                                              type="number"
+                                              value={p.pgTime ?? ""}
+                                              onChange={(e) => {
+                                                const val = e.target.value;
+                                                updateProcessField(
+                                                  p.processId,
+                                                  "pgTime",
+                                                  val === "" ? "" : Number(val)
+                                                );
+                                              }}
+                                            />
+                                          </td>
+
+                                          <td className="border p-2">
+                                            <Button
+                                              className="bg-green-700 hover:bg-green-600 text-white px-6 py-2"
+                                              onClick={() =>
+                                                handleSubmit(p.processId)
+                                              }
+                                            >
+                                              Lưu
+                                            </Button>
+                                          </td>
+                                        </tr>
+                                      ))
+                                    ) : (
+                                      <tr>
+                                        <td
+                                          colSpan={6}
+                                          className="border p-2 text-center"
+                                        >
+                                          Không có dữ liệu process!
+                                        </td>
+                                      </tr>
+                                    )}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </Fragment>
+                    );
+                  })
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      Không có dữ liệu!
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
+        </div>
+
+        {/* Phân trang */}
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="text-lg text-muted-foreground flex-1">
+            Trang {table.getState().pagination.pageIndex + 1} /{" "}
+            <span>{table.getPageCount()}</span>
+          </div>
+          <div className="space-x-2">
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+              className="text-lg"
+            >
+              Trước
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+              className="text-lg"
+            >
+              Tiếp
+            </Button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }

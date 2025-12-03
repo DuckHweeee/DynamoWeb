@@ -1,0 +1,542 @@
+"use client";
+
+import * as React from "react";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from "@tanstack/react-table";
+import {
+  ArrowUpDown,
+  MoreHorizontal,
+  Plus,
+  Search,
+  Upload,
+} from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { OrderDetail } from "./lib/type";
+import { useOrderDetail } from "./hooks/useOrderDetail";
+import AddOrderDetailForm from "./components/addOrderDetail";
+import EditOrderDetailForm from "./components/editOrderDetail";
+import DetailOrderDetail from "./components/orderDetail";
+import { Progress } from "@/components/ui/progress";
+import { ImportButton } from "@/components/ImportButton";
+import { toast } from "sonner";
+import axios from "axios";
+import { deleteOrderDetail } from "./components/deleteOrderDetail";
+
+function getColumns({
+  setEditingOrderDetail,
+  setShowForm,
+  setDetailOrderDetail,
+  setOpenDetail,
+  refetch,
+}: {
+  setEditingOrderDetail: (orderDetail: OrderDetail) => void;
+  setShowForm: (show: boolean) => void;
+  setDetailOrderDetail: (orderDetail: OrderDetail) => void;
+  setOpenDetail: (show: boolean) => void;
+  refetch: () => void;
+}): ColumnDef<OrderDetail>[] {
+  return [
+    {
+      accessorKey: "orderType",
+      header: ({ column }) => (
+        <Button
+          className="text-lg font-bold cursor-pointer"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Đối tượng gia công
+          <ArrowUpDown />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("orderType")}</div>
+      ),
+    },
+    {
+      accessorKey: "orderCode",
+      header: ({ column }) => (
+        <Button
+          className="text-lg font-bold cursor-pointer"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          ID Mã hàng <ArrowUpDown />
+        </Button>
+      ),
+      cell: ({ row }) => <div>{row.getValue("orderCode") ?? "—"}</div>,
+    },
+
+    {
+      accessorKey: "quantity",
+      header: ({ column }) => (
+        <Button
+          className="text-lg font-bold cursor-pointer"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Số lượng <ArrowUpDown />
+        </Button>
+      ),
+      cell: ({ row }) => <div>{row.getValue("quantity")}</div>,
+    },
+    //
+    {
+      accessorKey: "numberOfSteps",
+      header: ({ column }) => (
+        <Button
+          className="text-lg font-bold cursor-pointer"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          SL Nguyên công <ArrowUpDown />
+        </Button>
+      ),
+      cell: ({ row }) => <div>{row.getValue("numberOfSteps")}</div>,
+    },
+    // {
+    //   accessorKey: "managerGroupName",
+    //   header: ({ column }) => (
+    //     <Button
+    //       className="text-lg font-bold cursor-pointer"
+    //       variant="ghost"
+    //       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //     >
+    //       Nhóm quản lý
+    //       <ArrowUpDown />
+    //     </Button>
+    //   ),
+    //   cell: ({ row }) => <div>{row.getValue("managerGroupName")}</div>,
+    // },
+    //
+    // {
+    //   accessorKey: "office",
+    //   header: ({ column }) => (
+    //     <Button
+    //       className="text-lg font-bold cursor-pointer"
+    //       variant="ghost"
+    //       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //     >
+    //       Phòng ban
+    //       <ArrowUpDown />
+    //     </Button>
+    //   ),
+    //   cell: ({ row }) => <div>{row.getValue("office")}</div>,
+    // },
+    // {
+    //   accessorKey: "pgTimeGoal",
+    //   header: ({ column }) => (
+    //     <Button
+    //       className="text-lg font-bold cursor-pointer"
+    //       variant="ghost"
+    //       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //     >
+    //       PG dự kiến
+    //       <ArrowUpDown />
+    //     </Button>
+    //   ),
+    //   cell: ({ row }) => <div>{row.getValue("pgTimeGoal")}</div>,
+    // },
+    {
+      accessorKey: "progress",
+      header: ({ column }) => (
+        <Button
+          className="text-lg font-bold cursor-pointer"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Trạng thái
+          <ArrowUpDown />
+        </Button>
+      ),
+      cell: ({ row }) => {
+        const value = row.getValue("progress") as number;
+
+        const status = statusList.find((x) => x.value === value);
+
+        return (
+          <div className="flex justify-center">
+            <div
+              className={`px-4 py-1.5 rounded-sm text-center capitalize
+                                ${
+                                  status?.value === 2
+                                    ? "bg-[#E7F7EF] text-[#0CAF60]"
+                                    : status?.value === 3
+                                    ? "bg-[#EAF4FF] text-[#074695]"
+                                    : "bg-[#FFF4E5] text-[#FF8C00]"
+                                }`}
+            >
+              {status?.value === 2
+                ? "Đang thực hiện"
+                : status?.value === 3
+                ? "Đã hoàn thành"
+                : "Đang chờ"}
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      id: "Tiến dộ",
+      header: ({ column }) => (
+        // <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Tiến dộ <ArrowUpDown /></Button>
+        <span className="text-lg font-bold">Tiến dộ</span>
+      ),
+      cell: ({ row }) => {
+        const progress =
+          (Number(row.original?.processTimeSummaryDto?.quantity) /
+            Number(row.original?.quantity)) *
+          100;
+        return (
+          <div className="flex items-center gap-2">
+            <Progress
+              value={progress}
+              className={`w-full ${
+                progress < 50
+                  ? "[&>div]:!bg-red-500"
+                  : progress < 80
+                  ? "[&>div]:!bg-yellow-500"
+                  : "[&>div]:!bg-green-500"
+              }`}
+            />
+            <span className="text-sm font-semibold">
+              {progress.toFixed(0)}%
+            </span>
+          </div>
+        );
+      },
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const orderDetail = row.original;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                className="text-lg cursor-pointer pr-6"
+                onClick={() => {
+                  setDetailOrderDetail(orderDetail);
+                  setOpenDetail(true);
+                }}
+              >
+                Xem chi tiết
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-lg cursor-pointer pr-6"
+                onClick={() => {
+                  setEditingOrderDetail(orderDetail);
+                  setShowForm(true);
+                }}
+              >
+                Chỉnh sửa
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-lg cursor-pointer pr-6"
+                onClick={() => {
+                  setEditingOrderDetail(orderDetail);
+                  deleteOrderDetail(
+                    orderDetail.orderDetailId,
+                    refetch
+                  );     
+                  console.log("delete", orderDetail.orderDetailId);
+                }}
+              >
+                Xóa
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+}
+const statusList = [
+  { name: "Đang chờ", value: 1 },
+  { name: "Đang thực hiện", value: 2 },
+  { name: "Đã hoàn thành", value: 3 },
+];
+// export async function deleteOrderDetail(
+//   orderDetailId: number | string,
+//   refetch: () => void
+// ) {
+//   if (!orderDetailId) return;
+//   const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
+//   try {
+//     const confirmed = window.confirm("Bạn có chắc muốn xóa mục này không?");
+//     if (!confirmed) return;
+
+//     await axios.delete(`${urlLink}/api/order-detail/${orderDetailId}`);
+
+//     toast.success("Xóa thành công!");
+
+//     // ❗ optional: call your reload function here
+//     // await fetchData();
+//     await refetch();
+//   } catch (error) {
+//     console.error(error);
+//     toast.error("Xóa thất bại, vui lòng thử lại.");
+//   }
+// }
+
+export default function OrderDetailTable() {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+  const [globalFilter, setGlobalFilter] = useState("");
+  // OrderDetail Data
+  //const { data: orderDetail } = useOrderDetail();
+
+  const { data: orderDetail, refetch } = useOrderDetail();
+
+  const [showForm, setShowForm] = useState(false);
+  const [editingOrderDetail, setEditingOrderDetail] =
+    useState<OrderDetail | null>(null);
+
+  // Detail
+  const [detailOrderDetail, setDetailOrderDetail] =
+    useState<OrderDetail | null>(null);
+  const [openDetail, setOpenDetail] = useState(false);
+
+  const handleImportSuccess = () => {
+    toast.success("Import thành công!");
+    window.location.reload();
+  };
+
+  const columns = getColumns({
+    setEditingOrderDetail,
+    setShowForm,
+    setDetailOrderDetail,
+    setOpenDetail,
+    refetch,
+  });
+
+  const table = useReactTable({
+    data: orderDetail,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: "includesString",
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      globalFilter,
+    },
+  });
+
+  return (
+    <div className="w-full">
+      <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
+        <div className="flex flex-row items-center justify-between py-4">
+          <div className="w-2/3">
+            <p className="text-2xl font-bold">Quản lý mã hàng gia công</p>
+          </div>
+          <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
+            <div className="relative max-w-sm w-full">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Input
+                placeholder="Tìm kiếm"
+                value={globalFilter}
+                onChange={(e) => setGlobalFilter(e.target.value)}
+                className="pl-10 py-5"
+              />
+            </div>
+
+            <ImportButton
+              endpoint="order-detail/upload"
+              title="Import Mã Hàng Gia Công"
+              description="Chọn file Excel để import mã hàng gia công"
+              onImportSuccess={handleImportSuccess}
+              variant="outline"
+              size="lg"
+              className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
+            />
+
+            <Button
+              variant="secondary"
+              size="icon"
+              className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
+              onClick={() => setShowForm(true)}
+            >
+              <Plus size={60} strokeWidth={5} color="white" />
+            </Button>
+          </div>
+        </div>
+
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id} className="text-xl font-bold">
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id} className="text-center py-2">
+                      {!header.isPlaceholder &&
+                        flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className="text-center font-medium text-[16px] text-[#888888]"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    Không có kết quả.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+
+        <Dialog
+          open={showForm}
+          onOpenChange={(open) => {
+            setShowForm(open);
+            if (!open) setEditingOrderDetail(null);
+          }}
+        >
+          <DialogContent className="!max-w-5xl">
+            <DialogHeader>
+              <DialogTitle className="text-4xl">
+                {editingOrderDetail
+                  ? "Chỉnh sửa mã hàng gia công"
+                  : "Thêm mã hàng gia công"}
+              </DialogTitle>
+            </DialogHeader>
+
+            {editingOrderDetail ? (
+              <EditOrderDetailForm
+                initialData={editingOrderDetail}
+                onUpdate={(updated) => {
+                  const index = orderDetail.findIndex(
+                    (p) => p.orderDetailId === updated.orderDetailId
+                  );
+                  if (index !== -1) orderDetail[index] = updated;
+                  setShowForm(false);
+                  setEditingOrderDetail(null);
+                }}
+                onCancel={() => {
+                  setShowForm(false);
+                  setEditingOrderDetail(null);
+                }}
+              />
+            ) : (
+              <AddOrderDetailForm
+                onAdd={(neworderDetail) => {
+                  orderDetail.push(neworderDetail);
+                  table.setOptions((prev) => ({
+                    ...prev,
+                    data: [...orderDetail],
+                  }));
+                  setShowForm(false);
+                }}
+                onCancel={() => setShowForm(false)}
+              />
+            )}
+          </DialogContent>
+        </Dialog>
+        <DetailOrderDetail
+          openDetail={openDetail}
+          onClose={() => setOpenDetail(false)}
+          orderDetail={detailOrderDetail}
+        />
+
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Trước
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Tiếp
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

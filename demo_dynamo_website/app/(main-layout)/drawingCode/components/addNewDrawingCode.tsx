@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 
 import { DrawingCode } from "@/lib/type"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 type AddDrawingCodeFormProps = {
     onAdd: (drawing: DrawingCode) => void

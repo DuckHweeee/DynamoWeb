@@ -12,7 +12,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Plus, Search } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, Plus, Search, Upload } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -39,7 +39,8 @@ import AddNewKPI from "./components/addNewKPI"
 import EditKPIStaffForm from "./components/editKPI"
 import { Staff } from "@/lib/type"
 import { KPI } from "../lib/type"
-import { useMachineKPI } from "../hooks/useMachine"
+import { useMachineKPI } from "../../../../hooks/useMachine"
+import { ImportDialog } from "@/components/ImportDialog"
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 function getColumns({
@@ -202,8 +203,17 @@ export default function OperatorTable() {
     const [showForm, setShowForm] = useState(false)
     // Edit Operator
     const [editingOperator, setEditingOperator] = useState<KPI | null>(null)
-    console.log("editingOperator")
-    console.log(editingOperator)
+    // Import Dialog
+    const [showImportDialog, setShowImportDialog] = useState(false)
+
+    const handleImportSuccess = () => {
+        toast.success("Import KPI máy thành công!")
+        router.refresh()
+        setShowImportDialog(false)
+    }
+
+    // console.log("editingOperator")
+    // console.log(editingOperator)
     const columns = getColumns({ setEditingOperator, setShowForm })
     const table = useReactTable({
         data: machineKPI,
@@ -245,12 +255,20 @@ export default function OperatorTable() {
                                 className="pl-10 py-5"
                             />
                         </div>
-
                         <Button
                             variant="secondary" size="icon" className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
                             onClick={() => setShowForm(true)}>
                             <Plus size={60} strokeWidth={5} color="white" />
                         </Button>
+                        <Button
+                            variant="secondary"
+                            size="icon"
+                            className="px-10 py-6 bg-green-600 hover:bg-green-700 cursor-pointer mr-2"
+                            onClick={() => setShowImportDialog(true)}
+                        >
+                            <Upload size={24} color="white" />
+                        </Button>
+
                     </div>
                 </div>
                 <div className="rounded-md border w-full">
@@ -343,6 +361,15 @@ export default function OperatorTable() {
                         )}
                     </DialogContent>
                 </Dialog>
+
+                <ImportDialog
+                    isOpen={showImportDialog}
+                    onClose={() => setShowImportDialog(false)}
+                    onImportSuccess={handleImportSuccess}
+                    endpoint="machine-kpi/upload"
+                    title="Import KPI Máy từ Excel"
+                    description="Chọn file Excel để import danh sách KPI máy"
+                />
 
                 <div className="flex items-center justify-end space-x-2 py-4">
                     {/* <div className="text-muted-foreground flex-1 text-sm">

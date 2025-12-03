@@ -10,9 +10,22 @@ import { Machine2 } from "@/lib/type"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { SelectYear } from "./SelectYear"
 import { SelectMonth } from "./SelectMonth"
-import { useGroup } from "../hooks/useMachine"
+import { useGroup } from "../../../../hooks/useMachine"
 import { officeList } from "../lib/data"
 import { NewMachine } from "../lib/type"
+import { 
+    validateNewMachine, 
+    NewMachineFormData,
+    validateMachineName,
+    validateMachineType,
+    validateMachineWork,
+    validateMachineOffice,
+    validateMachineGroupId,
+    validateMachineYear,
+    validateMachineMonth,
+    validateMachineMiningTarget,
+    validateMachineOEE
+} from "../lib/validation"
 
 type AddMachineFormProps = {
     onAdd: (machine: Machine2) => void
@@ -35,28 +48,85 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
         oee: null
     })
 
+    // Validation errors state
+    const [errors, setErrors] = useState<{[key: string]: string | null}>({})
+
+    // Function to update field and validate
+    const updateField = (field: keyof NewMachine, value: any) => {
+        setNewMachine(prev => ({ ...prev, [field]: value }))
+        
+        // Validate field immediately
+        let error: string | null = null
+        switch (field) {
+            case 'machineName':
+                error = validateMachineName(value)
+                break
+            case 'machineType':
+                error = validateMachineType(value)
+                break
+            case 'machineWork':
+                error = validateMachineWork(value)
+                break
+            case 'machineOffice':
+                error = validateMachineOffice(value)
+                break
+            case 'groupId':
+                error = validateMachineGroupId(value)
+                break
+            case 'year':
+                error = validateMachineYear(value)
+                break
+            case 'month':
+                error = validateMachineMonth(value)
+                break
+            case 'machineMiningTarget':
+                error = validateMachineMiningTarget(value)
+                break
+            case 'oee':
+                error = validateMachineOEE(value)
+                break
+        }
+        
+        setErrors(prev => ({ ...prev, [field]: error }))
+    }
+
     const handleSubmit = async () => {
-        // Kiểm tra thông tin bắt buộc
-        if (
-            !newMachine.machineName.trim() ||
-            !newMachine.machineOffice ||
-            !newMachine.machineType.trim() ||
-            !newMachine.machineWork.trim()
-        ) {
-            toast.error("Vui lòng nhập đầy đủ thông tin máy.");
-            return;
+        // Validate all fields individually first
+        const fieldValidations = {
+            machineName: validateMachineName(newMachine.machineName),
+            machineType: validateMachineType(newMachine.machineType),
+            machineWork: validateMachineWork(newMachine.machineWork),
+            machineOffice: validateMachineOffice(newMachine.machineOffice),
+            groupId: validateMachineGroupId(newMachine.groupId),
+            year: validateMachineYear(newMachine.year),
+            month: validateMachineMonth(newMachine.month),
+            machineMiningTarget: validateMachineMiningTarget(newMachine.machineMiningTarget),
+            oee: validateMachineOEE(newMachine.oee),
         }
-        // Kiểm tra thông tin bắt buộc
-        if (
-            newMachine.groupId === null ||
-            newMachine.year === null ||
-            newMachine.month === null ||
-            newMachine.machineMiningTarget === null ||
-            newMachine.oee === null
-        ) {
-            toast.error("Vui lòng nhập đầy đủ thông tin mục tiêu máy.");
-            return;
+
+        // Check for any validation errors
+        const hasErrors = Object.values(fieldValidations).some(error => error !== null)
+        
+        if (hasErrors) {
+            // Update errors state with all validation results
+            setErrors(fieldValidations)
+            return
         }
+
+        // All fields validated - now prepare data for submission
+        // Since validation passed, we know all required fields have valid values
+        const dataToSubmit = {
+            machineName: newMachine.machineName.trim(),
+            machineType: newMachine.machineType.trim(),
+            machineWork: newMachine.machineWork.trim(),
+            machineOffice: newMachine.machineOffice,
+            groupId: newMachine.groupId,
+            year: newMachine.year!,
+            month: newMachine.month!,
+            machineMiningTarget: newMachine.machineMiningTarget!,
+            oee: newMachine.oee!
+        }
+
         try {
             const response = await fetch(
                 `${urlLink}/api/machine`,
@@ -65,17 +135,7 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({
-                        machineName: newMachine.machineName,
-                        machineType: newMachine.machineType,
-                        machineWork: newMachine.machineWork,
-                        machineOffice: newMachine.machineOffice,
-                        groupId: newMachine.groupId,
-                        year: newMachine.year,
-                        month: newMachine.month,
-                        machineMiningTarget: newMachine.machineMiningTarget,
-                        oee: newMachine.oee
-                    }),
+                    body: JSON.stringify(dataToSubmit),
                 }
             );
 
@@ -98,6 +158,7 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                 machineMiningTarget: null,
                 oee: null
             });
+            setErrors({})
         } catch (error) {
             toast.error("Đã xảy ra lỗi khi gửi.");
         }
@@ -115,18 +176,21 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                                 id="name"
                                 placeholder="Tên máy"
                                 value={newMachine.machineName}
-                                onChange={(e) => setNewMachine({ ...newMachine, machineName: e.target.value })}
-                                className="!text-lg placeholder:text-[16px]"
+                                onChange={(e) => updateField('machineName', e.target.value)}
+                                className={`!text-lg placeholder:text-[16px] ${errors.machineName ? 'border-red-500' : ''}`}
                             />
+                            {errors.machineName && (
+                                <span className="text-red-500 text-sm">{errors.machineName}</span>
+                            )}
                         </div>
 
                         <div className="grid">
                             <Label htmlFor="nhom" className="text-lg !font-normal">Phòng quản lý</Label>
                             <Select
                                 value={newMachine.machineOffice?.toString() ?? ""}
-                                onValueChange={(value) => setNewMachine({ ...newMachine, machineOffice: value })}
+                                onValueChange={(value) => updateField('machineOffice', value)}
                             >
-                                <SelectTrigger className="w-auto text-lg [&>span]:text-[16px]">
+                                <SelectTrigger className={`w-auto text-lg [&>span]:text-[16px] ${errors.machineOffice ? 'border-red-500' : ''}`}>
                                     <SelectValue placeholder="Chọn phòng quản lý" />
                                 </SelectTrigger>
                                 <SelectContent id="nhom">
@@ -139,6 +203,9 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
+                            {errors.machineOffice && (
+                                <span className="text-red-500 text-sm">{errors.machineOffice}</span>
+                            )}
                         </div>
 
                         <div className="grid">
@@ -147,9 +214,12 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                                 id="shortName"
                                 placeholder="Loại máy"
                                 value={newMachine.machineType}
-                                onChange={(e) => setNewMachine({ ...newMachine, machineType: e.target.value })}
-                                className="!text-lg placeholder:text-[16px]"
+                                onChange={(e) => updateField('machineType', e.target.value)}
+                                className={`!text-lg placeholder:text-[16px] ${errors.machineType ? 'border-red-500' : ''}`}
                             />
+                            {errors.machineType && (
+                                <span className="text-red-500 text-sm">{errors.machineType}</span>
+                            )}
                         </div>
 
                         <div className="grid">
@@ -158,9 +228,12 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                                 id="phong_ban"
                                 placeholder="Công Việc"
                                 value={newMachine.machineWork}
-                                onChange={(e) => setNewMachine({ ...newMachine, machineWork: e.target.value })}
-                                className="!text-lg placeholder:text-[16px]"
+                                onChange={(e) => updateField('machineWork', e.target.value)}
+                                className={`!text-lg placeholder:text-[16px] ${errors.machineWork ? 'border-red-500' : ''}`}
                             />
+                            {errors.machineWork && (
+                                <span className="text-red-500 text-sm">{errors.machineWork}</span>
+                            )}
                         </div>
 
                     </div>
@@ -174,9 +247,9 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                             <Label htmlFor="nhom" className="text-lg !font-normal">Nhóm</Label>
                             <Select
                                 value={newMachine.groupId?.toString() ?? ""}
-                                onValueChange={(value) => setNewMachine({ ...newMachine, groupId: value })}
+                                onValueChange={(value) => updateField('groupId', value)}
                             >
-                                <SelectTrigger className="w-auto text-lg [&>span]:text-[16px]">
+                                <SelectTrigger className={`w-auto text-lg [&>span]:text-[16px] ${errors.groupId ? 'border-red-500' : ''}`}>
                                     <SelectValue placeholder="Chọn nhóm" />
                                 </SelectTrigger>
                                 <SelectContent id="nhom">
@@ -189,27 +262,32 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
+                            {errors.groupId && (
+                                <span className="text-red-500 text-sm">{errors.groupId}</span>
+                            )}
                         </div>
                         <div className="grid">
                             <Label htmlFor="year" className="text-lg !font-normal">Năm</Label>
                             <SelectYear
                                 value={newMachine.year?.toString() ?? undefined}
-                                onChange={(value) =>
-                                    setNewMachine({ ...newMachine, year: Number(value) })
-                                }
+                                onChange={(value) => updateField('year', Number(value))}
                                 totalYears={5}
                                 placeholder="Chọn năm"
                             />
+                            {errors.year && (
+                                <span className="text-red-500 text-sm">{errors.year}</span>
+                            )}
                         </div>
                         <div className="grid">
                             <Label htmlFor="name" className="text-lg !font-normal">Tháng</Label>
                             <SelectMonth
                                 value={newMachine.month?.toString() ?? undefined}
-                                onChange={(value) =>
-                                    setNewMachine({ ...newMachine, month: Number(value) })
-                                }
+                                onChange={(value) => updateField('month', Number(value))}
                             // showAllOption={true}
                             />
+                            {errors.month && (
+                                <span className="text-red-500 text-sm">{errors.month}</span>
+                            )}
                         </div>
                     </div>
 
@@ -222,14 +300,12 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                                 type="number"
                                 inputMode="numeric"
                                 value={newMachine.machineMiningTarget !== null ? newMachine.machineMiningTarget.toString() : ""}
-                                onChange={(e) =>
-                                    setNewMachine({
-                                        ...newMachine,
-                                        machineMiningTarget: e.target.value === "" ? null : Number(e.target.value),
-                                    })
-                                }
-                                className="!text-lg placeholder:text-[16px]"
+                                onChange={(e) => updateField('machineMiningTarget', e.target.value === "" ? null : Number(e.target.value))}
+                                className={`!text-lg placeholder:text-[16px] ${errors.machineMiningTarget ? 'border-red-500' : ''}`}
                             />
+                            {errors.machineMiningTarget && (
+                                <span className="text-red-500 text-sm">{errors.machineMiningTarget}</span>
+                            )}
                         </div>
 
                         <div className="grid gap-1">
@@ -240,14 +316,12 @@ export default function AddMachineForm({ onAdd, onCancel }: AddMachineFormProps)
                                 type="number"
                                 inputMode="numeric"
                                 value={newMachine.oee !== null ? newMachine.oee.toString() : ""}
-                                onChange={(e) =>
-                                    setNewMachine({
-                                        ...newMachine,
-                                        oee: e.target.value === "" ? null : Number(e.target.value),
-                                    })
-                                }
-                                className="!text-lg placeholder:text-[16px]"
+                                onChange={(e) => updateField('oee', e.target.value === "" ? null : Number(e.target.value))}
+                                className={`!text-lg placeholder:text-[16px] ${errors.oee ? 'border-red-500' : ''}`}
                             />
+                            {errors.oee && (
+                                <span className="text-red-500 text-sm">{errors.oee}</span>
+                            )}
                         </div>
                     </div>
                 </div>

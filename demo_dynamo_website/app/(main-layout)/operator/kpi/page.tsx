@@ -12,7 +12,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Plus, Search } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, Plus, Search, Upload } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -32,10 +32,6 @@ import {
 } from "@/components/ui/table"
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-// import { Staff } from "@/lib/type"
-import EditOperatorForm from "../components/editOperator"
-import AddOperatorForm from "../components/addNewOperator"
-import { useStaff } from "../hooks/useStaff"
 import { useRouter } from 'next/navigation'
 import { toast } from "sonner"
 import { useStaffKPI } from "./hooks/useStaffKPI"
@@ -43,6 +39,7 @@ import { KPI } from "./lib/type"
 import AddNewKPI from "./components/addNewKPI"
 import EditKPIStaffForm from "./components/editKPI"
 import { Staff } from "@/lib/type"
+import { ImportDialog } from "@/components/ImportDialog"
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 function getColumns({
@@ -53,11 +50,6 @@ function getColumns({
     setShowForm: (show: boolean) => void
 }): ColumnDef<KPI>[] {
     return [
-        // {
-        //     id: "stt",
-        //     header: () => (<span className="text-lg font-bold ">STT</span>),
-        //     cell: ({ row }) => <div>{row.index + 1}</div>,
-        // },
         {
             accessorKey: "staffName",
             header: ({ column }) => (
@@ -67,15 +59,6 @@ function getColumns({
             ),
             cell: ({ row }) => <div className="capitalize">{row.getValue("staffName")}</div>,
         },
-        // {
-        //     accessorKey: "id",
-        //     header: ({ column }) => (
-        //         <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-        //             Mã nhân viên <ArrowUpDown />
-        //         </Button>
-        //     ),
-        //     cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
-        // },
         {
             accessorKey: "groupName",
             header: ({ column }) => (
@@ -187,9 +170,6 @@ function getColumns({
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            {/* <DropdownMenuItem className="text-lg cursor-pointer">
-                                Thông tin chi tiết
-                            </DropdownMenuItem> */}
                             <DropdownMenuItem
                                 className="text-lg cursor-pointer"
                                 onClick={() => {
@@ -204,9 +184,6 @@ function getColumns({
                 )
             },
         }
-
-
-
     ]
 }
 
@@ -229,8 +206,14 @@ export default function OperatorTable() {
     const [showForm, setShowForm] = useState(false)
     // Edit Operator
     const [editingOperator, setEditingOperator] = useState<KPI | null>(null)
-    console.log("editingOperator")
-    console.log(editingOperator)
+    // Import Dialog
+    const [showImportDialog, setShowImportDialog] = useState(false)
+
+    const handleImportSuccess = () => {
+        toast.success("Import KPI nhân viên thành công!")
+        router.refresh()
+        setShowImportDialog(false)
+    }
     const columns = getColumns({ setEditingOperator, setShowForm })
     const table = useReactTable({
         data: staffKPI,
@@ -272,12 +255,20 @@ export default function OperatorTable() {
                                 className="pl-10 py-5"
                             />
                         </div>
-
                         <Button
                             variant="secondary" size="icon" className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
                             onClick={() => setShowForm(true)}>
                             <Plus size={60} strokeWidth={5} color="white" />
                         </Button>
+                        <Button
+                            variant="secondary"
+                            size="icon"
+                            className="px-10 py-6 bg-green-600 hover:bg-green-700 cursor-pointer mr-2"
+                            onClick={() => setShowImportDialog(true)}
+                        >
+                            <Upload size={24} color="white" />
+                        </Button>
+
                     </div>
                 </div>
                 <div className="rounded-md border w-full">
@@ -372,13 +363,6 @@ export default function OperatorTable() {
                         {editingOperator ? (
                             <EditKPIStaffForm
                                 inforKPI={editingOperator}
-                                // onUpdate={(updated) => {
-                                //     const index = staff.findIndex(op => op.id === updated.id)
-                                //     if (index !== -1) staff[index] = updated
-                                //     table.setOptions(prev => ({ ...prev, data: [...staff] }))
-                                //     setShowForm(false)
-                                //     setEditingOperator(null)
-                                // }}
                                 onCancel={() => {
                                     setShowForm(false)
                                     setEditingOperator(null)
@@ -401,11 +385,16 @@ export default function OperatorTable() {
                     </DialogContent>
                 </Dialog>
 
+                <ImportDialog
+                    isOpen={showImportDialog}
+                    onClose={() => setShowImportDialog(false)}
+                    onImportSuccess={handleImportSuccess}
+                    endpoint="staff-kpi/upload"
+                    title="Import KPI Nhân Viên từ Excel"
+                    description="Chọn file Excel để import danh sách KPI nhân viên"
+                />
+
                 <div className="flex items-center justify-end space-x-2 py-4">
-                    {/* <div className="text-muted-foreground flex-1 text-sm">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div> */}
                     <div className="space-x-2">
                         <Button
                             className="cursor-pointer"

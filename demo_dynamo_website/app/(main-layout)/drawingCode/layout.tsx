@@ -28,7 +28,6 @@ export default function TbaletLayout({
     const isOrder = pathname.startsWith("/drawingCode/order");
     const isDrawingCode = !isOrder && pathname.startsWith("/drawingCode");
     return (
-        // <html>
         <div
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
@@ -65,6 +64,5 @@ export default function TbaletLayout({
             </div>
             {/* <Toaster richColors position="top-left" /> */}
         </div>
-        // </html>
     );
 }
