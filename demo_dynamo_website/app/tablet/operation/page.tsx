@@ -91,7 +91,7 @@ export default function TabletOperation() {
 
     const { data: staff } = useFetchOperators()
 
-    console.log("staff: ", staff);
+    //console.log("staff: ", staff);
 
     // Process
     // Đang tách ra từng phần của Process

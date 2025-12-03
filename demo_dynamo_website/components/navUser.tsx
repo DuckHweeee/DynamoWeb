@@ -52,7 +52,7 @@ export function ClientHeader() {
                         <div className="flex items-center px-3 py-1 bg-[#DDEEFF] rounded-md cursor-pointer hover:bg-[#CCE0FF] transition-colors">
                             <div className="flex flex-row gap-2 items-center">
                                 <Avatar className="h-10 w-10">
-                                    <AvatarImage src="/dynamo.png" />
+                                    {/* <AvatarImage src="/dynamo.png" /> */}
                                     <AvatarFallback>
                                         {user?.fullname?.charAt(0).toUpperCase() || user?.username?.charAt(0).toUpperCase() || "D"}
                                     </AvatarFallback>

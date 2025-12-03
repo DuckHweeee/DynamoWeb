@@ -9,9 +9,9 @@ export default function LoginPage() {
         <div className="flex justify-center gap-2 md:justify-start">
           <a href="#" className="flex items-center gap-2 font-medium">
             <div className="bg-primary text-primary-foreground flex size-10 items-center justify-center rounded-md">
-              <img src="/dynamo.png" />
+              {/* <img src="/dynamo.png" /> */}
             </div>
-            Dynamo.Inc
+            {/* Dynamo.Inc */}
           </a>
         </div>
         <div className="flex flex-1 items-center justify-center">

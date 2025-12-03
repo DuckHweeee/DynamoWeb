@@ -589,7 +589,7 @@ export default function GroupKPIPage() {
                 <SelectItem value="all">Tất cả</SelectItem>
                 <SelectItem value="month">Theo tháng</SelectItem>
                 <SelectItem value="week">Theo tuần</SelectItem>
-                <SelectItem value="day">Theo ngày</SelectItem>
+                {/* <SelectItem value="day">Theo ngày</SelectItem> */}
               </SelectContent>
             </Select>
           </div>
@@ -661,7 +661,7 @@ export default function GroupKPIPage() {
             </div>
           )}
 
-          {/* Day Filter (for daily KPIs) */}
+         {/* Day Filter (for daily KPIs) */}
           {periodFilter === "day" && (
             <div className="space-y-1">
               <label className="text-xs font-medium text-gray-600 tracking-wide">

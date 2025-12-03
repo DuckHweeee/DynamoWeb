@@ -69,10 +69,7 @@ export default function TabletProcess() {
   // Fetch and update todo data
   const fetchProcess = async () => {
     try {
-      const res = await axios.get<OrderDetail[]>(
-        `${URL}/api/order-detail`
-      );
-      // const filteredData = res.data.filter((item) => item.isPlan === 0);
+      const res = await axios.get<OrderDetail[]>(`${URL}/api/order-detail`);
       setTodo(res.data);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu process:", error);
@@ -82,32 +79,37 @@ export default function TabletProcess() {
   useEffect(() => {
     fetchProcess();
   }, []);
-  console.log("todo", todo);
   //ge† process
   const [subProcesses, setSubProcesses] = useState<Process2[]>([]);
 
   // Handle Submit
   const [loading, setLoading] = useState(false);
   const handleSubmit = async (processId: string) => {
+    const process = subProcesses.find((p) => p.processId === processId);
+
+    if (!process) return;
     setLoading(true);
     try {
       const url = `${URL}/api/drawing-code-process/update`;
       console.log(url);
-        const body = {
-     processId: processId,
-      manufacturingPoint: selectedPoint,
-      pgTime: selectedPGTime,
-      machineId: selectedMachineId,
-    };
+      const body = {
+        processId: process.processId,
+        manufacturingPoint: process.manufacturingPoint,
+        pgTime: process.pgTime,
+        machineId: process.machineDto?.machineId,
+      };
       await axios.put(url, body);
       toast.success("Gửi thành công!");
       // Refetch lại dữ liệu
-      await fetchProcess();
+      // await fetchProcess();
       // Reset selected values and close expanded row
-      setSelectedMachineId(null);
-      setSelectedPoint(null);
-      setSelectedPGTime(null);
-      setExpandedRowId(null);
+      // setSelectedMachineId(null);
+      // setSelectedPoint(null);
+      // setSelectedPGTime(null);
+      const res = await axios.get(
+        `${URL}/api/drawing-code-process/orderDetail/${expandedRowId}`
+      );
+      setSubProcesses(res.data);
     } catch (error: any) {
       // Lấy message từ backend
       const backendMessage =
@@ -118,6 +120,41 @@ export default function TabletProcess() {
     } finally {
       setLoading(false);
     }
+  };
+  const updateProcessField = (
+    processId: string,
+    field: keyof Process2,
+    value: any
+  ) => {
+    setSubProcesses((prev) =>
+      prev.map((p) =>
+        p.processId === processId
+          ? {
+              ...p,
+              [field]: value === "" ? p[field] : value, // giữ nguyên giá trị gốc
+            }
+          : p
+      )
+    );
+  };
+  const updateProcessMachine = (
+    processId: string,
+    machineId: number | string
+  ) => {
+    setSubProcesses((prev) =>
+      prev.map((p) =>
+        p.processId === processId
+          ? {
+              ...p,
+              machineId: Number(machineId), // Cập nhật hiển thị
+              machineDto: {
+                ...((p.machineDto ?? {}) as any),
+                machineId: Number(machineId), // Dữ liệu gửi server
+              },
+            }
+          : p
+      )
+    );
   };
 
   //Column
@@ -375,17 +412,18 @@ export default function TabletProcess() {
                           //   // const point = row.original.manufacturingPoint;
                           //   // const pgTime = row.original.pgTime;
 
-                          //   // setSelectedMachineId(may ? String(may) : "");
-                          //   // setSelectedPGTime(pgTime ? String(pgTime) : "");
-                          //   // setSelectedPoint(point ? String(point) : "");
+                          // setSelectedMachineId(may ? String(may) : "");
+                          // setSelectedPGTime(pgTime ? String(pgTime) : "");
+                          // setSelectedPoint(point ? String(point) : "");
 
                           //   // console.log(may ? String(may) : "");
                           //   // console.log(nhanvien ? String(nhanvien) : "");
                           // }}
                           onClick={async () => {
                             const id = row.original.orderDetailId;
-
-                            setExpandedRowId((prev) => (prev === id ? null : id));
+                            setExpandedRowId((prev) =>
+                              prev === id ? null : id
+                            );
 
                             if (id !== expandedRowId) {
                               try {
@@ -394,7 +432,10 @@ export default function TabletProcess() {
                                 );
                                 setSubProcesses(res.data);
                               } catch (e) {
-                                console.error("Lỗi gọi API processByOrderDetailId", e);
+                                console.error(
+                                  "Lỗi gọi API processByOrderDetailId",
+                                  e
+                                );
                               }
                             }
                           }}
@@ -408,107 +449,155 @@ export default function TabletProcess() {
                             </TableCell>
                           ))}
                         </TableRow>
-                        {row.original.orderDetailId=== expandedRowId && (
+                        {row.original.orderDetailId === expandedRowId && (
                           <TableRow>
-                          <TableCell colSpan={6} className="bg-gray-50">
-                            <div className="p-4 border rounded-lg">
-                              <table className="w-full border-collapse border">
-                                <thead className="bg-blue-900 text-white">
-                                  <tr>
-                                    <th className="p-2 border text-center">ID mã hàng</th>
-                                    <th className="p-2 border text-center">Thứ tự nguyên công</th>
-                                    <th className="p-2 border text-center">Thứ tự sản phẩm</th>
-                                    <th className="p-2 border text-center">Máy</th>
-                                    <th className="p-2 border text-center">Điểm</th>
-                                    <th className="p-2 border text-center">PG (phút)</th>
-                                    <th className="p-2 border text-center">Thao tác</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {subProcesses.length > 0 ? (
-                                    subProcesses.map((p: any) => (
-                                      <tr key={p.processId} className="text-center">
-                                        <td className="border p-2">{row.original.orderCode}</td>
-                                        <td className="border p-2">{p.partNumber}</td>
-                                       <td className="border p-2">{p.stepNumber}</td>
-                                        <td className="border p-2">
-                                          {/* <Select
-                                            value={p.machineId?.toString() || ""}
-                                            onValueChange={(value) =>
-                                              updateProcessField(p.processId, "machineId", value)
-                                            }
-                                          >
-                                            <SelectTrigger className="w-[150px]">
-                                              <SelectValue placeholder="Chọn máy" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                              <SelectGroup>
-                                                {machine2.map((m) => (
-                                                  <SelectItem key={m.machineId} value={m.machineId.toString()}>
-                                                    {m.machineName}
-                                                  </SelectItem>
-                                                ))}
-                                              </SelectGroup>
-                                            </SelectContent>
-                                          </Select> */}
-                                        </td>
+                            <TableCell colSpan={6} className="bg-gray-50">
+                              <div className="p-4 border rounded-lg">
+                                <table className="w-full border-collapse border">
+                                  <thead className="bg-blue-900 text-white">
+                                    <tr>
+                                      <th className="p-2 border text-center">
+                                        ID mã hàng
+                                      </th>
+                                      <th className="p-2 border text-center">
+                                        Thứ tự nguyên công
+                                      </th>
+                                      <th className="p-2 border text-center">
+                                        Thứ tự sản phẩm
+                                      </th>
+                                      <th className="p-2 border text-center">
+                                        Máy
+                                      </th>
+                                      <th className="p-2 border text-center">
+                                        Điểm
+                                      </th>
+                                      <th className="p-2 border text-center">
+                                        PG (phút)
+                                      </th>
+                                      <th className="p-2 border text-center">
+                                        Thao tác
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {subProcesses.length > 0 ? (
+                                      subProcesses.map((p: any) => (
+                                        <tr
+                                          key={p.processId}
+                                          className="text-center"
+                                        >
+                                          <td className="border p-2">
+                                            {/* {row.original.orderCode} */}
+                                            {p.machineId?.toString()}
+                                          </td>
+                                          <td className="border p-2">
+                                            {p.partNumber}
+                                          </td>
+                                          <td className="border p-2">
+                                            {p.stepNumber}
+                                          </td>
+                                          <td className="border p-2">
+                                            <Select
+                                              value={
+                                                p.machineId?.toString() ?? ""
+                                              }
+                                              onValueChange={(value) =>
+                                                updateProcessMachine(
+                                                  p.processId,
+                                                  value
+                                                )
+                                              }
+                                            >
+                                              <SelectTrigger className="w-full text-2xl">
+                                                <SelectValue placeholder="Máy" />
+                                              </SelectTrigger>
+                                              <SelectContent>
+                                                <SelectGroup>
+                                                  {machine2
+                                                    // giữ máy cũ dù status khác 0
+                                                    .map((m) => (
+                                                      <SelectItem
+                                                        className="text-2xl"
+                                                        key={m.machineId}
+                                                        value={m.machineId.toString()}
+                                                      >
+                                                        {m.machineName}
+                                                      </SelectItem>
+                                                    ))}
+                                                </SelectGroup>
+                                              </SelectContent>
+                                            </Select>
+                                          </td>
 
-                                        {/* <td className="border p-2">
-                                          <Input
-                                            type="number"
-                                            className="w-[120px]"
-                                            value={p.manufacturingPoint ?? ""}
-                                            onChange={(e) =>
-                                              updateProcessField(p.processId, "manufacturingPoint", e.target.value)
-                                            }
-                                          />
-                                        </td> */}
+                                          <td className="border p-2">
+                                            <Input
+                                              type="number"
+                                              value={p.manufacturingPoint ?? ""}
+                                              onChange={(e) => {
+                                                const val = e.target.value;
+                                                updateProcessField(
+                                                  p.processId,
+                                                  "manufacturingPoint",
+                                                  val === "" ? "" : Number(val)
+                                                );
+                                              }}
+                                            />
+                                          </td>
 
-                                        <td className="border p-2">
-                                          {/* <Input
-                                            type="number"
-                                            className="w-[120px]"
-                                            value={p.pgTime ?? ""}
-                                            onChange={(e) =>
-                                              updateProcessField(p.processId, "pgTime", e.target.value)
-                                            }
-                                          /> */}
-                                        </td>
+                                          <td className="border p-2">
+                                            <Input
+                                              type="number"
+                                              value={p.pgTime ?? ""}
+                                              onChange={(e) => {
+                                                const val = e.target.value;
+                                                updateProcessField(
+                                                  p.processId,
+                                                  "pgTime",
+                                                  val === "" ? "" : Number(val)
+                                                );
+                                              }}
+                                            />
+                                          </td>
 
-                                        <td className="border p-2">
-                                          {/* <Button
-                                            className="bg-green-700 hover:bg-green-600 text-white px-6 py-2"
-                                            onClick={() => handleUpdateProcess(p.processId)}
-                                          >
-                                            Lưu
-                                          </Button> */}
+                                          <td className="border p-2">
+                                            <Button
+                                              className="bg-green-700 hover:bg-green-600 text-white px-6 py-2"
+                                              onClick={() =>
+                                                handleSubmit(p.processId)
+                                              }
+                                            >
+                                              Lưu
+                                            </Button>
+                                          </td>
+                                        </tr>
+                                      ))
+                                    ) : (
+                                      <tr>
+                                        <td
+                                          colSpan={6}
+                                          className="border p-2 text-center"
+                                        >
+                                          Không có dữ liệu process!
                                         </td>
                                       </tr>
-                                    ))
-                                  ) : (
-                                    <tr>
-                                      <td colSpan={6} className="border p-2 text-center">
-                                        Không có dữ liệu process!
-                                      </td>
-                                    </tr>
-                                  )}
-                                </tbody>
-                              </table>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                          )}
-                        </Fragment>
-                      );
-                    })
-                  ) : (
-                    <TableRow>
-                      <TableCell
-                        colSpan={columns.length}
-                        className="h-24 text-center"
-                      >
-                        Không có dữ liệu!
-                      </TableCell>
+                                    )}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </Fragment>
+                    );
+                  })
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      Không có dữ liệu!
+                    </TableCell>
                   </TableRow>
                 )}
               </TableBody>

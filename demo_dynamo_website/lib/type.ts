@@ -355,12 +355,12 @@ export const REPORT_TYPE_OPTIONS = [
 ];
 
 // Office options
-export type OfficeType = 'pin' | 'insert' | 'mold';
+export type OfficeType = 'PIN' | 'D_INSERT' | 'MOLD';
 
 export const OFFICE_OPTIONS = [
-    { value: 'pin', label: 'Pin' },
-    { value: 'insert', label: 'Insert' },
-    { value: 'mold', label: 'Mold' }
+    { value: 'PIN', label: 'PIN' },
+    { value: 'D_INSERT', label: 'D_INSERT' },
+    { value: 'MOLD', label: 'MOLD' }
 ];
 export type Admin = {
     id: string;

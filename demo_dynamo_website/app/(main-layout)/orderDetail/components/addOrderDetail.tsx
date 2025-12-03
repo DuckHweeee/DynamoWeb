@@ -32,9 +32,9 @@ export default function AddOrderDetailForm({ onCancel }: AddOrderDetailFormProps
         numberOfSteps: ""
     });
     const officeList = [
-        { name: "Mold", value: "Mold" },
-        { name: "Pin", value: "Pin" },
-        { name: "Insert", value: "Insert" }
+        { name: "MOLD", value: "MOLD" },
+        { name: "PIN", value: "PIN" },
+        { name: "D_INSERT", value: "D_INSERT" }
     ];
     const handleSubmit = async () => {
         if (
@@ -72,7 +72,7 @@ export default function AddOrderDetailForm({ onCancel }: AddOrderDetailFormProps
                 const errorData = await response.json();
                 throw new Error(errorData.message || "Gửi thất bại.");
             }
-            toast.success("Thêm nhân viên và KPI thành công!");
+            toast.success("Thêm mã hàng gia công thành công!");
             location.reload()
             onCancel();
             setNewOrderDetail({

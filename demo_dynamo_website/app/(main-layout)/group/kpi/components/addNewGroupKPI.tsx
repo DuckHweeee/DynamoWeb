@@ -57,14 +57,15 @@ export default function AddNewGroupKPI({
       toast.error("Vui lòng điền đầy đủ thông tin");
       return;
     }
+    
 
     try {
       // Prepare data based on isMonth flag
       const kpiData = {
         ...newGroupKPI,
-        month: newGroupKPI.isMonth === 0 ? newGroupKPI.month : null,
-        week: newGroupKPI.isMonth === 1 ? newGroupKPI.week : null,
-        day: newGroupKPI.isMonth === 2 ? newGroupKPI.day : null,
+        month: newGroupKPI.isMonth === 1 ? newGroupKPI.month : null,
+        week: newGroupKPI.isMonth === 0 ? newGroupKPI.week : null,
+     
         groupName: selectedGroupName, // Include group name from the selected group
       };
 
@@ -92,9 +93,9 @@ export default function AddNewGroupKPI({
     setNewGroupKPI((prev) => ({
       ...prev,
       isMonth,
-      month: isMonth === 0 ? prev.month : null,
-      week: isMonth === 1 ? prev.week : null,
-      day: isMonth === 2 ? prev.day : null,
+      month: isMonth === 1 ? prev.month : null,
+      week: isMonth === 0 ? prev.week : null,
+     
     }));
   };
 
@@ -226,9 +227,9 @@ export default function AddNewGroupKPI({
                 <SelectValue placeholder="Chọn loại KPI" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="0">Theo tháng</SelectItem>
-                <SelectItem value="1">Theo tuần</SelectItem>
-                <SelectItem value="2">Theo ngày</SelectItem>
+                <SelectItem value="1">Theo tháng</SelectItem>
+                <SelectItem value="0">Theo tuần</SelectItem>
+                {/* <SelectItem value="2">Theo ngày</SelectItem> */}
               </SelectContent>
             </Select>
           </div>
@@ -236,7 +237,7 @@ export default function AddNewGroupKPI({
 
         {/* Period-specific selection */}
         <div className="grid grid-cols-1 gap-6">
-          {newGroupKPI.isMonth === 0 && (
+          {newGroupKPI.isMonth === 1 && (
             <div className="space-y-2">
               <Label htmlFor="month">Tháng *</Label>
               <FlexibleCombobox
@@ -255,7 +256,7 @@ export default function AddNewGroupKPI({
             </div>
           )}
 
-          {newGroupKPI.isMonth === 1 && (
+          {newGroupKPI.isMonth === 0 && (
             <div className="space-y-2">
               <Label htmlFor="week">Tuần *</Label>
               <WeekPicker
@@ -267,7 +268,7 @@ export default function AddNewGroupKPI({
             </div>
           )}
 
-          {newGroupKPI.isMonth === 2 && (
+          {/* {newGroupKPI.isMonth === 2 && (
             <div className="space-y-2">
               <Label htmlFor="date">Ngày *</Label>
               <DatePicker
@@ -280,7 +281,7 @@ export default function AddNewGroupKPI({
                 placeholder="Chọn ngày..."
               />
             </div>
-          )}
+          )} */}
         </div>
       </div>
 

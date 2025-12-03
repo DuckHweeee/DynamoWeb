@@ -50,9 +50,9 @@ export default function EditGroupKPIForm({
       editGroupKPI.year === null ||
       !editGroupKPI.office ||
       editGroupKPI.workingHourGoal === null ||
-      (editGroupKPI.isMonth === 0 && editGroupKPI.month === null) ||
-      (editGroupKPI.isMonth === 1 && editGroupKPI.week === null) ||
-      (editGroupKPI.isMonth === 2 && editGroupKPI.day === null)
+      (editGroupKPI.isMonth === 1 && editGroupKPI.month === null) ||
+      (editGroupKPI.isMonth === 0 && editGroupKPI.week === null) 
+
     ) {
       toast.error("Vui lòng điền đầy đủ thông tin");
       return;
@@ -62,9 +62,9 @@ export default function EditGroupKPIForm({
       // Prepare data based on isMonth flag
       const kpiData = {
         ...editGroupKPI,
-        month: editGroupKPI.isMonth === 0 ? editGroupKPI.month : null,
-        week: editGroupKPI.isMonth === 1 ? editGroupKPI.week : null,
-        day: editGroupKPI.isMonth === 2 ? editGroupKPI.day : null,
+        month: editGroupKPI.isMonth === 1 ? editGroupKPI.month : null,
+        week: editGroupKPI.isMonth === 0 ? editGroupKPI.week : null,
+        
       };
 
       const result = await updateGroupKPI(editGroupKPI.id!, kpiData);
@@ -91,9 +91,9 @@ export default function EditGroupKPIForm({
     setEditGroupKPI((prev) => ({
       ...prev,
       isMonth,
-      month: isMonth === 0 ? prev.month : null,
-      week: isMonth === 1 ? prev.week : null,
-      day: isMonth === 2 ? prev.day : null,
+      month: isMonth === 1 ? prev.month : null,
+      week: isMonth === 0 ? prev.week : null,
+      
     }));
   };
 
@@ -226,9 +226,9 @@ export default function EditGroupKPIForm({
                 <SelectValue placeholder="Chọn loại KPI" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="0">Theo tháng</SelectItem>
-                <SelectItem value="1">Theo tuần</SelectItem>
-                <SelectItem value="2">Theo ngày</SelectItem>
+                <SelectItem value="1">Theo tháng</SelectItem>
+                <SelectItem value="0">Theo tuần</SelectItem>
+               
               </SelectContent>
             </Select>
           </div>
@@ -236,7 +236,7 @@ export default function EditGroupKPIForm({
 
         {/* Period-specific selection */}
         <div className="grid grid-cols-1 gap-6">
-          {editGroupKPI.isMonth === 0 && (
+          {editGroupKPI.isMonth === 1 && (
             <div className="space-y-2">
               <Label htmlFor="month">Tháng *</Label>
               <FlexibleCombobox
@@ -255,7 +255,7 @@ export default function EditGroupKPIForm({
             </div>
           )}
 
-          {editGroupKPI.isMonth === 1 && (
+          {editGroupKPI.isMonth === 0 && (
             <div className="space-y-2">
               <Label htmlFor="week">Tuần *</Label>
               <WeekPicker
@@ -266,32 +266,12 @@ export default function EditGroupKPIForm({
               />
             </div>
           )}
-
-          {editGroupKPI.isMonth === 2 && (
-            <div className="space-y-2">
-              <Label htmlFor="date">Ngày *</Label>
-              <DatePicker
-                value={{
-                  day: editGroupKPI.day || null,
-                  month: editGroupKPI.month || null,
-                }}
-                year={editGroupKPI.year}
-                onSelect={(day, month) => {
-                  handleInputChange("day", day);
-                  handleInputChange("month", month);
-                }}
-                placeholder="Chọn ngày..."
-              />
-            </div>
-          )}
         </div>
       </div>
 
       {/* Performance Metrics Section */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">
-          Chỉ số hiệu suất
-        </h3>
+       
         <div className="grid grid-cols-1 gap-6">
           <div className="space-y-2">
             <Label htmlFor="workingHourGoal">Mục tiêu giờ làm việc *</Label>

@@ -14,6 +14,7 @@ export interface OrderDetail {
     managerGroupName: string;
     numberOfSteps: number;
     office: string;
+    progress: number;
     processTimeSummaryDto: ProcessTimeSummaryDto;
 }
 
@@ -62,4 +63,5 @@ export interface UpdateOrderDetail {
     quantity: number,
     pgTimeGoal: number,
     numberOfSteps: number
+    progress: number
 }

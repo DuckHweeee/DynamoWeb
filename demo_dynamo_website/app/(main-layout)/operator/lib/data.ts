@@ -2,13 +2,13 @@ import { Office, Status } from "./type";
 
 export const officeList: Office[] = [
     {
-        name: "Pin",
+        name: "PIN",
     },
     {
-        name: "Insert",
+        name: "D_INSERT",
     },
     {
-        name: "Mold",
+        name: "MOLD",
     },
 ]
 export const statusList: Status[] = [

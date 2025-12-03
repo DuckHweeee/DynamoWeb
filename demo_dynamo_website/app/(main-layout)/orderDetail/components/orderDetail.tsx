@@ -52,6 +52,10 @@ export default function DetailOrderDetail({ openDetail, onClose, orderDetail }: 
                                 <div className="flex text-lg text-[#c0c0c0]">Nhóm quản lý</div>
                                 <div className="flex text-[16px] font-medium">{orderDetail?.managerGroupName ?? "-"}</div>
                             </div>
+                               <div className="flex flex-col">
+                                <div className="flex text-lg text-[#c0c0c0]">Phòng sản xuất</div>
+                                <div className="flex text-[16px] font-medium">{orderDetail?.office ?? "-"}</div>
+                            </div>
                             <div className="flex flex-col">
                                 <div className="flex text-lg text-[#c0c0c0]">Giờ PG dự kiến</div>
                                 <div className="flex text-[16px] font-medium">{orderDetail?.pgTimeGoal ?? "-"}</div>
