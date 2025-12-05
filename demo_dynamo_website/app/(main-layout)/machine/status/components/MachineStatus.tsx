@@ -159,17 +159,44 @@ export default function MachineStatus({
                                     const elapsedMs = now - machine.startTime;
                                     const elapsedMinutes = Math.floor(elapsedMs / (1000 * 60));
                                     const result = getRemainingPgTime(machine.startTime, machine.pg);
+                                    const status = machine.status;
                                     return (
                                         <span>
                                             <strong className={result.isOver ? "text-red-400" : "text-green-600"}>
                                                 {result.text}
                                             </strong>
-                                            <br />
-                                            <span className="text-xs text-gray-500">
-                                                PG: {formatMinutes(machine.pg)} | Đã chạy: {formatMinutes(elapsedMinutes)}
-                                            </span>
                                         </span>
                                     );
+
+                                })()}
+                            </p>
+                            <p className="text-sm">
+                                {(() => {
+                                    const now = Date.now();
+                                    const elapsedMs = now - machine.startTime;
+                                    const elapsedMinutes = Math.floor(elapsedMs / (1000 * 60));
+                                    const result = getRemainingPgTime(machine.startTime, machine.pg);
+                                    const status = machine.status;
+                                    if (status != "Trống") {
+                                        return (    
+                                            <span>
+                                                <span className="text-xs text-gray-500">
+                                                    PG: {formatMinutes(machine.pg)} | Đã chạy:{" "}
+                                                    {formatMinutes(elapsedMinutes)}
+                                                </span>
+                                            </span>
+                                        );
+                                    } else {
+                                        return (
+                                            <span>
+                                                <span className="text-xs text-gray-500">
+                                                    PG: {formatMinutes(machine.pg)} | Đã chạy: 0
+                                                    giờ 0 phút
+                                                </span>
+                                            </span>
+                                        );
+                                    }
+
                                 })()}
                             </p>
                         </div>

@@ -25,13 +25,13 @@ import { useAuth } from "@/contexts/AuthContext"
 const data = {
     navMain: [
         {
-            title: "Thống kê",
+            title: "THỐNG KÊ",
             url: "/dashboard",
             icon: LayoutGrid,
             isActive: true,
             items: [
                 {
-                    title: "Máy móc",
+                    title: "Máy móc ",
                     url: "/dashboard/machine",
                 },
                 {
@@ -49,7 +49,7 @@ const data = {
             ],
         },
         {
-            title: "Nhân viên",
+            title: "NHÂN VIÊN",
             url: "/operator",
             icon: UserCog,
             items: [
@@ -68,7 +68,7 @@ const data = {
             ],
         },
         {
-            title: "Máy móc",
+            title: "MÁY MÓC",
             url: "/machine",
             icon: MonitorCog,
             items: [
@@ -98,7 +98,7 @@ const data = {
         //     ],
         // },
         {
-            title: "Mã hàng",
+            title: "MÃ HÀNG",
             url: "#",
             icon: MessageCircleMore,
             items: [
@@ -106,10 +106,14 @@ const data = {
                     title: "Mã hàng gia công",
                     url: "/orderDetail",
                 },
+                 {
+                    title: "Trạng thái mã hàng",
+                    url: "/orderDetail/status",
+                },
             ],
         },
         {
-            title: "Gia công",
+            title: "GIA CÔNG",
             url: "/process",
             icon: SquarePen,
             items: [
@@ -125,7 +129,7 @@ const data = {
         },
 
         {
-            title: "Nhóm",
+            title: "NHÓM",
             url: "/group",
             icon: FolderMinus,
             items: [
@@ -144,7 +148,7 @@ const data = {
             ],
         },
         {
-            title: "Lịch sử",
+            title: "LỊCH SỬ",
             url: "/history",
             icon: FolderClock,
             items: [
@@ -163,7 +167,7 @@ const data = {
             ],
         },
         {
-            title: "Tablet",
+            title: "TABLET",
             url: "/tablet",
             icon: Tablet,
             items: [
@@ -182,7 +186,7 @@ const data = {
             ],
         },
         {
-            title: "Tài khoản",
+            title: "TÀI KHOẢN",
             url: "/account",
             icon: UserCog,
             items: [

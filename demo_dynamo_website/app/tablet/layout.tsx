@@ -48,7 +48,7 @@ export default function TabletLayout({
                     <div className="flex gap-x-5">
                         <Link href={"/dashboard/machine"}>
                             <Button
-                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
+                                className={`cursor-pointer hover:bg-blue-200 text-xl  !py-6 px-4 rounded-sm ${tabletCSS}
                                     ${!isProcess && !isNewProcess && !isOperation ? "text-blue-950 border-blue-950 border-3 bg-white" : " bg-white text-blue-950"}
                                 `}
                             >
@@ -57,7 +57,7 @@ export default function TabletLayout({
                         </Link>
                         <Link href={"/tablet/process"}>
                             <Button
-                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
+                                className={`cursor-pointer hover:bg-blue-200 text-xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
                                     ${isProcess
                                         ? "text-blue-950 border-blue-950 border-3 bg-white"
                                         : " bg-white text-blue-950"
@@ -68,7 +68,7 @@ export default function TabletLayout({
                         </Link>
                         <Link href={"/tablet/newProcess"}>
                             <Button
-                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
+                                className={`cursor-pointer hover:bg-blue-200 text-xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
                                     ${isNewProcess
                                         ? "text-blue-950 border-blue-950 border-3 bg-white"
                                         : " bg-white text-blue-950"

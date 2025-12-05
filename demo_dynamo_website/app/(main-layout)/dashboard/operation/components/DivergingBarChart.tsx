@@ -46,7 +46,7 @@ export function DivergingBarChart({
             : 0;
 
     const chartData = [
-        { name: "TB", target: avgtarget, real: avgReal },
+        { name: "TB", target: avgtarget.toFixed(2), real: avgReal.toFixed(2) },
         ...data,
     ];
 

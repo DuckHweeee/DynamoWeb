@@ -7,7 +7,7 @@ export function useOperatorStatus(groupId: string) {
     const [data, setData] = useState<OperatorStatusType[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    useEffect(() => {
+    useEffect(() => {  
         const fetchData = async () => {
             setLoading(true);
             try {

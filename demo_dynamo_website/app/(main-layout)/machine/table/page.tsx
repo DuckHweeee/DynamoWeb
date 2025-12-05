@@ -17,7 +17,7 @@ export default function MachineTablePage() {
     return (
         <MachineTable
             data={machine}
-            title="Hiện Trạng Máy Móc"
+            title="Quản lý máy móc  "
             showAddButton={true}
             showActions={true}
             showViewHistory={false}

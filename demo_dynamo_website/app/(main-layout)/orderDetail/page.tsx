@@ -439,7 +439,7 @@ export default function OrderDetailTable() {
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
                         key={cell.id}
-                        className="text-center font-medium text-[16px] text-[#888888]"
+                        className="text-center font-medium text-[16px] text-[#888888] py-4"
                       >
                         {flexRender(
                           cell.column.columnDef.cell,

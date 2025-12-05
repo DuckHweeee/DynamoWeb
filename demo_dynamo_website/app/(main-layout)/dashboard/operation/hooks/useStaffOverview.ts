@@ -33,6 +33,7 @@ export function useStaffOverview(groupId: string, startDate: string, endDate: st
                 }
 
                 const json: StaffOverview[] = await res.json();
+                console.log("Fetched Staff Overview Data:", json);
                 setData(json);
                 setError(null);
             } catch (err) {

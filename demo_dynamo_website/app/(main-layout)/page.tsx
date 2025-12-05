@@ -51,7 +51,8 @@ export default function Home() {
     queryParams?.groupId ?? "",
     queryParams?.startDate ?? "",
     queryParams?.endDate ?? ""
-  );
+  );  
+  console.log("Staff Overview Data:", dataOverview);
   // Lấy danh sách nhân viên từ tất cả các nhóm
   const staffList = dataStatistic?.staffDto;
   // Lấy danh sách nhóm

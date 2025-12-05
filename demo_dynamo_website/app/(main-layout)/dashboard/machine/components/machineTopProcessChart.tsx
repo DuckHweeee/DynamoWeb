@@ -52,7 +52,7 @@ export function MachineTopProcessChart({
 
         return rawData.map((item) => ({
             name: `${item.machineName}`,
-            number: Math.round(item.totalRunTime),
+            number: item.totalRunTime.toFixed(2),
         }))
     }, [topProcess, dataTopHighMachine, dataTopLowMachine])
 

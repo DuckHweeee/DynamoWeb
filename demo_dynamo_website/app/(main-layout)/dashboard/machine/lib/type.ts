@@ -40,7 +40,7 @@ export interface MachineOverview {
 export interface TopMachine {
     machineName: string,
     machineId: number;
-    totalRunTime: number;
+    totalRunTime: number;   
 }
 
 export interface GroupEfficiency {

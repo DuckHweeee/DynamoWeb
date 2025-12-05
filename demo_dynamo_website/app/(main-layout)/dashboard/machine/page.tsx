@@ -85,6 +85,8 @@ export default function MachineOverview() {
         queryParams?.startDate ?? "",
         queryParams?.endDate ?? ""
     );
+
+    console.log("Top high machines:", dataTopHighMachine);
     // Gọi API lấy dữ liệu Top 5 thấp nhất
     const { data: dataTopLowMachine } = useTopLowMachine(
         queryParams?.groupId ?? "",
