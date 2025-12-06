@@ -1,14 +1,10 @@
-// export interface ListOrderDetailStatusType {
-    
-//     listStaffStatus: ListStaffStatus[];
-// }
-// export interface OrderDetailStatus {
-//     id: string;
-//     machineDto: MachineDto;
-//     staffDto?: any;
-//     drawingCodeName: string;
-//     pgTime: number;
-//     startTime: number;
-//     time: string;
-//     status: string;
-// }
+export interface ListOrderDetailStatusType {
+    orderDetailId: string;
+    orderCode: string;
+    orderStatus: OrderDetailStatus[];
+}
+export interface OrderDetailStatus {
+    partNumber: number;
+    totalStep: number;
+    doneStep: number;
+}
