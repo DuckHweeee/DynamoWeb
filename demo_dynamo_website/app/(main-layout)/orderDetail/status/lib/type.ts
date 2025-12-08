@@ -7,4 +7,5 @@ export interface OrderDetailStatus {
     partNumber: number;
     totalStep: number;
     doneStep: number;
+    doingStep: number;
 }

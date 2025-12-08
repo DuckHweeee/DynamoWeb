@@ -4,17 +4,23 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import OrderDetailStatus from "./components/OrderDetailStatus"
 import { useGroups } from "@/hooks/useGroup"
 import { useEffect, useState } from "react"
+import OrderList from "./components/OrderList"
+import { useOrderDetailStatus } from "./hooks/useOrderDetailStatus"
+
+
 //import { useMachineStatus } from "./hook/useMachineStatus"
 
 export default function StatusMachine() {
     const [selectedGroup, setSelectedGroup] = useState<string>()
     const { data: groupList } = useGroups()
 
-    // useEffect(() => {
-    //     if (groupList && groupList.length > 0 && !selectedGroup) {
-    //         setSelectedGroup(String(groupList[0].groupId));
-    //     }
-    // }, [groupList, selectedGroup]);
+    const { data: listOrderData } = useOrderDetailStatus()
+
+    useEffect(() => {
+        if (groupList && groupList.length > 0 && !selectedGroup) {
+            setSelectedGroup(String(groupList[0].groupId));
+        }
+    }, [groupList, selectedGroup]);
 
     // const { data: machineStatusList } = useMachineStatus(selectedGroup ?? "")
 
@@ -23,7 +29,7 @@ export default function StatusMachine() {
         <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
             <div className="flex flex-row items-center justify-between py-4">
                 <div className="w-2/3">
-                    <p className="text-2xl font-bold">Hiện Trạng Mã Hàng</p>
+                    <p className="text-2xl font-bold pb-4 pl-2">Hiện Trạng Mã Hàng</p>
                 </div>
                 <div className="w-1/3 flex items-center justify-end gap-5">
                     {/* <Input
@@ -70,7 +76,7 @@ export default function StatusMachine() {
                     </div>
                 </div>
             </div>
-            <OrderDetailStatus dataMachineStatus={machineStatusList} />
+            <OrderList data={listOrderData} />
         </div>
     )
 }

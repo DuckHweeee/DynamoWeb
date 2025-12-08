@@ -153,7 +153,7 @@ const KanbanPage = () => {
                         ).length
                       }
                     </div>
-                  </div>
+                  </div>  
                  </KanbanHeader>
                  <div className="flex-1 overflow-hidden">
                    <KanbanCards id={column.id}>
@@ -171,16 +171,16 @@ const KanbanPage = () => {
                           {/* Header with Order Code and Step */}
                           <div className="flex items-start justify-between gap-3 mb-3">
                             <div className="flex flex-col gap-1 flex-1">
-                              <h4 className="font-medium text-sm text-foreground leading-tight">
+                              <h4 className="font-medium text-base text-foreground leading-tight">
                                 {process.orderDetailDto?.orderCode || "N/A"}
                               </h4>
-                              <span className="text-xs text-muted-foreground">
-                                Bước {process.stepNumber} - Phần{" "}
+                              <span className="text-base text-muted-foreground">
+                                TT Nguyên công: {process.stepNumber} - TT Sản phẩm:{" "}
                                 {process.partNumber}
                               </span>
                             </div>
                             <div className="flex flex-col items-end gap-1">
-                              <span className="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-700 rounded">
+                              <span className="text-base font-medium px-2 py-1 bg-blue-100 text-blue-700 rounded">
                                 {process.processType}
                               </span>
                             </div>
@@ -190,34 +190,34 @@ const KanbanPage = () => {
                           <div className="mb-3 p-2 bg-gray-50 rounded-md">
                             <div className="flex items-center gap-2">
                               <div className="h-2 w-2 rounded-full bg-blue-500"></div>
-                              <span className="text-xs font-medium text-gray-700">
+                              <span className="text-base font-medium text-gray-700">
                                 Máy:{" "}
                                 {process.machineDto?.machineName ||
                                   "Chưa phân máy"}
                               </span>
                             </div>
-                            <div className="text-xs text-muted-foreground mt-1">
+                            {/* <div className="text-xs text-muted-foreground mt-1">
                               Nhóm: {process.machineDto?.groupName || "N/A"} |
                               Loại: {process.machineDto?.machineType || "N/A"}
-                            </div>
+                            </div> */}
                           </div>
 
                           {/* Staff Assignment */}
                           <div className="mb-3">
                             <div className="flex items-center gap-2">
                               <Avatar className="h-5 w-5 shrink-0">
-                                <AvatarFallback className="text-xs bg-primary/10 text-primary border">
+                                <AvatarFallback className="text-base bg-primary/10 text-primary border">
                                   {staffNames.charAt(0)}
                                 </AvatarFallback>
                               </Avatar>
-                              <span className="text-xs text-muted-foreground">
+                              <span className="text-base text-muted-foreground">
                                 {staffNames}
                               </span>
                             </div>
                           </div>
 
                           {/* Time Information */}
-                          <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-gray-100 pt-2">
+                          <div className="flex items-center justify-between text-base text-muted-foreground border-t border-gray-100 pt-2">
                             <div className="flex flex-col gap-1">
                               <span>
                                 Bắt đầu:{" "}
@@ -237,7 +237,7 @@ const KanbanPage = () => {
                               )}
                             </div>
                             <div className="text-right">
-                              <div className="text-xs font-medium">
+                              <div className="text-base font-medium">
                                 PG Time: {process.pgTime} mins
                               </div>
                             </div>
@@ -246,7 +246,7 @@ const KanbanPage = () => {
                           {/* Process Status Indicator */}
                           <div className="mt-3 pt-2 border-t border-gray-100">
                             <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-1 text-xs">
+                              <div className="flex items-center gap-1 text-base">
                                 <div
                                   className={`h-2 w-2 rounded-full ${process.processStatus === 1
                                       ? "bg-gray-500"
@@ -263,9 +263,7 @@ const KanbanPage = () => {
                                       : "Hoàn thành"}
                                 </span>
                               </div>
-                              <span className="text-xs text-muted-foreground">
-                                SL: {process.orderDetailDto?.quantity || 0}
-                              </span>
+                             
                             </div>
                           </div>
                         </div>

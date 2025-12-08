@@ -119,7 +119,7 @@ export function GroupTable() {
             {/* Header */}
             <div className="flex items-center justify-between py-4">
                 <div className="flex justify-start">
-                    <h1 className="text-2xl font-bold">Quản Lý Nhóm</h1>
+                    <h1 className="text-2xl font-bold pl-2">Quản Lý Nhóm</h1>
                 </div>
                 <div className="flex items-center gap-3 justify-end">
                     <div className="relative">
@@ -155,7 +155,7 @@ export function GroupTable() {
                     <TableHeader>
                         <TableRow className="text-lg font-bold">
                             <TableHead>
-                                <Button className="text-lg font-bold" variant="ghost">
+                                <Button className="text-lg font-bold py-5" variant="ghost">
                                     Tên Nhóm
                                 </Button>
                             </TableHead>
@@ -183,18 +183,18 @@ export function GroupTable() {
                             </TableRow>
                         ) : (
                             filteredGroups.map((group) => (
-                                <TableRow key={group.groupId}>
-                                    <TableCell className="pl-5 font-medium text-lg">
+                                <TableRow key={group.groupId} >
+                                    <TableCell className="pl-5  text-lg py-5" >
                                         <div>
                                             <div className="text-lg">{group.groupName}</div>
                                         </div>
                                     </TableCell>
-                                    <TableCell className="pl-5 font-medium text-lg">
+                                    <TableCell className="pl-5  text-lg">
                                         <div className="text-lg">
                                             {group.createdDate ? new Date(group.createdDate).toLocaleDateString('vi-VN') : "N/A"}
                                         </div>
                                     </TableCell>
-                                    <TableCell className="pl-5 font-medium text-lg">
+                                    <TableCell className="pl-5  text-lg">
                                         <div className="text-lg">
                                             {group.updatedDate ? new Date(group.updatedDate).toLocaleDateString('vi-VN') : "N/A"}
                                         </div>

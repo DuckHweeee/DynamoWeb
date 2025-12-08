@@ -278,11 +278,11 @@ export default function OperatorTable() {
                                 <TableRow key={headerGroup.id} className="text-lg font-bold">
                                     {headerGroup.headers.map((header) => {
                                         return (
-                                            <TableHead key={header.id} className="text-center py-2">
+                                            <TableHead key={header.id} className="text-center py-3">
                                                 {header.isPlaceholder
                                                     ? null
                                                     : flexRender(
-                                                        header.column.columnDef.header,
+                                                        header.column.columnDef.header, 
                                                         header.getContext()
                                                     )}
                                             </TableHead>
@@ -303,7 +303,7 @@ export default function OperatorTable() {
                                             return (
                                                 <TableCell
                                                     key={cell.id}
-                                                    className="font-medium text-[17px] text-[#000000] text-center"
+                                                    className="font-medium text-[17px] text-[#000000] text-center py-5"
                                                 >
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                 </TableCell>

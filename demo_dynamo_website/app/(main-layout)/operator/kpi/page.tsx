@@ -333,7 +333,7 @@ export default function OperatorTable() {
                                             return (
                                                 <TableCell
                                                     key={cell.id}
-                                                    className="font-medium text-[17px] text-[#000000] text-center"
+                                                    className=" text-[17px] text-[#000000] text-center py-5"
                                                 >
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                 </TableCell>

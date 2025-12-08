@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 export type UserRole = "Admin" | "Operator";
 
 export interface User {
-  id: string;
+  userId: string;
   username: string;
   email: string;
   fullname: string;
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       // Transform API response to match our User interface
       const user: User = {
-        id: userData.id,
+        userId: userData.userId,
         username: userData.username,
         email: userData.email,
         fullname: userData.fullname,

@@ -137,7 +137,7 @@ function getDefaultColumns<T = any>({
         {
             accessorKey: "pgTime" as keyof T,
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-bas e font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Giờ PG <ArrowUpDown />
                 </Button>
             ),
@@ -366,7 +366,7 @@ export default function ProcessTable<T = any>({
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888]">
+                                        <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888] py-5">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}

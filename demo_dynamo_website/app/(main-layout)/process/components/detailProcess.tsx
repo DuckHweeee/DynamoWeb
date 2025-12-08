@@ -7,7 +7,7 @@ import ProgressSteps from "./ProgressSteps";
 import dayjs from "dayjs";
 import Steps from "../../orderDetail/components/steps";
 
-export interface OrderDetailProps {
+export interface OrderDetailProps { 
     openDetail: boolean;
     onClose: () => void;
     process: Process | null

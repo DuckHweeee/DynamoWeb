@@ -378,7 +378,7 @@ export function MachineTable({
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id} className="text-lg font-bold">
                                 {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id} className="text-center">
+                                    <TableHead key={header.id} className="text-center py-3">
                                         {!header.isPlaceholder && flexRender(header.column.columnDef.header, header.getContext())}
                                     </TableHead>
                                 ))}
@@ -411,7 +411,7 @@ export function MachineTable({
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#393939]">
+                                        <TableCell key={cell.id} className="text-center text-[16px] text-[#393939] py-5">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}

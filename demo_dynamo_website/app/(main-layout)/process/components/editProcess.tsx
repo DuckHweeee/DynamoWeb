@@ -77,7 +77,7 @@ export default function EditProcessForm({
             !endDate ||
             !updateProcess.machineId ||
             !updateProcess.staffId ||
-            !user?.id
+            !user?.userId
         ) {
             toast.error("Vui lòng nhập đầy đủ thông tin nhân viên.");
             return;
@@ -102,7 +102,7 @@ export default function EditProcessForm({
                         orderCode: updateProcess.orderCode,
                         machineId: updateProcess.machineId,
                         staffId: updateProcess.staffId,
-                        plannerId: user.id,
+                        plannerId: user.userId,
                     }),
                 }
             );

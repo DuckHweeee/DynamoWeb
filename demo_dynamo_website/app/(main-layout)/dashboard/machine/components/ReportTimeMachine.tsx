@@ -74,7 +74,7 @@ export function ReportTimeMachine({ data, type }: ReportTimeOperatorProps) {
                         {convertHoursToHM(data?.totalRunTime ?? 0)}
                     </p>
 
-                    <div className="mt-2">
+                     <div className="mt-2">
                         <p className="text-lg font-medium text-[#343A40] flex items-center">
                             {/* Tổng Giờ Làm {typeDate[data.timeType]} */}
                             Tổng Giờ Chạy  {typeDate[type]}
