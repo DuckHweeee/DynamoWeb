@@ -27,7 +27,7 @@ export default function EditDailyReportForm({ report, onUpdate, onCancel }: Edit
   const { updateDailyReport } = useDailyReportMutations();
 
   // Multiple strategies to find current admin
-  const currentAdmin = admins?.find(admin => admin.id === user?.id) ||
+  const currentAdmin = admins?.find(admin => admin.id === user?.userId) ||
     admins?.find(admin => admin.username === user?.username) ||
     admins?.find(admin => admin.email === user?.email) ||
     admins?.find(admin => admin.fullname === user?.fullname);
@@ -119,7 +119,7 @@ export default function EditDailyReportForm({ report, onUpdate, onCancel }: Edit
     }
 
     // Use current admin ID, or fall back to user ID, or use hardcoded admin ID as last resort
-    const adminId = currentAdmin?.id || user?.id;
+    const adminId = currentAdmin?.id || user?.userId;
 
     if (!adminId) {
       toast.error("Không tìm thấy thông tin admin");

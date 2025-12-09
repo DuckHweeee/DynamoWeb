@@ -51,7 +51,7 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
             !endDate ||
             !newProcess.machineId ||
             !newProcess.staffId ||
-            !user?.id
+            !user?.userId
         ) {
             toast.error("Vui lòng nhập đầy đủ thông tin nhân viên.");
             return;
@@ -76,7 +76,7 @@ export default function AddProcessForm({ onCancel }: AddProcessFormProps) {
                         orderCode: newProcess.orderCode,
                         machineId: newProcess.machineId,
                         staffId: newProcess.staffId,
-                        plannerId: user.id,
+                        plannerId: user.userId,
                     }),
                 }
             );
