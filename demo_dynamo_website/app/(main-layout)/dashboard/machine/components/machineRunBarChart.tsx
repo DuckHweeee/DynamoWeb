@@ -66,9 +66,9 @@ export default function MachineRunBarChart({
     };
 
     return (
-        < Card className="h-full">
+        < Card className="h-full shadow-md shadow-green-200  border border-green-200">
             <CardHeader>
-                <p className="text-2xl font-bold">{title}</p>
+                <p className="text-xl font-semibold mb-1">{title}</p>
                 {/* <p className="text-lg text-gray-500 mb-4">{description}</p> */}
             </CardHeader>
             <CardContent>
@@ -79,7 +79,7 @@ export default function MachineRunBarChart({
                         margin={{
                             left: -30,
                         }}
-                    >
+                    >   
                         <YAxis 
                             domain={[yAxisMin, yAxisMax]}
                             tickFormatter={formatYAxisTick}

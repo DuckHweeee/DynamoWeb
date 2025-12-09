@@ -84,7 +84,7 @@ export default function DateRangeSelector({ onChange }: Props) {
     }, [mode, selectedDate, selectedWeek, selectedMonth, selectedYear, onChange])
 
     return (
-        <div className="flex gap-15">
+        <div className="flex gap-3">
             <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-600 tracking-wide">Loại</label>
                 <Select value={mode} onValueChange={(val) => setMode(val as Mode)}>

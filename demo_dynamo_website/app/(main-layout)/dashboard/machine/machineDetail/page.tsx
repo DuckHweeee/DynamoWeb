@@ -113,7 +113,7 @@ const MachineDetailOverview = () => {
         <>
             <div className="m-2 px-4 py-5 bg-white rounded-[10px] shadow" >
                 <div>
-                    <div className="flex justify-between items-center mr-5">
+                    <div className="flex justify-between items-center mr-5 border-b pb-3 py-4 ">
                         <p className="text-3xl font-semibold">Thống kê chi tiết máy {selectedMachineName}</p>
                         <Button
                             variant="outline"
@@ -124,7 +124,7 @@ const MachineDetailOverview = () => {
                             <Download className="h-4 w-4" />
                         </Button>
                     </div>
-                    <div className="flex flex-row py-3 gap-15 justify-end">
+                    <div className="flex flex-row py-3 gap-3 justify-end">
                         <DateRangeSelectorDetail
                             startDate={selectedStartDate}
                             endDate={selectedEndDate}

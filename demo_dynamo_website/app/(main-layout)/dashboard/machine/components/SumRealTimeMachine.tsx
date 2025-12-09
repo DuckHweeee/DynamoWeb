@@ -56,10 +56,10 @@ export function SumRealTimeMachine({
     }))
 
     return (
-        <Card>
+        <Card className="shadow-md shadow-blue-300 border border-blue-200">
             <CardHeader>
-                <p className="text-2xl font-bold">{title}</p>
-                <p className="text-xl text-gray-500 mb-4">{description}</p>
+                <p className="text-xl font-semibold">{title}</p>
+                <p className="text-lg text-gray-500 mb-4">{description}</p>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig} className="h-[350px] w-full">

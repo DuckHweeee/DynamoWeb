@@ -44,7 +44,7 @@ export function ReportTimeMachineDetail({ data, type }: ReportTimeOperatorProps)
     return (
         <>
             <div className="my-5 flex gap-3 items-center justify-between">
-                <div className="inline-block rounded-sm bg-white px-5 py-4 shadow-md border w-full">
+                <div className="inline-block rounded-lg bg-white px-5 py-4 shadow-md border w-full">
                     <div className="flex items-start justify-between">
                         <MonitorDot
                             size={24}
@@ -89,7 +89,7 @@ export function ReportTimeMachineDetail({ data, type }: ReportTimeOperatorProps)
                     </div>
                 </div>
 
-                <div className="inline-block rounded-sm bg-white px-6 py-4 shadow-md border w-full">
+                <div className="inline-block rounded-lg bg-white px-6 py-4 shadow-md border w-full">
                     <div className="flex items-start justify-between">
                         <MonitorDot
                             size={24}
@@ -134,7 +134,7 @@ export function ReportTimeMachineDetail({ data, type }: ReportTimeOperatorProps)
                     </div>
                 </div>
 
-                <div className="inline-block rounded-sm bg-white px-6 py-4 shadow-md border w-full">
+                <div className="inline-block rounded-lg bg-white px-6 py-4 shadow-md border w-full">
                     <div className="flex items-start justify-between">
                         <MonitorDot
                             size={24}
@@ -181,7 +181,7 @@ export function ReportTimeMachineDetail({ data, type }: ReportTimeOperatorProps)
 
 
                 {/*  */}
-                <div className="inline-block rounded-sm bg-white px-6 py-4 shadow-md border w-full">
+                {/* <div className="inline-block rounded-sm bg-white px-6 py-4 shadow-md border w-full">
                     <div className="flex items-start justify-between">
                         <MonitorDot
                             size={24}
@@ -212,8 +212,7 @@ export function ReportTimeMachineDetail({ data, type }: ReportTimeOperatorProps)
                     </p>
 
                     <div className="mt-2">
-                        <p className="text-lg font-medium text-[#343A40] flex items-center">
-                            {/* Tổng Điểm {typeDate[data.timeType]} */}
+                        <p className="text-lg font-medium text-[#343A40] flex items-center">                      
                             Tổng Giờ PG  {typeDate[type]}
                             {(data?.pgTimeRate ?? 0) !== undefined && (
                                 (data?.pgTimeRate ?? 0) >= 0 ? (
@@ -224,8 +223,8 @@ export function ReportTimeMachineDetail({ data, type }: ReportTimeOperatorProps)
                             )}
                         </p>
                     </div>
-                </div>
-                <div className="inline-block rounded-sm bg-white px-6 py-4 shadow-md border w-full">
+                </div> */}
+                <div className="inline-block rounded-lg bg-white px-6 py-4 shadow-md border w-full">
                     <div className="flex items-start justify-between">
                         <MonitorDot
                             size={24}

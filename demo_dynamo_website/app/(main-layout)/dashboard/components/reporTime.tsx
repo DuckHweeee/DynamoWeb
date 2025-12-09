@@ -6,7 +6,7 @@ export function ReportTime({ title, description }: { title: string; description:
             <div className="flex flex-row items-center justify-between mt-2">
                 <p className="text-3xl font-semibold">{title}</p>
 
-                <div className="flex gap-15 flex-row items-center justify-between">
+                <div className="flex gap-3 flex-row items-center justify-between">
                     <p className="text-xl font-medium">Tổng Số: </p>
                     <p className="text-3xl font-bold text-[#074695]">{description}</p>
                 </div>

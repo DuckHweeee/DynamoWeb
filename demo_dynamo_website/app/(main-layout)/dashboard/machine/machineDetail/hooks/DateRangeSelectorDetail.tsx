@@ -141,7 +141,7 @@ export default function DateRangeSelectorDetail({ startDate, endDate, onChange }
     const weeks = getWeeksOfYear(selectedYear ?? dayjs().year())
 
     return (
-        <div className="flex gap-15">
+        <div className="flex gap-3">
             <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-600 tracking-wide">Loại</label>
                 <Select value={mode} onValueChange={(val) => setMode(val as Mode)}>

@@ -26,7 +26,8 @@ export function ImportDialog({
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
     const [dragActive, setDragActive] = useState(false)
     const fileInputRef = useRef<HTMLInputElement>(null)
-    const { importExcel, loading, error } = useImportExcel(endpoint)
+    const [error, setError] = useState<string | null>(null)
+    const { importExcel, loading, error: importError } = useImportExcel(endpoint)
 
     const handleFileSelect = (file: File) => {
         // Validate file type
@@ -79,7 +80,7 @@ export function ImportDialog({
         if (!selectedFile) return
 
         try {
-            const result = await importExcel(selectedFile)
+            await importExcel(selectedFile)
             // console.log("Import successful:", result)
 
             if (onImportSuccess) {
@@ -88,7 +89,7 @@ export function ImportDialog({
 
             handleClose()
         } catch (error) {
-            console.error("Import error:", error)
+            setError(importError)
         }
     }
 
@@ -98,6 +99,7 @@ export function ImportDialog({
         if (fileInputRef.current) {
             fileInputRef.current.value = ""
         }
+        setError(null)
         onClose()
     }
 

@@ -340,7 +340,7 @@ export default function OrderDetailTable() {
 
   const handleImportSuccess = () => {
     toast.success("Import thành công!");
-    window.location.reload();
+     window.location.reload();
   };
 
   const columns = getColumns({

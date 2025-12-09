@@ -100,12 +100,6 @@ export default function TabletProcess() {
       };
       await axios.put(url, body);
       toast.success("Gửi thành công!");
-      // Refetch lại dữ liệu
-      // await fetchProcess();
-      // Reset selected values and close expanded row
-      // setSelectedMachineId(null);
-      // setSelectedPoint(null);
-      // setSelectedPGTime(null);
       const res = await axios.get(
         `${URL}/api/drawing-code-process/orderDetail/${expandedRowId}`
       );
@@ -117,7 +111,8 @@ export default function TabletProcess() {
         error?.response?.data ||
         "Cập nhật thất bại. Vui lòng thử lại.";
       toast.error(backendMessage);
-    } finally {
+    }
+     finally {
       setLoading(false);
     }
   };

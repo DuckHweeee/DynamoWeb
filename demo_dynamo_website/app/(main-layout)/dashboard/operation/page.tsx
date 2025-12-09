@@ -154,7 +154,7 @@ export default function Operation() {
               {/* <Download className="h-4 w-4" /> */}
             </Button>
           </div>
-          <div className="flex flex-row py-3 gap-15 justify-end">
+          <div className="flex flex-row py-3 gap-3 justify-end">
             <DateRangeSelector
               onChange={({ startDate, endDate, timeType }) => {
                 setStartDate(startDate);
