@@ -39,7 +39,7 @@ export default function AddDailyReportForm({
 
   // Multiple strategies to find current admin
   const currentAdmin =
-    admins?.find((admin) => admin.id === user?.id) ||
+    admins?.find((admin) => admin.id === user?.userId) ||
     admins?.find((admin) => admin.username === user?.username) ||
     admins?.find((admin) => admin.email === user?.email) ||
     admins?.find((admin) => admin.fullname === user?.fullname);
@@ -122,7 +122,7 @@ export default function AddDailyReportForm({
 
     // Use current admin ID, or fall back to user ID, or use hardcoded admin ID as last resort
     const adminId =
-      currentAdmin?.id || user?.id || "361f3631-1b80-45d8-a726-834c514dab76";
+      currentAdmin?.id || user?.userId || "361f3631-1b80-45d8-a726-834c514dab76";
 
     if (!adminId) {
       toast.error("Không tìm thấy thông tin admin");
