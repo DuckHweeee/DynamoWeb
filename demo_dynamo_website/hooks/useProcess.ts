@@ -11,7 +11,7 @@ export function useProcess() {
     const fetchData = useCallback(async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`${url}/api/drawing-code-process`);
+            const res = await axios.get(`${url}/api/drawing-code-process/planned`);
             // Ensure we always work with arrays
             const responseData = Array.isArray(res.data) ? res.data : [];
             const filtered = responseData.filter((item: Process2) => item.isPlan === 1);

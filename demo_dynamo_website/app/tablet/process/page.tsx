@@ -78,11 +78,11 @@ export default function TabletProcess() {
             header: ({ column }) => {
                 return (
                     <Button
-                        className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
+                        className="cursor-pointer text-xl  hover:bg-blue-950 hover:text-white"
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
-                        Đối Tượng Gia Công
+                        Đối tượng gia công
                         <ArrowUpDown />
                     </Button>
                 )
@@ -94,7 +94,7 @@ export default function TabletProcess() {
             accessorFn: (row) => row.orderDetailDto?.orderCode ?? "",
             header: ({ column }) => (
                 <Button
-                    className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
+                    className="cursor-pointer text-xl hover:bg-blue-950 hover:text-white"
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
@@ -111,11 +111,11 @@ export default function TabletProcess() {
             header: ({ column }) => {
                 return (
                     <Button
-                        className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
+                        className="cursor-pointer text-xl font-bold hover:bg-blue-950 hover:text-white"
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
-                        Thứ Tự Nguyên Công
+                        Thứ tự nguyên công
                         <ArrowUpDown />
                     </Button>
                 )
@@ -127,11 +127,11 @@ export default function TabletProcess() {
             header: ({ column }) => {
                 return (
                     <Button
-                        className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
+                        className="cursor-pointer text-xl hover:bg-blue-950 hover:text-white"
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
-                        Thứ Tự Gia Công
+                        Thứ tự gia công
                         <ArrowUpDown />
                     </Button>
                 )
@@ -143,11 +143,11 @@ export default function TabletProcess() {
             header: ({ column }) => {
                 return (
                     <Button
-                        className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
+                        className="cursor-pointer text-xl hover:bg-blue-950 hover:text-white"
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
-                        Điểm Gia Công
+                        Điểm gia công
                         <ArrowUpDown />
                     </Button>
                 )
@@ -159,7 +159,7 @@ export default function TabletProcess() {
             header: ({ column }) => {
                 return (
                     <Button
-                        className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
+                        className="cursor-pointer text-xl hover:bg-blue-950 hover:text-white"
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
@@ -177,7 +177,7 @@ export default function TabletProcess() {
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
+        getPaginationRowModel: getPaginationRowModel(), 
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
@@ -197,7 +197,7 @@ export default function TabletProcess() {
     return (
         <div className="w-full py-3 px-3 bg-white">
             <div className="flex items-center justify-between pb-3">
-                <p className="text-3xl capitalize">Danh sách mã bản vẽ được thiết lập</p>
+                <p className=" font-bold text-2xl capitalize px-5 py-5">DANH SÁCH GIA CÔNG CHI TIẾT ĐÃ ĐƯỢC LẬP</p>
                 <div className="relative max-w-sm w-full">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <Input
@@ -227,7 +227,7 @@ export default function TabletProcess() {
                                     <TableRow className="" key={headerGroup.id}>
                                         {headerGroup.headers.map((header) => {
                                             return (
-                                                <TableHead key={header.id} className="text-center text-white bg-blue-950 p-2 font-semibold">
+                                                <TableHead key={header.id} className="text-center text-white bg-[#074695] p-2 font-semibold">
                                                     {header.isPlaceholder
                                                         ? null
                                                         : flexRender(
@@ -247,7 +247,7 @@ export default function TabletProcess() {
                                         return (
                                             <Fragment key={row.id}>
                                                 <TableRow
-                                                    className={`${isOdd ? "bg-gray-100" : ""} text-2xl font-semibold !border-none`}
+                                                    className={`${isOdd ? "bg-gray-100" : ""} text-lg  !border-none`}
                                                     onClick={() => {
                                                         setExpandedRowId(prev =>
                                                             prev === row.original.processId ? null : row.original.processId
@@ -263,7 +263,7 @@ export default function TabletProcess() {
                                                     }
                                                 >
                                                     {row.getVisibleCells().map((cell) => (
-                                                        <TableCell key={cell.id} className="text-center">
+                                                        <TableCell key={cell.id} className="text-center p-8">
                                                             {flexRender(
                                                                 cell.column.columnDef.cell,
                                                                 cell.getContext()
@@ -277,12 +277,12 @@ export default function TabletProcess() {
                                                             <div className="pb-3 max-2xl:pl-6 max-2xl:pr-3  min-2xl:pr-3 min-2xl:pl-10 flex items-center gap-3">
                                                                 <div className="flex gap-6 w-full">
                                                                     <div className="w-1/2 flex items-center gap-2">
-                                                                        <p className="font-bold text-2xl whitespace-nowrap">Chọn máy:</p>
+                                                                        <p className=" text-xl whitespace-nowrap">Chọn máy:</p>
                                                                         <Select
                                                                             value={selectedMachineId || row.original.planDto?.machineId?.toString()}
                                                                             onValueChange={(value) => setSelectedMachineId(value)}
                                                                         >
-                                                                            <SelectTrigger className="w-full text-2xl">
+                                                                            <SelectTrigger className="w-full text-xl py-6">
                                                                                 <SelectValue placeholder="Máy" />
                                                                             </SelectTrigger>
                                                                             <SelectContent>
@@ -300,12 +300,12 @@ export default function TabletProcess() {
                                                                     </div>
 
                                                                     <div className="w-1/2 flex items-center gap-2">
-                                                                        <p className="font-bold text-2xl whitespace-nowrap">Chọn nhân viên:</p>
+                                                                        <p className=" text-xl whitespace-nowrap">Chọn nhân viên:</p>
                                                                         <Select
                                                                             value={selectedStaffId || staff.find(s => s.staffId === row.original.planDto?.staffId)?.id}
                                                                             onValueChange={(value) => setSelectedStaffId(value)}
                                                                         >
-                                                                            <SelectTrigger className="w-full text-2xl">
+                                                                            <SelectTrigger className="w-full text-xl py-6">
                                                                                 <SelectValue placeholder="Nhân viên" />
                                                                             </SelectTrigger>
                                                                             <SelectContent>
@@ -322,7 +322,7 @@ export default function TabletProcess() {
                                                                 </div>
                                                                 <div>
                                                                     <Button
-                                                                        className="bg-green-700 hover:bg-green-600 px-10 py-6 text-xl font-bold"
+                                                                        className="bg-green-700 hover:bg-green-600 px-10 py-6 text-lg "
                                                                         onClick={() => handleSubmit(row.original.processId)}
                                                                     >
                                                                         Gửi

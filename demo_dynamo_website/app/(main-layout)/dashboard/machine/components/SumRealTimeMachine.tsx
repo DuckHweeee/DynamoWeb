@@ -56,7 +56,7 @@ export function SumRealTimeMachine({
     }))
 
     return (
-        <Card className="shadow-md shadow-blue-300 border border-blue-200">
+        <Card className="shadow-md shadow-blue-200 border border-blue-300">
             <CardHeader>
                 <p className="text-xl font-semibold">{title}</p>
                 <p className="text-lg text-gray-500 mb-4">{description}</p>

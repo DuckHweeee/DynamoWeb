@@ -241,7 +241,7 @@ export default function OperatorTable() {
     return (
         <div className="w-full">
             <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
-                <div className="flex flex-row items-center justify-between py-4">
+                <div className="flex flex-row items-center justify-between py-4 border-b border-blue-300 mb-4">
                     <div className="w-2/3">
                         <p className="text-2xl font-bold">Danh Sách Mục Tiêu Máy</p>
                     </div>

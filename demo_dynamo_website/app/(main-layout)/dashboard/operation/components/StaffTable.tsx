@@ -128,7 +128,7 @@ export default function StaffTable({ title, description, staffList }: { title: s
     })
     return (
         // <div className="w-full">
-        <div className="my-2 px-4 py-2 bg-white rounded-[10px] shadow border">
+        <div className="my-2 px-4 py-2 bg-white rounded-[10px] shadow border border-purple-300 shadow-purple-200">
             <div className="flex flex-row items-center justify-between py-4">
                 <div className="w-2/3">
                     <p className="text-2xl font-bold">{title}</p>

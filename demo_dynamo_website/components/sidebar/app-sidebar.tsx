@@ -38,14 +38,14 @@ const data = {
                     title: "Vận hành",
                     url: "/dashboard/operation",
                 },
-                {
-                    title: "Gia công chi tiết",
-                    url: "/dashboard/process",
-                },
-                {
-                    title: "Bản vẽ",
-                    url: "/dashboard/drawingCode",
-                },
+                // {
+                //     title: "Gia công chi tiết",
+                //     url: "/dashboard/process",
+                // },
+                // {
+                //     title: "Bản vẽ",
+                //     url: "/dashboard/drawingCode",
+                // },
             ],
         },
         {
@@ -153,7 +153,7 @@ const data = {
             icon: FolderClock,
             items: [
                 {
-                    title: " Quy trình",
+                    title: " Gia công chi tiết",
                     url: "/history/historyProcess",
                 },
                 {

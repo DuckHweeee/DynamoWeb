@@ -18,7 +18,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import CreateProcessDialog from "./component/addOperation";
+// import CreateProcessDialog from "./component/addOperation";
 import { useFetchMachines, useFetchOperators } from "@/hooks/useFetchData";
 import { CurrentStaff, Machine2, OrderDetailDto, Process2, Staff } from "@/lib/type";
 import axios from "axios";
@@ -722,7 +722,7 @@ export default function TabletOperation() {
             }
 
             {/* Các nút bấm */}
-            < div className="flex gap-3 items-center justify-end px-6">
+            < div className="flex gap-3 items-center justify-end px-6 mt-3">
                 <div className="flex gap-4">
                     {isEditing && (
                         <Button

@@ -142,8 +142,8 @@ export default function Operation() {
     <>
       <div className="m-2 px-4 py-5 bg-white rounded-[10px] shadow">
         <div>
-          <div className="flex justify-between items-center mr-5">
-            <p className="text-3xl font-semibold">Thống kê vận hành</p>
+          <div className="flex justify-between items-center mr-5 border-b pb-3">
+            <p className="text-3xl font-semibold pb-3">Thống kê vận hành</p>
             <Button
               variant="outline"
               size="sm"

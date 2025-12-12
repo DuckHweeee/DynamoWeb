@@ -84,7 +84,7 @@ export function MachineProcessBarChart({
     }, [currentPage, totalPages, isScrolling])
 
     return (
-        <Card className="!w-full shadow-md shadow-blue-300 border border-blue-200" ref={containerRef}>
+        <Card className="!w-full shadow-md shadow-blue-200 border border-blue-300" ref={containerRef}>
             <CardHeader>
                 <div className="flex justify-between items-center">
                     <div>

@@ -117,7 +117,7 @@ export function GroupTable() {
     return (
         <div className="m-2 my-1.5 px-4 py-3 bg-white rounded-[10px] shadow">
             {/* Header */}
-            <div className="flex items-center justify-between py-4">
+            <div className="flex items-center justify-between py-4 border-b border-blue-300 mb-4">
                 <div className="flex justify-start">
                     <h1 className="text-2xl font-bold pl-2">Quản Lý Nhóm</h1>
                 </div>

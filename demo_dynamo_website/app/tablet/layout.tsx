@@ -80,7 +80,7 @@ export default function TabletLayout({
                         <Link href={"/tablet/operation"}>
                             <Button
                                 variant="outline"
-                                className={`cursor-pointer hover:bg-blue-200 text-2xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
+                                className={`cursor-pointer hover:bg-blue-200 text-xl font-semibold !py-6 px-4 rounded-sm ${tabletCSS}
                                      ${isOperation
                                         ? " bg-white border-blue-950 border-3"
                                         : "text-blue-950 "
@@ -94,7 +94,7 @@ export default function TabletLayout({
                             onClick={logout}
                             variant="outline"
                             size="sm"
-                            className="text-2xl font-semibold !py-6 px-4 rounded-sm border-red-500 border-2"
+                            className="text-xl font-semibold !py-6 px-4 rounded-sm border-red-500 border-2"
                         >
                             <LogOut className="w-4 h-4" />
                             Đăng Xuất

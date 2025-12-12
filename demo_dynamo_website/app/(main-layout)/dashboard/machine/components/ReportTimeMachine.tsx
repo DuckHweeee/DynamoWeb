@@ -69,12 +69,12 @@ export function ReportTimeMachine({ data, type }: ReportTimeOperatorProps) {
             </p>
           </div>
 
-          <p className="text-[30px] font-semibold text-[#074695] leading-none mt-2">
+          <p className="text-[30px] font-semibold text-green-700 leading-none mt-2">
             {convertHoursToHM(data?.totalRunTime ?? 0)}
           </p>
 
           <div className="mt-2">
-            <p className="text-lg font-medium text-[#343A40] flex items-center">
+            <p className="text-lg font-medium text-green-500 flex items-center">
               {/* Tổng Giờ Làm {typeDate[data.timeType]} */}
               Tổng Giờ Chạy {typeDate[type]}
               {(data?.runTimeRate ?? 0) !== undefined &&
@@ -114,12 +114,12 @@ export function ReportTimeMachine({ data, type }: ReportTimeOperatorProps) {
             </p>
           </div>
 
-          <p className="text-[30px] font-semibold text-[#074695] leading-none mt-2">
+          <p className="text-[30px] font-semibold text-yellow-700 leading-none mt-2">
             {convertHoursToHM(data?.totalStopTime ?? 0)}
           </p>
 
           <div className="mt-2">
-            <p className="text-lg font-medium text-[#343A40] flex items-center">
+            <p className="text-lg font-medium text-yellow-500 flex items-center">
               {/* Tổng Điểm {typeDate[data.timeType]} */}
               Tổng Giờ Dừng {typeDate[type]}
               {(data?.stopTimeRate ?? 0) !== undefined &&
@@ -169,12 +169,12 @@ export function ReportTimeMachine({ data, type }: ReportTimeOperatorProps) {
             </p>
           </div>
 
-          <p className="text-[30px] font-semibold text-[#074695] leading-none mt-2">
+          <p className="text-[30px] font-semibold text-red-700 leading-none mt-2">
             {convertHoursToHM(data?.totalErrorTime ?? 0)}
           </p>
 
           <div className="mt-2">
-            <p className="text-lg font-medium text-[#343A40] flex items-center">
+            <p className="text-lg font-medium text-red-500 flex items-center">
               {/* Tổng Điểm {typeDate[data.timeType]} */}
               Tổng Giờ Lỗi {typeDate[type]}
               {(data?.errorTimeRate ?? 0) !== undefined &&
@@ -261,12 +261,12 @@ export function ReportTimeMachine({ data, type }: ReportTimeOperatorProps) {
             </p>
           </div>
 
-          <p className="text-[30px] font-semibold text-[#074695] leading-none mt-2">
+          <p className="text-[30px] font-semibold text-blue-700 leading-none mt-2">
             {data?.totalProcesses ?? 0}
           </p>
 
           <div className="mt-2">
-            <p className="text-lg font-medium text-[#343A40] flex items-center">
+            <p className="text-lg font-medium text-blue-500 flex items-center">
               {/* Tổng Số Nguyên Công {typeDate[data.timeType]} */}
               Tổng Số Gia Công {typeDate[type]}
               {(data?.processRate ?? 0) !== undefined &&

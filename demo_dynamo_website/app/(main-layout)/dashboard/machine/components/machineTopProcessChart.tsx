@@ -57,7 +57,7 @@ export function MachineTopProcessChart({
     }, [topProcess, dataTopHighMachine, dataTopLowMachine])
 
     return (
-        <Card className="!w-full shadow-md shadow-blue-300 border border-blue-200">
+        <Card className="!w-full shadow-md shadow-green-200 border border-green-300">
             <CardHeader>
                 <div className="flex justify-between">
                     <div className="items-center">

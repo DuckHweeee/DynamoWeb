@@ -35,7 +35,7 @@ const getHistoryProcessColumns = (): ColumnDef<any>[] => [
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         className="h-auto p-0 hover:bg-transparent"
       >
-        <span className="font-bold">Mã Đơn Hàng</span>
+        <span className="font-bold">ID Mã Hàng</span>
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
@@ -49,7 +49,7 @@ const getHistoryProcessColumns = (): ColumnDef<any>[] => [
     accessorKey: "processType",
     header: () => <div className="font-bold text-base">Đối tượng gia công</div>,
     cell: ({ row }) => (
-      <Badge variant="outline">{row.getValue("processType")}</Badge>
+      <Badge className="py-2 px-4 bg-blue-50" variant="outline">{row.getValue("processType")}</Badge>
     ),
   },
   {
@@ -348,7 +348,7 @@ export default function HistoryProcessPage() {
                 className="h-10 flex-1"
                 onClick={() => refetch()}
                 disabled={loading}
-              >
+              > 
                 {loading ? "Đang tải..." : "Làm mới"}
               </Button>
             </div>

@@ -114,7 +114,7 @@ export default function OperationDetail() {
     return (
         <div className="m-2 px-4 py-5 bg-white rounded-[10px] shadow">
             <div className="">
-                <div className="flex justify-between items-center mr-5">
+                <div className="flex justify-between items-center mr-5 border-b pb-5">
                     <p className="text-3xl font-semibold">Thống kê nhân viên vận hành</p>
                     <Button
                         variant="outline"
@@ -124,7 +124,7 @@ export default function OperationDetail() {
                         <Download className="h-4 w-4" />
                     </Button>
                 </div>
-                <div className="flex flex-row py-3 gap-15 border-b justify-end">
+                <div className="flex flex-row py-3 gap-3 border-b justify-end">
                     <DateRangeSelectorDetail
                         startDate={selectedStartDate}
                         endDate={selectedEndDate}

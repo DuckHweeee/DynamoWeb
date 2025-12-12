@@ -126,7 +126,7 @@ export default function MachineTable({
     })
 
     return (
-        <div className="px-4 py-2 bg-white rounded-[10px] shadow-md shadow-blue-300 border border-blue-200">
+        <div className="px-4 py-2 bg-white rounded-[10px] shadow-md shadow-purple-200 border border-purple-300">
             <div className="flex flex-row items-center justify-between py-4">
                 {/* <p className="text-2xl font-bold">Thống kê thời gian máy</p> */}
                 <p className="text-2xl font-bold">{title}</p>

@@ -60,7 +60,7 @@ export function ReportTimeOperatorDetail({ data, type }: ReportTimeOperatorProps
     return (
         <>
             <div className="my-5 flex gap-3 items-center justify-between">
-                <div className="inline-block rounded-sm bg-white px-5 py-4 shadow-md border w-full">
+                <div className="inline-block rounded-xl bg-white px-5 py-4 shadow-md shadow-green-200 border border-green-200 w-full">
                     <div className="flex items-start justify-between">
                         <MonitorDot
                             size={24}
@@ -105,7 +105,7 @@ export function ReportTimeOperatorDetail({ data, type }: ReportTimeOperatorProps
                     </div>
                 </div>
 
-                <div className="inline-block rounded-sm bg-white px-6 py-4 shadow-md border w-full">
+                <div className="inline-block rounded-xl bg-white px-6 py-4 shadow-md shadow-blue-200 border border-blue-200 w-full">
                     <div className="flex items-start justify-between">
                         <MonitorDot
                             size={24}
@@ -150,7 +150,7 @@ export function ReportTimeOperatorDetail({ data, type }: ReportTimeOperatorProps
                     </div>
                 </div>
 
-                <div className="inline-block rounded-sm bg-white px-6 py-4 shadow-md border w-full">
+                <div className="inline-block rounded-xl bg-white px-6 py-4 shadow-md shadow-orange-200 border border-orange-200 w-full">
                     <div className="flex items-start justify-between">
                         <MonitorDot
                             size={24}
@@ -197,7 +197,7 @@ export function ReportTimeOperatorDetail({ data, type }: ReportTimeOperatorProps
 
 
                 {/*  */}
-                <div className="inline-block rounded-sm bg-white px-6 py-4 shadow-md border w-full">
+                <div className="inline-block rounded-xl bg-white px-6 py-4 shadow-md shadow-purple-200 border border-purple-200 w-full">
                     <div className="flex items-start justify-between">
                         <MonitorDot
                             size={24}

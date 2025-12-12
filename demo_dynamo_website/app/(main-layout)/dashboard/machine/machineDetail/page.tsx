@@ -113,8 +113,8 @@ const MachineDetailOverview = () => {
         <>
             <div className="m-2 px-4 py-5 bg-white rounded-[10px] shadow" >
                 <div>
-                    <div className="flex justify-between items-center mr-5 border-b pb-3 py-4 ">
-                        <p className="text-3xl font-semibold">Thống kê chi tiết máy {selectedMachineName}</p>
+                    <div className="flex justify-between items-center mr-5 border-b pb-2 py-4 ">
+                        <p className="text-3xl font-semibold pb-2">Thống kê chi tiết máy {selectedMachineName}</p>
                         <Button
                             variant="outline"
                             size="sm"

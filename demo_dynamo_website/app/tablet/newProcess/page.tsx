@@ -62,8 +62,7 @@ export default function TabletProcess() {
   const { data: staff } = useFetchOperators();
   const { data: machine2 } = useFetchMachines();
 
-  // Fetch ToDo Progress
-  const { data: fetchedProcesses, refetch } = useFetchProcesses();
+  // Fetch ToDo Progress  
   const [todo, setTodo] = useState<OrderDetail[]>([]);
 
   // Fetch and update todo data
@@ -304,7 +303,7 @@ export default function TabletProcess() {
         {/* Header */}
         <div className="flex items-center justify-between pb-3">
           <p className="text-2xl py-5 px-10 font-bold">
-            DANH SÁCH MÃ BẢN VẼ TRONG QUÁ TRÌNH
+            DANH SÁCH MÃ HÀNG CẦN THỰC HIỆN
           </p>
           <div className="flex flex-row justify-between items-center gap-3">
             <div className="relative max-w-sm w-full">

@@ -17,6 +17,8 @@ import { ReportTimeOperator } from "./dashboard/operation/components/ReportTimeO
 import { DivergingBarChart } from "./dashboard/operation/components/DivergingBarChart";
 import { StaffOverview } from "./dashboard/operation/lib/type";
 import StaffTable from "./dashboard/operation/components/StaffTable";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
 
 
 export default function Home() {
@@ -130,16 +132,16 @@ export default function Home() {
     <>
       <div className="m-2 px-4 py-5 bg-white rounded-[10px] shadow" >
         <div>
-          <div className="flex justify-between items-center mr-5">
-            <p className="text-3xl font-semibold">Thống kê vận hành</p>
-            {/* <Button
+          <div className="flex justify-between items-center mr-5 border-b pb-3">
+            <p className="text-3xl font-semibold pb-5">Thống kê vận hành</p>
+            <Button
               variant="outline"
               size="sm"
               className="items-center cursor-pointer !text-white border-gray-200 hover:border-gray-300 h-9 bg-blue-900 hover:bg-blue-650"
             >
               Xuất file
-              <Download className="h-4 w-4" />
-            </Button> */}
+              {/* <Download className="h-4 w-4" /> */}
+            </Button>
           </div>
           <div className="flex flex-row py-3 gap-3 justify-end">
             <DateRangeSelector

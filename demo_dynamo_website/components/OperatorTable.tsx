@@ -176,7 +176,7 @@ function getColumns({
         const isWorking = value === 1;
         return (
           <div
-            className={`w-full px-4 py-1.5 rounded-sm text-center capitalize
+            className={`w-full px-4 py-1.5 rounded-lg text-center capitalize
         ${isWorking
                 ? "bg-[#E7F7EF] text-[#0CAF60]"
                 : "bg-[#FFE6E6] text-[#FE4A4A]"
@@ -330,8 +330,8 @@ export function OperatorTable({
   }
 
   return (
-    <div className="bg-white rounded-[10px] px-6 mx-2 h-screen">
-      <div className="flex flex-row items-center justify-between py-4 bg-white">
+    <div className="bg-white rounded-[10px] px-6 mx-2 h-screen mb-4 ">
+      <div className="flex flex-row items-center justify-between py-4 bg-white border-b border-blue-300 mb-4">
         <div className="w-2/3">
           <p className="text-2xl font-bold">{title}</p>
         </div>

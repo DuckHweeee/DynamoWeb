@@ -42,7 +42,7 @@ const columns: ColumnDef<HistoryProcess>[] = [
         accessorKey: "startEndDate",
         header: ({ column }) => (
             <Button
-                className="text-lg font-bold capitalize"
+                className="text-lg"
                 variant="ghost"
                 onClick={() =>
                     column.toggleSorting(column.getIsSorted() === "asc")
@@ -67,7 +67,7 @@ const columns: ColumnDef<HistoryProcess>[] = [
         accessorKey: "orderCode",
         header: ({ column }) => (
             <Button
-                className="text-lg font-bold capitalize"
+                className="text-lg "
                 variant="ghost"
                 onClick={() =>
                     column.toggleSorting(column.getIsSorted() === "asc")
@@ -82,20 +82,20 @@ const columns: ColumnDef<HistoryProcess>[] = [
         accessorKey: "machineName",
         header: ({ column }) => (
             <Button
-                className="text-lg font-bold capitalize"
+                className="text-lg "
                 variant="ghost"
                 onClick={() =>
                     column.toggleSorting(column.getIsSorted() === "asc")
                 }
             >
-                Máy Vận Hành <ArrowUpDown />
+                Máy vận hành <ArrowUpDown />
             </Button>
         ),
         cell: ({ row }) => <div>{row.getValue("machineName")}</div>,
     },
     {
         accessorKey: "status",
-        header: () => <div className="text-lg font-bold">Trạng thái</div>,
+        header: () => <div className="text-lg ">Trạng thái</div>,
         cell: ({ row }) => {
             const status = row.getValue("status") as string
 

@@ -70,10 +70,10 @@ export function BarChartOperatorDetail({
     ]
 
     return (
-        <Card>
+        <Card className="w-full border border-blue-200 shadow-md shadow-blue-200 mb-4">
             <CardHeader>
-                <p className="text-2xl font-bold">{title}</p>
-                <p className="text-xl text-gray-500 mb-4">{description}</p>
+                <p className="text-xl font-bold">{title}</p>
+                <p className="text-lg text-gray-400 mb-4">{description}</p>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig} className="h-[350px] w-full">

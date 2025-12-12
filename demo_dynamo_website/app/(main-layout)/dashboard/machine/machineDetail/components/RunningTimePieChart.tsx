@@ -96,7 +96,7 @@ export function RunningTimePieChart({
   )
 
   return (
-    <Card data-chart={id} className="flex flex-col">
+    <Card data-chart={id} className="flex flex-col h-full border border-green-200 shadow-md shadow-green-200 rounded-lg">
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">

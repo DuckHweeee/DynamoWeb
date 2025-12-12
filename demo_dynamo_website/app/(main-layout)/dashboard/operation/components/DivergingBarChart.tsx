@@ -1,157 +1,182 @@
-"use client"
+"use client";
 
-import { Bar, BarChart, Cell, LabelList, ResponsiveContainer, XAxis, YAxis } from "recharts"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import {
-    ChartConfig,
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-} from "@/components/ui/chart"
+  Bar,
+  BarChart,
+  Cell,
+  LabelList,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
 const chartConfig = {
-    target: {
-        label: "Mục tiêu",
-        color: "#00a6fb",
-    },
-    real: {
-        label: "Thực tế",
-        color: "#0587ca",
-    },
-} satisfies ChartConfig
+  target: {
+    label: "Mục tiêu",
+    color: "#369fff",
+  },    
+  real: {
+    label: "Thực tế",
+    color: "#72e05cff",
+  },
+} satisfies ChartConfig;
 
 interface DivergingBarChartProps {
-    title: string
-    description: string
-    data: { name: string; target: number; real: number }[]
+  title: string;
+  description: string;
+  data: { name: string; target: number; real: number }[];
 }
 const legendItems = [
-    { name: "Mục tiêu", fill: "#00a6fb" },
-    { name: "Thực tế", fill: "#0587ca" },
-    { name: "Thấp hơn mục tiêu", fill: "#ff4d4d" },
-]
+  { name: "Mục tiêu", fill: "#369fff" },
+  { name: "Thực tế", fill: "#0587ca" },
+  { name: "Thấp hơn mục tiêu", fill: "#c35252ff" },
+];
+const CustomRealLabel = (props: any) => {
+  const { x, y, width, height, value } = props;
+
+  const threshold = 40; // nếu thanh < 40px thì đẩy ra ngoài
+  const inside = width > threshold;
+
+  return (
+    <text
+      x={inside ? x + width - 5 : x + width + 8}
+      y={y + height / 2}
+      dy="0.35em"
+      textAnchor={inside ? "end" : "start"}
+      fill={inside ? "#fff" : "#333"}
+      fontSize={16}
+    >
+      {value}
+    </text>
+  );
+};
 export function DivergingBarChart({
-    title,
-    description,
-    data,
+  title,
+  description,
+  data,
 }: DivergingBarChartProps) {
-    const avgtarget =
-        data.length > 0
-            ? data.reduce((sum, d) => sum + d.target, 0) / data.length
-            : 0;
+  const avgtarget =
+    data.length > 0
+      ? data.reduce((sum, d) => sum + d.target, 0) / data.length
+      : 0;
 
-    const avgReal =
-        data.length > 0
-            ? data.reduce((sum, d) => sum + d.real, 0) / data.length
-            : 0;
+  const avgReal =
+    data.length > 0
+      ? data.reduce((sum, d) => sum + d.real, 0) / data.length
+      : 0;
+  const chartData = [
+    { name: "TB", target: avgtarget.toFixed(2), real: avgReal.toFixed(2) },
+    ...data,
+  ];
 
-    const chartData = [
-        { name: "TB", target: avgtarget.toFixed(2), real: avgReal.toFixed(2) },
-        ...data,
-    ];
+  return (
+    <Card className="w-full border border-orange-300 shadow-md shadow-orange-100 my-5">
+      <CardHeader>
+        <div className="items-center">
+          <p className="text-xl font-bold">{title}</p>
+          <p className="text-lg text-gray-400">{description}</p>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig} className={`!h-[400px] w-full`}>
+          {/* <ResponsiveContainer width="100%" height="30%"> */}
+          <BarChart accessibilityLayer data={chartData} layout="vertical">
+            <YAxis
+              dataKey="name"
+              type="category"
+              tickLine={false}
+              axisLine={false}
+              fontSize={20}
+            />
+            <XAxis type="number" tickLine={false} axisLine={true} hide />
 
-    return (
-        <Card>
-            <CardHeader>
-                <div className="items-center">
-                    <p className="text-2xl font-bold">{title}</p>
-                    <p className="text-xl text-gray-500">{description}</p>
-                </div>
-            </CardHeader>
-            <CardContent>
-                <ChartContainer config={chartConfig} className={`!h-[400px] w-full`}>
-                    {/* <ResponsiveContainer width="100%" height="30%"> */}
-                    <BarChart accessibilityLayer data={chartData} layout="vertical">
-                        <YAxis
-                            dataKey="name"
-                            type="category"
-                            tickLine={false}
-                            axisLine={false}
-                            fontSize={20}
-                        />
-                        <XAxis type="number" tickLine={false} axisLine={true} hide />
+            {/* Thanh target */}
+            <Bar
+              dataKey="target"
+              stackId="a"
+              fill={chartConfig.target.color}
+              radius={[0, 0, 0, 0]}
+            >
+              <LabelList
+                dataKey="target"
+                position="insideRight"
+                fill="#fff"
+                fontSize={16}
+              />
+            </Bar>
 
-                        {/* Thanh target */}
-                        <Bar
-                            dataKey="target"
-                            stackId="a"
-                            fill={chartConfig.target.color}
-                            radius={[0, 0, 0, 0]}
-                        >
-                            <LabelList
-                                dataKey="target"
-                                position="insideRight"
-                                fill="#fff"
-                                fontSize={16}
-                            />
-                        </Bar>
+            {/* Thanh real (so sánh màu) */}
+            <Bar dataKey="real" stackId="a" radius={[0, 4, 4, 0]}>
+              {chartData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={
+                    index === 0
+                      ? chartConfig.real.color // luôn xanh cho "Trung bình"
+                      : entry.real < entry.target
+                      ? "#ff4d4d"
+                      : chartConfig.real.color
+                  }
+                />
+              ))}
+              <LabelList
+                dataKey="real"
+                content={<CustomRealLabel />}
+                fill="#fff"
+                fontSize={16}
+              />
+            </Bar>
 
-                        {/* Thanh real (so sánh màu) */}
-                        <Bar dataKey="real" stackId="a" radius={[0, 4, 4, 0]}>
-                            {chartData.map((entry, index) => (
-                                <Cell
-                                    key={`cell-${index}`}
-                                    fill={
-                                        index === 0
-                                            ? chartConfig.real.color // luôn xanh cho "Trung bình"
-                                            : entry.real < entry.target
-                                                ? "#ff4d4d"
-                                                : chartConfig.real.color
-                                    }
-                                />
-                            ))}
-                            <LabelList
-                                dataKey="real"
-                                position="insideRight"
-                                fill="#fff"
-                                fontSize={16}
-                            />
-                        </Bar>
-
-                        <ChartTooltip
-                            content={
-                                <ChartTooltipContent
-                                    hideLabel
-                                    className="w-[180px]"
-                                    formatter={(value, name) => (
-                                        <>
-                                            <div
-                                                className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
-                                                style={{
-                                                    background: `var(--color-${name})`,
-                                                }}
-                                            />
-                                            {chartConfig[name as keyof typeof chartConfig]?.label ||
-                                                name}
-                                            <div className="ml-auto font-mono font-medium">
-                                                {value}
-                                            </div>
-                                        </>
-                                    )}
-                                />
-                            }
-                            cursor={false}
-                            defaultIndex={0}
-                        />
-                        {/* <ChartLegend className="text-lg" content={<ChartLegendContent />} /> */}
-                    </BarChart>
-                    {/* </ResponsiveContainer> */}
-
-                </ChartContainer>
-                <div className="mx-6 grid grid-cols-3 bg-white p-3 justify-items-center">
-                    {legendItems.map((item, index) => (
-                        <div key={index} className="flex items-center gap-2">
-                            <div
-                                className="w-3 h-3 rounded-sm"
-                                style={{ backgroundColor: item.fill }}
-                            />
-                            <span className="text-sm text-gray-800 font-medium">
-                                {item.name}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            </CardContent>
-        </Card >
-    )
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  hideLabel
+                  className="w-[180px]"
+                  formatter={(value, name) => (
+                    <>
+                      <div
+                        className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
+                        style={{
+                          background: `var(--color-${name})`,
+                        }}
+                      />
+                      {chartConfig[name as keyof typeof chartConfig]?.label ||
+                        name}
+                      <div className="ml-auto font-mono font-medium">
+                        {value}
+                      </div>
+                    </>
+                  )}
+                />
+              }
+              cursor={false}
+              defaultIndex={0}
+            />
+            {/* <ChartLegend className="text-lg" content={<ChartLegendContent />} /> */}
+          </BarChart>
+          {/* </ResponsiveContainer> */}
+        </ChartContainer>
+        <div className="mx-6 grid grid-cols-3 bg-white p-3 justify-items-center">
+          {legendItems.map((item, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <div
+                className="w-3 h-3 rounded-sm"
+                style={{ backgroundColor: item.fill }}
+              />
+              <span className="text-sm text-gray-800 font-medium">
+                {item.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
