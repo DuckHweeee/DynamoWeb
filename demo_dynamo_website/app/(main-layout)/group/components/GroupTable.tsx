@@ -117,7 +117,7 @@ export function GroupTable() {
     return (
         <div className="m-2 my-1.5 px-4 py-3 bg-white rounded-[10px] shadow">
             {/* Header */}
-            <div className="flex items-center justify-between py-4 border-b border-blue-300 mb-4">
+            <div className="flex items-center justify-between py-4 border-b border-red-300 mb-5">
                 <div className="flex justify-start">
                     <h1 className="text-2xl font-bold pl-2">Quản Lý Nhóm</h1>
                 </div>
@@ -156,21 +156,21 @@ export function GroupTable() {
                         <TableRow className="text-lg font-bold">
                             <TableHead>
                                 <Button className="text-lg font-bold py-5" variant="ghost">
-                                    Tên Nhóm
+                                    Tên nhóm
                                 </Button>
                             </TableHead>
                             <TableHead>
                                 <Button className="text-lg font-bold" variant="ghost">
-                                    Ngày Tạo
+                                    Ngày tạo
                                 </Button>
                             </TableHead>
                             <TableHead>
                                 <Button className="text-lg font-bold" variant="ghost">
-                                    Cập Nhật
+                                    Cập nhật
                                 </Button>
                             </TableHead>
                             <TableHead className="text-right">
-                                <div className="text-lg font-bold">Hành Động</div>
+                                <div className="text-lg font-bold">Hành động</div>
                             </TableHead>
                         </TableRow>
                     </TableHeader>
@@ -182,8 +182,8 @@ export function GroupTable() {
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredGroups.map((group) => (
-                                <TableRow key={group.groupId} >
+                            filteredGroups.map((group,index) => (
+                                <TableRow key={group.groupId} className={index % 2 === 0 ? "bg-gray-50" : ""} >
                                     <TableCell className="pl-5  text-lg py-5" >
                                         <div>
                                             <div className="text-lg">{group.groupName}</div>

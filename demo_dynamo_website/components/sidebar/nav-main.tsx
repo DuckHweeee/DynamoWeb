@@ -58,12 +58,12 @@ export function NavMain({
                             <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
                                     <SidebarMenuButton
-                                        className={`cursor-pointer text-base p-6 ${isGroupActive ? "text-[#073c7e]" : ""}`}
+                                        className={`cursor-pointer text-base p-6 ${isGroupActive ? "text-[#890101]" : ""}`}
                                     >
                                         <Link href={item.url}>
                                             {item.icon && <item.icon />}
                                         </Link>
-                                        <span className="tracking-widest">{item.title}</span>
+                                        <span className={`${isGroupActive ? "text-[#890101]" : ""} tracking-widest ` }>{item.title}</span>
                                         <ChevronRight
                                             className={`ml-auto transition-transform duration-200 ${isGroupActive ? "rotate-90" : ""
                                                 }`}
@@ -82,7 +82,7 @@ export function NavMain({
                                                         key={subItem.title}
 
                                                     >
-                                                        <SidebarMenuSubButton asChild className={isActive ? "!text-[#073c7e] " : ""}>
+                                                        <SidebarMenuSubButton asChild className={isActive ? "!text-[#890101] " : ""}>
                                                             <Link
                                                                 href={subItem.url}
                                                                 onClick={() =>
@@ -92,7 +92,7 @@ export function NavMain({
                                                                     )
                                                                 }
                                                             >
-                                                                <span className="text-base tracking-widest">{subItem.title}</span>
+                                                                <span className="text-base tracking-wide ">{subItem.title}</span>
                                                             </Link>
                                                         </SidebarMenuSubButton>
                                                     </SidebarMenuSubItem>

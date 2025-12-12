@@ -570,7 +570,7 @@ export default function GroupKPIPage() {
         </div>
 
         {/* Filters Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-4 pt-2 border-t border-blue-300">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-4 pt-2 border-t border-red-300">
           {/* Period Filter */}
           <div className="space-y-1">
             <label className="text-xs font-medium text-gray-600 tracking-wide">

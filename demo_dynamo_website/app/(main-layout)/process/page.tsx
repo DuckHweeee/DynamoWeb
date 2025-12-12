@@ -14,7 +14,7 @@ export default function Home() {
     <>
       <div className="flex items-center justify-center p-3">
         <div className="flex gap-x-3">
-          <Link href={"/process"}>
+          {/* <Link href={"/process"}>
             <Button
               className={`cursor-pointer hover:bg-blue-200 text-xl font-semibold !py-6 px-4 rounded-sm border-1 bg-white text-blue-950
                                     ${
@@ -39,7 +39,7 @@ export default function Home() {
               <PencilLine className={`!w-[20px] !h-[20px] text-blue-950`} /> Gia
               công chi tiết
             </Button>
-          </Link>
+          </Link> */}
         </div>
       </div>
       <PlannedProcessTable />

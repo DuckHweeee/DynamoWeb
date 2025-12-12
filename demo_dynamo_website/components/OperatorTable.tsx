@@ -331,7 +331,7 @@ export function OperatorTable({
 
   return (
     <div className="bg-white rounded-[10px] px-6 mx-2 h-screen mb-4 ">
-      <div className="flex flex-row items-center justify-between py-4 bg-white border-b border-blue-300 mb-4">
+      <div className="flex flex-row items-center justify-between py-4 bg-white border-b border-red-300 mb-4">
         <div className="w-2/3">
           <p className="text-2xl font-bold">{title}</p>
         </div>
@@ -403,10 +403,11 @@ export function OperatorTable({
                 </TableRow>
               ))
             ) : table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row,index) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className={index % 2 === 0 ? "bg-gray-50" : ""}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell

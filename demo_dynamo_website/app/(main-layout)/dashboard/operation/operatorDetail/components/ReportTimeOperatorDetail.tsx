@@ -1,6 +1,6 @@
 "use client";
 
-import { MonitorDot, TrendingDown, TrendingUp } from "lucide-react";
+import { UserCog, TrendingDown, TrendingUp } from "lucide-react";
 import { StaffStatistic } from "../../lib/type";
 interface Props {
     staffCount: number;
@@ -62,14 +62,12 @@ export function ReportTimeOperatorDetail({ data, type }: ReportTimeOperatorProps
             <div className="my-5 flex gap-3 items-center justify-between">
                 <div className="inline-block rounded-xl bg-white px-5 py-4 shadow-md shadow-green-200 border border-green-200 w-full">
                     <div className="flex items-start justify-between">
-                        <MonitorDot
+                        <UserCog
                             size={24}
                             className={
-                                (data?.workingRate ?? 0) < 0
-                                    ? "text-red-500"
-                                    : (data?.workingRate ?? 0) > 0
-                                        ? "text-green-500"
-                                        : ""
+
+                                "text-green-500"
+
                             }
                         />
                         <p
@@ -86,12 +84,12 @@ export function ReportTimeOperatorDetail({ data, type }: ReportTimeOperatorProps
                         </p>
                     </div>
 
-                    <p className="text-[30px] font-semibold text-[#074695] leading-none mt-2">
+                    <p className="text-[30px] font-semibold text-green-700 leading-none mt-2">
                         {convertHoursToHM(data?.workingHours ?? 0)}
                     </p>
 
                     <div className="mt-2">
-                        <p className="text-lg font-medium text-[#343A40] flex items-center">
+                        <p className="text-lg font-medium text-green-500 flex items-center">
                             {/* Tổng Giờ Làm {typeDate[data.timeType]} */}
                             Tổng Giờ Làm {typeDate[type]}
                             {(data?.workingRate ?? 0) !== undefined && (
@@ -107,14 +105,10 @@ export function ReportTimeOperatorDetail({ data, type }: ReportTimeOperatorProps
 
                 <div className="inline-block rounded-xl bg-white px-6 py-4 shadow-md shadow-blue-200 border border-blue-200 w-full">
                     <div className="flex items-start justify-between">
-                        <MonitorDot
+                        <UserCog
                             size={24}
                             className={
-                                (data?.mpRate ?? 0) < 0
-                                    ? "text-red-500"
-                                    : (data?.mpRate ?? 0) > 0
-                                        ? "text-green-500"
-                                        : ""
+                                "text-blue-500"
                             }
                         />
                         <p
@@ -130,13 +124,12 @@ export function ReportTimeOperatorDetail({ data, type }: ReportTimeOperatorProps
                                 : `${data?.mpRate ?? 0}%`}
                         </p>
                     </div>
-
-                    <p className="text-[30px] font-semibold text-[#074695] leading-none mt-2">
+                    <p className="text-[30px] font-semibold text-blue-700 leading-none mt-2">
                         {data?.manufacturingPoints ?? 0}
                     </p>
 
                     <div className="mt-2">
-                        <p className="text-lg font-medium text-[#343A40] flex items-center">
+                        <p className="text-lg font-medium text-blue-500 flex items-center">
                             {/* Tổng Điểm {typeDate[data.timeType]} */}
                             Tổng Điểm {typeDate[type]}
                             {(data?.mpRate ?? 0) !== undefined && (
@@ -152,14 +145,10 @@ export function ReportTimeOperatorDetail({ data, type }: ReportTimeOperatorProps
 
                 <div className="inline-block rounded-xl bg-white px-6 py-4 shadow-md shadow-orange-200 border border-orange-200 w-full">
                     <div className="flex items-start justify-between">
-                        <MonitorDot
+                        <UserCog
                             size={24}
                             className={
-                                (data?.processRate ?? 0) < 0
-                                    ? "text-red-500"
-                                    : (data?.processRate ?? 0) > 0
-                                        ? "text-green-500"
-                                        : ""
+                                "text-orange-500"
                             }
                         />
                         <p
@@ -176,12 +165,12 @@ export function ReportTimeOperatorDetail({ data, type }: ReportTimeOperatorProps
                         </p>
                     </div>
 
-                    <p className="text-[30px] font-semibold text-[#074695] leading-none mt-2">
+                    <p className="text-[30px] font-semibold text-orange-700 leading-none mt-2">
                         {data?.processCount ?? 0}
                     </p>
 
                     <div className="mt-2">
-                        <p className="text-lg font-medium text-[#343A40] flex items-center">
+                        <p className="text-lg font-medium text-orange-500 flex items-center">
                             {/* Tổng Số Nguyên Công {typeDate[data.timeType]} */}
                             Tổng Số Nguyên Công {typeDate[type]}
                             {(data?.processRate ?? 0) !== undefined && (
@@ -199,14 +188,10 @@ export function ReportTimeOperatorDetail({ data, type }: ReportTimeOperatorProps
                 {/*  */}
                 <div className="inline-block rounded-xl bg-white px-6 py-4 shadow-md shadow-purple-200 border border-purple-200 w-full">
                     <div className="flex items-start justify-between">
-                        <MonitorDot
+                        <UserCog
                             size={24}
                             className={
-                                (data?.kpiRate ?? 0) < 0
-                                    ? "text-red-500"
-                                    : (data?.kpiRate ?? 0) > 0
-                                        ? "text-green-500"
-                                        : ""
+                                "text-purple-500"
                             }
                         />
                         <p
@@ -223,12 +208,12 @@ export function ReportTimeOperatorDetail({ data, type }: ReportTimeOperatorProps
                         </p>
                     </div>
 
-                    <p className="text-[30px] font-semibold text-[#074695] leading-none mt-2">
+                    <p className="text-[30px] font-semibold text-purple-700 leading-none mt-2">
                         {data?.totalKpi ?? 0}
                     </p>
 
                     <div className="mt-2">
-                        <p className="text-lg font-medium text-[#343A40] flex items-center">
+                        <p className="text-lg font-medium text-purple-500 flex items-center">
                             {/* Tổng KPI {typeDate[data.timeType]} */}
                             Tổng KPI {typeDate[type]}
                             {(data?.kpiRate ?? 0) !== undefined && (

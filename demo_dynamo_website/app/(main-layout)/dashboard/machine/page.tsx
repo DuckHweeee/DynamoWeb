@@ -137,7 +137,7 @@ export default function MachineOverview() {
     <>
       <div className="m-2 px-4 py-5 bg-white rounded-[10px] shadow">
         <div className="mb-5 ">
-          <div className="flex justify-between items-center mr-5 border-b py-5">
+          <div className="flex justify-between items-center mr-5 border-b border-red-500 py-5">
             <p className="text-3xl font-semibold">Thống kê máy móc</p>
             <Button
               variant="outline"

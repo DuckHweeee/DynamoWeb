@@ -39,11 +39,11 @@ export default function TabletLayout({
         <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             <ProtectedRoute allowedRoles={["Operator", "Admin"]}>
                 <div className="flex items-center justify-between p-3 lg:px-8 bg-[#E5EAF0]">
-                    {/* <div className="flex lg:flex-1 items-center gap-4">
-                        <a href="#" className="-m-1.5 p-1.5">
+                    <div className="flex lg:flex-1 items-center gap-4">
+                        <a href="#" className="-m-1.5 p-1.5">       
                             <img className="h-15 w-auto" src="/logo.png" alt="Logo" />
                         </a>
-                    </div> */}
+                    </div>
                     {/* Tắt tạm thời */}
                     <div className="flex gap-x-5">
                         <Link href={"/dashboard/machine"}>

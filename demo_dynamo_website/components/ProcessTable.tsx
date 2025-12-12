@@ -308,7 +308,7 @@ export default function ProcessTable<T = any>({
 
     return (
         <div className="m-1 bg-white rounded-[10px]">
-            <div className="flex flex-row items-center justify-between py-4">
+            <div className="flex flex-row items-center justify-between border-b border-red-500 py-4 mb-5">
                 <div className="w-2/3">
                     <p className="text-2xl font-bold">{title}</p>
                 </div>
@@ -363,8 +363,10 @@ export default function ProcessTable<T = any>({
                     </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                            table.getRowModel().rows.map((row,index) => (
+                                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}
+                                className={index % 2 === 0 ? "bg-gray-50" : ""}
+                                >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888] py-5">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}

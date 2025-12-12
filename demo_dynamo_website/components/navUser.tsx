@@ -30,11 +30,11 @@ export function ClientHeader() {
     const { user, logout } = useAuth();
 
     return (
-        <header className="m-2 px-4 py-3 bg-white rounded-[10px] flex items-center justify-between shadow">
+        <header className="m-2 px-5 py-4 bg-white rounded-[10px] flex items-center justify-between shadow">
             <div className="flex items-center gap-4">
                 <SidebarTrigger className="-ml-1" />
                 <div className="flex flex-col">
-                    <h1 className="text-2xl font-semibold text-[#369FFF]">
+                    <h1 className="text-xl font-semibold text-[#890101]">
                         Xin chào {user?.fullname || user?.username || "Dynamo"}, ngày mới tốt lành!
                     </h1>
                     {/* <p className="text-sm text-gray-500">{breadcrumb}</p> */}
@@ -49,20 +49,20 @@ export function ClientHeader() {
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <div className="flex items-center px-3 py-1 bg-[#DDEEFF] rounded-md cursor-pointer hover:bg-[#CCE0FF] transition-colors">
+                        <div className="flex items-center px-4 py-2 bg-white rounded-xl cursor-pointer hover:bg-[#F8DBDB] transition-colors border border-gray-300 shadow-md">
                             <div className="flex flex-row gap-2 items-center">
-                                <Avatar className="h-10 w-10">
-                                    {/* <AvatarImage src="/dynamo.png" /> */}
+                                <Avatar className="h-8 w-8">
+                                    <AvatarImage src="/dynamo.png" />
                                     <AvatarFallback>
                                         {user?.fullname?.charAt(0).toUpperCase() || user?.username?.charAt(0).toUpperCase() || "D"}
                                     </AvatarFallback>
                                 </Avatar>
-                                <div className="flex flex-col text-lg">
-                                    <span className="text-black font-medium capitalize">
+                                <div className="flex flex-col text-base px-3">
+                                    <span className="text-red-900 font-medium capitalize">
                                         {user?.fullname || user?.username || "Dynamo"}
                                     </span>
-                                    <span className="text-blue-600">
-                                        Vai trò {user?.role === "Admin" ? "Quản lý" : "Người vận hành"}
+                                    <span className="text-red-700 text-sm tracking-wide ">
+                                        Vai trò {user?.role === "Admin" ? "quản lý" : "người vận hành"}
                                     </span>
                                 </div>
                             </div>

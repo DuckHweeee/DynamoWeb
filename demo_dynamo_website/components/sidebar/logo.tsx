@@ -11,7 +11,7 @@ export function Logo() {
         <>
             <Link href="/"   className="flex items-center justify-center pt-3">
                 {open ?
-                    <img className="h-auto w-auto" src="/Layer_2.png" alt="Logo" />
+                    <img className="h-auto w-auto" src="/logo.png" alt="Logo" />
                     : (<House className="ml-1.5 mt-2" />)
                 }
             </Link>

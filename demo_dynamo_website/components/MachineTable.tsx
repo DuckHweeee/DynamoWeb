@@ -331,7 +331,7 @@ export function MachineTable({
 
     return (
         <div className="bg-white rounded-[10px] px-6 mx-2 h-screen">
-            <div className="flex flex-row items-center justify-between py-4 bg-white border-b border-blue-300 mb-4">
+            <div className="flex flex-row items-center justify-between py-4 bg-white border-b border-red-300 mb-4">
                 <div className="w-2/3">
                     <p className="text-2xl font-bold">{title}</p>
                 </div>

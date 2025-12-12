@@ -106,7 +106,7 @@ const data = {
                     title: "Mã hàng gia công",
                     url: "/orderDetail",
                 },
-                 {
+                {
                     title: "Trạng thái mã hàng",
                     url: "/orderDetail/status",
                 },
@@ -122,8 +122,13 @@ const data = {
                     url: "/process/kanban",
                 },
                 {
-                    title: "Gia công chi tiết",
+                    title: "Kế hoạch chi tiết",
                     url: "/process",
+                },
+               
+                {
+                    title: "Gia công chi tiết",
+                    url: "/process/unplannedProcess",
                 },
             ],
         },
