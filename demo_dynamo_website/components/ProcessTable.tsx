@@ -71,6 +71,10 @@ interface ProcessTableProps<T = any> {
     }>
     onViewHistory?: (process: T) => void
     customColumns?: ColumnDef<T>[]
+    page?: number
+    totalPages?: number
+    onNextPage?: () => void
+    onPrevPage?: () => void
 }
 
 function getDefaultColumns<T = any>({
@@ -237,7 +241,11 @@ export default function ProcessTable<T = any>({
     EditComponent,
     DetailComponent,
     onViewHistory,
-    customColumns
+    customColumns,
+    page,
+    onNextPage,
+    onPrevPage,
+    totalPages
 }: ProcessTableProps<T>) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -274,7 +282,6 @@ export default function ProcessTable<T = any>({
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
@@ -363,9 +370,9 @@ export default function ProcessTable<T = any>({
                     </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row,index) => (
+                            table.getRowModel().rows.map((row, index) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}
-                                className={index % 2 === 0 ? "bg-gray-50" : ""}
+                                    className={index % 2 === 0 ? "bg-gray-50" : ""}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888] py-5">
@@ -442,15 +449,28 @@ export default function ProcessTable<T = any>({
                 />
             )}
 
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="space-x-2">
-                    <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-                        Trước
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-                        Tiếp
-                    </Button>
-                </div>
+            <div className="flex items-center justify-end space-x-3 py-4">
+                <span className="text-sm text-gray-500">
+                    Trang {page! + 1} / {totalPages}
+                </span>
+
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={onPrevPage}
+                    disabled={page === 0}
+                >
+                    Trước
+                </Button>
+
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={onNextPage}
+                    disabled={page! + 1 >= totalPages!}
+                >
+                    Tiếp
+                </Button>
             </div>
         </div>
     )

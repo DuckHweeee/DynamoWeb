@@ -1,14 +1,21 @@
 "use client"
 
 import ProcessTable from "@/components/ProcessTable"
-import { usePlannedProcess } from "../hooks/usePlannedProcess"
 import AddProcessForm from "../components/addNewProcess"
 import DetailProcess from "../components/detailProcess"
 import EditProcessForm from "../components/editProcess"
+import { usePlannedProcess } from "../hooks/usePlannedProcess"
 
 export default function PlannedProcessTable() {
     // PlannedProcess Data
-    const { data: process } = usePlannedProcess()
+    const {
+        data: process,
+        page,
+        totalPages,
+        loading,
+        nextPage,
+        prevPage,
+    } = usePlannedProcess()
 
     return (
         <ProcessTable
@@ -20,6 +27,12 @@ export default function PlannedProcessTable() {
             AddComponent={AddProcessForm}
             EditComponent={EditProcessForm}
             DetailComponent={DetailProcess}
+            page={page}
+            totalPages={totalPages}
+            onNextPage={nextPage}
+            onPrevPage={prevPage}
+
+
         />
     )
 }

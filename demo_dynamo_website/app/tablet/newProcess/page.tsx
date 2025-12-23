@@ -44,8 +44,8 @@ import axios from "axios";
 import { OrbitProgress } from "@/node_modules/react-loading-indicators";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useOrderDetail } from "@/app/(main-layout)/orderDetail/hooks/useOrderDetail";
 import { OrderDetail } from "@/app/(main-layout)/orderDetail/lib/type";
-
 const URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const tabletCSS = "max-[1300px]:text-3xl max-[1300px]:!py-7 max-[1300px]:!px-8";
 export default function TabletProcess() {
@@ -63,21 +63,16 @@ export default function TabletProcess() {
   const { data: machine2 } = useFetchMachines();
 
   // Fetch ToDo Progress  
-  const [todo, setTodo] = useState<OrderDetail[]>([]);
+  const {
+    data: orderDetail,
+    page,
+    totalPages,
+    nextPage,
+    prevPage,
+    refetch,
+  } = useOrderDetail();
 
   // Fetch and update todo data
-  const fetchProcess = async () => {
-    try {
-      const res = await axios.get<OrderDetail[]>(`${URL}/api/order-detail`);
-      setTodo(res.data);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu process:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchProcess();
-  }, []);
   //ge† process
   const [subProcesses, setSubProcesses] = useState<Process2[]>([]);
 
@@ -111,7 +106,7 @@ export default function TabletProcess() {
         "Cập nhật thất bại. Vui lòng thử lại.";
       toast.error(backendMessage);
     }
-     finally {
+    finally {
       setLoading(false);
     }
   };
@@ -276,12 +271,12 @@ export default function TabletProcess() {
     // },
   ];
   const table = useReactTable({
-    data: todo,
-    columns,
+    data: orderDetail,
+    columns, manualPagination: true, // ⭐⭐⭐
+    pageCount: totalPages,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
@@ -289,6 +284,10 @@ export default function TabletProcess() {
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: "includesString",
     state: {
+      pagination: {
+        pageIndex: page,
+        pageSize: 10,
+      },
       sorting,
       columnFilters,
       columnVisibility,
@@ -368,51 +367,11 @@ export default function TabletProcess() {
                 {table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row, index) => {
                     const isOdd = index % 2 !== 0;
-                    // return (
-                    //     <Fragment key={row.id}>
-                    //         <TableRow
-                    //             className={`${isOdd ? "bg-gray-100" : ""} text-2xl font-semibold !border-none`}
-                    //         >
-                    //             {row.getVisibleCells().map((cell) => (
-                    //                 <TableCell key={cell.id} className="text-center">
-                    //                     {flexRender(
-                    //                         cell.column.columnDef.cell,
-                    //                         cell.getContext()
-                    //                     )}
-                    //                 </TableCell>
-                    //             ))}
-                    //         </TableRow>
-                    //     </Fragment>
-                    // );
                     return (
                       <Fragment key={row.id}>
                         <TableRow
                           className={`${isOdd ? "bg-gray-100" : ""
                             } text-base !border-none`}
-                          // onClick={() => {
-                          //   setExpandedRowId((prev) =>
-                          //     prev === row.original.orderDetailId
-                          //       ? null
-                          //       : row.original.orderDetailId
-                          //   );
-                          //   // const may = machine2.find(
-                          //   //   (m) =>
-                          //   //     m.machineId ===
-                          //   //     row.original.machineDto?.machineId
-                          //   // )?.machineId;
-                          //   // const nhanvien = staff.find(
-                          //   //   (s) => s.staffId === row.original.planDto?.staffId
-                          //   // )?.id;
-                          //   // const point = row.original.manufacturingPoint;
-                          //   // const pgTime = row.original.pgTime;
-
-                          // setSelectedMachineId(may ? String(may) : "");
-                          // setSelectedPGTime(pgTime ? String(pgTime) : "");
-                          // setSelectedPoint(point ? String(point) : "");
-
-                          //   // console.log(may ? String(may) : "");
-                          //   // console.log(nhanvien ? String(nhanvien) : "");
-                          // }}
                           onClick={async () => {
                             const id = row.original.orderDetailId;
                             setExpandedRowId((prev) =>
@@ -448,107 +407,107 @@ export default function TabletProcess() {
                             <TableCell colSpan={6} className="bg-gray-50 p-5">
                               {/* <div className="p-5 border rounded-xl shadow-sm bg-white"> */}
 
-                                <table className="w-full border-collapse text-sm">
-                                  <thead>
-                                    <tr className="bg-[#074695] text-white text-center">
-                                      <th className="p-3 font-semibold  py-4  px-4">ID mã hàng</th>
-                                      <th className="p-3 font-semibold">Thứ tự nguyên công</th>
-                                      <th className="p-3 font-semibold">Thứ tự sản phẩm</th>
-                                      <th className="p-3 font-semibold">Máy</th>
-                                      <th className="p-3 font-semibold">Điểm</th>
-                                      <th className="p-3 font-semibold">PG (phút)</th>
-                                      <th className="p-3 font-semibold">Thao tác</th>
-                                    </tr>
-                                  </thead>
+                              <table className="w-full border-collapse text-sm">
+                                <thead>
+                                  <tr className="bg-[#074695] text-white text-center">
+                                    <th className="p-3 font-semibold  py-4  px-4">ID mã hàng</th>
+                                    <th className="p-3 font-semibold">Thứ tự nguyên công</th>
+                                    <th className="p-3 font-semibold">Thứ tự sản phẩm</th>
+                                    <th className="p-3 font-semibold">Máy</th>
+                                    <th className="p-3 font-semibold">Điểm</th>
+                                    <th className="p-3 font-semibold">PG (phút)</th>
+                                    <th className="p-3 font-semibold">Thao tác</th>
+                                  </tr>
+                                </thead>
 
-                                  <tbody className="bg-white">
-                                    {subProcesses.length > 0 ? (
-                                      subProcesses.map((p: any) => (
-                                        <tr
-                                          key={p.processId}
-                                          className="text-center border-b hover:bg-gray-100 transition"
-                                        >
-                                          <td className="p-3">{p.machineId?.toString()}</td>
+                                <tbody className="bg-white">
+                                  {subProcesses.length > 0 ? (
+                                    subProcesses.map((p: any) => (
+                                      <tr
+                                        key={p.processId}
+                                        className="text-center border-b hover:bg-gray-100 transition"
+                                      >
+                                        <td className="p-3">{p.machineId?.toString()}</td>
 
-                                          <td className="p-3">{p.partNumber}</td>
+                                        <td className="p-3">{p.partNumber}</td>
 
-                                          <td className="p-3">{p.stepNumber}</td>
+                                        <td className="p-3">{p.stepNumber}</td>
 
-                                          <td className="p-3">
-                                            <Select
-                                              value={p.machineId?.toString() ?? ""}
-                                              onValueChange={(value) =>
-                                                updateProcessMachine(p.processId, value)
-                                              }
-                                            >
-                                              <SelectTrigger className="w-full h-11 text-base">
-                                                <SelectValue placeholder="Máy" />
-                                              </SelectTrigger>
-                                              <SelectContent>
-                                                <SelectGroup>
-                                                  {machine2.map((m) => (
-                                                    <SelectItem
-                                                      key={m.machineId}
-                                                      value={m.machineId.toString()}
-                                                      className="text-base"
-                                                    >
-                                                      {m.machineName}
-                                                    </SelectItem>
-                                                  ))}
-                                                </SelectGroup>
-                                              </SelectContent>
-                                            </Select>
-                                          </td>
+                                        <td className="p-3">
+                                          <Select
+                                            value={p.machineId?.toString() ?? ""}
+                                            onValueChange={(value) =>
+                                              updateProcessMachine(p.processId, value)
+                                            }
+                                          >
+                                            <SelectTrigger className="w-full h-11 text-base">
+                                              <SelectValue placeholder="Máy" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                              <SelectGroup>
+                                                {machine2.map((m) => (
+                                                  <SelectItem
+                                                    key={m.machineId}
+                                                    value={m.machineId.toString()}
+                                                    className="text-base"
+                                                  >
+                                                    {m.machineName}
+                                                  </SelectItem>
+                                                ))}
+                                              </SelectGroup>
+                                            </SelectContent>
+                                          </Select>
+                                        </td>
 
-                                          <td className="p-3">
-                                            <Input
-                                              type="number"
-                                              className="h-11"
-                                              value={p.manufacturingPoint ?? ""}
-                                              onChange={(e) =>
-                                                updateProcessField(
-                                                  p.processId,
-                                                  "manufacturingPoint",
-                                                  e.target.value === "" ? "" : Number(e.target.value)
-                                                )
-                                              }
-                                            />
-                                          </td>
+                                        <td className="p-3">
+                                          <Input
+                                            type="number"
+                                            className="h-11"
+                                            value={p.manufacturingPoint ?? ""}
+                                            onChange={(e) =>
+                                              updateProcessField(
+                                                p.processId,
+                                                "manufacturingPoint",
+                                                e.target.value === "" ? "" : Number(e.target.value)
+                                              )
+                                            }
+                                          />
+                                        </td>
 
-                                          <td className="p-3">
-                                            <Input
-                                              type="number"
-                                              className="h-11"
-                                              value={p.pgTime ?? ""}
-                                              onChange={(e) =>
-                                                updateProcessField(
-                                                  p.processId,
-                                                  "pgTime",
-                                                  e.target.value === "" ? "" : Number(e.target.value)
-                                                )
-                                              }
-                                            />
-                                          </td>
+                                        <td className="p-3">
+                                          <Input
+                                            type="number"
+                                            className="h-11"
+                                            value={p.pgTime ?? ""}
+                                            onChange={(e) =>
+                                              updateProcessField(
+                                                p.processId,
+                                                "pgTime",
+                                                e.target.value === "" ? "" : Number(e.target.value)
+                                              )
+                                            }
+                                          />
+                                        </td>
 
-                                          <td className="p-3">
-                                            <Button
-                                              className="bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded-lg"
-                                              onClick={() => handleSubmit(p.processId)}
-                                            >
-                                              Lưu
-                                            </Button>
-                                          </td>
-                                        </tr>
-                                      ))
-                                    ) : (
-                                      <tr>
-                                        <td colSpan={7} className="p-4 text-center text-gray-500">
-                                          Không có dữ liệu process!
+                                        <td className="p-3">
+                                          <Button
+                                            className="bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded-lg"
+                                            onClick={() => handleSubmit(p.processId)}
+                                          >
+                                            Lưu
+                                          </Button>
                                         </td>
                                       </tr>
-                                    )}  
-                                  </tbody>
-                                </table>
+                                    ))
+                                  ) : (
+                                    <tr>
+                                      <td colSpan={7} className="p-4 text-center text-gray-500">
+                                        Không có dữ liệu process!
+                                      </td>
+                                    </tr>
+                                  )}
+                                </tbody>
+                              </table>
                               {/* </div> */}
                             </TableCell>
                           </TableRow>
@@ -574,25 +533,25 @@ export default function TabletProcess() {
         {/* Phân trang */}
         <div className="flex items-center justify-end space-x-2 py-5 px-5">
           <div className="text-lg text-muted-foreground flex-1">
-            Trang {table.getState().pagination.pageIndex + 1} /{" "}
-            <span>{table.getPageCount()}</span>
+            <span>
+              Trang {page + 1} / {totalPages}
+            </span>
           </div>
           <div className="space-x-2">
             <Button
               variant="outline"
-              size="lg"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-              className="text-lg"
+              size="sm"
+              onClick={prevPage}
+              disabled={page === 0}
             >
               Trước
             </Button>
+
             <Button
               variant="outline"
-              size="lg"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-              className="text-lg"
+              size="sm"
+              onClick={nextPage}
+              disabled={page + 1 >= totalPages}
             >
               Tiếp
             </Button>

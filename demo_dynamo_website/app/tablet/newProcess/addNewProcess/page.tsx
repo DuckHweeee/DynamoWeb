@@ -41,7 +41,7 @@ export default function CreateProcessPage() {
     const fetchOrderDetail = async () => {
       try {
         const response = await axios.get<OrderDetailDto[]>(
-          `${urlLink}/api/order-detail`
+          `${urlLink}/api/order-detail/list`
         );
         setOrderDetail(response.data);
       } catch (error) {

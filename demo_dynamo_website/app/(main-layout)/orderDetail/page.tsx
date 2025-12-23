@@ -126,49 +126,7 @@ function getColumns({
       ),
       cell: ({ row }) => <div>{row.getValue("numberOfSteps")}</div>,
     },
-    // {
-    //   accessorKey: "managerGroupName",
-    //   header: ({ column }) => (
-    //     <Button
-    //       className="text-lg font-bold cursor-pointer"
-    //       variant="ghost"
-    //       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //     >
-    //       Nhóm quản lý
-    //       <ArrowUpDown />
-    //     </Button>
-    //   ),
-    //   cell: ({ row }) => <div>{row.getValue("managerGroupName")}</div>,
-    // },
-    //
-    // {
-    //   accessorKey: "office",
-    //   header: ({ column }) => (
-    //     <Button
-    //       className="text-lg font-bold cursor-pointer"
-    //       variant="ghost"
-    //       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //     >
-    //       Phòng ban
-    //       <ArrowUpDown />
-    //     </Button>
-    //   ),
-    //   cell: ({ row }) => <div>{row.getValue("office")}</div>,
-    // },
-    // {
-    //   accessorKey: "pgTimeGoal",
-    //   header: ({ column }) => (
-    //     <Button
-    //       className="text-lg font-bold cursor-pointer"
-    //       variant="ghost"
-    //       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //     >
-    //       PG dự kiến
-    //       <ArrowUpDown />
-    //     </Button>
-    //   ),
-    //   cell: ({ row }) => <div>{row.getValue("pgTimeGoal")}</div>,
-    // },
+
     {
       accessorKey: "progress",
       header: ({ column }) => (
@@ -190,19 +148,18 @@ function getColumns({
           <div className="flex justify-center">
             <div
               className={`px-4 py-1.5 rounded-sm text-center capitalize
-                                ${
-                                  status?.value === 2
-                                    ? "bg-[#E7F7EF] text-[#0CAF60]"
-                                    : status?.value === 3
-                                    ? "bg-[#EAF4FF] text-[#074695]"
-                                    : "bg-[#FFF4E5] text-[#FF8C00]"
-                                }`}
+                                ${status?.value === 2
+                  ? "bg-[#E7F7EF] text-[#0CAF60]"
+                  : status?.value === 3
+                    ? "bg-[#EAF4FF] text-[#074695]"
+                    : "bg-[#FFF4E5] text-[#FF8C00]"
+                }`}
             >
               {status?.value === 2
                 ? "Đang thực hiện"
                 : status?.value === 3
-                ? "Đã hoàn thành"
-                : "Đang chờ"}
+                  ? "Đã hoàn thành"
+                  : "Đang chờ"}
             </div>
           </div>
         );
@@ -223,13 +180,12 @@ function getColumns({
           <div className="flex items-center gap-2">
             <Progress
               value={progress}
-              className={`w-full ${
-                progress < 50
-                  ? "[&>div]:!bg-red-500"
-                  : progress < 80
+              className={`w-full ${progress < 50
+                ? "[&>div]:!bg-red-500"
+                : progress < 80
                   ? "[&>div]:!bg-yellow-500"
                   : "[&>div]:!bg-green-500"
-              }`}
+                }`}
             />
             <span className="text-sm font-semibold">
               {progress.toFixed(0)}%
@@ -295,28 +251,6 @@ const statusList = [
   { name: "Đang thực hiện", value: 2 },
   { name: "Đã hoàn thành", value: 3 },
 ];
-// export async function deleteOrderDetail(
-//   orderDetailId: number | string,
-//   refetch: () => void
-// ) {
-//   if (!orderDetailId) return;
-//   const urlLink = process.env.NEXT_PUBLIC_BACKEND_URL;
-//   try {
-//     const confirmed = window.confirm("Bạn có chắc muốn xóa mục này không?");
-//     if (!confirmed) return;
-
-//     await axios.delete(`${urlLink}/api/order-detail/${orderDetailId}`);
-
-//     toast.success("Xóa thành công!");
-
-//     // ❗ optional: call your reload function here
-//     // await fetchData();
-//     await refetch();
-//   } catch (error) {
-//     console.error(error);
-//     toast.error("Xóa thất bại, vui lòng thử lại.");
-//   }
-// }
 
 export default function OrderDetailTable() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -327,7 +261,14 @@ export default function OrderDetailTable() {
   // OrderDetail Data
   //const { data: orderDetail } = useOrderDetail();
 
-  const { data: orderDetail, refetch } = useOrderDetail();
+  const {
+    data: orderDetail,
+    page,
+    totalPages,
+    nextPage,
+    prevPage,
+    refetch,
+  } = useOrderDetail();
 
   const [showForm, setShowForm] = useState(false);
   const [editingOrderDetail, setEditingOrderDetail] =
@@ -340,7 +281,7 @@ export default function OrderDetailTable() {
 
   const handleImportSuccess = () => {
     toast.success("Import thành công!");
-     window.location.reload();
+    window.location.reload();
   };
 
   const columns = getColumns({
@@ -353,11 +294,11 @@ export default function OrderDetailTable() {
 
   const table = useReactTable({
     data: orderDetail,
-    columns,
+    columns, manualPagination: true, // ⭐⭐⭐
+    pageCount: totalPages,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
@@ -365,6 +306,10 @@ export default function OrderDetailTable() {
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: "includesString",
     state: {
+      pagination: {
+        pageIndex: page,
+        pageSize: 10,
+      },
       sorting,
       columnFilters,
       columnVisibility,
@@ -431,7 +376,7 @@ export default function OrderDetailTable() {
             </TableHeader>
             <TableBody>
               {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row,index) => (
+                table.getRowModel().rows.map((row, index) => (
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
@@ -516,22 +461,25 @@ export default function OrderDetailTable() {
           onClose={() => setOpenDetail(false)}
           orderDetail={detailOrderDetail}
         />
-
         <div className="flex items-center justify-end space-x-2 py-4">
           <div className="space-x-2">
+            <span>
+              Trang {page + 1} / {totalPages}
+            </span>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
+              onClick={prevPage}
+              disabled={page === 0}
             >
               Trước
             </Button>
+
             <Button
               variant="outline"
               size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
+              onClick={nextPage}
+              disabled={page + 1 >= totalPages}
             >
               Tiếp
             </Button>

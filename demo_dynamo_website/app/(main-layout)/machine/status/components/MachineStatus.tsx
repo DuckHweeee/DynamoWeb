@@ -140,11 +140,12 @@ export default function MachineStatus({
       </div>
 
       {dataMachineStatus && dataMachineStatus.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
           {paginatedMachines.map((machine) => (
             <div
               key={machine.id}
               className="bg-white border rounded-lg shadow p-4 space-y-1"
+              
             >
               <div className="flex justify-between items-center">
                 <p className="text-xl text-blue-800 font-bold">

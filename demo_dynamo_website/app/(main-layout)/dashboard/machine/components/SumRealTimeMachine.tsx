@@ -36,7 +36,26 @@ const legendItems = [
     { name: "Thực tế", fill: "#0077FF" },
     { name: "Mục tiêu", fill: "red" },
 ]
+const CustomRealLabel = (props: any) => {
+    const { x, y, width, height, value } = props;
 
+    const TEXT_HEIGHT = 14;     // fontSize
+    const PADDING = 6;          // khoảng đệm
+    const canFitInside = height > TEXT_HEIGHT + PADDING;
+
+    return (
+        <text
+            x={x + width / 2}
+            y={canFitInside ? y + TEXT_HEIGHT + 2 : y - 6}
+            textAnchor="middle"
+            fill={canFitInside ? "#fff" : "#333"}
+            fontSize={14}
+            fontWeight={500}
+        >
+            {value}
+        </text>
+    );
+};
 export function SumRealTimeMachine({
     title,
     description,
@@ -47,11 +66,10 @@ export function SumRealTimeMachine({
     dataOverview: MachineOverview[]
 }) {
     const groupTarget =
-        dataOverview.length > 0 ? dataOverview[0].groupTarget : 0
-
+        dataOverview.length > 0 ? dataOverview[0].groupTarget.toFixed(2) : 0
     const roundedData = dataOverview.map(item => ({
         ...item,
-        pgTime: Math.round(item.pgTime),
+        pgTime: item.pgTime.toFixed(2),
         pgTimeExpect: Math.round(item.pgTimeExpect),
     }))
 
@@ -62,12 +80,12 @@ export function SumRealTimeMachine({
                 <p className="text-lg text-gray-500 mb-4">{description}</p>
             </CardHeader>
             <CardContent>
-                <ChartContainer config={chartConfig} className="h-[350px] w-full">
+                <ChartContainer config={chartConfig} className="h-[350px] w-full px-6">
                     <BarChart
                         accessibilityLayer
                         data={roundedData}
                         margin={{
-                            left: -30,
+                            left: -20,
                         }}
                     >
                         <CartesianGrid vertical={false} />
@@ -86,7 +104,7 @@ export function SumRealTimeMachine({
                         <Bar dataKey="pgTime" fill="#0077FF" radius={4}>
                             <LabelList
                                 dataKey="pgTime"
-                                position="insideTop"
+                                content={<CustomRealLabel />}
                                 offset={8}
                                 className="fill-white"
                                 fontSize={14}
@@ -95,7 +113,7 @@ export function SumRealTimeMachine({
                         <Bar dataKey="pgTimeExpect" fill="#074695" radius={4}>
                             <LabelList
                                 dataKey="pgTimeExpect"
-                                position="insideTop"
+                                content={<CustomRealLabel />}
                                 offset={8}
                                 className="fill-white"
                                 fontSize={14}

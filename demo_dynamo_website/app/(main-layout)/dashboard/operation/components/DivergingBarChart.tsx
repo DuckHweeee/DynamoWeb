@@ -93,9 +93,7 @@ export function DivergingBarChart({
               type="category"
               tickLine={false}
               axisLine={false}
-              fontSize={15}
-               dx={-10}
-              
+              fontSize={15}              
             />
             <XAxis type="number" tickLine={false} axisLine={true} hide />
 

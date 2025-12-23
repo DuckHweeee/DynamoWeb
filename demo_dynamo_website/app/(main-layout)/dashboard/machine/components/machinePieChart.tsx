@@ -121,15 +121,15 @@ export function MachinePieChart({
                                 y={viewBox.cy}
                                 className="fill-foreground text-3xl font-bold"
                               >
-                                {chartData[0].number.toFixed(0)}%
+                                {chartData[0].number.toFixed(1)}%
                               </tspan>
 
                               {lines.map((line, i) => (
                                 <tspan
                                   key={i}
                                   x={viewBox.cx}
-                                  y={(viewBox.cy || 0) + 24 + i * 16}
-                                  className="fill-muted-foreground text-base font-bold"
+                                  y={(viewBox.cy || 0) + 30 + i * 16}
+                                  className="fill-muted-foreground text-base"
                                 >
                                   {line}
                                 </tspan>

@@ -28,11 +28,12 @@ import {
 import { Fragment, useState } from "react"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useFetchMachines, useFetchOperators, useFetchProcesses } from "@/hooks/useFetchData"
-import {  Process2 } from "@/lib/type"
+import { Process2 } from "@/lib/type"
 import { toast } from "sonner"
 import axios from "axios"
 import { OrbitProgress } from "@/node_modules/react-loading-indicators"
 import { useProcess } from "../../../hooks/useProcess"
+import { usePlannedProcess } from "@/app/(main-layout)/process/hooks/usePlannedProcess"
 
 const URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 export default function TabletProcess() {
@@ -45,7 +46,15 @@ export default function TabletProcess() {
     const { data: staff } = useFetchOperators();
     const { data: machine2 } = useFetchMachines()
 
-    const { data: processData2, refetch } = useProcess()
+    const {
+        data: process,
+        page,
+        totalPages,
+
+        nextPage,
+        prevPage,
+        refetch
+    } = usePlannedProcess()
 
     // Handle Submit
     const [loading, setLoading] = useState(false);
@@ -172,12 +181,12 @@ export default function TabletProcess() {
         },
     ];
     const table = useReactTable({
-        data: processData2,
-        columns,
+        data: process,
+        columns, manualPagination: true, // ⭐⭐⭐
+        pageCount: totalPages,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(), 
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
@@ -185,6 +194,10 @@ export default function TabletProcess() {
         onGlobalFilterChange: setGlobalFilter,
         globalFilterFn: "includesString",
         state: {
+            pagination: {
+                pageIndex: page,
+                pageSize: 10,
+            },
             sorting,
             columnFilters,
             columnVisibility,
@@ -355,22 +368,23 @@ export default function TabletProcess() {
                     Trang {table.getState().pagination.pageIndex + 1} /{" "}
                     <span>{table.getPageCount()}</span>
                 </div> */}
+                <span>
+                    Trang {page + 1} / {totalPages}
+                </span>
                 <div className="space-x-2">
                     <Button
                         variant="outline"
-                        size="lg"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                        className="text-lg"
+                        size="sm"
+                        onClick={prevPage}
+                        disabled={page === 0}
                     >
                         Trước
                     </Button>
                     <Button
                         variant="outline"
-                        size="lg"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                        className="text-lg"
+                        size="sm"
+                        onClick={nextPage}
+                        disabled={page + 1 >= totalPages}
                     >
                         Tiếp
                     </Button>

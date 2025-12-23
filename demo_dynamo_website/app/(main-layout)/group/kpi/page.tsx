@@ -108,7 +108,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold "
+            className="text-base font-bold "
           >
             Năm
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -117,7 +117,7 @@ function getColumns({
       },
       cell: ({ row }) => (
         <div className="pl-5 font-medium text-[16px] text-[#888888]">
-          <div className="text-lg  text-[#074695]">
+          <div className="text-base  text-[#074695]">
             {row.getValue("year")}
           </div>
         </div>
@@ -130,7 +130,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold "
+            className="text-base font-bold "
           >
             Chu kỳ thời gian
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -168,7 +168,7 @@ function getColumns({
 
         return (
           <div className="pl-5 text-[16px] text-[#888888]">
-            <div className="text-lg  text-[#074695]">
+            <div className="text-base  text-[#074695]">
               {displayContent}
             </div>
           </div>
@@ -182,7 +182,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg"
+            className="text-base"
           >
             Phòng ban
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -191,7 +191,7 @@ function getColumns({
       },
       cell: ({ row }) => (
         <div className="pl-5 font-medium text-[16px] text-[#888888]">
-          <div className="text-lg ">{row.getValue("office")}</div>
+          <div className="text-base">{row.getValue("office")}</div>
         </div>
       ),
     },
@@ -202,7 +202,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg "
+            className="text-base "
           >
             Nhóm
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -215,7 +215,7 @@ function getColumns({
 
         return (
           <div className="pl-5 font-medium text-[16px] text-[#888888]">
-            <div className="text-lg  text-[#074695]">
+            <div className="text-base  text-[#074695]">
               {groupsLoading ? (
                 <div className="flex items-center">
                   <div className="animate-pulse bg-gray-200 h-4 w-24 rounded"></div>
@@ -238,16 +238,16 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg"
+            className="text-base"
           >
-            Mục tiêu làm việc
+            Mục tiêu giờ làm
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
         <div className="pl-5  text-[16px] text-[#888888]">
-          <div className="text-lg text-[#074695]">
+          <div className="text-bass text-[#074695]">
             {Number(row.getValue("workingHourGoal") || 0).toFixed(0)}
           </div>
         </div>
@@ -260,7 +260,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg"
+            className="text-base"
           >
             Giờ tăng giảm thực
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -271,7 +271,7 @@ function getColumns({
         const difference = Number(row.getValue("workingHourDifference") || 0);
         return (
           <div className="pl-5 text-[16px] text-[#888888]">
-            <div className="text-lg text-[#074695]">
+            <div className="text-base text-[#074695]">
               {difference.toFixed(0)}
             </div>
           </div>
@@ -285,7 +285,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg"
+            className="text-base"
           >
             Giờ làm việc thực
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -294,7 +294,7 @@ function getColumns({
       },
       cell: ({ row }) => (
         <div className="pl-5 text-[16px] text-[#888888]">
-          <div className="text-lg text-[#074695]">
+          <div className="text-base text-[#074695]">
             {Number(row.getValue("workingHour") || 0).toFixed(0)}
           </div>
         </div>

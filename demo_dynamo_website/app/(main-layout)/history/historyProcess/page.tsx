@@ -1,8 +1,18 @@
 "use client";
-
 import * as React from "react";
-import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Search, Calendar } from "lucide-react";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from "@tanstack/react-table";
+import { ArrowUpDown, Search, Calendar, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
@@ -24,117 +34,174 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ProcessTable from "@/components/ProcessTable";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { getEndOfDayVN, getStartOfDayVN } from "@/hooks/getTodayRangeVN";
+import AddProcessForm from "../../process/components/addNewProcess";
+import EditProcessForm from "../../process/components/editProcess";
+import DetailProcess from "../../process/components/detailProcess";
 
-// Custom columns for DrawingCodeProcessHistory
-const getHistoryProcessColumns = (): ColumnDef<any>[] => [
-  {
-    accessorKey: "orderDetailDto.orderCode",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="h-auto p-0 hover:bg-transparent"
-      >
-        <span className="font-bold">ID Mã Hàng</span>
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    cell: ({ row }) => (
-      <div className="font-medium text-blue-600">
-        {row.original.orderDetailDto?.orderCode}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "processType",
-    header: () => <div className="font-bold text-base">Đối tượng gia công</div>,
-    cell: ({ row }) => (
-      <Badge className="py-2 px-4 bg-blue-50" variant="outline">{row.getValue("processType")}</Badge>
-    ),
-  },
-  {
-    accessorKey: "partNumber",
-    header: () => <div className="font-bold text-base">TT Gia công</div>,
-    cell: ({ row }) => (
-      <div className="text-center font-medium">
-        {row.getValue("partNumber")}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "stepNumber",
-    header: () => <div className="font-bold text-base">TT  Sản  phẩm</div>,
-    cell: ({ row }) => (
-      <div className="text-center font-medium">
-         {row.getValue("stepNumber")}
-      </div>
-    ),
-  },
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Process } from "../../process/lib/type";
+import CompletedProcessDetail from "./components/processDetail";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
-  {
-    accessorKey: "machineDto.machineName",
-    header: () => <div className="font-bold text-base">Máy</div>,
-    cell: ({ row }) => (
-      <div className="font-medium">
-        {row.original.machineDto?.machineName || "Chưa gán"}
-      </div>
-    ),
-  },
-  // {
-  //   accessorKey: "staffDtos",
-  //   header: () => <div className="font-bold text-base">Nhân viên</div>,
-  //   cell: ({ row }) => (
-  //     <div className="font-medium">
-  //       {row.original.staffDtos
-  //         ?.map((staff: any) => staff.staffName)
-  //         .join(", ") || "Chưa gán"}
-  //     </div>
-  //   ),
-  // },
-  {
-    accessorKey: "pgTime",
-    header: () => <div className="font-bold text-base">PG Dự kiến</div>,
-    cell: ({ row }) => (
-      <div className="text-center">{row.getValue("pgTime")} phút</div>
-    ),
-  },
-  // {
-  //   accessorKey: "startTime",
-  //   header: () => <div className="font-bold text-base">Thời Gian Bắt Đầu</div>,
-  //   cell: ({ row }) => {
-  //     const startTime = row.getValue("startTime") as string;
-  //     return (
-  //       <div className="text-center text-sm">
-  //         {startTime ? new Date(startTime).toLocaleString("vi-VN") : "N/A"}
-  //       </div>
-  //     );
-  //   },
-  // },
-  // {
-  //   accessorKey: "endTime",
-  //   header: () => <div className="font-bold text-base">Thời Gian Kết Thúc</div>,
-  //   cell: ({ row }) => {
-  //     const endTime = row.getValue("endTime") as string;
-  //     return (
-  //       <div className="text-center text-sm">
-  //         {endTime
-  //           ? new Date(endTime).toLocaleString("vi-VN")
-  //           : "Chưa kết thúc"}
-  //       </div>
-  //     );
-  //   },
-  // },
-  
-];
+function getColumns({
+  setDetailOrderDetail,
+  setOpenDetail,
+  refetch,
+}: {
+  setDetailOrderDetail: (orderDetail: Process) => void;
+  setOpenDetail: (show: boolean) => void;
+  refetch: () => void;
+}): ColumnDef<any>[] {
+  return [
+    {
+      accessorKey: "orderDetailDto.orderCode",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="h-auto p-0 hover:bg-transparent"
+        >
+          <span className="font-bold">ID Mã Hàng</span>
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="font-medium text-blue-600">
+          {row.original.orderDetailDto?.orderCode}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "processType",
+      header: () => <div className="font-bold text-base">Đối tượng gia công</div>,
+      cell: ({ row }) => (
+        <Badge className="py-2 px-4 bg-blue-50" variant="outline">{row.getValue("processType")}</Badge>
+      ),
+    },
+    {
+      accessorKey: "partNumber",
+      header: () => <div className="font-bold text-base">TT Gia công</div>,
+      cell: ({ row }) => (
+        <div className="text-center font-medium">
+          {row.getValue("partNumber")}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "stepNumber",
+      header: () => <div className="font-bold text-base">TT  Sản  phẩm</div>,
+      cell: ({ row }) => (
+        <div className="text-center font-medium">
+          {row.getValue("stepNumber")}
+        </div>
+      ),
+    },
+
+    {
+      accessorKey: "machineDto.machineName",
+      header: () => <div className="font-bold text-base">Máy</div>,
+      cell: ({ row }) => (
+        <div className="font-medium">
+          {row.original.machineDto?.machineName || "Chưa gán"}
+        </div>
+      ),
+    },
+    // {
+    //   accessorKey: "staffDtos",
+    //   header: () => <div className="font-bold text-base">Nhân viên</div>,
+    //   cell: ({ row }) => (
+    //     <div className="font-medium">
+    //       {row.original.staffDtos
+    //         ?.map((staff: any) => staff.staffName)
+    //         .join(", ") || "Chưa gán"}
+    //     </div>
+    //   ),
+    // },
+    {
+      accessorKey: "pgTime",
+      header: () => <div className="font-bold text-base">PG Dự kiến</div>,
+      cell: ({ row }) => (
+        <div className="text-center">{row.getValue("pgTime")} phút</div>
+      ),
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const orderDetail = row.original;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                className="text-lg cursor-pointer pr-6"
+                onClick={() => {
+                  setDetailOrderDetail(orderDetail);
+                  setOpenDetail(true);
+                }}
+              >
+                Xem chi tiết
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-lg cursor-pointer pr-6"
+                onClick={() => {
+                  // setEditingOrderDetail(orderDetail);
+                  // setShowForm(true);
+                }}
+              >
+                Chỉnh sửa
+              </DropdownMenuItem>
+              {/* {progress !== 2 && progress !== 3 && (
+              <DropdownMenuItem
+                className="text-lg cursor-pointer pr-6"
+                onClick={() => {
+                  setEditingOrderDetail(orderDetail);
+                  deleteOrderDetail(orderDetail.orderDetailId, refetch);
+                  console.log("delete", orderDetail.orderDetailId);
+                }}
+              >
+                Xóa
+              </DropdownMenuItem>
+            )} */}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+}
 
 export default function HistoryProcessPage() {
-  const [date, setDate] = useState<DateRange | undefined>();
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+  const [globalFilter, setGlobalFilter] = useState("");
+  //const [date, setDate] = useState<DateRange | undefined>();
   const [selectedProcessType, setSelectedProcessType] = useState<string>("all");
   const [selectedMachine, setSelectedMachine] = useState<string>("all");
   const [selectedStaff, setSelectedStaff] = useState<string>("all");
+  const today = new Date();
 
+  const [date, setDate] = useState<DateRange | undefined>(undefined);
+  const start = React.useMemo(() => {
+    if (!date?.from) return undefined;
+    return getStartOfDayVN(date.from);
+  }, [date?.from]);
+
+  const stop = React.useMemo(() => {
+    if (!date?.to) return undefined;
+    return getEndOfDayVN(date.to);
+  }, [date?.to]);
   // Fetch data using useCompletedProcess hook
-  const { data: processData, loading, error, refetch } = useCompletedProcess();
+  const { data: processData, loading, error, refetch } = useCompletedProcess(start, stop);
 
   // Extract unique values for filters from the data
   const processTypes = React.useMemo(() => {
@@ -169,10 +236,21 @@ export default function HistoryProcessPage() {
   }, [processData]);
 
   const clearFilters = () => {
-    setDate(undefined);
+    const today = new Date();
+
+    setDate({
+      from: today,
+      to: today,
+    });
+
     setSelectedProcessType("all");
     setSelectedMachine("all");
     setSelectedStaff("all");
+
+    refetch(
+      getStartOfDayVN(today),
+      getEndOfDayVN(today)
+    );
   };
 
   const hasFilters =
@@ -186,15 +264,6 @@ export default function HistoryProcessPage() {
     if (!processData) return [];
 
     return processData.filter((item) => {
-      // Date filter
-      if (date?.from || date?.to) {
-        const startTime = item.startTime ? new Date(item.startTime) : null;
-        const endTime = item.endTime ? new Date(item.endTime) : null;
-
-        if (date.from && startTime && startTime < date.from) return false;
-        if (date.to && endTime && endTime > date.to) return false;
-      }
-
       // Process type filter
       if (
         selectedProcessType !== "all" &&
@@ -220,6 +289,36 @@ export default function HistoryProcessPage() {
     });
   }, [processData, date, selectedProcessType, selectedMachine, selectedStaff]);
 
+  const [detailOrderDetail, setDetailOrderDetail] =
+    useState<Process | null>(null);
+  const [openDetail, setOpenDetail] = useState(false);
+
+  const columns = getColumns({
+    setDetailOrderDetail,
+    setOpenDetail,
+    refetch,
+  });
+  const table = useReactTable({
+    data: processData,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: "includesString",
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      globalFilter,
+    },
+  });
   return (
     <div className="m-2 py-3 bg-white rounded-[10px] shadow h-screen">
       {/* <div className="h-screen flex flex-col p-4 bg-gray-50"> */}
@@ -256,7 +355,16 @@ export default function HistoryProcessPage() {
                 <DatePicker
                   mode="range"
                   selected={date}
-                  onSelect={setDate}
+                  onSelect={(range) => {
+                    setDate(range);
+
+                    if (range?.from && range?.to) {
+                      refetch(
+                        getStartOfDayVN(range.from),
+                        getEndOfDayVN(range.to)
+                      );
+                    }
+                  }}
                   numberOfMonths={2}
                 />
               </PopoverContent>
@@ -348,7 +456,7 @@ export default function HistoryProcessPage() {
                 className="h-10 flex-1"
                 onClick={() => refetch()}
                 disabled={loading}
-              > 
+              >
                 {loading ? "Đang tải..." : "Làm mới"}
               </Button>
             </div>
@@ -356,19 +464,64 @@ export default function HistoryProcessPage() {
         </div>
       </div>
 
-      {/* Table Section using Global ProcessTable */}
-      <div className="flex-1 min-h-0">
-        <ProcessTable
-          data={filteredData || []}
-          loading={loading}
-          error={error}
-          title="Lịch Sử Quy Trình"
-          showAddButton={false}
-          showActions={false}
-          showViewHistory={false}
-          customColumns={getHistoryProcessColumns()}
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id} className="text-xl font-bold">
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id} className="text-center py-2">
+                    {!header.isPlaceholder &&
+                      flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row, index) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  className={index % 2 === 0 ? "bg-gray-50" : ""}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className="text-center font-medium text-[16px] text-[#888888] py-4"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  Không có kết quả.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+
+        <CompletedProcessDetail
+          openDetail={openDetail}
+          onClose={() => setOpenDetail(false)}
+         process={detailOrderDetail}
         />
       </div>
+
     </div>
   );
 }
