@@ -80,7 +80,7 @@ export default function TabletOperation() {
         };
         fetchOrderDetail();
     }, []);
-    
+
     const { data: machine } = useFetchMachines()
     // Thêm useEffect để thiết lập máy đầu tiên
     useEffect(() => {
@@ -161,8 +161,8 @@ export default function TabletOperation() {
         ? (updateInfor.updateStaffId || matchedStaff?.staffIdNumber || selectedProcess?.planDto?.staffId)
         : (matchedStaff?.staffIdNumber || selectedProcess?.planDto?.staffId);
 
-        console.log("matchedStaff: ", matchedStaff);
-        console.log("selectedProcess: ", selectedProcess);
+    console.log("matchedStaff: ", matchedStaff);
+    console.log("selectedProcess: ", selectedProcess);
     console.log("currentStaffId: ", currentStaffId);
 
     // Test
@@ -341,7 +341,20 @@ export default function TabletOperation() {
             await axios.post(url);
             toast.success("Gửi thành công!");
             setSelectStaff(undefined);
-            location.reload()
+            const res = await axios.get<ProcessResponse>(
+                `${urlLink}/api/drawing-code-process/machine/${selectedMachineId}`
+            );
+            setTodo(res.data.todo || []);
+            setInProgress(res.data.inProgress || null);
+
+            // fetch lại current staff
+            const response3 = await axios.get<CurrentStaff[]>(
+                `${urlLink}/api/current-staff`
+            );
+            setCurrentStaff(response3.data);
+
+            // reset selectedProcess
+            setSelectedProcess(null);
         } catch (error) {
             toast.error("Gửi thất bại. Vui lòng thử lại.");
         } finally {
