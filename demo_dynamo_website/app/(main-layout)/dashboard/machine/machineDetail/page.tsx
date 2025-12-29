@@ -69,7 +69,8 @@ const MachineDetailOverview = () => {
     const { data: dataEfficiencyDefault } = useMachineEfficiencyDetail(
         selectedMachine ?? 0,
         startDateFromUrl ?? "",
-        endDateFromUrl ?? ""
+        endDateFromUrl ?? "",
+        groupIdFromUrl ?? "",
     );
     useEffect(() => {
         if (dataEfficiencyDefault) {

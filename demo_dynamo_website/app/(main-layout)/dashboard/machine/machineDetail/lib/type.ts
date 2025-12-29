@@ -1,3 +1,4 @@
+import { Staff } from "@/lib/type";
 import { Machine } from "../../lib/type";
 
 export interface MachineStatisticDetail {
@@ -23,8 +24,7 @@ export interface MachineHistoryDetail {
     startTime: string;
     endTime: string;
     machineName: string;
-    staffIdNumber: number;
-    staffName: string;
+    staffDtos: Staff[];
     status: string;
 }
 

@@ -257,7 +257,6 @@ export default function OrderDetailTable() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
-  const [globalFilter, setGlobalFilter] = useState("");
   // OrderDetail Data
   //const { data: orderDetail } = useOrderDetail();
 
@@ -268,7 +267,8 @@ export default function OrderDetailTable() {
     nextPage,
     prevPage,
     refetch,
-  } = useOrderDetail();
+    search
+  } = useOrderDetail(10);
 
   const [showForm, setShowForm] = useState(false);
   const [editingOrderDetail, setEditingOrderDetail] =
@@ -300,11 +300,8 @@ export default function OrderDetailTable() {
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-    onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: "includesString",
     state: {
       pagination: {
         pageIndex: page,
@@ -314,7 +311,6 @@ export default function OrderDetailTable() {
       columnFilters,
       columnVisibility,
       rowSelection,
-      globalFilter,
     },
   });
 
@@ -330,9 +326,10 @@ export default function OrderDetailTable() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <Input
                 placeholder="Tìm kiếm"
-                value={globalFilter}
-                onChange={(e) => setGlobalFilter(e.target.value)}
-                className="pl-10 py-5"
+                onChange={(e) => {
+                  console.log("typing:", e.target.value);
+                  search(e.target.value);
+                }}
               />
             </div>
 

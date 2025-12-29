@@ -6,8 +6,6 @@ import {
   ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable,
@@ -70,12 +68,13 @@ export default function TabletProcess() {
     nextPage,
     prevPage,
     refetch,
-  } = useOrderDetail();
+    search,
+  } = useOrderDetail(10);
 
   // Fetch and update todo data
   //ge† process
   const [subProcesses, setSubProcesses] = useState<Process2[]>([]);
-
+  const [keyword, setKeyword] = useState("");
   // Handle Submit
   const [loading, setLoading] = useState(false);
   const handleSubmit = async (processId: string) => {
@@ -150,7 +149,6 @@ export default function TabletProcess() {
   //Column
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
-  const [globalFilter, setGlobalFilter] = useState("");
 
   const columns: ColumnDef<OrderDetail>[] = [
     {
@@ -216,22 +214,6 @@ export default function TabletProcess() {
       },
       cell: ({ row }) => <div>{row.getValue("quantity")}</div>,
     },
-    // {
-    //   accessorKey: "manufacturingPoint",
-    //   header: ({ column }) => {
-    //     return (
-    //       <Button
-    //         className="cursor-pointer text-[22px] font-bold hover:bg-blue-950 hover:text-white"
-    //         variant="ghost"
-    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //       >
-    //         ĐGC
-    //         <ArrowUpDown />
-    //       </Button>
-    //     );
-    //   },
-    //   cell: ({ row }) => <div>{row.getValue("manufacturingPoint")}</div>,
-    // },
     {
       accessorKey: "pgTimeGoal",
       header: ({ column }) => {
@@ -248,27 +230,6 @@ export default function TabletProcess() {
       },
       cell: ({ row }) => <div>{row.getValue("pgTimeGoal")}</div>,
     },
-    // {
-    //     accessorKey: "planDto.machineId",
-    //     accessorFn: (row) => row.planDto?.machineId ?? "",
-    //     header: ({ column }) => {
-    //         return (
-    //             <Button
-    //                 className="cursor-pointer text-2xl font-bold hover:bg-blue-950 hover:text-white"
-    //                 variant="ghost"
-    //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //             >
-    //                 Máy
-    //                 <ArrowUpDown />
-    //             </Button>
-    //         )
-    //     },
-    //     cell: ({ row }) => {
-    //         const machineId = row.original.machineDto?.machineId;
-    //         const foundMachine = machine2.find(mc => mc.machineId === machineId);
-    //         return <div>{foundMachine ? foundMachine.machineName : ""}</div>;
-    //     }
-    // },
   ];
   const table = useReactTable({
     data: orderDetail,
@@ -278,11 +239,8 @@ export default function TabletProcess() {
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-    onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: "includesString",
     state: {
       pagination: {
         pageIndex: page,
@@ -292,7 +250,6 @@ export default function TabletProcess() {
       columnFilters,
       columnVisibility,
       rowSelection,
-      globalFilter,
     },
   });
 
@@ -309,8 +266,12 @@ export default function TabletProcess() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <Input
                 placeholder="Tìm kiếm"
-                value={globalFilter}
-                onChange={(e) => setGlobalFilter(e.target.value)}
+                value={keyword}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setKeyword(value);
+                  search(value); // 🔥 DÒNG QUYẾT ĐỊNH
+                }}
                 className="pl-10 py-5"
               />
             </div>

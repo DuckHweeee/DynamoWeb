@@ -69,6 +69,36 @@ const columns: ColumnDef<MachineHistoryDetail>[] = [
         cell: ({ row }) => <div>{row.getValue("orderCode")}</div>,
     },
     {
+        accessorKey: "partNumber",
+        header: ({ column }) => (
+            <Button
+                className="text-lg font-bold capitalize"
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                }
+            >
+                TTSP <ArrowUpDown />
+            </Button>
+        ),
+        cell: ({ row }) => <div>{row.getValue("partNumber")}</div>,
+    },
+    {
+        accessorKey: "stepNumber",
+        header: ({ column }) => (
+            <Button
+                className="text-lg font-bold capitalize"
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                }
+            >
+                TTGC <ArrowUpDown />
+            </Button>
+        ),
+        cell: ({ row }) => <div>{row.getValue("stepNumber")}</div>,
+    },
+    {
         accessorKey: "machineName",
         header: ({ column }) => (
             <Button
@@ -83,15 +113,30 @@ const columns: ColumnDef<MachineHistoryDetail>[] = [
         ),
         // cell: ({ row }) => <div>{row.getValue("machineName")}</div>,
         cell: ({ row }) => {
-            const staffId = row.original.staffIdNumber
-            const staffName = row.original.staffName
+            const staffList = row.original.staffDtos;
+            if (!staffList?.length) return "-";
 
             return (
-                <div className="flex flex-col">
-                    <div className="text-lg font-normal">{staffName}</div>
-                    <div className="text-lg font-normal">ID: {staffId}</div>
+                <div className="group relative cursor-pointer">
+                    <span className="text-lg">
+                        {staffList[0].staffName}
+                        {staffList.length > 1 && (
+                            <span className="text-gray-500 ml-1">
+                                (+{staffList.length - 1})
+                            </span>
+                        )}
+                    </span>
+
+                    {/* Hover box */}
+                    <div className="absolute z-50 hidden group-hover:block bg-white border shadow rounded p-2 mt-1">
+                        {staffList.map((s) => (
+                            <div key={s.staffId} className="text-sm">
+                                {s.staffName} (ID: {s.staffId})
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            )
+            );
         },
     },
     {

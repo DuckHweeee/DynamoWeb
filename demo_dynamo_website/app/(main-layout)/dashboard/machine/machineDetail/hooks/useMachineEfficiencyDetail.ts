@@ -3,7 +3,7 @@ import axios from "axios";
 import { MachineEfficiencyDetail } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-export function useMachineEfficiencyDetail(id: number, startDate: string, endDate: string) {
+export function useMachineEfficiencyDetail(id: number, startDate: string, endDate: string, groupId: string) {
     const [data, setData] = useState<MachineEfficiencyDetail | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -15,7 +15,7 @@ export function useMachineEfficiencyDetail(id: number, startDate: string, endDat
                 const res = await fetch(`${url}/api/machine-detail/efficiency`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ id, startDate, endDate }),
+                    body: JSON.stringify({ id, startDate, endDate, groupId}),
                     signal: controller.signal,
                 });
                 if (!res.ok) throw new Error("Lỗi mạng hoặc server");

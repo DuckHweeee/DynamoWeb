@@ -6,6 +6,9 @@ import { useGroups } from "@/hooks/useGroup"
 import { useEffect, useState } from "react"
 import OrderList from "./components/OrderList"
 import { useOrderDetailStatus } from "./hooks/useOrderDetailStatus"
+import { Button } from "@/components/ui/button"
+import { Search } from "lucide-react"
+import { Input } from "@/components/ui/input"
 
 
 //import { useMachineStatus } from "./hook/useMachineStatus"
@@ -13,8 +16,18 @@ import { useOrderDetailStatus } from "./hooks/useOrderDetailStatus"
 export default function StatusMachine() {
     const [selectedGroup, setSelectedGroup] = useState<string>()
     const { data: groupList } = useGroups()
+    const [keyword, setKeyword] = useState("");
 
-    const { data: listOrderData } = useOrderDetailStatus()
+    // const { data: listOrderData } = useOrderDetailStatus()
+    const {
+        data,
+        page,
+        totalPages,
+        nextPage,
+        prevPage,
+        loading,
+        search
+    } = useOrderDetailStatus(12);
 
     useEffect(() => {
         if (groupList && groupList.length > 0 && !selectedGroup) {
@@ -38,17 +51,21 @@ export default function StatusMachine() {
                         onChange={(e) => setGlobalFilter(e.target.value)}
                         className="max-w-sm !text-[20px]"
                     /> */}
-                    {/* <div className="relative max-w-sm w-full">
+                    <div className="relative max-w-sm w-full items-center flex justify-center">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                         <Input
                             placeholder="Tìm kiếm"
-                            // value={globalFilter}
-                            // onChange={(e) => setGlobalFilter(e.target.value)}
+                            value={keyword}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                setKeyword(value);
+                                search(value); // 🔥 DÒNG QUYẾT ĐỊNH
+                            }}
                             className="pl-10"
                         />
-                    </div> */}
+                    </div>
                     <div className="space-y-1">
-                        <label className="text-sm font-medium text-gray-600 tracking-wide">Nhóm</label>
+                        {/* <label className="text-sm font-medium text-gray-600 tracking-wide">Nhóm</label> */}
                         <Select
                             value={selectedGroup ?? ""}
                             onValueChange={(val) => setSelectedGroup(val)}
@@ -76,7 +93,20 @@ export default function StatusMachine() {
                     </div>
                 </div>
             </div>
-            <OrderList data={listOrderData} />
+            <OrderList data={data} />
+            <div className="flex justify-center items-center gap-4 mt-6">
+                <Button onClick={prevPage} disabled={page === 0}>
+                    Trước
+                </Button>
+
+                <span>
+                    Trang {page + 1} / {totalPages}
+                </span>
+
+                <Button onClick={nextPage} disabled={page + 1 >= totalPages}>
+                    Sau
+                </Button>
+            </div>
         </div>
     )
 }

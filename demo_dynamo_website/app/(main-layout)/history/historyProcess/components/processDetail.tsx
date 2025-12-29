@@ -130,11 +130,13 @@ export default function CompletedProcessDetail({ openDetail, onClose, process }:
                             </div>
                             <div className="flex flex-col">
                                 <div className="flex text-lg text-[#c0c0c0]">Thời điểm bắt đầu</div>
-                                <div className="flex text-[16px] font-medium">{process?.createdDate ?? "-"}</div>
+                                <div className="flex text-[16px] font-medium">  {dayjs(process?.startTime
+                                ).format("DD/MM/YYYY HH:mm:ss") ?? "-"}</div>
                             </div>
                             <div className="flex flex-col">
                                 <div className="flex text-lg text-[#c0c0c0]">Thời điểm kết thúc</div>
-                                <div className="flex text-[16px] font-medium">{process?.updatedDate ?? "-"}</div>
+                                <div className="flex text-[16px] font-medium">  {dayjs(process?.endTime
+                                ).format("DD/MM/YYYY HH:mm:ss") ?? "-"}</div>
                             </div>
                             {/* <div className="flex flex-col">
                                 <div className="flex font-semibold text-lg text-[#c0c0c0]">Hiện trạng</div>

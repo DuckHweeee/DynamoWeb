@@ -265,7 +265,7 @@ export default function MachineOverview() {
             dataOverview={dataOverview}
           />
           <MachineTopProcessChart
-            title="Top 5 máy chạy trong nhóm"
+            title="Top 5 máy chạy trong nhóm(Giờ)"
             description="Thống kê top 5 máy"
             dataTopHighMachine={dataTopHighMachine}
             dataTopLowMachine={dataTopLowMachine}

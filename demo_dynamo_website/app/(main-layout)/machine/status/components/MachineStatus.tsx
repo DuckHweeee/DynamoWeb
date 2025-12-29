@@ -145,27 +145,26 @@ export default function MachineStatus({
             <div
               key={machine.id}
               className="bg-white border rounded-lg shadow p-4 space-y-1"
-              
+
             >
               <div className="flex justify-between items-center">
                 <p className="text-xl text-blue-800 font-bold">
                   {machine.name}
                 </p>
                 <div
-                  className={`w-4 h-4 rounded-full ${
-                    machineStatusClasses[machine.status].bg
-                  }`}
+                  className={`w-4 h-4 rounded-full ${machineStatusClasses[machine.status].bg
+                    }`}
                 />
               </div>
-              <p className="text-sm">
-                Trạng Thái:{" "}
-                <span className="font-semibold">{machine.status}</span>
-              </p>
               <p className="text-sm">
                 Mã Bản Vẽ: <strong>{machine.drawingCode}</strong>
               </p>
               <p className="text-sm">
                 NVVH: <strong>{machine.operator}</strong>
+              </p>
+              <p className="text-sm">
+                TG bắt đầu:
+                <span className="font-semibold"> {new Date(machine.startTime).toLocaleString("vi-VN")}</span>
               </p>
               <p className="text-sm">
                 {(() => {

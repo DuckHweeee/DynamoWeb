@@ -8,5 +8,7 @@ export default function OrderList({ data }: { data: ListOrderDetailStatusType[] 
         <OrderCard key={order.orderDetailId} order={order} />
       ))}
     </div>
+    
+    
   );
 }
