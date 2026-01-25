@@ -4,7 +4,7 @@ import { StaffStatistic } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export function useStaffStatistic(groupId: string, startDate: string, endDate: string) {
+export function useStaffStatistic(groupId: string, startDate: string, endDate: string, shiftCode: string) {
     const [data, setData] = useState<StaffStatistic | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -14,10 +14,16 @@ export function useStaffStatistic(groupId: string, startDate: string, endDate: s
         const fetchData = async () => {
             setLoading(true);
             try {
+                console.log("📡 useStaffStatistic fetch:", {
+                    groupId,
+                    startDate,
+                    endDate,
+                    shiftCode
+                });
                 const res = await fetch(`${url}/api/staff-group-statistic/statistic`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ groupId, startDate, endDate }),
+                    body: JSON.stringify({ groupId, startDate, endDate ,shiftCode}),
                     signal: controller.signal,
                 });
                 if (!res.ok) throw new Error("Lỗi mạng hoặc server");
@@ -36,7 +42,7 @@ export function useStaffStatistic(groupId: string, startDate: string, endDate: s
 
         if (groupId && startDate && endDate) fetchData();
         return () => controller.abort();
-    }, [groupId, startDate, endDate]);
+    }, [groupId, startDate, endDate, shiftCode]);
 
     return { data, loading, error };
 }

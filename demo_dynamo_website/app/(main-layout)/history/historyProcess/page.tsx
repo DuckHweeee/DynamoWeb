@@ -355,10 +355,15 @@ export default function HistoryProcessPage() {
                 <DatePicker
                   mode="range"
                   selected={date}
+                  required
                   onSelect={(range) => {
+                    console.log("RAW range:", range);
                     setDate(range);
 
                     if (range?.from && range?.to) {
+                      console.log("➡ from:", range.from);
+                      console.log("➡ from (VN start):", getStartOfDayVN(range.from));
+                      console.log("➡ to (VN end):", getEndOfDayVN(range.to));
                       refetch(
                         getStartOfDayVN(range.from),
                         getEndOfDayVN(range.to)
@@ -514,11 +519,32 @@ export default function HistoryProcessPage() {
             )}
           </TableBody>
         </Table>
-
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="space-x-2">
+            <Button
+              className="cursor-pointer"
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Trước
+            </Button>
+            <Button
+              className="cursor-pointer"
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Tiếp
+            </Button>
+          </div>
+        </div>
         <CompletedProcessDetail
           openDetail={openDetail}
           onClose={() => setOpenDetail(false)}
-         process={detailOrderDetail}
+          process={detailOrderDetail}
         />
       </div>
 

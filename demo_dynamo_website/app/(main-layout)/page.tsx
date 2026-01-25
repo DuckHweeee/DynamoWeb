@@ -18,7 +18,6 @@ import { DivergingBarChart } from "./dashboard/operation/components/DivergingBar
 import { StaffOverview } from "./dashboard/operation/lib/type";
 import StaffTable from "./dashboard/operation/components/StaffTable";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
 
 
 export default function Home() {
@@ -27,6 +26,7 @@ export default function Home() {
   const [selectedEndDate, setSelectedEndDate] = useState<string>()
   const [selectedGroup, setSelectedGroup] = useState<string>()
   const [selectedStaff, setSelectedStaff] = useState("");
+  const [selectedShiftType, setSelectedShiftType] = useState<string>("FULL")
   const [selectedTimeType, setSelectedTimeType] = useState<string>("day");
 
   // Tạo queryParams để truyền vào hook useStaffStatistic
@@ -34,26 +34,38 @@ export default function Home() {
     if (!selectedGroup || !selectedStartDate || !selectedEndDate) {
       return null;
     }
-    return {
+
+    const params = {
       groupId: selectedGroup,
       startDate: selectedStartDate,
-      endDate: selectedEndDate
+      endDate: selectedEndDate,
+      shiftCode: selectedShiftType, // ✅ LUÔN CÓ
     };
-  }, [selectedGroup, selectedStartDate, selectedEndDate]);
+
+    console.log("📤 Query Params:", params);
+    return params;
+  }, [
+    selectedGroup,
+    selectedStartDate,
+    selectedEndDate,
+    selectedShiftType, // ✅ THÊM DÒNG NÀY
+  ]);
 
   // Gọi API lấy dữ liệu thống kê nhân viên Statistic
   const { data: dataStatistic } = useStaffStatistic(
     queryParams?.groupId ?? "",
     queryParams?.startDate ?? "",
-    queryParams?.endDate ?? ""
+    queryParams?.endDate ?? "",
+    queryParams?.shiftCode??""
   );
 
   // Gọi API lấy dữ liệu thống kê nhân viên Overview
   const { data: dataOverview } = useStaffOverview(
     queryParams?.groupId ?? "",
     queryParams?.startDate ?? "",
-    queryParams?.endDate ?? ""
-  );  
+    queryParams?.endDate ?? "",
+    queryParams?.shiftCode ??""
+  );
   console.log("Staff Overview Data:", dataOverview);
   // Lấy danh sách nhân viên từ tất cả các nhóm
   const staffList = dataStatistic?.staffDto;
@@ -145,10 +157,11 @@ export default function Home() {
           </div>
           <div className="flex flex-row py-3 gap-3 justify-end">
             <DateRangeSelector
-              onChange={({ startDate, endDate, timeType }) => {
+              onChange={({ startDate, endDate, timeType, shiftCode }) => {
                 setStartDate(startDate);
                 setSelectedEndDate(endDate);
                 setSelectedTimeType(timeType);
+                setSelectedShiftType(shiftCode); // ✅ LƯU CA
               }}
             />
             <div className="space-y-1">

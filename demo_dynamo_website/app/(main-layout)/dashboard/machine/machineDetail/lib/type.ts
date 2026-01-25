@@ -8,6 +8,8 @@ export interface MachineStatisticDetail {
     runTimeRate: number;
     totalStopTime: number;
     stopTimeRate: number;
+    totalEmptyTime: number;
+    emptyTimeRate: number
     totalPgTime: number;
     pgTimeRate: number;
     totalErrorTime: number;

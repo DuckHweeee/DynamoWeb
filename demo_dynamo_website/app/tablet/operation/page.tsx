@@ -70,8 +70,9 @@ export default function TabletOperation() {
         const fetchOrderDetail = async () => {
             try {
                 const response = await axios.get<OrderDetailDto[]>(
-                    `${urlLink}/api/order-detail`
+                    `${urlLink}/api/order-detail/list`
                 );
+                console.log("order detail resp: ", response.data)
                 setOrderDetail(response.data);
             } catch (error) {
                 console.error("Lỗi khi lấy dữ liệu mã hàng:", error);
@@ -371,7 +372,6 @@ export default function TabletOperation() {
     }, [selectedMachineId, isAddnew]);
     // console.log("selectStaff")
     // console.log(selectStaff)
-
 
     return (
         <>

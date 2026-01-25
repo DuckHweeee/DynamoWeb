@@ -48,7 +48,7 @@ import {
 import { toast } from "sonner";
 import { useGroups } from "@/hooks/useGroup";
 import { useAdmin } from "@/hooks/useAdmin";
-import { DailyReport, REPORT_TYPE_LABELS, REPORT_TYPE_OPTIONS, OFFICE_OPTIONS } from "@/lib/type";
+import { DailyReport, REPORT_TYPE_LABELS, REPORT_TYPE_OPTIONS, OFFICE_OPTIONS, REPORT_TYPE_SHIFT, REPORT_SHIFT_LABELS } from "@/lib/type";
 import { useDailyReport, useDailyReportMutations } from "../hooks/useDailyReport";
 import AddDailyReportForm from "./AddDailyReportForm";
 import EditDailyReportForm from "./EditDailyReportForm";
@@ -118,6 +118,31 @@ function getColumns({
           </div>
         </div>
       ),
+    },
+    {
+      accessorKey: "shiftCode",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="text-lg font-bold"
+          >
+            Ca làm viêc
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const shiftCode = row.getValue("shiftCode") as string;
+        return (
+          <div className="pl-5 font-medium text-[16px] text-[#888888]">
+            <div className="text-lg font-semibold text-[#074695]">
+              {REPORT_SHIFT_LABELS[shiftCode as keyof typeof REPORT_SHIFT_LABELS] || shiftCode}
+            </div>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "office",
@@ -221,14 +246,14 @@ function getColumns({
       cell: ({ row }) => {
         const hourDiff = Number(row.getValue("hourDiff") || 0);
         const reportType = row.original.reportType;
-        
+
         // Determine the expected sign and display based on report type
         const isOffOrLeave = reportType === 'off' || reportType === 'leave';
         const isOvertimeOrExtra = reportType === 'overtime' || reportType === 'extra';
-        
+
         let displayValue = "";
         let colorClass = "text-[#074695]"; // default blue
-        
+
         if (isOffOrLeave) {
           // Off/Leave should always show negative values
           displayValue = `-${Math.abs(hourDiff)}`;
@@ -237,7 +262,7 @@ function getColumns({
           // Overtime/Extra should always show positive values
           displayValue = `+${Math.abs(hourDiff)}`;
           colorClass = "text-green-600";
-        } 
+        }
         return (
           <div className="pl-5 font-medium text-[16px] text-[#888888]">
             <div className={`text-lg font-semibold ${colorClass}`}>

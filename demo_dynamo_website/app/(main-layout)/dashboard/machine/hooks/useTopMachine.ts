@@ -3,7 +3,7 @@ import { TopMachine } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export function useTopHighMachine(groupId: string, startDate: string, endDate: string) {
+export function useTopHighMachine(groupId: string, startDate: string, endDate: string, shiftCode: string) {
     const [data, setData] = useState<TopMachine[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -20,6 +20,7 @@ export function useTopHighMachine(groupId: string, startDate: string, endDate: s
                         groupId: groupId,
                         startDate: startDate,
                         endDate: endDate,
+                        shiftCode: shiftCode
                     }),
                 });
 
@@ -41,11 +42,11 @@ export function useTopHighMachine(groupId: string, startDate: string, endDate: s
         if (groupId && startDate && endDate) {
             fetchData();
         }
-    }, [groupId, startDate, endDate]);
+    }, [groupId, startDate, endDate, shiftCode]);
     return { data, loading, error };
 }
 
-export function useTopLowMachine(groupId: string, startDate: string, endDate: string) {
+export function useTopLowMachine(groupId: string, startDate: string, endDate: string, shiftCode: string) {
     const [data, setData] = useState<TopMachine[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -62,6 +63,8 @@ export function useTopLowMachine(groupId: string, startDate: string, endDate: st
                         groupId: groupId,
                         startDate: startDate,
                         endDate: endDate,
+                        shiftCode: shiftCode
+
                     }),
                 });
 
@@ -83,6 +86,6 @@ export function useTopLowMachine(groupId: string, startDate: string, endDate: st
         if (groupId && startDate && endDate) {
             fetchData();
         }
-    }, [groupId, startDate, endDate]);
+    }, [groupId, startDate, endDate, shiftCode]);
     return { data, loading, error };
 }

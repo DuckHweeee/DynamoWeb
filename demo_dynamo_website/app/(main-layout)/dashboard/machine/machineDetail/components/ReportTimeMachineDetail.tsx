@@ -58,17 +58,16 @@ export function ReportTimeMachineDetail({
           <div className="flex items-start justify-between">
             <MonitorDot size={24} className={"text-green-500"} />
             <p
-              className={`text-lg font-medium ${
-                (data?.runTimeRate ?? 0) < 0
+              className={`text-lg font-medium ${(data?.runTimeRate ?? 0) < 0
                   ? "text-red-500"
                   : (data?.runTimeRate ?? 0) > 0
-                  ? "text-green-500"
-                  : ""
-              }`}
+                    ? "text-green-500"
+                    : ""
+                }`}
             >
               {(data?.runTimeRate ?? 0) > 0
-                ? `+${data?.runTimeRate ?? 0}%`
-                : `${data?.runTimeRate ?? 0}%`}
+                ? `+${data?.runTimeRate.toFixed(2) ?? 0}%`
+                : `${data?.runTimeRate.toFixed(2) ?? 0}%`}
             </p>
           </div>
 
@@ -94,17 +93,16 @@ export function ReportTimeMachineDetail({
           <div className="flex items-start justify-between">
             <MonitorDot size={24} className={"text-yellow-500"} />
             <p
-              className={`text-lg font-medium ${
-                (data?.stopTimeRate ?? 0) < 0
+              className={`text-lg font-medium ${(data?.stopTimeRate ?? 0) < 0
                   ? "text-red-500"
                   : (data?.stopTimeRate ?? 0) > 0
-                  ? "text-green-500"
-                  : ""
-              }`}
+                    ? "text-green-500"
+                    : ""
+                }`}
             >
               {(data?.stopTimeRate ?? 0) > 0
-                ? `+${data?.stopTimeRate ?? 0}%`
-                : `${data?.stopTimeRate ?? 0}%`}
+                ? `+${data?.stopTimeRate.toFixed(2) ?? 0}%`
+                : `${data?.stopTimeRate.toFixed(2) ?? 0}%`}
             </p>
           </div>
 
@@ -130,17 +128,16 @@ export function ReportTimeMachineDetail({
           <div className="flex items-start justify-between">
             <MonitorDot size={24} className={"text-red-500"} />
             <p
-              className={`text-lg font-medium ${
-                (data?.errorTimeRate ?? 0) < 0
+              className={`text-lg font-medium ${(data?.errorTimeRate ?? 0) < 0
                   ? "text-red-500"
                   : (data?.errorTimeRate ?? 0) > 0
-                  ? "text-green-500"
-                  : ""
-              }`}
+                    ? "text-green-500"
+                    : ""
+                }`}
             >
               {(data?.errorTimeRate ?? 0) > 0
-                ? `+${data?.errorTimeRate ?? 0}%`
-                : `${data?.errorTimeRate ?? 0}%`}
+                ? `+${data?.errorTimeRate.toFixed(2) ?? 0}%`
+                : `${data?.errorTimeRate.toFixed(2) ?? 0}%`}
             </p>
           </div>
 
@@ -163,60 +160,50 @@ export function ReportTimeMachineDetail({
         </div>
 
         {/*  */}
-        {/* <div className="inline-block rounded-sm bg-white px-6 py-4 shadow-md border w-full">
-                    <div className="flex items-start justify-between">
-                        <MonitorDot
-                            size={24}
-                            className={
-                                (data?.pgTimeRate ?? 0) < 0
-                                    ? "text-red-500"
-                                    : (data?.pgTimeRate ?? 0) > 0
-                                        ? "text-green-500"
-                                        : ""
-                            }
-                        />
-                        <p
-                            className={`text-lg font-medium ${(data?.pgTimeRate ?? 0) < 0
-                                ? "text-red-500"
-                                : (data?.pgTimeRate ?? 0) > 0
-                                    ? "text-green-500"
-                                    : ""
-                                }`}
-                        >
-                            {(data?.pgTimeRate ?? 0) > 0
-                                ? `+${data?.pgTimeRate ?? 0}%`
-                                : `${data?.pgTimeRate ?? 0}%`}
-                        </p>
-                    </div>
+        <div className="inline-block rounded-lg bg-white px-6 py-4 shadow-md shadow-grey-200 border border-muted-foreground  w-full">
+          <div className="flex items-start justify-between">
+               <MonitorDot size={24} className={"text-muted-foreground"} />
+            <p
+              className={`text-lg font-medium ${(data?.emptyTimeRate  ?? 0) < 0
+                ? "text-red-500"
+                : (data?.emptyTimeRate  ?? 0) > 0
+                  ? "text-green-500"
+                  : ""
+                }`}
+            >
+              {(data?.emptyTimeRate  ?? 0) > 0
+                ? `+${data?.emptyTimeRate.toFixed(2)  ?? 0}%`
+                : `${data?.emptyTimeRate.toFixed(2)  ?? 0}%`}
+            </p>
+          </div>
 
-                    <p className="text-[30px] font-semibold text-[#074695] leading-none mt-2">
-                        {convertHoursToHM(data?.totalPgTime ?? 0)}
-                    </p>
+          <p className="text-[30px] font-semibold text-muted-foreground leading-none mt-2">
+            {convertHoursToHM(data?.totalEmptyTime ?? 0)}
+          </p>
 
-                    <div className="mt-2">
-                        <p className="text-lg font-medium text-[#343A40] flex items-center">                      
-                            Tổng Giờ PG  {typeDate[type]}
-                            {(data?.pgTimeRate ?? 0) !== undefined && (
-                                (data?.pgTimeRate ?? 0) >= 0 ? (
-                                    <TrendingUp size={14} className="ml-1 text-green-500" />
-                                ) : (
-                                    <TrendingDown size={14} className="ml-1 text-red-500" />
-                                )
-                            )}
-                        </p>
-                    </div>
-                </div> */}
+          <div className="mt-2">
+            <p className="text-lg font-medium text-muted-foreground flex items-center">
+              Tổng Giờ Trống  {typeDate[type]}
+              {(data?.emptyTimeRate ?? 0) !== undefined && (
+                (data?.emptyTimeRate ?? 0) >= 0 ? (
+                  <TrendingUp size={14} className="ml-1 text-green-500" />
+                ) : (
+                  <TrendingDown size={14} className="ml-1 text-red-500" />
+                )
+              )}
+            </p>
+          </div>
+        </div>
         <div className="inline-block rounded-lg bg-white px-6 py-4 shadow-md shadow-blue-200 border border-blue-300 w-full">
           <div className="flex items-start justify-between">
             <MonitorDot size={24} className={"text-blue-500"} />
             <p
-              className={`text-lg font-medium ${
-                (data?.processRate ?? 0) < 0
+              className={`text-lg font-medium ${(data?.processRate ?? 0) < 0
                   ? "text-red-500"
                   : (data?.processRate ?? 0) > 0
-                  ? "text-green-500"
-                  : ""
-              }`}
+                    ? "text-green-500"
+                    : ""
+                }`}
             >
               {(data?.processRate ?? 0) > 0
                 ? `+${data?.processRate ?? 0}%`
@@ -224,12 +211,11 @@ export function ReportTimeMachineDetail({
             </p>
           </div>
 
-          <p className="text-[25px] font-semibold text-green-700 leading-none mt-2">
+          <p className="text-[25px] font-semibold text-blue-700 leading-none mt-2">
             {data?.numberOfProcesses ?? 0}
           </p>
           <div className="mt-2">
-            <p className="text-lg font-medium text-green-500 flex items-center">
-              {/* Tổng Số Nguyên Công {typeDate[data.timeType]} */}
+            <p className="text-lg font-medium text-blue-500 flex items-center">
               Tổng Số Gia Công {typeDate[type]}
               {(data?.processRate ?? 0) !== undefined &&
                 ((data?.processRate ?? 0) >= 0 ? (

@@ -4,7 +4,7 @@ import { StaffOverview } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export function useStaffOverview(groupId: string, startDate: string, endDate: string) {
+export function useStaffOverview(groupId: string, startDate: string, endDate: string, shiftCode: string) {
     const [data, setData] = useState<StaffOverview[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -25,6 +25,7 @@ export function useStaffOverview(groupId: string, startDate: string, endDate: st
                         groupId: groupId,
                         startDate: startDate,
                         endDate: endDate,
+                        shiftCode:shiftCode
                     }),
                 });
 
@@ -47,7 +48,7 @@ export function useStaffOverview(groupId: string, startDate: string, endDate: st
         if (groupId && startDate && endDate) {
             fetchData();
         }
-    }, [groupId, startDate, endDate]);
+    }, [groupId, startDate, endDate, shiftCode]);
     // console.log("Staff Overview Data:", data);
     return { data, loading, error };
 }

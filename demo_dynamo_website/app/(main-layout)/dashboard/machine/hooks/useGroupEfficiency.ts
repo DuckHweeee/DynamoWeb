@@ -3,7 +3,7 @@ import axios from "axios";
 import { GroupEfficiency } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-export function useGroupEfficiency(groupId: string, startDate: string, endDate: string) {
+export function useGroupEfficiency(groupId: string, startDate: string, endDate: string, shiftCode:string) {
     const [data, setData] = useState<GroupEfficiency | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -16,7 +16,7 @@ export function useGroupEfficiency(groupId: string, startDate: string, endDate: 
                 const res = await fetch(`${url}/api/group-efficiency`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ groupId, startDate, endDate }),
+                    body: JSON.stringify({ groupId, startDate, endDate, shiftCode }),
                     signal: controller.signal,
                 });
                 if (!res.ok) throw new Error("Lỗi mạng hoặc server");
@@ -35,7 +35,7 @@ export function useGroupEfficiency(groupId: string, startDate: string, endDate: 
 
         if (groupId && startDate && endDate) fetchData();
         return () => controller.abort();
-    }, [groupId, startDate, endDate]);
+    }, [groupId, startDate, endDate, shiftCode]);
 
     return { data, loading, error };
 }

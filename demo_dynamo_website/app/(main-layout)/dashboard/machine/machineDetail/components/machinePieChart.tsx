@@ -31,7 +31,27 @@ export function MachinePieChart({
     return (
         <div className="grid grid-cols-3 gap-4">
             {data.map((item, index) => {
-                const chartData = [{ name: item.name, number: item.value, fill: "#2563eb" }];
+                let fillColor;
+                if (item.name === "Tổn thất Offset" || item.name === "Tổn thất NG/khác") {
+                    fillColor =
+                        item.value > 25
+                            ? "#ef4444" // red
+                            : item.value > 20 
+                                ? "#facc15" // yellow
+                                : "#22c55e"; // green
+                } else {
+                    fillColor =
+                        item.value < 40
+                            ? "#ef4444"
+                            : item.value < 70
+                                ? "#facc15"
+                                : "#22c55e";
+                }
+
+                const chartData = [
+                    { name: item.name, number: item.value, fill: fillColor },
+                ];
+
                 const startAngle = 90;
                 const endAngle = startAngle - (item.value / 100) * 360;
                 const chartConfig = {
@@ -40,7 +60,7 @@ export function MachinePieChart({
                     },
                 } satisfies ChartConfig
                 return (
-                    <Card key={index} className="flex flex-col h-fit w-auto py-1">
+                    <Card key={index} className="flex flex-col h-fit w-auto py-1" style={{ borderColor: fillColor, borderWidth: 1 }} >
                         <CardContent className="flex-1 pb-0 px-1">
                             <ChartContainer
                                 config={chartConfig}
@@ -97,7 +117,7 @@ export function MachinePieChart({
                                                                 y={viewBox.cy}
                                                                 className="fill-foreground text-3xl font-bold"
                                                             >
-                                                                {chartData[0].number.toLocaleString()}%
+                                                                {chartData[0].number.toFixed(1)}%
                                                             </tspan>
 
                                                             {lines.map((line, i) => (

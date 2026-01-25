@@ -3,7 +3,7 @@ import axios from "axios";
 import { MachineHistoryDetail } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-export function useMachineHistoryDetail(groupId: string, id: number, startDate: string, endDate: string) {
+export function useMachineHistoryDetail(groupId: string, id: number, startDate: string, endDate: string, shiftCode:string) {
     const [data, setData] = useState<MachineHistoryDetail[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -15,7 +15,7 @@ export function useMachineHistoryDetail(groupId: string, id: number, startDate: 
                 const res = await fetch(`${url}/api/machine-detail/history`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ groupId, id, startDate, endDate }),
+                    body: JSON.stringify({ groupId, id, startDate, endDate,shiftCode }),
                     signal: controller.signal,
                 });
                 if (!res.ok) throw new Error("Lỗi mạng hoặc server");
@@ -34,6 +34,6 @@ export function useMachineHistoryDetail(groupId: string, id: number, startDate: 
 
         if (groupId && id && startDate && endDate) fetchData();
         return () => controller.abort();
-    }, [groupId, id, startDate, endDate]);
+    }, [groupId, id, startDate, endDate, shiftCode]);
     return { data, loading, error };
 }

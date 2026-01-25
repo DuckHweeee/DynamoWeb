@@ -24,7 +24,7 @@ export function MachinePieChart({
 }: {
   dataRunTime: GroupEfficiency;
 }) {
-  const data = mapData(dataRunTime);
+  const data = mapData(dataRunTime); 
   return (
     <div className="grid grid-cols-3 gap-4">
       {data.map((item, index) => {

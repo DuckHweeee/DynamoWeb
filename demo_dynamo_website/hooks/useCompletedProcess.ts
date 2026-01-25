@@ -26,6 +26,7 @@ export function useCompletedProcess(start?: number, stop?: number) {
             )
 
             setData(res.data)
+            console.log(res.data.length)
         } catch (err) {
             setError("Lỗi khi tải dữ liệu lịch sử quy trình hoàn thành.")
             console.error(err)

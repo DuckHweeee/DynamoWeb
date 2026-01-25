@@ -43,6 +43,7 @@ export function useDailyReportMutations() {
     const createDailyReport = async (reportData: Omit<DailyReport, 'id' | 'createdDate'>) => {
         try {
             const response = await axios.post(`${url}/api/report`, reportData);
+            console.log(reportData)
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error)) {

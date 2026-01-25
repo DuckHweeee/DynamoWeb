@@ -27,6 +27,7 @@ export default function Operation() {
   const [selectedGroup, setSelectedGroup] = useState<string>();
   const [selectedStaff, setSelectedStaff] = useState("");
   const [selectedTimeType, setSelectedTimeType] = useState<string>("day");
+  const [selectedShiftType, setSelectedShiftType] = useState<string>("FULL")
 
   // Tạo queryParams để truyền vào hook useStaffStatistic
   const queryParams = useMemo(() => {
@@ -37,21 +38,24 @@ export default function Operation() {
       groupId: selectedGroup,
       startDate: selectedStartDate,
       endDate: selectedEndDate,
+      shiftCode: selectedShiftType
     };
-  }, [selectedGroup, selectedStartDate, selectedEndDate]);
+  }, [selectedGroup, selectedStartDate, selectedEndDate, selectedShiftType]);
 
   // Gọi API lấy dữ liệu thống kê nhân viên Statistic
   const { data: dataStatistic } = useStaffStatistic(
     queryParams?.groupId ?? "",
     queryParams?.startDate ?? "",
-    queryParams?.endDate ?? ""
+    queryParams?.endDate ?? "",
+    queryParams?.shiftCode ?? ""
   );
 
   // Gọi API lấy dữ liệu thống kê nhân viên Overview
   const { data: dataOverview } = useStaffOverview(
     queryParams?.groupId ?? "",
     queryParams?.startDate ?? "",
-    queryParams?.endDate ?? ""
+    queryParams?.endDate ?? "",
+    queryParams?.shiftCode??""
   );
 
   // Lấy danh sách nhân viên từ tất nhóm
@@ -156,10 +160,11 @@ export default function Operation() {
           </div>
           <div className="flex flex-row py-3 gap-3 justify-end">
             <DateRangeSelector
-              onChange={({ startDate, endDate, timeType }) => {
+              onChange={({ startDate, endDate, timeType, shiftCode}) => {
                 setStartDate(startDate);
                 setSelectedEndDate(endDate);
                 setSelectedTimeType(timeType);
+                setSelectedShiftType(shiftCode);
               }}
             />
             <div className="space-y-1">

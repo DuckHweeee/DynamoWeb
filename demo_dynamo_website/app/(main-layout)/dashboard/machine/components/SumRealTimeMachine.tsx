@@ -85,7 +85,7 @@ export function SumRealTimeMachine({
                         accessibilityLayer
                         data={roundedData}
                         margin={{
-                            left: -20,
+                            left: -5,
                         }}
                     >
                         <CartesianGrid vertical={false} />

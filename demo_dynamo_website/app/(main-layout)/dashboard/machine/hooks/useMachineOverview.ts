@@ -4,7 +4,7 @@ import { MachineOverview } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export function useMachineOverview(groupId: string, startDate: string, endDate: string) {
+export function useMachineOverview(groupId: string, startDate: string, endDate: string, shiftCode:string) {
     const [data, setData] = useState<MachineOverview[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -15,13 +15,15 @@ export function useMachineOverview(groupId: string, startDate: string, endDate: 
             console.log("Fetching machine overview data with params:", {
                 groupId,
                 startDate,
-                endDate
+                endDate,
+                shiftCode
             });
 
             const response = await axios.post(`${url}/api/machine-group-statistic/overview`, {
                 groupId: groupId,
                 startDate: startDate,
                 endDate: endDate,
+                shiftCode:shiftCode
             });
 
             console.log("Machine overview API response:", response.data);
@@ -57,7 +59,7 @@ export function useMachineOverview(groupId: string, startDate: string, endDate: 
             setLoading(false);
             setError(null);
         }
-    }, [groupId, startDate, endDate]);
+    }, [groupId, startDate, endDate, shiftCode]);
     const refetch = () => {
         if (groupId && startDate && endDate) {
             fetchData();

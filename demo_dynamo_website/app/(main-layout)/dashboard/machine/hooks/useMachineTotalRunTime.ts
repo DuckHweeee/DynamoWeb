@@ -3,7 +3,7 @@ import axios from "axios";
 import { TotalRunTime } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-export function useMachineTotalRuntime(groupId: string, startDate: string, endDate: string) {
+export function useMachineTotalRuntime(groupId: string, startDate: string, endDate: string, shiftCode: string) {
     const [data, setData] = useState<TotalRunTime | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -16,7 +16,8 @@ export function useMachineTotalRuntime(groupId: string, startDate: string, endDa
                 const response = await axios.post(`${url}/api/machine-group-statistic/totalTime`, {
                     groupId,
                     startDate,
-                    endDate
+                    endDate,
+                     shiftCode
                 }, {
                     signal: controller.signal
                 });
@@ -37,7 +38,7 @@ export function useMachineTotalRuntime(groupId: string, startDate: string, endDa
 
         if (groupId && startDate && endDate) fetchData();
         return () => controller.abort();
-    }, [groupId, startDate, endDate]);
+    }, [groupId, startDate, endDate, shiftCode]);
 
     const refetch = () => {
         if (groupId && startDate && endDate) {
@@ -49,7 +50,8 @@ export function useMachineTotalRuntime(groupId: string, startDate: string, endDa
                     const response = await axios.post(`${url}/api/machine-group-statistic/totalTime`, {
                         groupId,
                         startDate,
-                        endDate
+                        endDate,
+                        shiftCode
                     });
                     setData(response.data);
                 } catch (err: any) {

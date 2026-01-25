@@ -11,7 +11,7 @@ export function useOrderDetail() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get<OrderDetailDto[]>(`${url}/api/order-detail`);
+                const res = await axios.get<OrderDetailDto[]>(`${url}/api/order-detail/list`);
                 setData(res.data)
             } catch (err) {
                 setError("Lỗi khi tải dữ liệu")

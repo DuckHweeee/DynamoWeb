@@ -35,18 +35,20 @@ const MachineDetailOverview = () => {
     const endDateFromUrl = searchParams.get("endDate") || "";
     const groupIdFromUrl = searchParams.get("groupId") || "";
     const machineIdFromUrl = searchParams.get("machineId") || "";
+    const shiftCodeFromUrl = searchParams.get("shiftCode") || "";
 
     const [selectedStartDate, setSelectedStartDate] = useState<string>(startDateFromUrl);
     const [selectedEndDate, setSelectedEndDate] = useState<string>(endDateFromUrl);
     const [selectedGroup, setSelectedGroup] = useState<string>(groupIdFromUrl);
     const [selectedMachine, setSelectedMachine] = useState<number>(Number(machineIdFromUrl));
-
+    const [selectedShiftCode, setSelectedShiftCode] = useState<string>(shiftCodeFromUrl);
     useEffect(() => {
         setSelectedStartDate(startDateFromUrl);
         setSelectedEndDate(endDateFromUrl);
         setSelectedGroup(groupIdFromUrl);
         setSelectedMachine(Number(machineIdFromUrl));
-    }, [startDateFromUrl, endDateFromUrl, groupIdFromUrl, machineIdFromUrl]);
+        setSelectedShiftCode(shiftCodeFromUrl)
+    }, [startDateFromUrl, endDateFromUrl, groupIdFromUrl, machineIdFromUrl, shiftCodeFromUrl]);
 
     // Get data
     const { data: groupList } = useGroups()
@@ -54,14 +56,16 @@ const MachineDetailOverview = () => {
     const { data: dataStatistic } = useMachineStatisticDetail(
         selectedMachine ?? 0,
         startDateFromUrl ?? "",
-        endDateFromUrl ?? ""
+        endDateFromUrl ?? "",
+        shiftCodeFromUrl ?? ""
     );
     console.log("dataStatistic", dataStatistic)
     const { data: dataHistory } = useMachineHistoryDetail(
         groupIdFromUrl ?? "",
         selectedMachine ?? 0,
         startDateFromUrl ?? "",
-        endDateFromUrl ?? ""
+        endDateFromUrl ?? "",
+        shiftCodeFromUrl ?? ""
     );
 
     const [dataEfficiency, setDataEfficiency] = useState<MachineEfficiencyDetail | null>(null);
@@ -71,6 +75,7 @@ const MachineDetailOverview = () => {
         startDateFromUrl ?? "",
         endDateFromUrl ?? "",
         groupIdFromUrl ?? "",
+        shiftCodeFromUrl ?? ""
     );
     useEffect(() => {
         if (dataEfficiencyDefault) {
@@ -93,6 +98,7 @@ const MachineDetailOverview = () => {
                     groupId: selectedGroup,
                     startDate: selectedStartDate,
                     endDate: selectedEndDate,
+                    shiftCode: selectedShiftCode
                 }),
             });
 
@@ -103,7 +109,7 @@ const MachineDetailOverview = () => {
 
             const result = await response.json();
             setDataEfficiency(result);
-            const newUrl = `?groupId=${selectedGroup}&startDate=${selectedStartDate}&endDate=${selectedEndDate}&machineId=${result.machineId}`;
+            const newUrl = `?groupId=${selectedGroup}&startDate=${selectedStartDate}&endDate=${selectedEndDate}&machineId=${result.machineId}&shiftCode=${selectedShiftCode}`;
             router.replace(newUrl);
         } catch (error) {
             toast.error("Đã xảy ra lỗi khi gửi.");
@@ -129,10 +135,12 @@ const MachineDetailOverview = () => {
                         <DateRangeSelectorDetail
                             startDate={selectedStartDate}
                             endDate={selectedEndDate}
-                            onChange={({ startDate, endDate, timeType }) => {
+                            shiftCode={selectedShiftCode as any}
+                            onChange={({ startDate, endDate, timeType, shiftCode }) => {
                                 setSelectedStartDate(startDate);
                                 setSelectedEndDate(endDate);
                                 setSelectedTimeType(timeType);
+                                setSelectedShiftCode(shiftCode);
                             }}
                         />
                         <div className="space-y-1">

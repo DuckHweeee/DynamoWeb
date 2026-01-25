@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGroups } from "@/hooks/useGroup";
 import { useAdmin } from "@/hooks/useAdmin";
-import { Group } from "@/lib/type";
+import { Group, REPORT_TYPE_SHIFT } from "@/lib/type";
 import { DailyReport, REPORT_TYPE_OPTIONS, OFFICE_OPTIONS } from "@/lib/type";
 import { useDailyReportMutations } from "../hooks/useDailyReport";
 
@@ -46,6 +46,7 @@ export default function AddDailyReportForm({
 
   const [formData, setFormData] = useState({
     dateTime: new Date(),
+    shiftCode: "",
     office: "",
     reportType: "",
     hourDiff: "",
@@ -54,6 +55,7 @@ export default function AddDailyReportForm({
 
   const [errors, setErrors] = useState({
     dateTime: "",
+    shiftCode: "",
     office: "",
     reportType: "",
     hourDiff: "",
@@ -100,6 +102,7 @@ export default function AddDailyReportForm({
   const validateForm = () => {
     const newErrors = {
       dateTime: !formData.dateTime ? "Ngày không được để trống" : "",
+      shiftCode: !formData.shiftCode ? "Ca không được trống" : "",
       office: !formData.office ? "Phòng ban không được để trống" : "",
       reportType: !formData.reportType
         ? "Loại khai báo không được để trống"
@@ -134,6 +137,7 @@ export default function AddDailyReportForm({
     try {
       const reportData = {
         dateTime: formData.dateTime.toISOString().split("T")[0],
+        shiftCode: formData.shiftCode,
         office: formData.office,
         reportType: formData.reportType,
         hourDiff: parseInt(formData.hourDiff),
@@ -162,16 +166,60 @@ export default function AddDailyReportForm({
           >
             Ngày báo cáo <span className="text-red-500 ml-1">*</span>
           </Label>
-            <DatePicker
-              locale={vi}
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              showTimeSelect
-              timeFormat="HH:mm"
-              dateFormat="dd/MM/yyyy HH:mm"
-              className="border px-3 py-1 rounded-sm w-full text-xl"
-            />
-       
+          <DatePicker
+            locale={vi}
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            showTimeSelect
+            timeFormat="HH:mm"
+            dateFormat="dd/MM/yyyy HH:mm"
+            className="border px-3 py-1 rounded-sm w-full text-xl"
+          />
+
+        </div>
+        {/* Report Type */}
+        <div className="space-y-2">
+          <Label
+            htmlFor="reportType"
+            className="text-lg font-semibold text-gray-700 flex items-center"
+          >
+            Ca <span className="text-red-500 ml-1">*</span>
+          </Label>
+          <Select
+            value={formData.shiftCode}
+            onValueChange={(value) =>
+              setFormData((prev) => ({ ...prev, shiftCode: value }))
+            }
+            disabled={isLoading}
+          >
+            <SelectTrigger
+              className={`h-12 text-lg border-2 transition-colors ${errors.reportType
+                ? "border-red-500 focus:border-red-500"
+                : "border-gray-300 focus:border-blue-500"
+                }`}
+            >
+              <SelectValue
+                placeholder="Chọn loại khai báo"
+                className="text-gray-500"
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {REPORT_TYPE_SHIFT.map((option) => (
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  className="text-lg py-3 hover:bg-blue-50"
+                >
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors.shiftCode && (
+            <p className="text-red-500 text-sm font-medium">
+              {errors.shiftCode}
+            </p>
+          )}
         </div>
 
         {/* Office */}
@@ -190,11 +238,10 @@ export default function AddDailyReportForm({
             disabled={isLoading}
           >
             <SelectTrigger
-              className={`h-12 text-lg border-2 transition-colors ${
-                errors.office
-                  ? "border-red-500 focus:border-red-500"
-                  : "border-gray-300 focus:border-blue-500"
-              }`}
+              className={`h-12 text-lg border-2 transition-colors ${errors.office
+                ? "border-red-500 focus:border-red-500"
+                : "border-gray-300 focus:border-blue-500"
+                }`}
             >
               <SelectValue
                 placeholder="Chọn phòng ban"
@@ -234,11 +281,10 @@ export default function AddDailyReportForm({
             disabled={isLoading}
           >
             <SelectTrigger
-              className={`h-12 text-lg border-2 transition-colors ${
-                errors.groupId
-                  ? "border-red-500 focus:border-red-500"
-                  : "border-gray-300 focus:border-blue-500"
-              }`}
+              className={`h-12 text-lg border-2 transition-colors ${errors.groupId
+                ? "border-red-500 focus:border-red-500"
+                : "border-gray-300 focus:border-blue-500"
+                }`}
             >
               <SelectValue placeholder="Chọn nhóm" className="text-gray-500" />
             </SelectTrigger>
@@ -273,11 +319,10 @@ export default function AddDailyReportForm({
             disabled={isLoading}
           >
             <SelectTrigger
-              className={`h-12 text-lg border-2 transition-colors ${
-                errors.reportType
-                  ? "border-red-500 focus:border-red-500"
-                  : "border-gray-300 focus:border-blue-500"
-              }`}
+              className={`h-12 text-lg border-2 transition-colors ${errors.reportType
+                ? "border-red-500 focus:border-red-500"
+                : "border-gray-300 focus:border-blue-500"
+                }`}
             >
               <SelectValue
                 placeholder="Chọn loại khai báo"
@@ -314,7 +359,7 @@ export default function AddDailyReportForm({
               <span className="ml-2 text-sm font-normal text-gray-500">
                 (
                 {formData.reportType === "off" ||
-                formData.reportType === "leave"
+                  formData.reportType === "leave"
                   ? "Số âm"
                   : "Số dương"}
                 )
@@ -329,22 +374,20 @@ export default function AddDailyReportForm({
             placeholder="Nhập số giờ (dấu sẽ được tự động điều chỉnh)"
             value={Math.abs(parseFloat(formData.hourDiff) || 0)}
             onChange={(e) => handleHourDiffChange(e.target.value)}
-            className={`h-12 text-lg border-2 transition-colors ${
-              errors.hourDiff
-                ? "border-red-500 focus:border-red-500"
-                : "border-gray-300 focus:border-blue-500"
-            }`}
+            className={`h-12 text-lg border-2 transition-colors ${errors.hourDiff
+              ? "border-red-500 focus:border-red-500"
+              : "border-gray-300 focus:border-blue-500"
+              }`}
             disabled={isLoading}
           />
           {formData.reportType && formData.hourDiff && (
             <div className="flex items-center space-x-2 text-sm">
               <span className="text-gray-600">Giá trị sẽ được lưu:</span>
               <span
-                className={`font-bold ${
-                  parseFloat(formData.hourDiff) < 0
-                    ? "text-red-600"
-                    : "text-green-600"
-                }`}
+                className={`font-bold ${parseFloat(formData.hourDiff) < 0
+                  ? "text-red-600"
+                  : "text-green-600"
+                  }`}
               >
                 {formData.hourDiff} giờ
               </span>

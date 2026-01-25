@@ -36,6 +36,7 @@ export default function MachineOverview() {
   const [selectedGroup, setSelectedGroup] = useState<string>();
   const [selectedMachine, setSelectedMachine] = useState("");
   const [selectedTimeType, setSelectedTimeType] = useState<string>("day");
+  const [selectedShiftCode, setSelectedShiftCode] = useState<string>("FULL");
 
   // Tạo queryParams để truyền vào hook useMachineStatistic
   const queryParams = useMemo(() => {
@@ -46,8 +47,9 @@ export default function MachineOverview() {
       groupId: selectedGroup,
       startDate: selectedStartDate,
       endDate: selectedEndDate,
+      shiftCode: selectedShiftCode
     };
-  }, [selectedGroup, selectedStartDate, selectedEndDate]);
+  }, [selectedGroup, selectedStartDate, selectedEndDate, selectedShiftCode]);
 
   // Get machine statistics from API
   const {
@@ -57,7 +59,9 @@ export default function MachineOverview() {
   } = useMachineStatistics(
     queryParams?.groupId ?? "",
     queryParams?.startDate ?? "",
-    queryParams?.endDate ?? ""
+    queryParams?.endDate ?? "",
+    queryParams?.shiftCode ?? ""
+
   );
   // Lấy danh sách máy từ nhóm
   const machineList = machineStatistics?.machines;
@@ -66,28 +70,32 @@ export default function MachineOverview() {
   const { data: dataOverview } = useMachineOverview(
     queryParams?.groupId ?? "",
     queryParams?.startDate ?? "",
-    queryParams?.endDate ?? ""
+    queryParams?.endDate ?? "",
+    queryParams?.shiftCode ?? ""
   );
 
   // Gọi API lấy dữ liệu thống kê Total Run Time
   const { data: dataTotalRunTime } = useMachineTotalRuntime(
     queryParams?.groupId ?? "",
     queryParams?.startDate ?? "",
-    queryParams?.endDate ?? ""
+    queryParams?.endDate ?? "",
+    queryParams?.shiftCode ?? ""
   );
 
   // Gọi API lấy dữ liệu hiệu suất Group Efficiency
   const { data: dataGroupEfficiency } = useGroupEfficiency(
     queryParams?.groupId ?? "",
     queryParams?.startDate ?? "",
-    queryParams?.endDate ?? ""
+    queryParams?.endDate ?? "",
+    queryParams?.shiftCode ?? ""
   );
 
   // Gọi API lấy dữ liệu Top 5 cao nhất
   const { data: dataTopHighMachine } = useTopHighMachine(
     queryParams?.groupId ?? "",
     queryParams?.startDate ?? "",
-    queryParams?.endDate ?? ""
+    queryParams?.endDate ?? "",
+    queryParams?.shiftCode ?? ""
   );
 
   console.log("Top high machines:", dataTopHighMachine);
@@ -95,7 +103,8 @@ export default function MachineOverview() {
   const { data: dataTopLowMachine } = useTopLowMachine(
     queryParams?.groupId ?? "",
     queryParams?.startDate ?? "",
-    queryParams?.endDate ?? ""
+    queryParams?.endDate ?? "",
+    queryParams?.shiftCode ?? ""
   );
 
   // Lấy danh sách nhóm
@@ -120,6 +129,7 @@ export default function MachineOverview() {
     if (selectedStartDate) searchParams.set("startDate", selectedStartDate);
     if (selectedEndDate) searchParams.set("endDate", selectedEndDate);
     if (selectedGroup) searchParams.set("groupId", selectedGroup);
+    if(selectedShiftCode) searchParams.set("shiftCode", selectedShiftCode);
     searchParams.set("machineId", machineId);
 
     router.push(`/dashboard/machine/machineDetail?${searchParams.toString()}`);
@@ -151,10 +161,11 @@ export default function MachineOverview() {
           </div>
           <div className="flex flex-row py-3 gap-3 justify-end">
             <DateRangeSelector
-              onChange={({ startDate, endDate, timeType }) => {
+              onChange={({ startDate, endDate, timeType, shiftCode }) => {
                 setStartDate(startDate);
                 setSelectedEndDate(endDate);
                 setSelectedTimeType(timeType);
+                setSelectedShiftCode(shiftCode);
               }}
             />
             <div className="space-y-1">
@@ -174,11 +185,10 @@ export default function MachineOverview() {
                       <SelectItem
                         key={m.groupId}
                         value={String(m.groupId)}
-                        className={`text-lg text-blue-950 cursor-pointer ${
-                          String(selectedGroup) === String(m.groupId)
-                            ? "bg-gray-200"
-                            : ""
-                        }`}
+                        className={`text-lg text-blue-950 cursor-pointer ${String(selectedGroup) === String(m.groupId)
+                          ? "bg-gray-200"
+                          : ""
+                          }`}
                       >
                         {m.groupName}
                       </SelectItem>
@@ -226,13 +236,13 @@ export default function MachineOverview() {
 
         <div className="my-5 grid grid-cols-2 gap-3">
           {
-          dataTotalRunTime && (
-            <MachineRunBarChart
-              title={`Tổng giờ hoạt động trong ${selectedTimeType} của nhóm  ${selectedGroupName}`}
-              description="Tổng thời gian hoạt động của nhóm này."
-              dataRunTime={dataTotalRunTime}
-            />
-          )}
+            dataTotalRunTime && (
+              <MachineRunBarChart
+                title={`Tổng giờ hoạt động trong ${selectedTimeType} của nhóm  ${selectedGroupName}`}
+                description="Tổng thời gian hoạt động của nhóm này."
+                dataRunTime={dataTotalRunTime}
+              />
+            )}
           {dataGroupEfficiency && (
             <MachinePieChart dataRunTime={dataGroupEfficiency} />
           )}

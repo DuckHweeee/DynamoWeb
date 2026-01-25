@@ -22,9 +22,10 @@ dayjs.extend(isoWeeksInYear)
 dayjs.extend(isLeapYear)
 
 type Mode = "day" | "week" | "month" | "year"
+type ShiftCode = "FULL" | "CA_NGAY" | "CA_DEM"
 
 interface Props {
-    onChange?: (range: { startDate: string; endDate: string; timeType: Mode }) => void;
+    onChange?: (range: { startDate: string; endDate: string; timeType: Mode; shiftCode: ShiftCode }) => void;
 }
 
 export default function DateRangeSelector({ onChange }: Props) {
@@ -33,6 +34,7 @@ export default function DateRangeSelector({ onChange }: Props) {
     const [selectedWeek, setSelectedWeek] = useState<number | null>(dayjs().isoWeek())
     const [selectedMonth, setSelectedMonth] = useState<number | null>(dayjs().month() + 1)
     const [selectedYear, setSelectedYear] = useState<number | null>(dayjs().year())
+    const [shiftCode, setShiftType] = useState<ShiftCode>("FULL")
 
     const getWeeksOfYear = (year: number) => {
         const weeks: { week: number; start: string; end: string }[] = []
@@ -78,10 +80,19 @@ export default function DateRangeSelector({ onChange }: Props) {
             endDate = end.format("YYYY-MM-DD");
         }
 
-        if (startDate && endDate && onChange) {
-            onChange({ startDate, endDate, timeType: mode }); // Thêm timeType
+        if (startDate && endDate) {
+            const payload = {
+                startDate,
+                endDate,
+                timeType: mode,
+                shiftCode: shiftCode,
+            }
+
+            console.log("📤 DateRangeSelector payload:", payload)
+
+            onChange?.(payload)
         }
-    }, [mode, selectedDate, selectedWeek, selectedMonth, selectedYear, onChange])
+    }, [mode, selectedDate, selectedWeek, selectedMonth, selectedYear, shiftCode])
 
     return (
         <div className="flex gap-3">
@@ -197,6 +208,28 @@ export default function DateRangeSelector({ onChange }: Props) {
                         </SelectContent>
                     </Select>
                 )}
+            </div>
+            <div className="space-y-1">
+                <label className="text-sm font-medium text-gray-600 tracking-wide">Ca</label>
+                <Select
+                    value={shiftCode}
+                    onValueChange={(val) => setShiftType(val as ShiftCode)}
+                >
+                    <SelectTrigger className="w-[150px] text-lg cursor-pointer">
+                        <SelectValue placeholder="Chọn ca" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="FULL" className="text-lg cursor-pointer">
+                            Cả ngày
+                        </SelectItem>
+                        <SelectItem value="CA_NGAY" className="text-lg cursor-pointer">
+                            Ca ngày
+                        </SelectItem>
+                        <SelectItem value="CA_DEM" className="text-lg cursor-pointer">
+                            Ca đêm
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
         </div>
     )

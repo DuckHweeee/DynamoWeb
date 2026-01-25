@@ -339,6 +339,7 @@ export interface NewDailyReport {
 
 // Type for report types based on the image
 export type ReportType = 'off' | 'overtime' | 'extra' | 'leave';
+export type ReportShift = 'CA_NGAY' | 'CA_DEM';
 
 export const REPORT_TYPE_LABELS: Record<ReportType, string> = {
     'off': 'Nghỉ ngày làm',
@@ -347,12 +348,24 @@ export const REPORT_TYPE_LABELS: Record<ReportType, string> = {
     'leave': 'Về sớm giờ'
 };
 
+export const REPORT_SHIFT_LABELS: Record<ReportShift, string> = {
+    'CA_NGAY': 'Ca ngày',
+    'CA_DEM': 'Ca đêm',
+};
+
 export const REPORT_TYPE_OPTIONS = [
     { value: 'off', label: 'Nghỉ ngày làm' },
     { value: 'overtime', label: 'Tăng ca thêm' },
     { value: 'extra', label: 'Làm ngày nghỉ' },
     { value: 'leave', label: 'Về sớm giờ' }
 ];
+
+export const REPORT_TYPE_SHIFT = [
+    { value: 'CA_NGAY', label: 'Ca ngày' },
+    { value: 'CA_DEM', label: 'Ca đêm' },
+ 
+];
+
 
 // Office options
 export type OfficeType = 'PIN' | 'D_INSERT1' | 'MOLD';
