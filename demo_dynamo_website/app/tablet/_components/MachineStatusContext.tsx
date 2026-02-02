@@ -33,7 +33,7 @@ export const MachineStatusProvider = ({ children }: { children: React.ReactNode 
     // console.log(machineStatuses)
 
     useEffect(() => {
-        const ws = new WebSocket(`${webSocketLink}/ws/users`)
+        const ws = new WebSocket(`${webSocketLink}/ws/status`)
 
         ws.onopen = () => {
             console.log("WebSocket connected")

@@ -8,8 +8,10 @@ export default function MachineSocketListener() {
   const { setAlerts } = useMachineAlert();
   const alertedMachines = useRef<Set<string>>(new Set());
 
+   const wsUrl = process.env.NEXT_PUBLIC_WS_URL!;
+  
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080/ws/users");
+    const ws = new WebSocket("ws://localhost:8080/ws/status");
     ws.onmessage = (event) => {
       const payload = JSON.parse(event.data);
 

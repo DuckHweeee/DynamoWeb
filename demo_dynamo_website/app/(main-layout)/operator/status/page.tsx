@@ -4,6 +4,7 @@ import OperatorStatus from "./components/OperatorStatus"
 import { useEffect, useState } from "react"
 import { useGroups } from "@/hooks/useGroup"
 import { useOperatorStatus } from "./hook/useOperatorStatus"
+import { useOperatorStatusWS } from "./hook/useOperatorStatusWS"
 
 export default function DashboardPage() {
     const [selectedGroup, setSelectedGroup] = useState<string>()
@@ -13,7 +14,12 @@ export default function DashboardPage() {
             setSelectedGroup(String(groupList[0].groupId));
         }
     }, [groupList, selectedGroup]);
-    const { data: operatorStatusList } = useOperatorStatus(selectedGroup ?? "")
+    const { data: operatorStatusListApi } = useOperatorStatus(selectedGroup ?? "");
+    const wsDataByGroup = useOperatorStatusWS();
+    const operatorStatusList =
+        wsDataByGroup[selectedGroup ?? ""] ??
+        operatorStatusListApi ??
+        [];
     return (
         <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
             <div className="flex flex-row items-center justify-between py-4 border-b border-red-300 mb-4">

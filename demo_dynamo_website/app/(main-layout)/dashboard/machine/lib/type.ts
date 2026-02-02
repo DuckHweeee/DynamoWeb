@@ -5,14 +5,14 @@ export interface MachineStatistic {
     totalStopTime: number;
     totalPgTime: number;
     totalOffsetTime: number;
-    totalSpanTime: number;
+    totalEmptyTime: number;
     totalErrorTime: number;
     errorTimeRate: number;
     runTimeRate: number;
     stopTimeRate: number;
     pgTimeRate: number;
     offsetTimeRate: number;
-    spanTimeRate: number;
+    emptyTimeRate: number;
     totalMachines: number,
     totalProcesses: number,
     processRate: number,

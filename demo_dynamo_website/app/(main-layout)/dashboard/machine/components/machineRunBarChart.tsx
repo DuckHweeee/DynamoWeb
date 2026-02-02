@@ -15,14 +15,14 @@ import {
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 
 const mapData = (raw: TotalRunTime) => [
-    { name: "Giờ chạy chính PG", value: Number(raw.totalPgTime), fill: "#2563EB" },
-    { name: "Giờ chạy Offset", value: Number(raw.totalOffsetTime), fill: "#F59E0B" },
+    { name: "Giờ chạy chính PG", value: Number(raw.totalPgTime), fill: "#53a6dd" },
+    { name: "Giờ chạy Offset", value: Number(raw.totalOffsetTime), fill: "rgb(245, 158, 11)" },
     { name: "Giờ chạy SP_Chính", value: Number(raw.runTimeOfMainProduct), fill: "#10B981" },
     { name: "Giờ chạy NG_Chạy lại", value: Number(raw.runTimeOfRerun), fill: "#EF4444" },
     { name: "Giờ chạy LK_Đồ giá", value: Number(raw.runTimeOfLK), fill: "#8B5CF6" },
     { name: "Giờ chạy điện cực", value: Number(raw.runTimeOfElectric), fill: "#0EA5E9" },
     { name: "Giờ chạy Dự bị", value: Number(raw.totalRunTimeOfPreparation), fill: "#14B8A6" },
-    { name: "Giờ dừng", value: Number(raw.totalStopTime), fill: "#6B7280" },
+    { name: "Giờ dừng", value: Number(raw.totalStopTime), fill: "#e5e759" },
     { name: "Giờ lỗi", value: Number(raw.totalErrorTime), fill: "#E11D48" },
 ]
 const chartConfig = {

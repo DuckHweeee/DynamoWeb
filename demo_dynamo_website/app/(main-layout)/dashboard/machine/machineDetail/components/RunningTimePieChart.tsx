@@ -51,23 +51,27 @@ const chartConfig = {
     label: "Tổng giờ lỗi",
     color: "#E11D48",
   },
-  pg: {
-    label: "Tổng giờ PG",
+  empty: {
+    label: "Tổng giờ trống",
     color: "#3b82f6",
-  },
-  process: {
-    label: "Tổng gia công",
-    color: "#023e8a",
   },
 } satisfies ChartConfig
 
 const mapData = (raw: MachineStatisticDetail) => [
-  { category: "running", hours: Math.round(raw.totalRunTime), fill: "#1D4AE1" },
-  { category: "stopped", hours: Math.round(raw.totalStopTime), fill: "#F59E0B" },
-  { category: "error", hours: Math.round(raw.totalErrorTime), fill: "#E11D48" },
-  { category: "pg", hours: Math.round(raw.totalPgTime), fill: "#3b82f6" },
-  { category: "process", hours: Math.round(raw.numberOfProcesses), fill: "#023e8a" },
+  { category: "running", hours: raw.totalRunTime, fill: "#1D4AE1" },
+  { category: "stopped", hours: raw.totalStopTime, fill: "#F59E0B" },
+  { category: "error", hours: raw.totalErrorTime, fill: "#E11D48" },
+  { category: "empty", hours: raw.totalEmptyTime, fill: "#3b82f6" },
 ];
+function formatHoursToHM(hours: number): string {
+  const h = Math.floor(hours)
+  const m = Math.round((hours - h) * 60)
+
+  if (h > 0 && m > 0) return `${h} giờ ${m} phút`
+  if (h > 0) return `${h} giờ`
+  if (m > 0) return `${m} phút`
+  return "0 phút"
+}
 
 export function RunningTimePieChart({
   title,
@@ -175,7 +179,11 @@ export function RunningTimePieChart({
                 content={({ viewBox }) => {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                     const activeData = machineTimeData[activeIndex]
-                    const percentage = ((activeData.hours / totalHours) * 100).toFixed(1)
+                    const rawPercent = (activeData.hours / totalHours) * 100
+                    const percentage =
+                      rawPercent > 0 && rawPercent < 0.1
+                        ? "<0.1"
+                        : rawPercent.toFixed(1)
 
                     return (
                       <text
@@ -184,19 +192,22 @@ export function RunningTimePieChart({
                         textAnchor="middle"
                         dominantBaseline="middle"
                       >
+                        {/* Dòng trên: Giờ + phút */}
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="fill-foreground text-base font-bold"
                         >
-                          {activeData.hours.toLocaleString()}
+                          {formatHoursToHM(activeData.hours)}
                         </tspan>
+
+                        {/* Dòng dưới: Phần trăm */}
                         <tspan
                           x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
+                          y={(viewBox.cy || 0) + 28}
+                          className="fill-muted-foreground text-sm"
                         >
-                          Giờ ({percentage}%)
+                          {percentage}%
                         </tspan>
                       </text>
                     )

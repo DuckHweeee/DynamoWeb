@@ -36,7 +36,7 @@ export function MachinePieChart({
                     fillColor =
                         item.value > 25
                             ? "#ef4444" // red
-                            : item.value > 20 
+                            : item.value > 20
                                 ? "#facc15" // yellow
                                 : "#22c55e"; // green
                 } else {
@@ -60,7 +60,11 @@ export function MachinePieChart({
                     },
                 } satisfies ChartConfig
                 return (
-                    <Card key={index} className="flex flex-col h-fit w-auto py-1" style={{ borderColor: fillColor, borderWidth: 1 }} >
+                    <Card
+                        key={item.name}   // ✅ unique & ổn định
+                        className="flex flex-col h-fit w-auto py-1"
+                        style={{ borderColor: fillColor, borderWidth: 1 }}
+                    >
                         <CardContent className="flex-1 pb-0 px-1">
                             <ChartContainer
                                 config={chartConfig}

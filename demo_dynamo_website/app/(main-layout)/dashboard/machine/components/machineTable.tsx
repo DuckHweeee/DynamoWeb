@@ -29,9 +29,24 @@ import { MachineOverview } from "../lib/type"
 
 function formatHoursToTime(hours: number): string {
     // The API returns time in decimal hours, so convert to hours and minutes
-    const wholeHours = Math.floor(hours)
-    const minutes = Math.floor((hours % 1) * 60)
-    return `${wholeHours}h ${minutes}m`
+    // const wholeHours = Math.floor(hours)
+    // const minutes = Math.floor((hours % 1) * 60)
+    // return `${wholeHours}h ${minutes}m`
+
+
+    let h = Math.floor(hours);
+    let m = Math.round((hours - h) * 60);
+
+    // ⚠️ Xử lý trường hợp làm tròn lên 60 phút
+    if (m === 60) {
+        h += 1;
+        m = 0;
+    }
+
+    if (h > 0 && m > 0) return `${h}h ${m}m`;
+    if (h > 0) return `${h} h`;
+    if (m > 0) return `${m} m`;
+    return "0 phút";
 }
 
 const columns: ColumnDef<MachineOverview>[] = [

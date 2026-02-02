@@ -53,7 +53,9 @@ export function useTopLowMachine(groupId: string, startDate: string, endDate: st
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
+            console.log(shiftCode)
             try {
+
                 const res = await fetch(`${url}/api/machine-group-statistic/top-5-lowest`, {
                     method: "POST",
                     headers: {

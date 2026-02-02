@@ -91,9 +91,7 @@ const MachineDetailOverview = () => {
         try {
             const response = await fetch(`${url}/api/machine-detail/detail`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     groupId: selectedGroup,
                     startDate: selectedStartDate,
@@ -108,8 +106,15 @@ const MachineDetailOverview = () => {
             }
 
             const result = await response.json();
+
+            const machines = result.machines ?? [];
+            const stillExists = machines.some((m: any) => m.machineId === selectedMachine);
+
+            const finalMachineId = stillExists ? selectedMachine : result.machineId;
+
             setDataEfficiency(result);
-            const newUrl = `?groupId=${selectedGroup}&startDate=${selectedStartDate}&endDate=${selectedEndDate}&machineId=${result.machineId}&shiftCode=${selectedShiftCode}`;
+
+            const newUrl = `?groupId=${selectedGroup}&startDate=${selectedStartDate}&endDate=${selectedEndDate}&machineId=${finalMachineId}&shiftCode=${selectedShiftCode}`;
             router.replace(newUrl);
         } catch (error) {
             toast.error("Đã xảy ra lỗi khi gửi.");

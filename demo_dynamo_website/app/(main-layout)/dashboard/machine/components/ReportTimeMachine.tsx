@@ -13,14 +13,21 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MachineStatistic } from "../lib/type";
 function convertHoursToHM(hours: number): string {
-  const h = Math.floor(hours);
-  const m = Math.round((hours - h) * 60);
+  let h = Math.floor(hours);
+  let m = Math.round((hours - h) * 60);
+
+  // ⚠️ Xử lý trường hợp làm tròn lên 60 phút
+  if (m === 60) {
+    h += 1;
+    m = 0;
+  }
 
   if (h > 0 && m > 0) return `${h} giờ ${m} phút`;
   if (h > 0) return `${h} giờ`;
   if (m > 0) return `${m} phút`;
   return "0 phút";
 }
+
 
 function formatHoursToHM(hours: number): string {
   const h = Math.floor(hours);
@@ -50,23 +57,32 @@ export function ReportTimeMachine({ data, type }: ReportTimeOperatorProps) {
   };
   return (
     <>
-      <div className="my-5 flex gap-3 items-center justify-between">
-        <div className="inline-block rounded-xl bg-white px-5 py-4 shadow-md shadow-green-200 border border-green-500 w-full">
-          <div className="flex items-start justify-between">
-            <MonitorDot size={24} className={"text-green-500"} />
-            <p
-              className={`text-lg font-medium ${
-                (data?.runTimeRate ?? 0) < 0
-                  ? "text-red-500"
-                  : (data?.runTimeRate ?? 0) > 0
+      <div className="my-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+        <div className="inline-block rounded-xl bg-white px-5 py-3 shadow-md shadow-green-200 border border-green-500 w-full">
+          <div className="flex items-center justify-between">
+            <MonitorDot size={25} className={"text-green-500"} />
+            <div
+              className={`text-base font-medium ${(data?.runTimeRate ?? 0) < 0
+                ? "text-red-500"
+                : (data?.runTimeRate ?? 0) > 0
                   ? "text-green-500"
-                  : ""
-              }`}
+                  : "text-gray-400"
+                }`}
             >
-              {(data?.runTimeRate ?? 0) > 0
-                ? `+${data?.runTimeRate ?? 0}%`
-                : `${data?.runTimeRate ?? 0}%`}
-            </p>
+              <span
+                className={`flex justify-center items-center px-2 py-1 rounded-md ${(data?.runTimeRate ?? 0) < 0
+                  ? "bg-red-100 text-red-500"
+                  : (data?.runTimeRate ?? 0) > 0
+                    ? "bg-green-100 text-green-500"
+                    : "bg-gray-100 text-gray-400"
+                  }`}
+              >
+                {(data?.runTimeRate ?? 0) > 0
+                  ? `+${data?.runTimeRate}%`
+                  : `${data?.runTimeRate}%`}
+              </span>
+            </div>
+
           </div>
 
           <p className="text-[30px] font-semibold text-green-700 leading-none mt-2">
@@ -88,30 +104,39 @@ export function ReportTimeMachine({ data, type }: ReportTimeOperatorProps) {
               Trung bình:{" "}
               {data && data.totalMachines > 0
                 ? formatHoursToHM(
-                    (data?.totalRunTime ?? 0) / data.totalMachines
-                  )
+                  (data?.totalRunTime ?? 0) / data.totalMachines
+                )
                 : "0 giờ 0 phút"}{" "}
               / máy
             </p>
           </div>
         </div>
 
-        <div className="inline-block rounded-xl bg-white px-6 py-4 shadow-md shadow-yellow-100 border border-yellow-500 w-full">
-          <div className="flex items-start justify-between">
-            <MonitorDot size={24} className={"text-yellow-500"} />
-            <p
-              className={`text-lg font-medium ${
-                (data?.stopTimeRate ?? 0) < 0
-                  ? "text-red-500"
-                  : (data?.stopTimeRate ?? 0) > 0
+        <div className="inline-block rounded-xl bg-white px-6 py-3 shadow-md shadow-yellow-100 border border-yellow-500 w-full">
+          <div className="flex items-center justify-between">
+            <MonitorDot size={25} className={"text-yellow-500"} />
+            <div
+              className={`text-base font-medium ${(data?.stopTimeRate ?? 0) < 0
+                ? "text-red-500"
+                : (data?.stopTimeRate ?? 0) > 0
                   ? "text-green-500"
-                  : ""
-              }`}
+                  : "text-gray-400"
+                }`}
             >
-              {(data?.stopTimeRate ?? 0) > 0
-                ? `+${data?.stopTimeRate ?? 0}%`
-                : `${data?.stopTimeRate ?? 0}%`}
-            </p>
+              <span
+                className={`flex justify-center items-center px-2 py-1 rounded-md ${(data?.stopTimeRate ?? 0) < 0
+                  ? "bg-red-100 text-red-500"
+                  : (data?.stopTimeRate ?? 0) > 0
+                    ? "bg-green-100 text-green-500"
+                    : "bg-gray-100 text-gray-400"
+                  }`}
+              >
+                {(data?.stopTimeRate ?? 0) > 0
+                  ? `+${data?.stopTimeRate}%`
+                  : `${data?.stopTimeRate}%`}
+              </span>
+            </div>
+
           </div>
 
           <p className="text-[30px] font-semibold text-yellow-700 leading-none mt-2">
@@ -133,40 +158,39 @@ export function ReportTimeMachine({ data, type }: ReportTimeOperatorProps) {
               Trung bình:{" "}
               {data && data.totalMachines > 0
                 ? formatHoursToHM(
-                    (data?.totalStopTime ?? 0) / data.totalMachines
-                  )
+                  (data?.totalStopTime ?? 0) / data.totalMachines
+                )
                 : "0 giờ 0 phút"}{" "}
               / máy
             </p>
           </div>
         </div>
 
-        <div className="inline-block rounded-xl bg-white px-6 py-4 shadow-md shadow-red-200 border border-red-500 w-full">
-          <div className="flex items-start justify-between">
-            <MonitorDot
-              size={24}
-              // className={
-              //     (data?.errorTimeRate ?? 0) < 0
-              //         ? "text-red-500"
-              //         : (data?.errorTimeRate ?? 0) > 0
-              //             ? "text-green-500"
-              //             : ""
-              // }
-              className="text-red-500"
-            />
-            <p
-              className={`text-lg font-medium ${
-                (data?.errorTimeRate ?? 0) < 0
-                  ? "text-red-500"
-                  : (data?.errorTimeRate ?? 0) > 0
+        <div className="inline-block rounded-xl bg-white px-6 py-3 shadow-md shadow-red-200 border border-red-500 w-full">
+          <div className="flex items-center justify-between">
+            <MonitorDot size={25} className={"text-red-500"} />
+            <div
+              className={`text-base font-medium ${(data?.errorTimeRate ?? 0) < 0
+                ? "text-red-500"
+                : (data?.errorTimeRate ?? 0) > 0
                   ? "text-green-500"
-                  : ""
-              }`}
+                  : "text-gray-400"
+                }`}
             >
-              {(data?.errorTimeRate ?? 0) > 0
-                ? `+${data?.errorTimeRate ?? 0}%`
-                : `${data?.errorTimeRate ?? 0}%`}
-            </p>
+              <span
+                className={`flex justify-center items-center px-2 py-1 rounded-md ${(data?.errorTimeRate ?? 0) < 0
+                  ? "bg-red-100 text-red-500"
+                  : (data?.errorTimeRate ?? 0) > 0
+                    ? "bg-green-100 text-green-500"
+                    : "bg-gray-100 text-gray-400"
+                  }`}
+              >
+                {(data?.errorTimeRate ?? 0) > 0
+                  ? `+${data?.errorTimeRate}%`
+                  : `${data?.errorTimeRate}%`}
+              </span>
+            </div>
+
           </div>
 
           <p className="text-[30px] font-semibold text-red-700 leading-none mt-2">
@@ -188,77 +212,87 @@ export function ReportTimeMachine({ data, type }: ReportTimeOperatorProps) {
               Trung bình:{" "}
               {data && data.totalMachines > 0
                 ? formatHoursToHM(
-                    (data?.totalErrorTime ?? 0) / data.totalMachines
-                  )
+                  (data?.totalErrorTime ?? 0) / data.totalMachines
+                )
                 : "0 giờ 0 phút"}{" "}
               / máy
             </p>
           </div>
         </div>
-        {/* <div className="inline-block rounded-xl bg-white px-6 py-4 shadow-md shadow-blue-200 border border-blue-500 w-full">
-                    <div className="flex items-start justify-between">
-                        <MonitorDot
-                            size={24}
-                            className={
-                                (data?.pgTimeRate ?? 0) < 0
-                                    ? "text-red-500"
-                                    : (data?.pgTimeRate ?? 0) > 0
-                                        ? "text-green-500"
-                                        : ""
-                            }
-                        />
-                        <p
-                            className={`text-lg font-medium ${(data?.pgTimeRate ?? 0) < 0
-                                ? "text-red-500"
-                                : (data?.pgTimeRate ?? 0) > 0
-                                    ? "text-green-500"
-                                    : ""
-                                }`}
-                        >
-                            {(data?.pgTimeRate ?? 0) > 0
-                                ? `+${data?.pgTimeRate ?? 0}%`
-                                : `${data?.pgTimeRate ?? 0}%`}
-                        </p>
-                    </div>
-
-                    <p className="text-[30px] font-semibold text-[#074695] leading-none mt-2">
-                        {convertHoursToHM(data?.totalPgTime ?? 0)}
-                    </p>
-
-                    <div className="mt-2">
-                        <p className="text-lg font-medium text-[#343A40] flex items-center">
-                            Tổng Giờ PG  {typeDate[type]}
-                            {(data?.pgTimeRate ?? 0) !== undefined && (
-                                (data?.pgTimeRate ?? 0) >= 0 ? (
-                                    <TrendingUp size={14} className="ml-1 text-green-500" />
-                                ) : (
-                                    <TrendingDown size={14} className="ml-1 text-red-500" />
-                                )
-                            )}
-                        </p>
-                        <p className="text-sm text-gray-400">
-                            Trung bình: {data && data.totalMachines > 0
-                                ? formatHoursToHM((data?.totalPgTime ?? 0) / data.totalMachines)
-                                : "0 giờ 0 phút"} / máy
-                        </p>
-                    </div>
-                </div> */}
-        <div className="inline-block rounded-xl bg-white px-6 py-4 shadow-md shadow-blue-200 border border-blue-500 w-full">
-          <div className="flex items-start justify-between">
-            <MonitorDot size={24} className={"text-blue-500"} />
-            <p
-              className={`text-lg font-medium ${
-                (data?.processRate ?? 0) < 0
-                  ? "text-red-500"
-                  : (data?.processRate ?? 0) > 0
+        <div className="inline-block rounded-xl bg-white px-6 py-3 shadow-md shadow-gray-200 border border-gray-500 w-full">
+          <div className="flex items-center justify-between">
+            <MonitorDot size={25} className={"text-gray-500"} />
+            <div
+              className={`text-base font-medium ${(data?.emptyTimeRate ?? 0) < 0
+                ? "text-red-500"
+                : (data?.emptyTimeRate ?? 0) > 0
                   ? "text-green-500"
-                  : ""
-              }`}
+                  : "text-gray-400"
+                }`}
             >
-              {(data?.processRate ?? 0) > 0
-                ? `+${data?.processRate ?? 0}%`
-                : `${data?.processRate ?? 0}%`}
+              <span
+                className={`flex justify-center items-center px-2 py-1 rounded-md ${(data?.emptyTimeRate ?? 0) < 0
+                  ? "bg-red-100 text-red-500"
+                  : (data?.emptyTimeRate ?? 0) > 0
+                    ? "bg-green-100 text-green-500"
+                    : "bg-gray-100 text-gray-400"
+                  }`}
+              >
+                {(data?.emptyTimeRate ?? 0) > 0
+                  ? `+${data?.emptyTimeRate}%`
+                  : `${data?.emptyTimeRate}%`}
+              </span>
+            </div>
+
+          </div>
+
+          <p className="text-[30px] font-semibold text-gray-400 leading-none mt-2">
+            {convertHoursToHM(data?.totalEmptyTime ?? 0)}
+          </p>
+
+          <div className="mt-2">
+            <p className="text-lg font-medium text-gray-400 flex items-center">
+              Tổng Giờ Trống  {typeDate[type]}
+              {(data?.emptyTimeRate ?? 0) !== undefined && (
+                (data?.emptyTimeRate ?? 0) >= 0 ? (
+                  <TrendingUp size={14} className="ml-1 text-green-500" />
+                ) : (
+                  <TrendingDown size={14} className="ml-1 text-red-500" />
+                )
+              )}
             </p>
+            <p className="text-sm text-gray-400">
+              Trung bình: {data && data.totalMachines > 0
+                ? formatHoursToHM((data?.emptyTimeRate ?? 0) / data.totalMachines)
+                : "0 giờ 0 phút"} / máy
+            </p>
+          </div>
+        </div>
+        <div className="inline-block rounded-xl bg-white px-6 py-3 shadow-md shadow-blue-200 border border-blue-500 w-full">
+          <div className="flex items-center justify-between">
+            <MonitorDot size={25} className={"text-blue-500"} />
+            <div
+              className={`text-base font-medium ${(data?.processRate ?? 0) < 0
+                ? "text-red-500"
+                : (data?.processRate ?? 0) > 0
+                  ? "text-green-500"
+                  : "text-gray-400"
+                }`}
+            >
+              <span
+                className={`flex justify-center items-center px-2 py-1 rounded-md ${(data?.processRate ?? 0) < 0
+                  ? "bg-red-100 text-red-500"
+                  : (data?.processRate ?? 0) > 0
+                    ? "bg-green-100 text-green-500"
+                    : "bg-gray-100 text-gray-400"
+                  }`}
+              >
+                {(data?.processRate ?? 0) > 0
+                  ? `+${data?.processRate}%`
+                  : `${data?.processRate}%`}
+              </span>
+            </div>
+
           </div>
 
           <p className="text-[30px] font-semibold text-blue-700 leading-none mt-2">
