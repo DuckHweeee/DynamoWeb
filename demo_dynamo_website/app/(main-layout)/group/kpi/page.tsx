@@ -12,7 +12,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Plus, Search, X, Upload } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Plus, Search, X, Upload, Edit, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -65,22 +65,22 @@ function getWeekDateRange(year: number, weekNumber: number): { start: string; en
   const firstDayOfYear = new Date(year, 0, 1);
   const daysToFirstThursday = (11 - firstDayOfYear.getDay()) % 7;
   const firstThursday = new Date(year, 0, 1 + daysToFirstThursday);
-  
+
   // Calculate the start of the target week (Monday)
   const weekStart = new Date(firstThursday);
   weekStart.setDate(firstThursday.getDate() - 3 + (weekNumber - 1) * 7);
-  
+
   // Calculate the end of the target week (Sunday)
   const weekEnd = new Date(weekStart);
   weekEnd.setDate(weekStart.getDate() + 6);
-  
+
   // Format dates as dd/mm
   const formatDate = (date: Date) => {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     return `${day}/${month}`;
   };
-  
+
   return {
     start: formatDate(weekStart),
     end: formatDate(weekEnd)
@@ -108,7 +108,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-base font-bold "
+            className="text-[14px] font-bold text-white"
           >
             Năm
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -117,7 +117,7 @@ function getColumns({
       },
       cell: ({ row }) => (
         <div className="pl-5 font-medium text-[16px] text-[#888888]">
-          <div className="text-base  text-[#074695]">
+          <div className="inline-block border px-4 py-2 rounded-md bg-white  text-base text-[14px]  text-[#074695]">
             {row.getValue("year")}
           </div>
         </div>
@@ -130,7 +130,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-base font-bold "
+            className="text-[14px] font-bold text-white"
           >
             Chu kỳ thời gian
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -168,7 +168,7 @@ function getColumns({
 
         return (
           <div className="pl-5 text-[16px] text-[#888888]">
-            <div className="text-base  text-[#074695]">
+            <div className="inline-block border px-4 py-2 rounded-md bg-white   text-base  text-[14px] text-[#074695]">
               {displayContent}
             </div>
           </div>
@@ -182,7 +182,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-base"
+            className="text-[14px] font-bold text-white"
           >
             Phòng ban
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -190,8 +190,8 @@ function getColumns({
         );
       },
       cell: ({ row }) => (
-        <div className="pl-5 font-medium text-[16px] text-[#888888]">
-          <div className="text-base">{row.getValue("office")}</div>
+        <div className="pl-5 font-medium text-[16px] text-[#fff]">
+          <div className="text-[14px] ">{row.getValue("office")}</div>
         </div>
       ),
     },
@@ -202,7 +202,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-base "
+            className="text-[14x] font-bold text-white"
           >
             Nhóm
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -214,8 +214,8 @@ function getColumns({
         const group = groups.find((g) => g.groupId === groupId);
 
         return (
-          <div className="pl-5 font-medium text-[16px] text-[#888888]">
-            <div className="text-base  text-[#074695]">
+          <div className="pl-5 text-[14px] text-[#888888] inline-block border px-4 py-2 rounded-md bg-white  ">
+            <div className="text-[14px] text-[#074695]">
               {groupsLoading ? (
                 <div className="flex items-center">
                   <div className="animate-pulse bg-gray-200 h-4 w-24 rounded"></div>
@@ -238,7 +238,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-base"
+            className="text-[14px] font-bold text-white"
           >
             Mục tiêu giờ làm
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -246,8 +246,8 @@ function getColumns({
         );
       },
       cell: ({ row }) => (
-        <div className="pl-5  text-[16px] text-[#888888]">
-          <div className="text-bass text-[#074695]">
+        <div className="pl-5  text-[16px] text-[#888888] inline-block border px-4 py-2 rounded-md bg-white  ">
+          <div className="text-[14px] font-bold text-[#074695]">
             {Number(row.getValue("workingHourGoal") || 0).toFixed(0)}
           </div>
         </div>
@@ -260,7 +260,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-base"
+            className="text-[14px] font-bold text-white"
           >
             Giờ tăng giảm thực
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -270,8 +270,8 @@ function getColumns({
       cell: ({ row }) => {
         const difference = Number(row.getValue("workingHourDifference") || 0);
         return (
-          <div className="pl-5 text-[16px] text-[#888888]">
-            <div className="text-base text-[#074695]">
+          <div className="pl-5 text-[16px] text-[#888888] inline-block border px-4 py-2 rounded-md bg-white  ">
+            <div className="text-[14px] font-bold text-[#074695]">
               {difference.toFixed(0)}
             </div>
           </div>
@@ -285,7 +285,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-base"
+            className="text-[14px] font-bold text-white"
           >
             Giờ làm việc thực
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -293,8 +293,8 @@ function getColumns({
         );
       },
       cell: ({ row }) => (
-        <div className="pl-5 text-[16px] text-[#888888]">
-          <div className="text-base text-[#074695]">
+        <div className="pl-5 text-[16px] text-[#888888] inline-block border px-4 py-2 rounded-md bg-white  ">
+          <div className="text-[14px] font-bold text-[#074695]">
             {Number(row.getValue("workingHour") || 0).toFixed(0)}
           </div>
         </div>
@@ -311,7 +311,7 @@ function getColumns({
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
                 <span className="sr-only">Mở menu</span>
-                <MoreHorizontal className="h-4 w-4" />
+                <MoreHorizontal color="white" className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -321,13 +321,15 @@ function getColumns({
                   setShowForm(true);
                 }}
               >
-                Chỉnh sửa
+                <Edit className="mr-2 h-4 w-4" />
+                <span className="text-sm">Chỉnh sửa</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => handleDelete(groupKPI.id)}
                 className="text-red-600"
               >
-                Xóa
+                <Trash className="mr-2 h-4 w-4" />
+                <span className="text-sm">Xóa</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -504,6 +506,11 @@ export default function GroupKPIPage() {
       columnVisibility,
       rowSelection,
     },
+    initialState: {
+      pagination: {
+        pageSize: 7,   // ⬅️ mỗi trang tối đa 7 dòng
+      },
+    },
   });
 
   const hasActiveFilters =
@@ -533,13 +540,15 @@ export default function GroupKPIPage() {
   }
 
   return (
-    <div className="m-2 my-1.5 px-4 py-3 bg-white rounded-[10px] shadow">
+    <div className="m-2 mt-4 my-1.5 px-4 py-3 bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl rounded-2xl rounded-[10px] px-6 mt-6 mx-2 h-full">
       {/* Header with Filters */}
       <div className="space-y-4 py-4">
         {/* Title and Add Button */}
         <div className="flex items-center justify-between">
           <div className="flex justify-start">
-            <h1 className="text-2xl font-bold">DANH SÁCH KPI NHÓM THEO THÁNG</h1>
+            {/* <h1 className="text-2xl font-bold">DANH SÁCH KPI NHÓM THEO THÁNG</h1> */}
           </div>
           <div className="flex items-center gap-3">
             <Button
@@ -570,10 +579,10 @@ export default function GroupKPIPage() {
         </div>
 
         {/* Filters Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-4 pt-2 border-t border-red-300">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-4 pt-2">
           {/* Period Filter */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-600 tracking-wide">
+            <label className="text-xs  font-medium text-white tracking-wide">
               Loại KPI
             </label>
             <Select
@@ -582,7 +591,7 @@ export default function GroupKPIPage() {
                 setPeriodFilter(value)
               }
             >
-              <SelectTrigger className="h-9">
+              <SelectTrigger className="h-9 w-[210px] py-5 text-white bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
                 <SelectValue placeholder="Chọn loại" />
               </SelectTrigger>
               <SelectContent>
@@ -596,7 +605,7 @@ export default function GroupKPIPage() {
 
           {/* Year Filter */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-600 tracking-wide">
+            <label className="text-xs font-medium text-white tracking-wide">
               Năm
             </label>
             <Select
@@ -605,7 +614,7 @@ export default function GroupKPIPage() {
                 setYearFilter(value === "all" ? null : parseInt(value))
               }
             >
-              <SelectTrigger className="h-9">
+              <SelectTrigger className="h-9 w-[210px] py-5 text-white bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
                 <SelectValue placeholder="Chọn năm" />
               </SelectTrigger>
               <SelectContent>
@@ -622,7 +631,7 @@ export default function GroupKPIPage() {
           {/* Month Filter (for monthly KPIs) */}
           {periodFilter === "month" && (
             <div className="space-y-1">
-              <label className="text-xs font-medium text-gray-600 tracking-wide">
+              <label className="text-xs font-medium text-white tracking-wide">
                 Tháng
               </label>
               <Select
@@ -631,7 +640,7 @@ export default function GroupKPIPage() {
                   setMonthFilter(value === "all" ? null : parseInt(value))
                 }
               >
-                <SelectTrigger className="h-9">
+                <SelectTrigger className="h-9 w-[210px] py-5 text-white bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
                   <SelectValue placeholder="Chọn tháng" />
                 </SelectTrigger>
                 <SelectContent>
@@ -649,7 +658,7 @@ export default function GroupKPIPage() {
           {/* Week Filter (for weekly KPIs) */}
           {periodFilter === "week" && (
             <div className="space-y-1">
-              <label className="text-xs font-medium text-gray-600 tracking-wide">
+              <label className="text-xs font-medium text-white tracking-wide">
                 Tuần
               </label>
               <WeekPicker
@@ -657,51 +666,34 @@ export default function GroupKPIPage() {
                 year={yearFilter}
                 onSelect={(week) => setWeekFilter(week)}
                 placeholder="Chọn tuần..."
-              />
-            </div>
-          )}
 
-         {/* Day Filter (for daily KPIs) */}
-          {periodFilter === "day" && (
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-gray-600 tracking-wide">
-                Ngày
-              </label>
-              <DatePicker
-                value={{ day: dayFilter, month: dayMonthFilter }}
-                year={yearFilter}
-                onSelect={(day, month) => {
-                  setDayFilter(day);
-                  setDayMonthFilter(month);
-                }}
-                placeholder="Chọn ngày..."
               />
             </div>
           )}
 
           {/* Group Name Search */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-600 tracking-wide">
+            <label className="text-xs font-medium text-white tracking-wide">
               Tên nhóm
             </label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-3.5 h-3.5" />
+              <Search color="white" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-3.5 h-3.5" />
               <Input
                 placeholder="Tìm nhóm..."
                 value={groupSearchFilter}
                 onChange={(event) => setGroupSearchFilter(event.target.value)}
-                className="pl-9 h-9 text-sm"
+                className="pl-9 h-9 text-sm py-5"
               />
             </div>
           </div>
 
           {/* Office Search */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-600 tracking-wide">
+            <label className="text-xs font-medium text-white tracking-wide">
               Phòng ban
             </label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-3.5 h-3.5" />
+              <Search color="white" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-3.5 h-3.5" />
               <Input
                 placeholder="Tìm kiếm..."
                 value={
@@ -710,7 +702,7 @@ export default function GroupKPIPage() {
                 onChange={(event) =>
                   table.getColumn("office")?.setFilterValue(event.target.value)
                 }
-                className="pl-9 h-9 text-sm"
+                className="pl-9 h-9 text-sm py-5"
               />
             </div>
           </div>
@@ -725,7 +717,7 @@ export default function GroupKPIPage() {
                 variant="outline"
                 size="sm"
                 onClick={clearFilters}
-                className="text-red-600 hover:text-red-700 border-red-200 hover:border-red-300 h-9"
+                className="py-5 text-red-600 hover:text-red-700 border-red-200 hover:border-red-300 h-9"
               >
                 <X className="h-4 w-4 mr-1" />
                 Xóa bộ lọc
@@ -808,12 +800,12 @@ export default function GroupKPIPage() {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow  
+                <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-5 py-5">
+                    <TableCell key={cell.id} className="px-5 py-5 text-[14px]">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -838,7 +830,7 @@ export default function GroupKPIPage() {
 
       {/* Pagination */}
       <div className="flex items-center justify-between space-x-2 py-4 border-t">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-sm text-white">
           Trang {table.getState().pagination.pageIndex + 1} /{" "}
           {table.getPageCount()}
           <span className="ml-2">

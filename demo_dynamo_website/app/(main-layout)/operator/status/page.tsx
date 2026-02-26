@@ -21,19 +21,19 @@ export default function DashboardPage() {
         operatorStatusListApi ??
         [];
     return (
-        <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
-            <div className="flex flex-row items-center justify-between py-4 border-b border-red-300 mb-4">
+        <div className="m-2 px-4 py-3 bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl">
+            <div className="flex flex-row items-center justify-between border-b pb-4 border-red-300 mb-6">
                 <div className="w-2/3">
-                    <p className="text-2xl font-bold">Hiện Trạng Người Vận hành</p>
                 </div>
                 <div className="w-1/3 flex items-center justify-end gap-5">
                     <div className="space-y-1">
-                        <label className="text-sm font-medium text-gray-600 tracking-wide">Nhóm</label>
                         <Select
                             value={selectedGroup ?? ""}
                             onValueChange={(val) => setSelectedGroup(val)}
                         >
-                            <SelectTrigger className="w-[180px] text-lg cursor-pointer">
+                            <SelectTrigger className="w-[175px] text-base cursor-pointer p-5  text-white bg-white/10 backdrop-blur border border-white/20 shadow-xl ">
                                 <SelectValue placeholder="Nhóm" />
                             </SelectTrigger>
                             <SelectContent>
@@ -41,9 +41,9 @@ export default function DashboardPage() {
                                     {groupList.map((m) => (
                                         <SelectItem
                                             key={m.groupId}
-                                            value={String(m.groupId)}
+                                            value={String(m.groupId)} 
                                             className={`text-lg text-blue-950 cursor-pointer ${String(selectedGroup) === String(m.groupId)
-                                                ? "bg-gray-200"
+                                                ? "bg-white/10 backdrop-blur border border-white/20 shadow-xl"
                                                 : ""
                                                 }`}
                                         >

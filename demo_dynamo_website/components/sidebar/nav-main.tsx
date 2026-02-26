@@ -58,12 +58,29 @@ export function NavMain({
                             <SidebarMenuItem>
                                 <CollapsibleTrigger asChild>
                                     <SidebarMenuButton
-                                        className={`cursor-pointer text-base p-6 ${isGroupActive ? "text-[#890101]" : ""}`}
+                                        className={`cursor-pointer text-base text-white pb-6 pt-6 ${isGroupActive ? "text-[#890101] bg-white" : ""}`}
                                     >
                                         <Link href={item.url}>
-                                            {item.icon && <item.icon />}
+                                            {item.icon && (
+                                                <span
+                                                    className={` inline-flex items-center justify-center bg-white/40 backdrop-blur-3xl
+                                                                border border-white/20
+                                                                shadow-xl rounded-md
+                                                        ${isGroupActive
+                                                            ? "border-[#890101] text-[#890101]"
+                                                            : "border-white/50 text-white"
+                                                        }
+                                                    `}
+                                                    style={{ width: 36, height: 36 }}
+                                                >
+                                                    <item.icon
+                                                        size={20}
+                                                        className="pointer-events-none"
+                                                    />
+                                                </span>
+                                            )}
                                         </Link>
-                                        <span className={`${isGroupActive ? "text-[#890101]" : ""} tracking-widest ` }>{item.title}</span>
+                                        <span className={`${isGroupActive ? "text-[#890101] bg-white" : ""} tracking-widest `}>{item.title}</span>
                                         <ChevronRight
                                             className={`ml-auto transition-transform duration-200 ${isGroupActive ? "rotate-90" : ""
                                                 }`}
@@ -82,7 +99,7 @@ export function NavMain({
                                                         key={subItem.title}
 
                                                     >
-                                                        <SidebarMenuSubButton asChild className={isActive ? "!text-[#890101] " : ""}>
+                                                        <SidebarMenuSubButton asChild className={isActive ? "text-[#890101] bg-white " : "  text-white "}>
                                                             <Link
                                                                 href={subItem.url}
                                                                 onClick={() =>
@@ -92,7 +109,9 @@ export function NavMain({
                                                                     )
                                                                 }
                                                             >
-                                                                <span className="text-base tracking-wide ">{subItem.title}</span>
+                                                                <span>
+                                                                    {subItem.title}
+                                                                </span>
                                                             </Link>
                                                         </SidebarMenuSubButton>
                                                     </SidebarMenuSubItem>

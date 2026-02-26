@@ -44,55 +44,55 @@ const columns: ColumnDef<StaffOverview>[] = [
     {
         accessorKey: "staffFullName",
         header: ({ column }) => (
-            <Button className="cursor-pointer text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            <Button className="cursor-pointer text-sm font-bold capitalize text-white" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 Tên nhân viên <ArrowUpDown />
             </Button>
         ),
         cell: ({ row }) => (
             <div>
-                <div className="text-lg">{row.getValue("staffFullName")}</div>
-                <div className="text-sm text-muted-foreground font-normal uppercase">#{row.original.staffIdNumber}</div>
+                <div className="text-sm text-white">{row.getValue("staffFullName")}</div>
+                <div className="text-sm text-muted-foreground font-normal uppercase text-white">#{row.original.staffIdNumber}</div>
             </div>
         ),
     },
     {
-        accessorKey: "totalWorkingHour",
+        accessorKey: "pgTime",
         header: ({ column }) => (
-            <Button className="cursor-pointer text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                Giờ làm việc <ArrowUpDown />
+            <Button className="cursor-pointer text-sm font-bold capitalize text-white" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                Giờ PG <ArrowUpDown />
             </Button>
         ),
-        cell: ({ row }) => <div>{convertHoursToHM(row.getValue("totalWorkingHour"))}</div>,
+        cell: ({ row }) => <div className="inline-block !w-[120px] !h-[30px] bg-[#E6FFE6] text-[#00A90B] px-4 py-1 rounded-md text-center">{row.getValue("pgTime")}</div>,
     },
     {
         accessorKey: "totalOperationNumber",
         header: ({ column }) => (
-            <Button className="cursor-pointer text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            <Button className="cursor-pointer text-sm font-bold capitalize text-white" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 Số nguyên công <ArrowUpDown />
             </Button>
         ),
-        cell: ({ row }) => <div>{row.getValue("totalOperationNumber")}</div>,
+        cell: ({ row }) => <div className="inline-block !w-[120px] !h-[30px] bg-sky-200 text-blue-800 px-4 py-1 rounded-md text-center">{row.getValue("totalOperationNumber")}</div>,
     },
     {
         accessorKey: "totalManufacturingPoint",
         header: ({ column }) => (
-            <Button className="cursor-pointer text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            <Button className="cursor-pointer text-sm font-bold capitalize text-white" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 Điểm nguyên công <ArrowUpDown />
             </Button>
         ),
         cell: ({ row }) => (
-            <div className="font-bold">{row.getValue("totalManufacturingPoint")}</div>
+            <div className="inline-block !w-[120px] !h-[30px] bg-orange-100 text-orange-700 px-4 py-1 rounded-md text-center">{row.getValue("totalManufacturingPoint")}</div>
         ),
     },
     {
         accessorKey: "kpi",
         header: ({ column }) => (
-            <Button className="cursor-pointer text-lg font-bold capitalize" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            <Button className="cursor-pointer text-sm font-bold capitalize text-white" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 KPI <ArrowUpDown />
             </Button>
         ),
         cell: ({ row }) => (
-            <div className="font-bold">{row.getValue("kpi")}</div>
+            <div className="inline-block !w-[120px] !h-[30px] bg-rose-50 text-pink-700 px-4 py-1 rounded-md text-center">{row.getValue("kpi")}</div>
         ),
     },
 ]
@@ -125,13 +125,19 @@ export default function StaffTable({ title, description, staffList }: { title: s
             rowSelection,
             globalFilter,
         },
+        initialState: {
+            pagination: {
+                pageSize: 9,   // ⬅️ mỗi trang tối đa 7 dòng
+            },
+        },
+
     })
     return (
         // <div className="w-full">
-        <div className="my-2 px-4 py-2 bg-white rounded-[10px] shadow border border-purple-300 shadow-purple-200">
+        <div className="my-3 px-4 py-2 rounded-[20px] bg-white/20 backdrop-blur-lg border border-white/20 shadow-xl shadow-md w-full h-[696px]">
             <div className="flex flex-row items-center justify-between py-4">
                 <div className="w-2/3">
-                    <p className="text-2xl font-bold">{title}</p>
+                    <p className="text-base font-bold text-white">{title}</p>
                 </div>
 
             </div>
@@ -165,7 +171,7 @@ export default function StaffTable({ title, description, staffList }: { title: s
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell
                                             key={cell.id}
-                                            className={`font-medium text-[16px] text-[#888888] text-center`}
+                                            className={`font-medium text-[13px] text-[#888888] text-center`}
                                         >
                                             {flexRender(
                                                 cell.column.columnDef.cell,

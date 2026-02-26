@@ -109,7 +109,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       document.cookie = `auth-user=${JSON.stringify(user)}; path=/; max-age=${7 * 24 * 60 * 60}`;
 
       // Redirect based on role
-      router.push(user.role === "Admin" ? "/" : "/tablet/process");
+      router.push(user.role === "Admin" ? "/dashboard/operation" : "/tablet/process");
 
       setIsLoading(false);
       return true;

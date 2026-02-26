@@ -53,11 +53,11 @@ const columns: ColumnDef<MachineOverview>[] = [
     {
         accessorKey: "machineName",
         header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-lg">Tên máy <ArrowUpDown /></Button>
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-[14px] font-bold text-white">Tên máy <ArrowUpDown /></Button>
         ),
         cell: ({ row }) => (
             <div>
-                <div className="text-lg">{row.getValue("machineName")}</div>
+                <div className="text-sm text-white">{row.getValue("machineName")}</div>
                 {/* <div className="text-sm text-muted-foreground font-normal">#{row.original.id}</div> */}
             </div>
         ),
@@ -65,7 +65,7 @@ const columns: ColumnDef<MachineOverview>[] = [
     {
         accessorKey: "runTime",
         header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-lg">Tổng giờ chạy <ArrowUpDown /></Button>
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-[14px] font-bold text-white">Tổng giờ chạy <ArrowUpDown /></Button>
         ),
         cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#E6FFE6] text-[#00A90B] px-4 py-1 rounded-md">{formatHoursToTime(row.getValue("runTime"))}</span></div>,
         // cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("tgc"))}</div>,
@@ -73,7 +73,7 @@ const columns: ColumnDef<MachineOverview>[] = [
     {
         accessorKey: "stopTime",
         header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-lg">Tổng giờ dừng <ArrowUpDown /></Button>
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-[14px] font-bold text-white">Tổng giờ dừng <ArrowUpDown /></Button>
         ),
         cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#FAFFAF] text-[#C3B300] px-4 py-1 rounded-md">{formatHoursToTime(row.getValue("stopTime"))}</span></div>,
 
@@ -82,7 +82,7 @@ const columns: ColumnDef<MachineOverview>[] = [
     {
         accessorKey: "emptyTime",
         header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-lg">Tổng giờ trống <ArrowUpDown /></Button>
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-[14px] font-bold text-white">Tổng giờ trống <ArrowUpDown /></Button>
         ),
         cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#B5B5B5] text-[#FFFFFF] px-4 py-1 rounded-md">{formatHoursToTime(row.getValue("emptyTime"))}</span></div>,
         // cell: ({ row }) => <div>{formatSecondsToTime(row.getValue("tgt"))}</div>,
@@ -90,7 +90,7 @@ const columns: ColumnDef<MachineOverview>[] = [
     {
         accessorKey: "errorTime",
         header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-lg">Tổng giờ lỗi <ArrowUpDown /></Button>
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")} className="text-[14px] font-bold text-white">Tổng giờ lỗi <ArrowUpDown /></Button>
         ),
         cell: ({ row }) => <div> <span className="inline-block !w-[93px] !h-[30px] bg-[#FFE6E6] text-[#FE4A4A]  px-4 py-1 rounded-md">{formatHoursToTime(row.getValue("errorTime"))}</span></div>,
 
@@ -108,8 +108,6 @@ export default function MachineTable({
 }) {
     // Debug logging
     React.useEffect(() => {
-        console.log("MachineTable received dataOverview:", dataOverview);
-        console.log("Sample data structure:", dataOverview[0]);
     }, [dataOverview]);
 
     const [sorting, setSorting] = useState<SortingState>([])
@@ -141,10 +139,10 @@ export default function MachineTable({
     })
 
     return (
-        <div className="px-4 py-2 bg-white rounded-[10px] shadow-md shadow-purple-200 border border-purple-300">
+        <div className="px-4 py-2 bg-white rounded-[10px] shadow-md bg-white/20 backdrop-blur-lg border border-white/20 shadow-xl ">
             <div className="flex flex-row items-center justify-between py-4">
                 {/* <p className="text-2xl font-bold">Thống kê thời gian máy</p> */}
-                <p className="text-2xl font-bold">{title}</p>
+                <p className="text-base font-bold text-white">{title}</p>
                 {/* <p className="text-xl">{description}</p> */}
                 {/* <Input
                     placeholder="Tìm kiếm"
@@ -172,7 +170,7 @@ export default function MachineTable({
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888] py-5">
+                                        <TableCell key={cell.id} className="text-center font-bold text-[14px] text-[#888888] py-5">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}

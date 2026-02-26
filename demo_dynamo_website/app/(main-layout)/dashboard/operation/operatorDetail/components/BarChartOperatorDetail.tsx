@@ -26,8 +26,18 @@ const chartConfig = {
 } satisfies ChartConfig
 
 const legendItems = [
-    { name: "Thực tế", fill: "#0077FF" },
-    { name: "Dự kiến", fill: "#074695" },
+    {
+        name: "Thực tế (Đạt)",
+        gradient: "linear-gradient(90deg, #D0E5A5, #86E3C3)",
+    },
+    {
+        name: "Thực tế (Không đạt)",
+        gradient: "linear-gradient(90deg, #df7f53, #f10a16)",
+    },
+    {
+        name: "Dự kiến",
+        gradient: "linear-gradient(90deg, #4adede, #1ca7ec)",
+    },
 ]
 
 interface BarChartOperatorDetailProps {
@@ -43,7 +53,7 @@ export function BarChartOperatorDetail({
 }: BarChartOperatorDetailProps) {
     const chartConfigs = [
         {
-            name: "ĐGC",
+            name: "Điểm gia công",
             realKey: "manufacturingPoints",
             goalKey: "manufacturingPointsGoal",
         },
@@ -53,7 +63,7 @@ export function BarChartOperatorDetail({
             goalKey: "pgTimeGoal",
         },
         {
-            name: "Giờ Máy",
+            name: "Giờ máy",
             realKey: "workingHours",
             goalKey: "workingHoursGoal",
         },
@@ -70,13 +80,13 @@ export function BarChartOperatorDetail({
     ]
 
     return (
-        <Card className="w-full border border-blue-300 shadow-md shadow-blue-100 mb-4">
+        <Card className="w-full my-2 rounded-[20px] bg-white/20 backdrop-blur-lg border border-white/20 shadow-xl shadow-md w-full">
             <CardHeader>
-                <p className="text-xl font-bold">{title}</p>
-                <p className="text-lg text-gray-400 mb-4">{description}</p>
+                <p className="text-base font-bold text-white">{title}</p>
+                <p className="text-sm text-white">{description}</p>
             </CardHeader>
             <CardContent>
-                <ChartContainer config={chartConfig} className="h-[350px] w-full">
+                <ChartContainer config={chartConfig} className="h-[480px] w-full">
                     <BarChart
                         data={chartConfigs.map(cfg => ({
                             name: cfg.name,
@@ -86,7 +96,25 @@ export function BarChartOperatorDetail({
                         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                     >
                         <CartesianGrid vertical={false} />
-                        <XAxis dataKey="name" tickLine={false} tickMargin={5} axisLine={false} tick={{ fontSize: 16 }} />
+                        <XAxis dataKey="name" tickLine={false} tickMargin={5} axisLine={false} tick={{
+                            fontSize: 16, fill: "#ffffff",
+                            style: { fill: "#fff" },
+                        }} />
+                        <defs>
+                            <linearGradient id="desireGradient" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stopColor="#4adede" />
+                                <stop offset="100%" stopColor=" #1ca7ec" />
+                            </linearGradient>
+                            <linearGradient id="realGradient" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stopColor="#D0E5A5" />
+                                <stop offset="100%" stopColor=" #86E3C3" />
+                            </linearGradient>
+                            <linearGradient id="NGGradient" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stopColor="#df7f53" />
+                                <stop offset="100%" stopColor=" #f10a16" />
+                            </linearGradient>
+
+                        </defs>
                         <YAxis hide />
                         <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
 
@@ -98,36 +126,36 @@ export function BarChartOperatorDetail({
                                 return (
                                     <Cell
                                         key={`cell-real-${index}`}
-                                        fill={real < goal ? "#EF4444" : "var(--color-real)"}
+                                        fill={real < goal ? "url(#NGGradient)" : "url(#realGradient)"}
                                     />
                                 )
                             })}
-                            <LabelList dataKey="real" position="insideTop" offset={8} className="fill-white" fontSize={14} />
+                            <LabelList dataKey="real" position="top" offset={8} className="fill-white" fontSize={14} />
                         </Bar>
 
                         {/* Bar desirable giữ nguyên màu xanh */}
-                        <Bar dataKey="desirable" fill="var(--color-desirable)" radius={4}>
+                        <Bar dataKey="desirable" fill="url(#desireGradient)" radius={4}>
                             <LabelList
                                 dataKey="desirable"
-                                position="insideTop"
+                                position="top"
                                 offset={8}
                                 className="fill-white"
                                 fontSize={14}
+
                             />
                         </Bar>
                     </BarChart>
-
                 </ChartContainer>
 
                 {/* Legend */}
-                <div className="mx-6 flex items-center justify-center gap-6 bg-white p-3">
+                <div className="mx-6 flex items-center justify-center gap-6 p-3">
                     {legendItems.map((item, index) => (
                         <div key={index} className="flex items-center gap-2">
                             <div
-                                className="w-3 h-3 rounded-sm"
-                                style={{ backgroundColor: item.fill }}
+                                className="w-3 h-3 rounded-sm "
+                                style={{ background: item.gradient }}
                             />
-                            <span className="text-sm text-gray-800 font-medium">
+                            <span className="text-sm text-white font-medium">
                                 {item.name}
                             </span>
                         </div>

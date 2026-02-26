@@ -1,11 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import {
   Bar,
   BarChart,
   Cell,
   LabelList,
-  ResponsiveContainer,
   XAxis,
   YAxis,
 } from "recharts";
@@ -16,12 +16,16 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const chartConfig = {
   target: {
     label: "Mục tiêu",
     color: "#369fff",
-  },    
+  },
   real: {
     label: "Thực tế",
     color: "#72e05cff",
@@ -33,149 +37,277 @@ interface DivergingBarChartProps {
   description: string;
   data: { name: string; target: number; real: number }[];
 }
-const legendItems = [
-  { name: "Mục tiêu", fill: "#369fff" },
-  { name: "Thực tế", fill: "#0587ca" },
-  { name: "Thấp hơn mục tiêu", fill: "#c35252ff" },
-];
-const CustomRealLabel = (props: any) => {
-  const { x, y, width, height, value } = props;
 
-  const threshold = 40; // nếu thanh < 40px thì đẩy ra ngoài
-  const inside = width > threshold;
+type ChartMode = "ranking" | "comparison";
 
-  return (
-    <text
-      x={inside ? x + width - 5 : x + width + 8}
-      y={y + height / 2}
-      dy="0.35em"
-      textAnchor={inside ? "end" : "start"}
-      fill={inside ? "#fff" : "#333"}
-      fontSize={16}
-    >
-      {value}
-    </text>
-  );
-};
+const ITEMS_PER_PAGE = 5;
+
 export function DivergingBarChart({
   title,
   description,
   data,
 }: DivergingBarChartProps) {
-  const avgtarget =
-    data.length > 0
-      ? data.reduce((sum, d) => sum + d.target, 0) / data.length
-      : 0;
+  const [chartMode, setChartMode] = useState<ChartMode>("ranking");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const avgReal =
-    data.length > 0
-      ? data.reduce((sum, d) => sum + d.real, 0) / data.length
-      : 0;
-  const chartData = [
-    { name: "TB", target: avgtarget.toFixed(2), real: avgReal.toFixed(2) },
-    ...data,
+  const sortedData = [...data].sort((a, b) => b.real - a.real);
+
+  const totalPages = Math.ceil(sortedData.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedData = sortedData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+
+  const handleModeChange = (value: string) => {
+    setChartMode(value as ChartMode);
+    setCurrentPage(1);
+  };
+
+  const legendItemsRanking = [
+    { name: "Thực tế", fill: "#72e05cff" },
   ];
 
+  const legendItemsComparison = [
+    { name: "Mục tiêu", fill: "#369fff" },
+    { name: "Thực tế (đạt)", fill: "#72e05cff" },
+    { name: "Thực tế (chưa đạt)", fill: "#dc2626" },
+  ];
+
+  const chartHeight = 390;
+
   return (
-    <Card className="w-full border border-orange-300 shadow-md shadow-orange-100 my-5">
-      <CardHeader>
+    <Card className="w-full shadow-md !bg-transparent">
+      <CardHeader className="text-white">
         <div className="items-center">
-          <p className="text-xl font-bold">{title}</p>
-          <p className="text-lg text-gray-400">{description}</p>
+          <p>{title}</p>
+          <p>{description}</p>
         </div>
+        <RadioGroup
+          defaultValue="ranking"
+          value={chartMode}
+          onValueChange={handleModeChange}
+          className="flex gap-6 mt-4"
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="ranking" id="ranking" />
+            <Label htmlFor="ranking" className="cursor-pointer text-white">
+              Xếp hạng thực tế
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="comparison" id="comparison" />
+            <Label htmlFor="comparison" className="cursor-pointer text-white">
+              So sánh với mục tiêu
+            </Label>
+          </div>
+        </RadioGroup>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className={`!h-[400px] w-full`}>
-          {/* <ResponsiveContainer width="100%" height="30%"> */}
-          <BarChart accessibilityLayer data={chartData} layout="vertical">
-            <YAxis
-              dataKey="name"
-              type="category"
-              tickLine={false}
-              axisLine={false}
-              fontSize={15}              
-            />
-            <XAxis type="number" tickLine={false} axisLine={true} hide />
+        <ChartContainer config={chartConfig} style={{
+          height: chartHeight, width: "100%", marginLeft: -35,
+        }}>
+          {chartMode === "ranking" ? (
+            <BarChart data={paginatedData} layout="vertical" accessibilityLayer margin={{ right: 30, left: 20 }}>
+              <defs>
+                <linearGradient id="rankingGradient" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#D0E5A5" />
+                  <stop offset="100%" stopColor="#86E3C3" />
+                </linearGradient>
+              </defs>
+              <YAxis
+                dataKey="name"
+                type="category"
+                tickLine={true}
+                axisLine={false}
+                fontSize={14}
+                fontWeight={600}
+                width={80}
+                tick={{
+                  fill: "#ffffff",
+                  style: { fill: "#fff" },
+                }}
 
-            {/* Thanh target */}
-            <Bar
-              dataKey="target"
-              stackId="a"
-              fill={chartConfig.target.color}
-              radius={[0, 0, 0, 0]}
-            >
-              <LabelList
-                dataKey="target"
-                position="insideRight"
-                fill="#fff"
-                fontSize={16}
               />
-            </Bar>
-
-            {/* Thanh real (so sánh màu) */}
-            <Bar dataKey="real" stackId="a" radius={[0, 4, 4, 0]}>
-              {chartData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={
-                    index === 0
-                      ? chartConfig.real.color // luôn xanh cho "Trung bình"
-                      : entry.real < entry.target
-                      ? "#ff4d4d"
-                      : chartConfig.real.color
-                  }
-                />
-              ))}
-              <LabelList
+              <XAxis type="number" tickLine={true} axisLine={true} />
+              <Bar
                 dataKey="real"
-                content={<CustomRealLabel />}
-                fill="#fff"
-                fontSize={16}
-              />
-            </Bar>
-
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  hideLabel
-                  className="w-[180px]"
-                  formatter={(value, name) => (
-                    <>
-                      <div
-                        className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
-                        style={{
-                          background: `var(--color-${name})`,
-                        }}
-                      />
-                      {chartConfig[name as keyof typeof chartConfig]?.label ||
-                        name}
-                      <div className="ml-auto font-mono font-medium">
-                        {value}
-                      </div>
-                    </>
-                  )}
+                fill="url(#rankingGradient)"
+                radius={7}
+                barSize={50}
+              >
+                <LabelList
+                  dataKey="real"
+                  position="right"
+                  fontSize={12}
+                  fontWeight={750}
+                  className="fill-white"
                 />
-              }
-              cursor={false}
-              defaultIndex={0}
-            />
-            {/* <ChartLegend className="text-lg" content={<ChartLegendContent />} /> */}
-          </BarChart>
-          {/* </ResponsiveContainer> */}
-        </ChartContainer>
-        <div className="mx-6 grid grid-cols-3 bg-white p-3 justify-items-center">
-          {legendItems.map((item, index) => (
-            <div key={index} className="flex items-center gap-2">
-              <div
-                className="w-3 h-3 rounded-sm"
-                style={{ backgroundColor: item.fill }}
+              </Bar>
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    hideLabel
+                    className="w-[180px]"
+                    formatter={(value) => (
+                      <>
+                        <div
+                          className="h-2.5 w-2.5 shrink-0 rounded-[2px] "
+                          style={{ background: "#72e05cff" }}
+                        />
+                        Thực tế
+                        <div className="ml-auto font-mono font-medium">
+                          {value}
+                        </div>
+                      </>
+                    )}
+                  />
+                }
+                cursor={false}
               />
-              <span className="text-sm text-gray-800 font-medium">
-                {item.name}
-              </span>
-            </div>
-          ))}
+            </BarChart>
+          ) : (
+            <BarChart data={paginatedData} layout="vertical" accessibilityLayer barGap={2} margin={{
+              right: 50,
+              left: 20
+            }}>
+              <defs>
+                <linearGradient id="targetGradient" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#93c5fd" />
+                  <stop offset="100%" stopColor="#3b82f6" />
+                </linearGradient>
+                <linearGradient id="realGreenGradient" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#D0E5A5" />
+                  <stop offset="100%" stopColor="#86E3C3" />
+                </linearGradient>
+                <linearGradient id="realRedGradient" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#dc2626" />
+                  <stop offset="100%" stopColor="#f87171" />
+                </linearGradient>
+              </defs>
+              <YAxis
+                dataKey="name"
+                type="category"
+                tickLine={true}
+                axisLine={false}
+                fontSize={14}
+                fontWeight={600}
+                width={80}
+                tick={{
+                  fill: "#ffffff",
+                  style: { fill: "#fff" },
+                }}
+              />
+              <XAxis type="number" tickLine={true} axisLine={true} />
+              <Bar
+                dataKey="target"
+                fill="url(#targetGradient)"
+                radius={7}
+                barSize={30}
+
+              >
+                <LabelList
+                  dataKey="target"
+                  fontSize={12}
+                  className="fill-white"
+                  position="right"
+                  fontWeight={750}
+                />
+              </Bar>
+              <Bar dataKey="real" radius={7} barSize={30}>
+                {paginatedData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={
+                      entry.real >= entry.target
+                        ? "url(#realGreenGradient)"
+                        : "url(#realRedGradient)"
+                    }
+                  />
+                ))}
+                <LabelList
+                  dataKey="real"
+                  fontSize={12}
+                  position={"right"}
+                  className="fill-white"
+                  fontWeight={750}
+
+                />
+              </Bar>
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    hideLabel
+                    className="w-[180px]"
+                    formatter={(value, name) => (
+                      <>
+                        <div
+                          className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
+                          style={{
+                            background: `var(--color-${name})`,
+                          }}
+                        />
+                        {chartConfig[name as keyof typeof chartConfig]?.label ||
+                          name}
+                        <div className="ml-auto font-mono font-medium">
+                          {value}
+                        </div>
+                      </>
+                    )}
+                  />
+                }
+                cursor={false}
+              />
+            </BarChart>
+          )}
+        </ChartContainer>
+
+        {/* Legend */}
+        <div className="mx-6 grid grid-cols-3  p-3 justify-items-center">
+          {(chartMode === "ranking" ? legendItemsRanking : legendItemsComparison).map(
+            (item, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <div
+                  className="w-3 h-3 rounded-sm"
+                  style={{ backgroundColor: item.fill }}
+                />
+                <span className="text-sm text-white font-medium">
+                  {item.name}
+                </span>
+              </div>
+            )
+          )}
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-4 mt-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <span className="text-sm text-white">
+              Trang {currentPage} / {totalPages}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

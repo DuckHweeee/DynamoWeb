@@ -13,7 +13,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Plus, Search } from "lucide-react"
+import { ArrowUpDown, Edit, Eye, MoreHorizontal, Plus, Search } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -90,14 +90,14 @@ function getColumns({
     const baseColumns: ColumnDef<Machine2>[] = [
         {
             id: "stt",
-            header: () => (<span className="text-lg font-bold ">STT</span>),
+            header: () => (<span className="text-base text-white font-bold ">STT</span>),
             cell: ({ row }) => <div>{row.index + 1}</div>,
         },
         {
             accessorKey: "machineName",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Tên Máy <ArrowUpDown />
+                <Button className="text-base font-bold cursor-pointer text-white" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Tên máy <ArrowUpDown />
                 </Button>
             ),
             cell: ({ row }) => <div className="capitalize">{row.getValue("machineName")}</div>,
@@ -105,8 +105,8 @@ function getColumns({
         {
             accessorKey: "machineType",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Loại Máy <ArrowUpDown />
+                <Button className="text-base text-white  font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Loại máy <ArrowUpDown />
                 </Button>
             ),
             cell: ({ row }) => <div className="capitalize">{row.getValue("machineType")}</div>,
@@ -114,8 +114,8 @@ function getColumns({
         {
             accessorKey: "machineWork",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                    Công Việc <ArrowUpDown />
+                <Button className="text-base text-white  font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Công việc <ArrowUpDown />
                 </Button>
             ),
             cell: ({ row }) => <div className="capitalize">{row.getValue("machineWork")}</div>,
@@ -123,7 +123,7 @@ function getColumns({
         {
             accessorKey: "machineOffice",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base text-white font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Phòng quản lý <ArrowUpDown />
                 </Button>
             ),
@@ -132,7 +132,7 @@ function getColumns({
         {
             accessorKey: "machineKpiDtos.groupName",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base text-white  font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Nhóm <ArrowUpDown />
                 </Button>
             ),
@@ -142,7 +142,7 @@ function getColumns({
             accessorKey: "createdDate",
             header: ({ column }) => (
                 <Button
-                    className="text-lg font-bold cursor-pointer"
+                    className="text-base text-white font-bold cursor-pointer"
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
@@ -165,7 +165,7 @@ function getColumns({
         {
             accessorKey: "status",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base text-white font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Trạng thái <ArrowUpDown />
                 </Button>
             ),
@@ -175,7 +175,7 @@ function getColumns({
 
                 return (
                     <div
-                        className={`w-full px-4 py-1 rounded-sm text-center capitalize
+                        className={`w-auto px-4 py-1 rounded-sm text-center capitalize 
                   ${isRunning
                                 ? "bg-[#E7F7EF] text-[#0CAF60]"
                                 : "bg-gray-300 text-white"}`}
@@ -186,7 +186,7 @@ function getColumns({
             },
         },
     ]
-    
+
     // Add actions column if needed
     if (showActions || showViewHistory) {
         baseColumns.push({
@@ -224,7 +224,8 @@ function getColumns({
                                             }
                                         }}
                                     >
-                                        Thông tin chi tiết
+                                        <Eye className="mr-2 h-4 w-4" />
+                                        <span className="text-sm">Xem chi tiết</span>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                         className="text-lg cursor-pointer pr-6"
@@ -237,7 +238,8 @@ function getColumns({
                                             }
                                         }}
                                     >
-                                        Chỉnh sửa
+                                        <Edit className="mr-2 h-4 w-4" />
+                                        <span className="text-sm">Chỉnh sửa</span>
                                     </DropdownMenuItem>
                                 </>
                             )}
@@ -312,6 +314,11 @@ export function MachineTable({
             rowSelection,
             globalFilter,
         },
+        initialState: {
+            pagination: {
+                pageSize: 8,   // ⬅️ mỗi trang tối đa 7 dòng
+            },
+        },
     })
 
     const handleAdd = () => {
@@ -330,10 +337,12 @@ export function MachineTable({
     }
 
     return (
-        <div className="bg-white rounded-[10px] px-6 mx-2 h-screen">
-            <div className="flex flex-row items-center justify-between py-4 bg-white border-b border-red-300 mb-4">
+        <div className="bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl rounded-2xl rounded-[10px] px-6 mt-6 mx-2 h-auto">
+            <div className="flex flex-row items-center justify-between py-4  mb-4">
                 <div className="w-2/3">
-                    <p className="text-2xl font-bold">{title}</p>
+                    {/* <p className="text-2xl font-bold">{title}</p> */}
                 </div>
                 <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
                     <div className="relative max-w-sm w-full">
@@ -342,7 +351,7 @@ export function MachineTable({
                             placeholder="Tìm kiếm"
                             value={globalFilter}
                             onChange={(e) => setGlobalFilter(e.target.value)}
-                            className="pl-10 py-5"
+                            className="pl-10 py-5.5 text-white "
                         />
                     </div>
 
@@ -350,7 +359,9 @@ export function MachineTable({
                         <Button
                             variant="secondary"
                             size="icon"
-                            className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
+                            className="px-10 py-6 px-10 py-6 bg-white/10 backdrop
+                            border border-white/20
+                            shadow-xl  hover:bg-[#0754B4] cursor-pointer"
                             onClick={handleAdd}
                         >
                             <Plus size={60} strokeWidth={5} color="white" />
@@ -365,7 +376,9 @@ export function MachineTable({
                             onImportSuccess={handleImportSuccess}
                             variant="outline"
                             size="lg"
-                            className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
+                            className="px-4 py-6 px-10 py-6 bg-white/10 backdrop
+                            border border-white/20
+                            shadow-xl hover:bg-green-700 cursor-pointer text-white hover:text-white"
                         />
                     )}
 
@@ -376,7 +389,7 @@ export function MachineTable({
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id} className="text-lg font-bold">
+                            <TableRow key={headerGroup.id} className="text-base font-bold">
                                 {headerGroup.headers.map((header) => (
                                     <TableHead key={header.id} className="text-center py-3">
                                         {!header.isPlaceholder && flexRender(header.column.columnDef.header, header.getContext())}
@@ -411,7 +424,7 @@ export function MachineTable({
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="text-center text-[16px] text-[#393939] py-5">
+                                        <TableCell key={cell.id} className="text-center text-[14px] text-[#ffffff] py-5">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}

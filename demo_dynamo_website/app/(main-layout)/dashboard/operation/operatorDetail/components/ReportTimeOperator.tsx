@@ -65,37 +65,37 @@ export function ReportTimeOperator({ data, type }: ReportTimeOperatorProps) {
                         <MonitorDot
                             size={24}
                             className={
-                                (data?.workingRate ?? 0) < 0
+                                (data?.pgRate ?? 0) < 0
                                     ? "text-red-500"
-                                    : (data?.workingRate ?? 0) > 0
+                                    : (data?.pgRate ?? 0) > 0
                                         ? "text-green-500"
                                         : ""
                             }
                         />
                         <p
-                            className={`text-lg font-medium ${(data?.workingRate ?? 0) < 0
+                            className={`text-lg font-medium ${(data?.pgRate ?? 0) < 0
                                 ? "text-red-500"
-                                : (data?.workingRate ?? 0) > 0
+                                : (data?.pgRate ?? 0) > 0
                                     ? "text-green-500"
                                     : ""
                                 }`}
                         >
-                            {(data?.workingRate ?? 0) > 0
-                                ? `+${data?.workingRate ?? 0}%`
-                                : `${data?.workingRate ?? 0}%`}
+                            {(data?.pgRate ?? 0) > 0
+                                ? `+${data?.pgRate ?? 0}%`
+                                : `${data?.pgRate ?? 0}%`}
                         </p>
                     </div>
 
                     <p className="text-[30px] font-semibold text-[#074695] leading-none mt-2">
-                        {convertHoursToHM(data?.workingHours ?? 0)}
+                        {convertHoursToHM(data?.pgHour ?? 0)}
                     </p>
 
                     <div className="mt-2">
                         <p className="text-lg font-medium text-[#343A40] flex items-center">
                             {/* Tổng Giờ Làm {typeDate[data.timeType]} */}
                             Tổng Giờ Làm {typeDate[type]}
-                            {(data?.workingRate ?? 0) !== undefined && (
-                                (data?.workingRate ?? 0) >= 0 ? (
+                            {(data?.pgRate ?? 0) !== undefined && (
+                                (data?.pgRate ?? 0) >= 0 ? (
                                     <TrendingUp size={14} className="ml-1 text-green-500" />
                                 ) : (
                                     <TrendingDown size={14} className="ml-1 text-red-500" />
@@ -104,7 +104,7 @@ export function ReportTimeOperator({ data, type }: ReportTimeOperatorProps) {
                         </p>
                         <p className="text-sm text-gray-400">
                             Trung bình: {data && data.staffCount > 0
-                                ? formatHoursToHM((data?.workingHours ?? 0) / data.staffCount)
+                                ? formatHoursToHM((data?.pgHour ?? 0) / data.staffCount)
                                 : "0 giờ 0 phút"} / người
                         </p>
                     </div>

@@ -7,6 +7,8 @@ export interface MachineStatusType {
     startTime: number;
     time: string;
     status: string;
+    duration: number;
+    lastStatusChangeAt: number;
 }
 export interface StaffDto {
     staffName: string;

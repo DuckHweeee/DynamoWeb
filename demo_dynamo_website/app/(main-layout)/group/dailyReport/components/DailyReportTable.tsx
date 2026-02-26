@@ -13,7 +13,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Plus, Search, X } from "lucide-react";
+import { ArrowUpDown, Edit, MoreHorizontal, Plus, Search, Trash, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -104,7 +104,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-[14px] font-bold text-white"
           >
             Ngày
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -113,7 +113,7 @@ function getColumns({
       },
       cell: ({ row }) => (
         <div className="pl-5 font-medium text-[16px] text-[#888888]">
-          <div className="text-lg font-semibold text-[#074695]">
+          <div className="text-base font-semibold text-[#074695]">
             {formatDate(row.getValue("dateTime"))}
           </div>
         </div>
@@ -126,7 +126,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-[14px] font-bold text-white"
           >
             Ca làm viêc
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -137,7 +137,7 @@ function getColumns({
         const shiftCode = row.getValue("shiftCode") as string;
         return (
           <div className="pl-5 font-medium text-[16px] text-[#888888]">
-            <div className="text-lg font-semibold text-[#074695]">
+            <div className="text-base font-semibold text-[#074695]">
               {REPORT_SHIFT_LABELS[shiftCode as keyof typeof REPORT_SHIFT_LABELS] || shiftCode}
             </div>
           </div>
@@ -151,7 +151,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-[14px] font-bold text-white"
           >
             Phòng ban
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -164,7 +164,7 @@ function getColumns({
 
         return (
           <div className="pl-5 font-medium text-[16px] text-[#888888]">
-            <div className="text-lg font-semibold">{office?.label || officeValue}</div>
+            <div className="text-base font-semibold">{office?.label || officeValue}</div>
           </div>
         );
       },
@@ -176,7 +176,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-[14px] font-bold text-white"
           >
             Nhóm
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -189,7 +189,7 @@ function getColumns({
 
         return (
           <div className="pl-5 font-medium text-[16px] text-[#888888]">
-            <div className="text-lg font-semibold text-[#074695]">
+            <div className="text-base font-semibold text-[#074695]">
               {groupsLoading ? (
                 <div className="flex items-center">
                   <div className="animate-pulse bg-gray-200 h-4 w-24 rounded"></div>
@@ -211,7 +211,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-[14px] font-bold text-white"
           >
             Loại khai báo
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -222,7 +222,7 @@ function getColumns({
         const reportType = row.getValue("reportType") as string;
         return (
           <div className="pl-5 font-medium text-[16px] text-[#888888]">
-            <div className="text-lg font-semibold text-[#074695]">
+            <div className="text-base font-semibold text-[#074695]">
               {REPORT_TYPE_LABELS[reportType as keyof typeof REPORT_TYPE_LABELS] || reportType}
             </div>
           </div>
@@ -236,7 +236,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-[14px] font-bold text-white"
           >
             Giờ tăng giảm thực
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -265,7 +265,7 @@ function getColumns({
         }
         return (
           <div className="pl-5 font-medium text-[16px] text-[#888888]">
-            <div className={`text-lg font-semibold ${colorClass}`}>
+            <div className={`text-base font-semibold ${colorClass}`}>
               {displayValue}
             </div>
           </div>
@@ -279,7 +279,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-[14px] font-bold text-white"
           >
             Ngày tạo
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -288,7 +288,7 @@ function getColumns({
       },
       cell: ({ row }) => (
         <div className="pl-5 font-medium text-[16px] text-[#888888]">
-          <div className="text-lg font-semibold text-[#074695]">
+          <div className="text-base font-semibold text-[#074695]">
             {formatDateTime(row.getValue("createdDate"))}
           </div>
         </div>
@@ -301,7 +301,7 @@ function getColumns({
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-lg font-bold"
+            className="text-[14px] font-bold text-white"
           >
             Người khai báo
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -314,7 +314,7 @@ function getColumns({
 
         return (
           <div className="pl-5 font-medium text-[16px] text-[#888888]">
-            <div className="text-lg font-semibold text-[#074695]">
+            <div className="text-base font-semibold text-[#074695]">
               {adminsLoading ? (
                 <div className="flex items-center">
                   <div className="animate-pulse bg-gray-200 h-4 w-32 rounded"></div>
@@ -350,13 +350,15 @@ function getColumns({
                   setShowForm(true);
                 }}
               >
-                Chỉnh sửa
+                <Edit className="mr-2 h-4 w-4" />
+                <span className="text-sm">Chỉnh sửa</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => setDeletingDailyReport(report)}
                 className="text-red-600"
               >
-                Xóa
+                <Trash className="mr-2 h-4 w-4" />
+                <span className="text-sm">Xóa</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -507,7 +509,7 @@ export default function DailyReportPage() {
   if (loading || groupsLoading || adminsLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-lg">Đang tải dữ liệu...</div>
+        <div className="text-lg text-white">Đang tải dữ liệu...</div>
       </div>
     );
   }
@@ -521,13 +523,15 @@ export default function DailyReportPage() {
   }
 
   return (
-    <div className="m-2 my-1.5 px-4 py-3 bg-white rounded-[10px] shadow">
+    <div className="m-2 my-1.5 px-4 py-3 bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl rounded-2xl rounded-[10px] px-6 mt-6 mx-2 h-auto rounded-[10px] shadow h-full">
       {/* Header with Filters */}
-      <div className="space-y-4 py-4">
+      <div className="space-y-2 py-5">
         {/* Title and Add Button */}
         <div className="flex items-center justify-between">
           <div className="flex justify-start">
-            <h1 className="text-2xl font-bold uppercase">Giờ Làm Việc Tăng Giảm Ngoài Kế Hoạch</h1>
+            {/* <h1 className="text-2xl font-bold uppercase">Giờ Làm Việc Tăng Giảm Ngoài Kế Hoạch</h1> */}
           </div>
           <div className="flex items-center gap-3">
             <Button
@@ -544,17 +548,17 @@ export default function DailyReportPage() {
         </div>
 
         {/* Filters Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 pt-2 border-t border-red-300">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
           {/* Report Type Filter */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-600 tracking-wide">
+            <label className="text-xs font-medium text-white tracking-wide">
               Loại báo cáo
             </label>
             <Select
               value={reportTypeFilter}
               onValueChange={(value: string) => setReportTypeFilter(value)}
             >
-              <SelectTrigger className="h-9">
+              <SelectTrigger className="h-9 w-[250px] py-5 text-white bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white cursor-pointer">
                 <SelectValue placeholder="Chọn loại" />
               </SelectTrigger>
               <SelectContent>
@@ -570,7 +574,7 @@ export default function DailyReportPage() {
 
           {/* Year Filter */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-600 tracking-wide">
+            <label className="text-xs font-medium text-white tracking-wide">
               Năm
             </label>
             <Select
@@ -579,7 +583,7 @@ export default function DailyReportPage() {
                 setYearFilter(value === "all" ? null : parseInt(value))
               }
             >
-              <SelectTrigger className="h-9">
+              <SelectTrigger className="h-9 w-[250px] py-5 text-white bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white cursor-pointer">
                 <SelectValue placeholder="Chọn năm" />
               </SelectTrigger>
               <SelectContent>
@@ -595,7 +599,7 @@ export default function DailyReportPage() {
 
           {/* Month Filter */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-600 tracking-wide">
+            <label className="text-xs font-medium text-white tracking-wide">
               Tháng
             </label>
             <Select
@@ -604,7 +608,7 @@ export default function DailyReportPage() {
                 setMonthFilter(value === "all" ? null : parseInt(value))
               }
             >
-              <SelectTrigger className="h-9">
+              <SelectTrigger className="h-9 w-[250px] py-5 text-white bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white cursor-pointer">
                 <SelectValue placeholder="Chọn tháng" />
               </SelectTrigger>
               <SelectContent>
@@ -620,7 +624,7 @@ export default function DailyReportPage() {
 
           {/* Group Name Search */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-600 tracking-wide">
+            <label className="text-xs font-medium text-white tracking-wide">
               Tên nhóm
             </label>
             <div className="relative">
@@ -629,14 +633,14 @@ export default function DailyReportPage() {
                 placeholder="Tìm nhóm..."
                 value={groupSearchFilter}
                 onChange={(event) => setGroupSearchFilter(event.target.value)}
-                className="pl-9 h-9 text-sm"
+                className="pl-9 h-9 text-sm py-5"
               />
             </div>
           </div>
 
           {/* Office Search */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-600 tracking-wide">
+            <label className="text-xs font-medium text-white tracking-wide">
               Phòng ban
             </label>
             <div className="relative">
@@ -649,7 +653,7 @@ export default function DailyReportPage() {
                 onChange={(event) =>
                   table.getColumn("office")?.setFilterValue(event.target.value)
                 }
-                className="pl-9 h-9 text-sm"
+                className="pl-9 h-9 text-sm py-5"
               />
             </div>
           </div>
@@ -666,7 +670,7 @@ export default function DailyReportPage() {
                 onClick={clearFilters}
                 className="text-red-600 hover:text-red-700 border-red-200 hover:border-red-300 h-9"
               >
-                <X className="h-4 w-4 mr-1" />
+                <X className="h-4 w-4 mr-1 py-5.5" />
                 Xóa bộ lọc
               </Button>
             </div>
@@ -675,7 +679,7 @@ export default function DailyReportPage() {
 
         {/* Filter Summary */}
         {hasActiveFilters && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 mt-5">
             <div className="flex items-center gap-1">
               <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <span>
@@ -751,7 +755,7 @@ export default function DailyReportPage() {
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center text-white"
                 >
                   Không có dữ liệu báo cáo nào.
                 </TableCell>
@@ -763,7 +767,7 @@ export default function DailyReportPage() {
 
       {/* Pagination */}
       <div className="flex items-center justify-between space-x-2 py-4 border-t">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-sm text-white">
           Trang {table.getState().pagination.pageIndex + 1} /{" "}
           {table.getPageCount()}
           <span className="ml-2">

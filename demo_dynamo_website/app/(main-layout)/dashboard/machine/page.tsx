@@ -23,9 +23,9 @@ import DateRangeSelector from "../components/DateRangeSelector";
 import MachineRunBarChart from "./components/machineRunBarChart";
 import { useMachineTotalRuntime } from "./hooks/useMachineTotalRunTime";
 import { useGroupEfficiency } from "./hooks/useGroupEfficiency";
-import { MachinePieChart } from "./components/machinePieChart";
 import { useTopHighMachine, useTopLowMachine } from "./hooks/useTopMachine";
 import { useExportExcel } from "@/hooks/useExportExcel";
+import { MachinePieChart } from "./components/machinePieChart copy";
 
 export default function MachineOverview() {
   const router = useRouter();
@@ -129,7 +129,7 @@ export default function MachineOverview() {
     if (selectedStartDate) searchParams.set("startDate", selectedStartDate);
     if (selectedEndDate) searchParams.set("endDate", selectedEndDate);
     if (selectedGroup) searchParams.set("groupId", selectedGroup);
-    if(selectedShiftCode) searchParams.set("shiftCode", selectedShiftCode);
+    if (selectedShiftCode) searchParams.set("shiftCode", selectedShiftCode);
     searchParams.set("machineId", machineId);
 
     router.push(`/dashboard/machine/machineDetail?${searchParams.toString()}`);
@@ -145,96 +145,98 @@ export default function MachineOverview() {
 
   return (
     <>
-      <div className="m-2 px-4 py-5 bg-white rounded-[10px] shadow">
-        <div className="mb-5 ">
-          <div className="flex justify-between items-center mr-5 border-b border-red-500 py-5">
-            <p className="text-3xl font-semibold">Thống kê máy móc</p>
-            <Button
-              variant="outline"
-              size="lg"
-              className="items-center cursor-pointer !text-white border-gray-200 hover:border-gray-300 h-9 bg-blue-900 hover:bg-blue-650 px-4 text-base"
-              onClick={exportExcel}
-            >
-              Xuất file
-              {/* <Download className="h-4 w-4" /> */}
-            </Button>
-          </div>
-          <div className="flex flex-row py-3 gap-3 justify-end">
-            <DateRangeSelector
-              onChange={({ startDate, endDate, timeType, shiftCode }) => {
-                setStartDate(startDate);
-                setSelectedEndDate(endDate);
-                setSelectedTimeType(timeType);
-                setSelectedShiftCode(shiftCode);
-              }}
-            />
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-600 tracking-wide">
-                Nhóm
-              </label>
-              <Select
-                value={selectedGroup ?? ""}
-                onValueChange={(val) => setSelectedGroup(val)}
-              >
-                <SelectTrigger className="w-[180px] text-lg cursor-pointer">
-                  <SelectValue placeholder="Nhóm" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {groupList.map((m) => (
-                      <SelectItem
-                        key={m.groupId}
-                        value={String(m.groupId)}
-                        className={`text-lg text-blue-950 cursor-pointer ${String(selectedGroup) === String(m.groupId)
-                          ? "bg-gray-200"
-                          : ""
-                          }`}
-                      >
-                        {m.groupName}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
+      <div className="m-2 px-4 py-1 rounded-[20px] bg-white/10 backdrop-blur border border-white/20 shadow-xl  ">
+        <div className="pb-1 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-700 
+                bg-[length:100%_2px] bg-no-repeat bg-left-bottom">
+          <div className="flex py-3 gap-3 justify-between items-center">
+            <div className="flex gap-3">
+              <DateRangeSelector
+                onChange={({ startDate, endDate, timeType, shiftCode }) => {
+                  setStartDate(startDate);
+                  setSelectedEndDate(endDate);
+                  setSelectedTimeType(timeType);
+                  setSelectedShiftCode(shiftCode);
+                }}
+              />
+              <div className="space-y-1">
+                <Select
+                  value={selectedGroup ?? ""}
+                  onValueChange={(val) => setSelectedGroup(val)}
+                >
+                  <SelectTrigger className="w-[175px] text-base cursor-pointer p-5  bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
+                    <SelectValue placeholder="Nhóm" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {groupList.map((m) => (
+                        <SelectItem
+                          key={m.groupId}
+                          value={String(m.groupId)}
+                          className={`text-base text-blue-950 cursor-pointer p-3 ${String(selectedGroup) === String(m.groupId)
+                            ? "bg-gray-200"
+                            : ""
+                            }`}
+                        >
+                          {m.groupName}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
 
+              <div className="space-y-1">
+                <Select
+                  value={selectedMachine}
+                  onValueChange={handleMachineSelection}
+                >
+                  <SelectTrigger className="w-auto text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow transition text-white [&_span]:!text-white">
+
+                    <SelectValue
+                      placeholder={`Tổng số: ${machineList?.length || 0} máy`}
+                      className="!text-white"
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {machineList?.map((machine) => (
+                        <SelectItem
+                          className="text-base text-blue-950"
+                          key={machine.machineId}
+                          value={String(machine.machineId)}
+                        >
+                          {machine.machineName}
+                        </SelectItem>
+                      )) || []}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-600 tracking-wide">
-                Máy móc
-              </label>
-              <Select
-                value={selectedMachine}
-                onValueChange={handleMachineSelection}
+              <Button
+                variant="outline"
+                size="lg"
+                className="items-center cursor-pointer !text-white  bg-white/20 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow"
+                onClick={exportExcel}
               >
-                <SelectTrigger className="w-fit text-lg px-4 rounded-md transition ">
-                  <SelectValue
-                    placeholder={`Tổng số: ${machineList?.length || 0} máy`}
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {machineList?.map((machine) => (
-                      <SelectItem
-                        className="text-xl text-blue-950"
-                        key={machine.machineId}
-                        value={String(machine.machineId)}
-                      >
-                        {machine.machineName}
-                      </SelectItem>
-                    )) || []}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+                Xuất file
+              </Button>
             </div>
           </div>
         </div>
 
-        {/* <ReportTimeMachine /> */}
         {machineStatistics && (
           <ReportTimeMachine type={selectedTimeType} data={machineStatistics} />
         )}
+        <div className="my-6 grid grid-cols-3 gap-6">
 
-        <div className="my-5 grid grid-cols-2 gap-3">
+          <MachineTopProcessChart
+            title="Top 5 máy chạy trong nhóm (Giờ)"
+            description="Thống kê top 5 máy"
+            dataTopHighMachine={dataTopHighMachine}
+            dataTopLowMachine={dataTopLowMachine}
+          />
           {
             dataTotalRunTime && (
               <MachineRunBarChart
@@ -243,50 +245,45 @@ export default function MachineOverview() {
                 dataRunTime={dataTotalRunTime}
               />
             )}
-          {dataGroupEfficiency && (
-            <MachinePieChart dataRunTime={dataGroupEfficiency} />
-          )}
-        </div>
-
-        <SumRealTimeMachine
-          title={`Tổng thời gian thực của từng máy trong ${selectedGroupName} (Giờ)`}
-          description="Tổng giờ chạy thực so với tổng giờ chạy mục tiêu"
-          dataOverview={dataOverview}
-        />
-
-        {/* Show loading state */}
-        {statisticsLoading && (
-          <div className="text-center py-4">
-            <p>Đang tải dữ liệu thống kê máy móc...</p>
-          </div>
-        )}
-
-        {/* Show error state */}
-        {statisticsError && (
-          <div className="text-center py-4 text-red-500">
-            <p>{statisticsError}</p>
-          </div>
-        )}
-
-        <div className="flex gap-5 justify-between my-5">
           <MachineProcessBarChart
             title={`Tổng số gia công từng máy trong nhóm ${selectedGroupName} đã chạy xong`}
             description="Thống kê số lượng gia công chi tiết đã được thực thi"
             dataOverview={dataOverview}
           />
-          <MachineTopProcessChart
-            title="Top 5 máy chạy trong nhóm(Giờ)"
-            description="Thống kê top 5 máy"
-            dataTopHighMachine={dataTopHighMachine}
-            dataTopLowMachine={dataTopLowMachine}
-          />
         </div>
 
-        <MachineTable
-          title="Danh sách thống kê máy móc"
-          description="Tất cả các máy"
-          dataOverview={dataOverview}
-        />
+
+        <div className="my-6 grid grid-cols-4 gap-6">
+          <div className="col-span-3">
+            <SumRealTimeMachine
+              title={`Tổng thời gian thực của từng máy trong ${selectedGroupName} (Giờ)`}
+              description="Tổng giờ chạy thực so với tổng giờ chạy mục tiêu"
+              dataOverview={dataOverview}
+            />
+          </div>
+          <div className="col-span-1"> {dataGroupEfficiency && (
+            <MachinePieChart dataRunTime={dataGroupEfficiency} />
+          )}
+          </div>
+        </div>
+        <div className="my-6 grid grid-cols-3 gap-6">
+          <div className="col-span-1">
+            <MachineTable
+              title="Danh sách thống kê máy móc"
+              description="Tất cả các máy"
+              dataOverview={dataOverview}
+            />
+          </div>
+          <div className="col-span-2">
+            <MachineTable
+              title="Danh sách thống kê máy móc"
+              description="Tất cả các máy"
+              dataOverview={dataOverview}
+            />
+          </div>
+        </div>
+
+
       </div>
     </>
   );

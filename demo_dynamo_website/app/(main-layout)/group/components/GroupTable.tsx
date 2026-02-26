@@ -115,11 +115,13 @@ export function GroupTable() {
     }
 
     return (
-        <div className="m-2 my-1.5 px-4 py-3 bg-white rounded-[10px] shadow">
+        <div className="bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl rounded-2xl rounded-[10px] px-6 mt-6 mx-2 h-full m-4">
             {/* Header */}
-            <div className="flex items-center justify-between py-4 border-b border-red-300 mb-5">
+            <div className="flex items-center justify-between py-4 mb-5">
                 <div className="flex justify-start">
-                    <h1 className="text-2xl font-bold pl-2">Quản Lý Nhóm</h1>
+                    {/* <h1 className="text-2xl font-bold pl-2">Quản Lý Nhóm</h1> */}
                 </div>
                 <div className="flex items-center gap-3 justify-end">
                     <div className="relative">
@@ -128,7 +130,7 @@ export function GroupTable() {
                             placeholder="Tìm kiếm theo tên, loại hoặc ID..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 w-64 md:w-80"
+                            className="pl-10 w-64 md:w-80 py-5.5"
                         />
                     </div>
                     <ImportButton
@@ -138,11 +140,15 @@ export function GroupTable() {
                         onImportSuccess={handleImportSuccess}
                         variant="outline"
                         size="lg"
-                        className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
+                        className="px-10 py-6 bg-white/10 backdrop
+                            border border-white/20
+                            shadow-xl  hover:bg-[#0754B4] cursor-pointer text-white "
                     />
                     <Button
                         onClick={() => setShowCreateDialog(true)}
-                        className="bg-[#004799] hover:bg-[#003b80] text-white px-6 py-2 rounded-md transition"
+                        className="px-10 py-6 bg-white/10 backdrop
+                            border border-white/20
+                            shadow-xl  hover:bg-[#0754B4] cursor-pointer  "
                     >
                         <Plus size={60} strokeWidth={5} color="white" />
                     </Button>
@@ -155,22 +161,22 @@ export function GroupTable() {
                     <TableHeader>
                         <TableRow className="text-lg font-bold">
                             <TableHead>
-                                <Button className="text-lg font-bold py-5" variant="ghost">
+                                <Button className="text-base font-bold py-5 text-white" variant="ghost">
                                     Tên nhóm
                                 </Button>
                             </TableHead>
                             <TableHead>
-                                <Button className="text-lg font-bold" variant="ghost">
+                                <Button className="text-base  font-bold text-white" variant="ghost">
                                     Ngày tạo
                                 </Button>
                             </TableHead>
                             <TableHead>
-                                <Button className="text-lg font-bold" variant="ghost">
+                                <Button className="text-base font-bold text-white" variant="ghost">
                                     Cập nhật
                                 </Button>
                             </TableHead>
                             <TableHead className="text-right">
-                                <div className="text-lg font-bold">Hành động</div>
+                                <div className="text-base font-bold text-white">Hành động</div>
                             </TableHead>
                         </TableRow>
                     </TableHeader>
@@ -182,20 +188,20 @@ export function GroupTable() {
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredGroups.map((group,index) => (
-                                <TableRow key={group.groupId} className={index % 2 === 0 ? "bg-gray-50" : ""} >
+                            filteredGroups.map((group, index) => (
+                                <TableRow key={group.groupId}  >
                                     <TableCell className="pl-5  text-lg py-5" >
                                         <div>
-                                            <div className="text-lg">{group.groupName}</div>
+                                            <div className="text-sm text-white">{group.groupName}</div>
                                         </div>
                                     </TableCell>
-                                    <TableCell className="pl-5  text-lg">
-                                        <div className="text-lg">
+                                    <TableCell className="pl-5 text-base">
+                                        <div className="text-sm text-white">
                                             {group.createdDate ? new Date(group.createdDate).toLocaleDateString('vi-VN') : "N/A"}
                                         </div>
                                     </TableCell>
                                     <TableCell className="pl-5  text-lg">
-                                        <div className="text-lg">
+                                        <div className="text-sm text-white">
                                             {group.updatedDate ? new Date(group.updatedDate).toLocaleDateString('vi-VN') : "N/A"}
                                         </div>
                                     </TableCell>
@@ -203,7 +209,7 @@ export function GroupTable() {
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
                                                 <Button variant="ghost" className="h-8 w-8 p-0">
-                                                    <MoreHorizontal className="h-4 w-4" />
+                                                    <MoreHorizontal className="h-4 w-4" color="white" />
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
@@ -234,7 +240,7 @@ export function GroupTable() {
 
             {/* Footer with count */}
             <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="text-sm text-muted-foreground">
+                <div className="text-sm text-white">
                     Hiển thị {filteredGroups.length} trên {groups.length} nhóm
                 </div>
             </div>

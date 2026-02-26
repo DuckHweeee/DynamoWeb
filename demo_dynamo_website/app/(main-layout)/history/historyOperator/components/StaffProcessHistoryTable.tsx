@@ -86,25 +86,7 @@ export function StaffProcessHistoryTable({
   } = useStaffProcessHistory(staffId, startDateString, endDateString);
 
   const columns: ColumnDef<DrawingCodeProcessHistory>[] = [
-    // {
-    //     accessorKey: "createdDate",
-    //     header: ({ column }) => (
-    //         <Button
-    //             variant="ghost"
-    //             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //             className="h-auto p-0 hover:bg-transparent text-xs"
-    //         >
-    //             <span className="font-semibold">Thời Gian</span>
-    //             <ArrowUpDown className="ml-1 h-3 w-3" />
-    //         </Button>
-    //     ),
-    //     cell: ({ row }) => (
-    //         <div className="font-medium text-xs">
-    //             {formatTime(row.getValue("createdDate"))}
-    //         </div>
-    //     ),
-    //     size: 130,
-    // },
+
     {
       accessorKey: "orderDetailDto.orderCode",
       header: () => <div className="font-semibold text-xs">ID mã hàng</div>,
@@ -222,7 +204,7 @@ export function StaffProcessHistoryTable({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalHeader>
-        <ModalTitle>Lịch Sử Quy Trình - {staffName}</ModalTitle>
+        <ModalTitle>Lịch sử quy trình - {staffName}</ModalTitle>
       </ModalHeader>
 
       <ModalContent>

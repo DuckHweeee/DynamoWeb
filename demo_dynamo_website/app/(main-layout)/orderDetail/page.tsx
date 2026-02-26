@@ -15,6 +15,8 @@ import {
 } from "@tanstack/react-table";
 import {
   ArrowUpDown,
+  Edit,
+  Eye,
   MoreHorizontal,
   Plus,
   Search,
@@ -73,7 +75,7 @@ function getColumns({
       accessorKey: "orderType",
       header: ({ column }) => (
         <Button
-          className="text-lg font-bold cursor-pointer"
+          className="text-base font-bold text-white cursor-pointer"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -89,7 +91,7 @@ function getColumns({
       accessorKey: "orderCode",
       header: ({ column }) => (
         <Button
-          className="text-lg font-bold cursor-pointer"
+          className="text-base font-bold text-white cursor-pointer"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -103,7 +105,7 @@ function getColumns({
       accessorKey: "quantity",
       header: ({ column }) => (
         <Button
-          className="text-lg font-bold cursor-pointer"
+          className="text-base font-bold text-white cursor-pointer"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -117,7 +119,7 @@ function getColumns({
       accessorKey: "numberOfSteps",
       header: ({ column }) => (
         <Button
-          className="text-lg font-bold cursor-pointer"
+          className="text-base font-bold text-white cursor-pointer"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -131,7 +133,7 @@ function getColumns({
       accessorKey: "progress",
       header: ({ column }) => (
         <Button
-          className="text-lg font-bold cursor-pointer"
+          className="text-base font-bold text-white cursor-pointer"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -169,7 +171,7 @@ function getColumns({
       id: "Tiến dộ",
       header: ({ column }) => (
         // <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Tiến dộ <ArrowUpDown /></Button>
-        <span className="text-lg font-bold">Tiến dộ</span>
+        <span className="text-base font-bold text-white">Tiến dộ</span>
       ),
       cell: ({ row }) => {
         const progress =
@@ -216,7 +218,8 @@ function getColumns({
                   setOpenDetail(true);
                 }}
               >
-                Xem chi tiết
+                <Eye className="mr-2 h-4 w-4" />
+                <span className="text-sm">Xem chi tiết</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-lg cursor-pointer pr-6"
@@ -225,7 +228,8 @@ function getColumns({
                   setShowForm(true);
                 }}
               >
-                Chỉnh sửa
+                <Edit className="mr-2 h-4 w-4" />
+                <span className="text-sm">Chỉnh sửa</span>
               </DropdownMenuItem>
               {progress !== 2 && progress !== 3 && (
                 <DropdownMenuItem
@@ -268,7 +272,7 @@ export default function OrderDetailTable() {
     prevPage,
     refetch,
     search
-  } = useOrderDetail(10);
+  } = useOrderDetail(9);
 
   const [showForm, setShowForm] = useState(false);
   const [editingOrderDetail, setEditingOrderDetail] =
@@ -294,7 +298,7 @@ export default function OrderDetailTable() {
 
   const table = useReactTable({
     data: orderDetail,
-    columns, manualPagination: true, // ⭐⭐⭐
+    columns, manualPagination: true,
     pageCount: totalPages,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -305,23 +309,26 @@ export default function OrderDetailTable() {
     state: {
       pagination: {
         pageIndex: page,
-        pageSize: 10,
+        pageSize: 8,
       },
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
     },
+
   });
 
   return (
     <div className="w-full">
-      <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
-        <div className="flex flex-row items-center justify-between py-4 border-b border-red-300 mb-5">
+      <div className="m-2 px-4 py-3  bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl rounded-[10px] shadow ">
+        <div className="flex flex-row items-center justify-between py-4 mb-5">
           <div className="w-2/3">
-            <p className="text-2xl font-bold">Quản lý mã hàng gia công</p>
+            {/* <p className="text-2xl font-bold">Quản lý mã hàng gia công</p> */}
           </div>
-          <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
+          <div className="w-1/3 flex flex-row justify-end-safe items-center gap-2">
             <div className="relative max-w-sm w-full">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <Input
@@ -329,7 +336,9 @@ export default function OrderDetailTable() {
                 onChange={(e) => {
                   console.log("typing:", e.target.value);
                   search(e.target.value);
+
                 }}
+                className="pl-10 py-5.5"
               />
             </div>
 
@@ -340,13 +349,17 @@ export default function OrderDetailTable() {
               onImportSuccess={handleImportSuccess}
               variant="outline"
               size="lg"
-              className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
+              className="px-4 py-6  bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl rounded-[10px] shadow  hover:bg-green-700 cursor-pointer text-white hover:text-white"
             />
 
             <Button
               variant="secondary"
               size="icon"
-              className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
+              className="px-10 py-6  bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl rounded-[10px] shadow  hover:bg-[#0754B4] cursor-pointer"
               onClick={() => setShowForm(true)}
             >
               <Plus size={60} strokeWidth={5} color="white" />
@@ -377,12 +390,12 @@ export default function OrderDetailTable() {
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className={index % 2 === 0 ? "bg-gray-50" : ""}
+
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
                         key={cell.id}
-                        className="text-center font-medium text-[16px] text-[#888888] py-4"
+                        className="text-center font-medium text-[14px] text-[#ffffff] py-4"
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
@@ -460,7 +473,7 @@ export default function OrderDetailTable() {
         />
         <div className="flex items-center justify-end space-x-2 py-4">
           <div className="space-x-2">
-            <span>
+            <span className="text-white">
               Trang {page + 1} / {totalPages}
             </span>
             <Button

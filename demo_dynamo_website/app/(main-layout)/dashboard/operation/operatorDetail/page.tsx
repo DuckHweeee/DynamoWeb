@@ -112,111 +112,114 @@ export default function OperationDetail() {
     };
 
     return (
-        <div className="m-2 px-4 py-5 bg-white rounded-[10px] shadow">
+        <div className="m-2 px-4 py-5 !text-white  bg-white/10 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow">
             <div className="">
-                <div className="flex justify-between items-center mr-5 border-b border-red-500 pb-5">
-                    <p className="text-3xl font-semibold">Thống kê nhân viên vận hành</p>
+                <div className="flex justify-between items-center mr-5">
+                    {/* <p className="text-3xl font-semibold">Thống kê nhân viên vận hành</p> */}
+                    <div className="flex flex-row py-3 gap-3 justify-end">
+                        <DateRangeSelectorDetail
+                            startDate={selectedStartDate}
+                            endDate={selectedEndDate}
+                            onChange={({ startDate, endDate, timeType }) => {
+                                setSelectedStartDate(startDate);
+                                setSelectedEndDate(endDate);
+                                setSelectedTimeType(timeType);
+                            }}
+                        />
+                        <div className="space-y-1">
+                            <Select value={selectedGroup ?? ""} onValueChange={(val) => setSelectedGroup(val)}>
+                                <SelectTrigger className="w-[175px] text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
+                                    <SelectValue placeholder="Nhóm" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        {groupList.map((m) => (
+                                            <SelectItem className="text-lg text-blue-950 cursor-pointer" key={m.groupId} value={String(m.groupId)}>
+                                                {m.groupName}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-1">
+                            <Select
+                                value={selectedStaff ? String(selectedStaff) : ""}
+                                onValueChange={(val) => setSelectedStaff(val ? Number(val) : 0)}
+                            >
+                                <SelectTrigger className=" transition w-auto text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
+                                    <SelectValue placeholder={`Tổng số: ${staffList?.length || 0} nhân viên`}>
+                                        {selectedStaffName ||
+                                            `Tổng số: ${staffList?.length || 0} nhân viên`}
+                                    </SelectValue>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        {staffList?.map((st) => (
+                                            <SelectItem
+                                                key={st.id}
+                                                value={String(st.id)}
+                                                className={`text-lg text-blue-950 cursor-pointer ${selectedStaff === st.id ? "bg-gray-100" : ""
+                                                    }`}
+                                            >
+                                                {st.staffName}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="flex flex-col">
+                            <Button
+                                onClick={handleSubmit}
+                                variant="outline"
+                                size="lg"
+                                className="w-[175px] text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white"
+                            >
+                                <UserRoundSearch className="h-4 w-4 mr-1" />
+                                Lọc nhóm mới
+                            </Button>
+                        </div>
+                    </div>
                     <Button
                         variant="outline"
                         size="sm"
-                        className="items-center cursor-pointer !text-white border-gray-200 hover:border-gray-300 h-9 bg-blue-950 hover:bg-blue-650"
+                        className="items-center cursor-pointer 
+             px-6 text-base transition-all bg-white/20 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow text-white"
                     >
                         <Download className="h-4 w-4" />
                     </Button>
                 </div>
-                <div className="flex flex-row py-3 gap-3 justify-end">
-                    <DateRangeSelectorDetail
-                        startDate={selectedStartDate}
-                        endDate={selectedEndDate}
-                        onChange={({ startDate, endDate, timeType }) => {
-                            setSelectedStartDate(startDate);
-                            setSelectedEndDate(endDate);
-                            setSelectedTimeType(timeType);
-                        }}
-                    />
-                    <div className="space-y-1">
-                        <label className="text-sm font-medium text-gray-600 tracking-wide ">Nhóm</label>
-                        <Select value={selectedGroup ?? ""} onValueChange={(val) => setSelectedGroup(val)}>
-                            <SelectTrigger className="w-[180px] text-lg cursor-pointer">
-                                <SelectValue placeholder="Nhóm" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    {groupList.map((m) => (
-                                        <SelectItem className="text-lg text-blue-950 cursor-pointer" key={m.groupId} value={String(m.groupId)}>
-                                            {m.groupName}
-                                        </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
 
-                    <div className="space-y-1">
-                        <label className="text-sm font-medium text-gray-600 tracking-wide">
-                            Nhân viên
-                        </label>
-                        <Select
-                            value={selectedStaff ? String(selectedStaff) : ""}
-                            onValueChange={(val) => setSelectedStaff(val ? Number(val) : 0)}
-                        >
-                            <SelectTrigger className="w-fit text-lg rounded-md transition cursor-pointer">
-                                <SelectValue placeholder={`Tổng số: ${staffList?.length || 0} nhân viên`}>
-                                    {selectedStaffName ||
-                                        `Tổng số: ${staffList?.length || 0} nhân viên`}
-                                </SelectValue>
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    {staffList?.map((st) => (
-                                        <SelectItem
-                                            key={st.id}
-                                            value={String(st.id)}
-                                            className={`text-lg text-blue-950 cursor-pointer ${selectedStaff === st.id ? "bg-gray-100" : ""
-                                                }`}
-                                        >
-                                            {st.staffName}
-                                        </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    <div className="flex flex-col pt-6">
-                        <Button
-                            onClick={handleSubmit}
-                            variant="outline"
-                            size="lg"
-                            className="text-lg font-normal cursor-pointer text-gray-600 hover:text-gray-700 border-gray-200 hover:border-gray-300 h-9"
-                        >
-                            <UserRoundSearch className="h-4 w-4 mr-1" />
-                            Lọc nhóm mới
-                        </Button>
-                    </div>
-                </div>
             </div>
 
             {/* Các component con */}
             {dataOverview && (
                 <ReportTimeOperatorDetail type={selectedTimeType} data={dataOverview} />
             )}
+            <div className="grid grid-cols-5 gap-6 ">
+                <div className="col-span-2">
+                    {dataWorkingDetail && (
+                        <BarChartOperatorDetail
+                            title="Thống kê công việc người vận hành"
+                            description="Tổng giờ chạy thực so với tổng giờ chạy mục tiêu"
+                            dataChart={dataWorkingDetail}
+                        />
+                    )}
+                </div>
+                <div className="col-span-3">
 
+                    {dataHistoryProcess && (
+                        <TableOperatorDetail
+                            title="Danh sách thống kê người vận hành"
+                            dataHistoryProcess={dataHistoryProcess}
+                        />
+                    )}
+                </div>
+            </div>
             {/* Render charts chỉ khi có data */}
-            {dataWorkingDetail && (
-                <BarChartOperatorDetail
-                    title="Thống kê công việc người vận hành"
-                    description="Tổng giờ chạy thực so với tổng giờ chạy mục tiêu"
-                    dataChart={dataWorkingDetail}
-                />
-            )}
 
-            {dataHistoryProcess && (
-                <TableOperatorDetail
-                    title="Danh sách thống kê người vận hành"
-                    dataHistoryProcess={dataHistoryProcess}
-                />
-            )}
+
         </div>
     );
 }

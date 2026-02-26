@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ChevronDown, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,32 +11,47 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-function getBreadcrumbFromPath(pathname: string) {
-    const segments = pathname.split("/").filter(Boolean);
-    return segments
-        .map((segment) =>
-            segment
-                .split("-")
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(" ")
-        )
-        .join(" > ");
+interface ClientHeaderProps {
+    title: string
 }
 
-export function ClientHeader() {
-    const pathname = usePathname();
-    const breadcrumb = getBreadcrumbFromPath(pathname || "/");
+// function getBreadcrumbFromPath(pathname: string) {
+//     const segments = pathname.split("/").filter(Boolean);
+//     return segments
+//         .map((segment) =>
+//             segment
+//                 .split("-")
+//                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+//                 .join(" ")
+//         )
+//         .join(" > ");
+// }
+
+export function ClientHeader(title: ClientHeaderProps) {
+    // const pathname = usePathname();
+    // const breadcrumb = getBreadcrumbFromPath(pathname || "/");
     const { user, logout } = useAuth();
 
     return (
-        <header className="m-2 px-5 py-4 bg-white rounded-[10px] flex items-center justify-between shadow">
+        <header className="px-5 py-3 bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl rounded-[15px] m-2 flex items-center justify-between shadow">
             <div className="flex items-center gap-4">
-                <SidebarTrigger className="-ml-1" />
+                <SidebarTrigger className="-ml-1 text-white" />
                 <div className="flex flex-col">
-                    <h1 className="text-xl font-semibold text-[#890101]">
-                        Xin chào {user?.fullname || user?.username || "Dynamo"}, ngày mới tốt lành!
+                    <h1 className="relative text-xl font-extrabold uppercase tracking-wide
+                        bg-gradient-to-r from-[#e5e7eb] via-[#9ca3af] to-[#f9fafb]
+                        bg-clip-text text-transparent
+                        drop-shadow-[1px_1px_1px_rgba(0,0,0,0.45)] mb-1
+                    ">
+                        <span className="absolute inset-0 bg-gradient-to-r from-[#9ca3af] via-[#f3f4f6] to-[#6b7280]
+                        bg-clip-text text-transparent translate-x-[1px] translate-y-[1px]">
+                            {title.title}
+                        </span>
+                        <span className="relative">
+                            {title.title}
+                        </span>
                     </h1>
-                    {/* <p className="text-sm text-gray-500">{breadcrumb}</p> */}
                 </div>
             </div>
 
@@ -49,7 +63,7 @@ export function ClientHeader() {
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <div className="flex items-center px-4 py-2 bg-white rounded-xl cursor-pointer hover:bg-[#F8DBDB] transition-colors border border-gray-300 shadow-md">
+                        <div className="flex items-center px-4 py-2 bg-white rounded-xl cursor-pointer hover:bg-[#EAEAEA] transition-colors border border-slate-200">
                             <div className="flex flex-row gap-2 items-center">
                                 <Avatar className="h-8 w-8">
                                     <AvatarImage src="/dynamo.png" />

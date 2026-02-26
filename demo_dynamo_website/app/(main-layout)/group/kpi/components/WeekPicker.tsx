@@ -77,12 +77,12 @@ export default function WeekPicker({
     return (
         <div className="space-y-2">
             <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
+                <PopoverTrigger asChild className="justify-between">
                     <Button
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className="w-full justify-between h-9"
+                        className="h-9 w-[210px] py-5 text-white bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white"
                         disabled={disabled}
                     >
                         {selectedWeek ? selectedWeek.displayText : placeholder}

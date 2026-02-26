@@ -143,9 +143,9 @@ export default function DateRangeSelectorDetail({ startDate, endDate, onChange }
     return (
         <div className="flex gap-3">
             <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-600 tracking-wide">Loại</label>
+               
                 <Select value={mode} onValueChange={(val) => setMode(val as Mode)}>
-                    <SelectTrigger className="w-[150px] text-lg cursor-pointer">
+                    <SelectTrigger className="w-[175px] text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
                         <SelectValue placeholder="Chọn chế độ" />
                     </SelectTrigger>
                     <SelectContent>
@@ -158,14 +158,14 @@ export default function DateRangeSelectorDetail({ startDate, endDate, onChange }
             </div>
 
             <div className="flex-1 flex-col gap-2">
-                <label className="text-sm font-medium text-gray-600 tracking-wide">Thời gian</label>
+              
                 {mode === "day" && (
                     <div className="flex flex-col gap-2">
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button
                                     variant="outline"
-                                    className="cursor-pointer w-auto justify-start text-right text-lg font-normal "
+                                    className="w-[175px] text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white "
                                 >
                                     {selectedDate
                                         ? dayjs(selectedDate).format("DD/MM/YYYY")
@@ -190,7 +190,7 @@ export default function DateRangeSelectorDetail({ startDate, endDate, onChange }
                         value={selectedWeek ? String(selectedWeek) : undefined}
                         onValueChange={(val) => setSelectedWeek(Number(val))}
                     >
-                        <SelectTrigger className="cursor-pointer text-lg ">
+                        <SelectTrigger className="w-auto text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
                             <SelectValue placeholder="Chọn tuần" />
                         </SelectTrigger>
                         <SelectContent className="max-h-[300px]">
@@ -214,7 +214,7 @@ export default function DateRangeSelectorDetail({ startDate, endDate, onChange }
                         value={selectedMonth ? String(selectedMonth) : undefined}
                         onValueChange={(val) => setSelectedMonth(Number(val))}
                     >
-                        <SelectTrigger className="cursor-pointer text-lg">
+                        <SelectTrigger className="w-[175px] text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
                             <SelectValue placeholder="Chọn tháng" />
                         </SelectTrigger>
                         <SelectContent className="max-h-[300px]">
@@ -238,7 +238,7 @@ export default function DateRangeSelectorDetail({ startDate, endDate, onChange }
                         value={selectedYear ? String(selectedYear) : undefined}
                         onValueChange={(val) => setSelectedYear(Number(val))}
                     >
-                        <SelectTrigger className="cursor-pointer text-xl ">
+                        <SelectTrigger className="w-[175px] text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
                             <SelectValue placeholder="Chọn năm" />
                         </SelectTrigger>
                         <SelectContent className="max-h-[300px]">

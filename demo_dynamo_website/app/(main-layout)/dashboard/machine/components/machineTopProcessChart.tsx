@@ -29,7 +29,7 @@ const chartConfig = {
     },
     number: {
         label: "Tổng số",
-        color: "#074695",
+        color: "#22c55e",
     },
 } satisfies ChartConfig
 
@@ -57,22 +57,22 @@ export function MachineTopProcessChart({
     }, [topProcess, dataTopHighMachine, dataTopLowMachine])
 
     return (
-        <Card className="!w-full shadow-md shadow-green-200 border border-green-300">
+        <Card className="!w-full shadow-md bg-white/20 backdrop-blur-lg border border-white/20 shadow-xl ">
             <CardHeader>
                 <div className="flex justify-between">
                     <div className="items-center">
-                        <p className="text-xl font-semibold">{title}</p>
-                        <p className="text-lg text-gray-500">{description}</p>
+                        <p className="text-base font-semibold text-white ">{title}</p>
+                        <p className="text-sm text-gray-700 text-white">{description}</p>
                     </div>
                     <div className="flex items-center">
                         <Select value={topProcess} onValueChange={setTopProcess}>
-                            <SelectTrigger className="cursor-pointer text-lg w-[180px] bg-[#004799] px-4 !py-5.5 !text-white rounded-md hover:bg-[#003b80] transition [&>svg]:!text-white">
+                            <SelectTrigger className="cursor-pointer text-sm w-[120px] bg-linear-to-r from-[#D0E5A5] to-[#86E3C3] px-4 !py-4 !text-white rounded-sm hover:bg-[#15803d] transition [&>svg]:!text-white">
                                 <SelectValue placeholder="Sắp xếp" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectItem className="cursor-pointer text-lg" value="high">Cao nhất</SelectItem>
-                                    <SelectItem className="cursor-pointer text-lg" value="low">Thấp nhất</SelectItem>
+                                    <SelectItem className="cursor-pointer text-sm" value="high">Cao nhất</SelectItem>
+                                    <SelectItem className="cursor-pointer text-sm" value="low">Thấp nhất</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
@@ -87,30 +87,42 @@ export function MachineTopProcessChart({
                         layout="vertical"
                         margin={{
                             left: -50,
+                            right: 180
                         }}
                     >
+                        <defs>
+                            <linearGradient id="barGradient" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stopColor="#D0E5A5" />
+                                <stop offset="100%" stopColor=" #86E3C3" />
+                            </linearGradient>
+                        </defs>
                         <XAxis type="number" dataKey="number" hide />
                         <CartesianGrid horizontal={false} />
                         <YAxis
                             dataKey="name"
                             type="category"
-                            tickLine={false}
+                            tickLine={true}
                             tickMargin={5}
                             axisLine={false}
                             width={110}
-                            tick={{ fontSize: 18 }}
+                            tick={{
+                                fontSize: 14, fontWeight: 700, fill: "#ffffff", 
+                                style: { fill: "#fff" },
+                            }}
                         />
+
                         <ChartTooltip
                             cursor={false}
                             content={<ChartTooltipContent indicator="dashed" />}
                         />
-                        <Bar dataKey="number" fill="var(--color-number)" radius={5}>
+                        <Bar dataKey="number" fill="url(#barGradient)" radius={5}>
                             <LabelList
                                 dataKey="number"
-                                position="insideRight"
-                                offset={10}
+                                position="right"
+                                offset={1}
                                 className="fill-white"
-                                fontSize={18}
+                                fontSize={12}
+                                fontWeight={750}
                             />
                         </Bar>
                     </BarChart>

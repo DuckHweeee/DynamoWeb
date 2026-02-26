@@ -104,7 +104,7 @@ export default function StatusMachine() {
 
     // Data realtime theo groupId
     const wsDataByGroup = useGroupStatusWS();
-    
+
     // Set group mặc định
     useEffect(() => {
         if (groupList.length > 0 && !selectedGroupId) {
@@ -122,21 +122,21 @@ export default function StatusMachine() {
         [];
 
     return (
-        <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
+        <div className="m-2 px-4 py-3 rounded-[10px]  bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl">
             <div className="flex flex-row items-center justify-between py-4 border-b border-red-300">
                 <div className="w-2/3">
-                    <p className="text-2xl font-bold">Hiện Trạng Máy</p>
+                    {/* <p className="text-2xl font-bold">Hiện Trạng Máy</p> */}
                 </div>
                 <div className="w-1/3 flex items-center justify-end gap-5">
                     <div className="space-y-1">
-                        <label className="text-sm font-medium text-gray-600 tracking-wide">
-                            Nhóm
-                        </label>
+
                         <Select
                             value={selectedGroupId ?? ""}
                             onValueChange={(val) => setSelectedGroupId(val)}
                         >
-                            <SelectTrigger className="w-[180px] text-lg cursor-pointer">
+                            <SelectTrigger className="w-[175px] text-base cursor-pointer text-white p-5 bg-white/20 backdrop-blur-3xl border border-white/20 shadow-xl rounded-lg m-2">
                                 <SelectValue placeholder="Nhóm" />
                             </SelectTrigger>
                             <SelectContent>
@@ -145,7 +145,7 @@ export default function StatusMachine() {
                                         <SelectItem
                                             key={m.groupId}
                                             value={m.groupId}
-                                            className={`text-lg cursor-pointer ${selectedGroupId === m.groupId ? "bg-gray-200" : ""
+                                            className={`text-lg cursor-pointer${selectedGroupId === m.groupId ? "bg-gray-200" : ""
                                                 }`}
                                         >
                                             {m.groupName}

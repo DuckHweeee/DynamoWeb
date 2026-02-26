@@ -7,13 +7,12 @@ import {
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
-    getPaginationRowModel,
     getSortedRowModel,
     SortingState,
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Plus, Search, Upload } from "lucide-react"
+import { ArrowUpDown, Edit, Eye, MoreHorizontal, Plus, Search, Upload } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -34,16 +33,8 @@ import {
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
-import { Process } from "@/app/(main-layout)/process/lib/type"
 import { ImportButton } from "@/components/ImportButton"
 import { toast } from "sonner"
-
-function formatSeconds(seconds: string): string {
-    const total = parseInt(seconds)
-    const hours = Math.floor(total / 3600)
-    const minutes = Math.floor((total % 3600) / 60)
-    return `${hours}h ${minutes}m`
-}
 
 interface ProcessTableProps<T = any> {
     data: T[]
@@ -96,7 +87,7 @@ function getDefaultColumns<T = any>({
         {
             accessorKey: "processType" as keyof T,
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base font-bold text-white cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Đối tượng gia công <ArrowUpDown />
                 </Button>
             ),
@@ -105,7 +96,7 @@ function getDefaultColumns<T = any>({
         {
             accessorKey: "orderDetailDto.orderCode" as keyof T,
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base text-white font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Mã hàng <ArrowUpDown />
                 </Button>
             ),
@@ -114,7 +105,7 @@ function getDefaultColumns<T = any>({
         {
             accessorKey: "partNumber" as keyof T,
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base font-bold text-white cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Số nguyên công <ArrowUpDown />
                 </Button>
             ),
@@ -123,7 +114,7 @@ function getDefaultColumns<T = any>({
         {
             accessorKey: "stepNumber" as keyof T,
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base font-bold text-white cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Thứ tự nguyên công <ArrowUpDown />
                 </Button>
             ),
@@ -132,7 +123,7 @@ function getDefaultColumns<T = any>({
         {
             accessorKey: "manufacturingPoint" as keyof T,
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base font-bold text-white cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Điểm nguyên công <ArrowUpDown />
                 </Button>
             ),
@@ -141,7 +132,7 @@ function getDefaultColumns<T = any>({
         {
             accessorKey: "pgTime" as keyof T,
             header: ({ column }) => (
-                <Button className="text-bas e font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base font-bold text-white cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Giờ PG <ArrowUpDown />
                 </Button>
             ),
@@ -150,7 +141,7 @@ function getDefaultColumns<T = any>({
         {
             accessorKey: "processStatus" as keyof T,
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base font-bold text-white cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Trạng Thái <ArrowUpDown />
                 </Button>
             ),
@@ -192,7 +183,8 @@ function getDefaultColumns<T = any>({
                                     className="text-lg cursor-pointer pr-6"
                                     onClick={() => onViewHistory(process)}
                                 >
-                                    Xem lịch sử
+                                    <Eye className="mr-2 h-4 w-4" />
+                                    <span className="text-sm">Xem lịch sử</span>
                                 </DropdownMenuItem>
                             )}
                             {showActions && (
@@ -204,7 +196,8 @@ function getDefaultColumns<T = any>({
                                             setOpenDetail(true)
                                         }}
                                     >
-                                        Xem chi tiết
+                                        <Eye className="mr-2 h-4 w-4" />
+                                        <span className="text-sm">Xem chi tiết</span>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                         className="text-lg cursor-pointer pr-6"
@@ -213,7 +206,8 @@ function getDefaultColumns<T = any>({
                                             setShowForm(true)
                                         }}
                                     >
-                                        Chỉnh sửa
+                                        <Edit className="mr-2 h-4 w-4" />
+                                        <span className="text-sm">Chỉnh sửa</span>
                                     </DropdownMenuItem>
                                 </>
                             )}
@@ -314,10 +308,10 @@ export default function ProcessTable<T = any>({
     }
 
     return (
-        <div className="m-1 bg-white rounded-[10px]">
-            <div className="flex flex-row items-center justify-between border-b border-red-500 py-4 mb-5">
+        <div className="m-1 rounded-[10px] ">
+            <div className="flex flex-row items-center justify-between  py-4 mb-5">
                 <div className="w-2/3">
-                    <p className="text-2xl font-bold">{title}</p>
+                    {/* <p className="text-2xl font-bold">{title}</p> */}
                 </div>
                 <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
                     <div className="relative max-w-sm w-full">
@@ -326,7 +320,7 @@ export default function ProcessTable<T = any>({
                             placeholder="Tìm kiếm"
                             value={globalFilter}
                             onChange={(e) => setGlobalFilter(e.target.value)}
-                            className="pl-10 py-5"
+                            className="pl-10 py-5.5"
                         />
                     </div>
 
@@ -338,7 +332,7 @@ export default function ProcessTable<T = any>({
                             onImportSuccess={handleImportSuccess}
                             variant="outline"
                             size="lg"
-                            className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
+                            className="px-4 py-6  bg-white/10 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow hover:bg-green-700 cursor-pointer text-white hover:text-white"
                         />
                     )}
 
@@ -346,7 +340,7 @@ export default function ProcessTable<T = any>({
                         <Button
                             variant="secondary"
                             size="icon"
-                            className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
+                            className="px-10 py-6  bg-white/10 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow hover:bg-[#0754B4] cursor-pointer"
                             onClick={() => setShowForm(true)}
                         >
                             <Plus size={60} strokeWidth={5} color="white" />
@@ -372,10 +366,10 @@ export default function ProcessTable<T = any>({
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row, index) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}
-                                    className={index % 2 === 0 ? "bg-gray-50" : ""}
+                                   
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="text-center font-medium text-[16px] text-[#888888] py-5">
+                                        <TableCell key={cell.id} className="text-center font-medium text-[14px] text-[#ffffff] py-5">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
@@ -383,7 +377,7 @@ export default function ProcessTable<T = any>({
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                <TableCell colSpan={columns.length} className="h-24 text-center text-white">
                                     Không có kết quả.
                                 </TableCell>
                             </TableRow>
@@ -450,7 +444,7 @@ export default function ProcessTable<T = any>({
             )}
 
             <div className="flex items-center justify-end space-x-3 py-4">
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-white">
                     Trang {page! + 1} / {totalPages}
                 </span>
 

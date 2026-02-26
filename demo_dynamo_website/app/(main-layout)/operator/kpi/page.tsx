@@ -12,7 +12,7 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Plus, Search, Upload } from "lucide-react"
+import { ArrowUpDown, Edit, MoreHorizontal, Plus, Search, Upload } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -53,7 +53,7 @@ function getColumns({
         {
             accessorKey: "staffName",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base font-bold text-white cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Tên nhân viên <ArrowUpDown />
                 </Button>
             ),
@@ -62,7 +62,7 @@ function getColumns({
         {
             accessorKey: "groupName",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base text-white font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Nhóm <ArrowUpDown />
                 </Button>
             ),
@@ -73,7 +73,7 @@ function getColumns({
         {
             accessorKey: "year",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base text-white font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Năm <ArrowUpDown />
                 </Button>
             ),
@@ -82,7 +82,7 @@ function getColumns({
         {
             accessorKey: "month",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base text-white font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Tháng <ArrowUpDown />
                 </Button>
             ),
@@ -91,7 +91,7 @@ function getColumns({
         {
             accessorKey: "manufacturingPoint",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base text-white font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Điểm gia công <ArrowUpDown />
                 </Button>
             ),
@@ -100,7 +100,7 @@ function getColumns({
         {
             accessorKey: "pgTimeGoal",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base text-white font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Giờ PG <ArrowUpDown />
                 </Button>
             ),
@@ -109,7 +109,7 @@ function getColumns({
         {
             accessorKey: "machineTimeGoal",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base text-white font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Giờ máy <ArrowUpDown />
                 </Button>
             ),
@@ -118,7 +118,7 @@ function getColumns({
         {
             accessorKey: "workGoal",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base text-white font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Giờ làm việc <ArrowUpDown />
                 </Button>
             ),
@@ -127,7 +127,7 @@ function getColumns({
         {
             accessorKey: "kpi",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base text-white font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     KPI <ArrowUpDown />
                 </Button>
             ),
@@ -136,7 +136,7 @@ function getColumns({
         {
             accessorKey: "oleGoal",
             header: ({ column }) => (
-                <Button className="text-lg font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <Button className="text-base text-white font-bold cursor-pointer" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     OLE <ArrowUpDown />
                 </Button>
             ),
@@ -177,7 +177,8 @@ function getColumns({
                                     setShowForm(true)
                                 }}
                             >
-                                Chỉnh sửa
+                                <Edit className="mr-2 h-4 w-4" />
+                                <span className="text-sm">Chỉnh sửa</span>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -235,15 +236,20 @@ export default function OperatorTable() {
             rowSelection,
             globalFilter,
         },
+        initialState: {
+            pagination: {
+                pageSize: 8,   // ⬅️ mỗi trang tối đa 7 dòng
+            },
+        },
     })
 
 
     return (
-        <div className="w-full">
-            <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
-                <div className="flex flex-row items-center justify-between py-4 border-b border-red-300 mb-4">
+        <div className="w-full ">
+            <div className="m-2 mt-4 px-4 py-3 bg-white/10 backdrop-blur border border-white/20 shadow-xl  rounded-[10px] shadow h-auto">
+                <div className="flex flex-row items-center justify-between py-4 mb-4">
                     <div className="w-2/3">
-                        <p className="text-2xl font-bold">Danh Sách Mục Tiêu Nhân Viên</p>
+                        {/* <p className="text-2xl font-bold">Danh Sách Mục Tiêu Nhân Viên</p> */}
                     </div>
                     <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
                         <div className="relative max-w-sm w-full">
@@ -252,18 +258,18 @@ export default function OperatorTable() {
                                 placeholder="Tìm kiếm"
                                 value={globalFilter}
                                 onChange={(e) => setGlobalFilter(e.target.value)}
-                                className="pl-10 py-5"
+                                className="pl-10 py-5.5"
                             />
                         </div>
                         <Button
-                            variant="secondary" size="icon" className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
+                            variant="secondary" size="icon" className="px-10 py-6 bg-white/10 backdrop-blur border border-white/20 shadow-xl hover:bg-[#0754B4] cursor-pointer"
                             onClick={() => setShowForm(true)}>
                             <Plus size={60} strokeWidth={5} color="white" />
                         </Button>
                         <Button
                             variant="secondary"
                             size="icon"
-                            className="px-10 py-6 bg-green-600 hover:bg-green-700 cursor-pointer mr-2"
+                            className="px-10 py-6 bg-white/10 backdrop-blur border border-white/20 shadow-xl  hover:bg-green-700 cursor-pointer mr-2"
                             onClick={() => setShowImportDialog(true)}
                         >
                             <Upload size={24} color="white" />
@@ -297,7 +303,7 @@ export default function OperatorTable() {
                                     <TableRow
                                         key={row.id}
                                         data-state={row.getIsSelected() && "selected"}
-                                        className={index % 2 === 0 ? "bg-gray-50" : ""}
+                                      
                                     >
                                         {row.getVisibleCells().map((cell) => {
                                             // kiểm tra nếu cột là staffName thì custom render
@@ -308,7 +314,7 @@ export default function OperatorTable() {
                                                 return (
                                                     <TableCell
                                                         key={cell.id}
-                                                        className="font-medium text-[16px] text-center"
+                                                        className="font-medium text-[14px] text-center text-white"
                                                     >
                                                         <div className="flex flex-col">
                                                             <div className={`${status === 0
@@ -333,7 +339,7 @@ export default function OperatorTable() {
                                             return (
                                                 <TableCell
                                                     key={cell.id}
-                                                    className=" text-[17px] text-[#000000] text-center py-5"
+                                                    className=" text-[14px] text-[#000000] text-center py-5 text-white"
                                                 >
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                 </TableCell>

@@ -23,7 +23,7 @@ const chartConfig = {
     },
     numberOfProcesses: {
         label: "Tổng số",
-        color: "#074695",
+        color: "#3b82f6",
     },
 } satisfies ChartConfig
 
@@ -84,12 +84,12 @@ export function MachineProcessBarChart({
     }, [currentPage, totalPages, isScrolling])
 
     return (
-        <Card className="!w-full shadow-md shadow-blue-200 border border-blue-300" ref={containerRef}>
+        <Card className="!w-full shadow-md bg-white/20 backdrop-blur-lg border border-white/20 shadow-xl  " ref={containerRef}>
             <CardHeader>
                 <div className="flex justify-between items-center">
                     <div>
-                        <p className="text-xl font-semibold">{title}</p>
-                        <p className="text-lg text-gray-500">{description}</p>
+                        <p className="text-base font-semibold text-white">{title}</p>
+                        <p className="text-sm text-white">{description}</p>
                     </div>
                 </div>
             </CardHeader>
@@ -100,39 +100,46 @@ export function MachineProcessBarChart({
                         data={currentData}
                         layout="vertical"
                         margin={{
-                            left: -50,
+                            left: -70,
+                            right: 30
                         }}
                     >
                         <XAxis type="number"
                             dataKey="numberOfProcesses"
-                            // tick={{ fontSize: 15 }}
-                            // tickLine={false}
-                            // tickMargin={10}
-                            // axisLine={true}
                             hide
                         />
                         {/* <CartesianGrid horizontal={false} /> */}
+                        <defs>
+                            <linearGradient id="processGradient" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stopColor="#4adede" />
+                                <stop offset="100%" stopColor=" #1ca7ec" />
+                            </linearGradient>
+                        </defs>
                         <YAxis
                             dataKey="machineName"
                             type="category"
-                            tickLine={false}
+                            tickLine={true}
                             tickMargin={5}
                             axisLine={false}
                             width={110}
-                            tick={{ fontSize: 18 }}
+                            tick={{
+                                fontSize: 14, fontWeight: 750, fill: "#fff",
+                                style: { fill: "#fff" },
+                            }}
                         // tickFormatter={(value) => value.slice(0, 7)}
                         />
                         <ChartTooltip
                             cursor={false}
                             content={<ChartTooltipContent indicator="dashed" />}
                         />
-                        <Bar dataKey="numberOfProcesses" fill={chartConfig.numberOfProcesses.color} radius={5}>
+                        <Bar dataKey="numberOfProcesses" fill="url(#processGradient)" radius={5}>
                             <LabelList
                                 dataKey="numberOfProcesses"
-                                position="insideRight"
+                                position="right"
                                 offset={8}
                                 className="fill-white"
-                                fontSize={18}
+                                fontSize={13}
+                                fontWeight={750}
                             />
                         </Bar>
                     </BarChart>
@@ -145,7 +152,7 @@ export function MachineProcessBarChart({
                             key={index}
                             onClick={() => setCurrentPage(index)}
                             className={`w-3 h-3 rounded-full transition-colors cursor-pointer ${index === currentPage
-                                ? 'bg-blue-600'
+                                ? 'bg-blue-500'
                                 : 'bg-gray-300 hover:bg-gray-400'
                                 }`}
                             aria-label={`Go to page ${index + 1}`}

@@ -216,7 +216,7 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalHeader>
-        <ModalTitle>Lịch Sử Quy Trình - {machineName}</ModalTitle>
+        <ModalTitle>Lịch sử quy trình - {machineName}</ModalTitle>
       </ModalHeader>
 
       <ModalContent>

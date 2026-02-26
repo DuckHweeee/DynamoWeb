@@ -4,7 +4,7 @@ import { OrderDetail } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export function useOrderDetail(pageSize = 10) {
+export function useOrderDetail(pageSize = 8) {
     const [data, setData] = useState<OrderDetail[]>([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);

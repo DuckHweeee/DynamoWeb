@@ -13,7 +13,6 @@ import { Download, UserRoundSearch } from "lucide-react";
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation"
-import { RunningTimePieChart } from "./components/RunningTimePieChart";
 import { useGroups } from "@/hooks/useGroup";
 import { MachineEfficiencyDetail } from "./lib/type";
 import { useMachineEfficiencyDetail } from "./hooks/useMachineEfficiencyDetail";
@@ -24,6 +23,8 @@ import DateRangeSelectorDetail from "./hooks/DateRangeSelectorDetail";
 import { ReportTimeMachineDetail } from "./components/ReportTimeMachineDetail";
 import { MachinePieChart } from "./components/machinePieChart";
 import MachineHistoryTable from "./components/MachineHistoryTable";
+import { RunningTimePieChart1 } from "./components/RunningTimePieChart";
+
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const MachineDetailOverview = () => {
@@ -123,84 +124,86 @@ const MachineDetailOverview = () => {
 
     return (
         <>
-            <div className="m-2 px-4 py-5 bg-white rounded-[10px] shadow" >
-                <div>
-                    <div className="flex justify-between items-center mr-5 border-b pb-2 py-4 ">
-                        <p className="text-3xl font-semibold pb-2">Thống kê chi tiết máy {selectedMachineName}</p>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="items-center cursor-pointer !text-white border-gray-200 hover:border-gray-300 h-9 bg-blue-900 hover:bg-blue-650"
-                        >
-                            Xuất file
-                            <Download className="h-4 w-4" />
-                        </Button>
-                    </div>
-                    <div className="flex flex-row py-3 gap-3 justify-end">
-                        <DateRangeSelectorDetail
-                            startDate={selectedStartDate}
-                            endDate={selectedEndDate}
-                            shiftCode={selectedShiftCode as any}
-                            onChange={({ startDate, endDate, timeType, shiftCode }) => {
-                                setSelectedStartDate(startDate);
-                                setSelectedEndDate(endDate);
-                                setSelectedTimeType(timeType);
-                                setSelectedShiftCode(shiftCode);
-                            }}
-                        />
-                        <div className="space-y-1">
-                            <label className="text-sm font-medium text-gray-600 tracking-wide">Nhóm</label>
-                            <Select value={selectedGroup ?? ""} onValueChange={(val) => setSelectedGroup(val)}>
-                                <SelectTrigger className="w-[180px] text-lg ">
-                                    <SelectValue placeholder="Nhóm" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        {groupList.map((m) => (
-                                            <SelectItem className="text-lg text-blue-950" key={m.groupId} value={String(m.groupId)}>
-                                                {m.groupName}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
+            <div className="m-2 px-4 py-5  bg-white/10 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow" >
+                <div className="pb-1 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-700 
+                bg-[length:100%_2px] bg-no-repeat bg-left-bottom">
+                    <div className="flex py-3 gap-3 justify-between items-center">
+                        <div className="flex gap-3">
+                            <DateRangeSelectorDetail
+                                startDate={selectedStartDate}
+                                endDate={selectedEndDate}
+                                shiftCode={selectedShiftCode as any}
+                                onChange={({ startDate, endDate, timeType, shiftCode }) => {
+                                    setSelectedStartDate(startDate);
+                                    setSelectedEndDate(endDate);
+                                    setSelectedTimeType(timeType);
+                                    setSelectedShiftCode(shiftCode);
+                                }}
+                            />
+                            <div className="space-y-1">
+                                <Select value={selectedGroup ?? ""} onValueChange={(val) => setSelectedGroup(val)}>
+                                    <SelectTrigger className="w-[175px] text-base cursor-pointer p-5 text-white  bg-white/20 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow">
+                                        <SelectValue placeholder="Nhóm" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            {groupList.map((m) => (
+                                                <SelectItem className="text-lg text-blue-950" key={m.groupId} value={String(m.groupId)}>
+                                                    {m.groupName}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                        <div className="space-y-1">
-                            <label className="text-sm font-medium text-gray-600 tracking-wide">Máy móc</label>
-                            <Select
-                                value={selectedMachine.toString()}
-                                onValueChange={(val) => setSelectedMachine(val ? Number(val) : 0)}
-                            >
-                                <SelectTrigger className="w-fit text-lg px-4 rounded-md transition ">
-                                    <SelectValue
-                                        placeholder={selectedMachineName}
-                                    />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        {machineList?.map((machine) => (
-                                            <SelectItem
-                                                className="text-xl text-blue-950"
-                                                key={machine.machineId}
-                                                value={String(machine.machineId)}
-                                            >
-                                                {machine.machineName}
-                                            </SelectItem>
-                                        )) || []}
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
+                            <div className="space-y-1">
+                                <Select
+                                    value={selectedMachine.toString()}
+                                    onValueChange={(val) => setSelectedMachine(val ? Number(val) : 0)}
+                                >
+                                    <SelectTrigger className="w-[175px] text-base text-white cursor-pointer p-5  bg-white/20 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow transition ">
+                                        <SelectValue
+                                            placeholder={selectedMachineName}
+                                        />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            {machineList?.map((machine) => (
+                                                <SelectItem
+                                                    className="text-xl text-blue-950"
+                                                    key={machine.machineId}
+                                                    value={String(machine.machineId)}
+                                                >
+                                                    {machine.machineName}
+                                                </SelectItem>
+                                            )) || []}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="flex flex-col">
+                                <Button
+                                    onClick={handleSubmit}
+                                    variant="outline"
+                                    size="lg"
+                                    className="w-[175px] text-base cursor-pointer p-5 text-white bg-white/20 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow font-normal"
+                                >
+                                    <UserRoundSearch className="h-4 w-4 mr-1" />
+                                    Lọc nhóm mới
+                                </Button>
+                            </div>
                         </div>
-                        <div className="flex flex-col pt-6">
+                        <div className="space-y-1">
                             <Button
-                                onClick={handleSubmit}
                                 variant="outline"
-                                size="lg"
-                                className="text-lg font-normal cursor-pointer text-gray-600 hover:text-gray-700 border-gray-200 hover:border-gray-300 h-9"
+                                size="sm"
+                                className="items-center cursor-pointer !text-white  h-11 
+                                    hover:from-slate-400 hover:via-zinc-300 hover:to-red-700
+                                    px-6 text-base transition-all  bg-white/40 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow"
                             >
-                                <UserRoundSearch className="h-4 w-4 mr-1" />
-                                Lọc nhóm mới
+                                Xuất file
+                                <Download className="h-4 w-4" />
                             </Button>
                         </div>
                     </div>
@@ -209,17 +212,22 @@ const MachineDetailOverview = () => {
                     <ReportTimeMachineDetail data={dataStatistic} type={selectedTimeType} />
                 )}
 
-                <div className="my-5 grid grid-cols-2 gap-3">
-                    {dataStatistic && (
-                        <RunningTimePieChart dataRunTime={dataStatistic} title={"Thống kê thời gian hoạt động máy"} description={"Phân tích thời gian trong tháng này"} />
-                    )}
-                    {dataEfficiency && (
-                        <MachinePieChart dataDetail={dataEfficiency} />
-                    )}
+                <div className="my-6 grid grid-cols-6 gap-6">
+                    <div className="col-span-2 grid grid-rows-2 gap-6">
+                        {dataStatistic && (
+                            <RunningTimePieChart1 dataRunTime={dataStatistic} title={"Thống kê thời gian hoạt động máy"} description={"Phân tích thời gian trong tháng này"} />
+                        )}
+                        {dataEfficiency && (
+                            <MachinePieChart  dataRunTime={dataEfficiency} />
+                        )}
+                    </div>
+
+                    <div className="col-span-4">
+                        {dataHistory && (
+                            <MachineHistoryTable title={"Lịch sử máy chạy"} dataHistory={dataHistory} />
+                        )} </div>
+
                 </div>
-                {dataHistory && (
-                    <MachineHistoryTable title={"Lịch sử máy chạy"} dataHistory={dataHistory} />
-                )}
             </div >
         </>
     );

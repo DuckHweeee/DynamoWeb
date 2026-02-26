@@ -32,7 +32,7 @@ const columns: ColumnDef<MachineHistoryDetail>[] = [
         accessorKey: "startEndDate",
         header: ({ column }) => (
             <Button
-                className="text-lg font-bold capitalize"
+                className="text-base text-white font-bold capitalize"
                 variant="ghost"
                 onClick={() =>
                     column.toggleSorting(column.getIsSorted() === "asc")
@@ -47,8 +47,8 @@ const columns: ColumnDef<MachineHistoryDetail>[] = [
 
             return (
                 <div className="flex flex-col">
-                    <div className="text-lg font-normal">{dayjs(start).format("DD-MM-YYYY HH:mm:ss")}</div>
-                    <div className="text-lg font-normal">{dayjs(end).format("DD-MM-YYYY HH:mm:ss")}</div>
+                    <div className="text-sm font-normal py-2">{dayjs(start).format("DD-MM-YYYY HH:mm:ss")}</div>
+                    <div className="text-sm font-normal">{dayjs(end).format("DD-MM-YYYY HH:mm:ss")}</div>
                 </div>
             )
         },
@@ -57,7 +57,7 @@ const columns: ColumnDef<MachineHistoryDetail>[] = [
         accessorKey: "orderCode",
         header: ({ column }) => (
             <Button
-                className="text-lg font-bold capitalize"
+                className="text-base font-bold text-white capitalize"
                 variant="ghost"
                 onClick={() =>
                     column.toggleSorting(column.getIsSorted() === "asc")
@@ -72,7 +72,7 @@ const columns: ColumnDef<MachineHistoryDetail>[] = [
         accessorKey: "partNumber",
         header: ({ column }) => (
             <Button
-                className="text-lg font-bold capitalize"
+                className="text-base font-bold text-white capitalize"
                 variant="ghost"
                 onClick={() =>
                     column.toggleSorting(column.getIsSorted() === "asc")
@@ -87,7 +87,7 @@ const columns: ColumnDef<MachineHistoryDetail>[] = [
         accessorKey: "stepNumber",
         header: ({ column }) => (
             <Button
-                className="text-lg font-bold capitalize"
+                className="text-base font-bold text-white capitalize"
                 variant="ghost"
                 onClick={() =>
                     column.toggleSorting(column.getIsSorted() === "asc")
@@ -102,7 +102,7 @@ const columns: ColumnDef<MachineHistoryDetail>[] = [
         accessorKey: "machineName",
         header: ({ column }) => (
             <Button
-                className="text-lg font-bold capitalize"
+                className="text-base font-bold text-white capitalize"
                 variant="ghost"
                 onClick={() =>
                     column.toggleSorting(column.getIsSorted() === "asc")
@@ -118,7 +118,7 @@ const columns: ColumnDef<MachineHistoryDetail>[] = [
 
             return (
                 <div className="group relative cursor-pointer">
-                    <span className="text-lg">
+                    <span className="text-sm">
                         {staffList[0].staffName}
                         {staffList.length > 1 && (
                             <span className="text-gray-500 ml-1">
@@ -141,7 +141,7 @@ const columns: ColumnDef<MachineHistoryDetail>[] = [
     },
     {
         accessorKey: "status",
-        header: () => <div className="text-lg font-bold">Trạng thái</div>,
+        header: () => <div className="text-base text-white font-bold">Trạng thái</div>,
         cell: ({ row }) => {
             const status = row.getValue("status") as string
 
@@ -220,13 +220,19 @@ export default function MachineHistoryTable({
             rowSelection,
             globalFilter,
         },
+        initialState: {
+            pagination: {
+                pageSize: 7,   // ⬅️ mỗi trang tối đa 7 dòng
+            },
+        },
+
     })
 
     return (
-        <div className="my-2 px-4 py-2 bg-white rounded-[10px] shadow-md shadow-purple-200 border border-purple-300">
+        <div className="h-full px-4 py-2  bg-white/20 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow rounded-[10px] shadow-md max-h-[7px]">
             <div className="flex flex-row items-center justify-between py-4">
                 <div className="w-2/3">
-                    <p className="text-2xl font-bold">{title}</p>
+                    <p className="text-lg font-bold text-white">{title}</p>
                 </div>
             </div>
             <div className="rounded-md border">
@@ -235,7 +241,7 @@ export default function MachineHistoryTable({
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow
                                 key={headerGroup.id}
-                                className="text-lg font-bold !text-center"
+                                className="text-sm font-bold !text-center"
                             >
                                 {headerGroup.headers.map((header) => (
                                     <TableHead
@@ -263,7 +269,7 @@ export default function MachineHistoryTable({
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell
                                             key={cell.id}
-                                            className="font-medium text-[16px] text-[#555] text-center"
+                                            className="font-medium text-[12px] text-[#fff] text-center"
                                         >
                                             {flexRender(
                                                 cell.column.columnDef.cell,

@@ -12,7 +12,7 @@ export default function Home() {
   const isUnPlannedProcess = pathname === "/process/unplannedProcess";
   return (
     <>
-      <div className="flex items-center justify-center p-3">
+      <div className="flex items-center justify-center p-3 s">
         <div className="flex gap-x-3">
           {/* <Link href={"/process"}>
             <Button

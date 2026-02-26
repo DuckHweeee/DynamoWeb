@@ -12,7 +12,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Plus, Search, Eye } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Plus, Search, Eye, Edit } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -80,14 +80,14 @@ function getColumns({
   const baseColumns: ColumnDef<Staff>[] = [
     {
       id: "stt",
-      header: () => <span className="text-lg font-bold">STT</span>,
+      header: () => <span className="text-base  text-white font-bold">STT</span>,
       cell: ({ row }) => <div>{row.index + 1}</div>,
     },
     {
       accessorKey: "staffId",
       header: ({ column }) => (
         <Button
-          className="text-lg font-bold cursor-pointer"
+          className="text-base text-white font-bold cursor-pointer"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -102,7 +102,7 @@ function getColumns({
       accessorKey: "staffName",
       header: ({ column }) => (
         <Button
-          className="text-lg font-bold cursor-pointer"
+          className="text-base  text-white font-bold cursor-pointer"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -117,11 +117,11 @@ function getColumns({
       accessorKey: "staffOffice",
       header: ({ column }) => (
         <Button
-          className="text-lg font-bold cursor-pointer"
+          className="text-base  text-white font-bold cursor-pointer"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Phòng Ban <ArrowUpDown />
+          Phòng ban <ArrowUpDown />
         </Button>
       ),
       cell: ({ row }) => (
@@ -132,7 +132,7 @@ function getColumns({
       accessorKey: "staffKpiDtos.groupName",
       header: ({ column }) => (
         <Button
-          className="text-lg font-bold cursor-pointer"
+          className="text-base  text-white font-bold cursor-pointer"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -149,11 +149,11 @@ function getColumns({
       accessorKey: "staffSection",
       header: ({ column }) => (
         <Button
-          className="text-lg font-bold cursor-pointer"
+          className="text-base text-white font-bold cursor-pointer"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Công Việc <ArrowUpDown />
+          Công việc <ArrowUpDown />
         </Button>
       ),
       cell: ({ row }) => (
@@ -164,11 +164,11 @@ function getColumns({
       accessorKey: "status",
       header: ({ column }) => (
         <Button
-          className="text-lg font-bold cursor-pointer"
+          className="text-base  text-white font-bold cursor-pointer"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Trạng Thái <ArrowUpDown />
+          Trạng thái <ArrowUpDown />
         </Button>
       ),
       cell: ({ getValue }) => {
@@ -176,13 +176,13 @@ function getColumns({
         const isWorking = value === 1;
         return (
           <div
-            className={`w-full px-4 py-1.5 rounded-lg text-center capitalize
+            className={`px-2 py-1.5 rounded-lg text-center
         ${isWorking
                 ? "bg-[#E7F7EF] text-[#0CAF60]"
                 : "bg-[#FFE6E6] text-[#FE4A4A]"
               }`}
           >
-            {isWorking ? "Đang Làm" : "Đã Nghỉ"}
+            {isWorking ? "Đang làm" : "Đã nghỉ"}
           </div>
         );
       },
@@ -193,7 +193,7 @@ function getColumns({
   if (showViewHistory && onViewHistory) {
     baseColumns.push({
       id: "viewHistory",
-      header: () => <div className="font-bold">Lịch Sử</div>,
+      header: () => <div className="font-bold text-white">Lịch Sử</div>,
       cell: ({ row }) => (
         <Button
           variant="outline"
@@ -203,8 +203,8 @@ function getColumns({
           }
           className="h-8 px-3"
         >
-          <Eye className="h-4 w-4 mr-1" />
-          Xem Lịch Sử
+          <Eye className="h-4 w-4 mr-1 text-black" />
+         <span className="text-black">Xem Lịch Sử</span> 
         </Button>
       ),
     });
@@ -230,7 +230,8 @@ function getColumns({
                   className="text-lg cursor-pointer pr-6"
                   onClick={() => onDetail(staff)}
                 >
-                  Thông tin chi tiết
+                  <Eye className="mr-2 h-4 w-4" />
+                  <span className="text-sm">Xem Chi Tiết</span>
                 </DropdownMenuItem>
               )}
               {onEdit && (
@@ -238,7 +239,8 @@ function getColumns({
                   className="text-lg cursor-pointer"
                   onClick={() => onEdit(staff)}
                 >
-                  Chỉnh sửa
+                  <Edit className="mr-2 h-4 w-4" />
+                 <span className="text-sm">Chỉnh sửa</span>
                 </DropdownMenuItem>
               )}
             </DropdownMenuContent>
@@ -309,6 +311,12 @@ export function OperatorTable({
       rowSelection,
       globalFilter,
     },
+    initialState: {
+      pagination: {
+        pageSize: 8,   // ⬅️ mỗi trang tối đa 7 dòng
+      },
+    },
+
   });
 
   if (error) {
@@ -330,10 +338,10 @@ export function OperatorTable({
   }
 
   return (
-    <div className="bg-white rounded-[10px] px-6 mx-2 h-screen mb-4 ">
-      <div className="flex flex-row items-center justify-between py-4 bg-white border-b border-red-300 mb-4">
+    <div className="bg-white/10 backdrop-blur border border-white/20 shadow-xl  rounded-[10px] px-6 mx-2 mt-4 h-auto">
+      <div className="flex flex-row items-center justify-between py-4  mb-4">
         <div className="w-2/3">
-          <p className="text-2xl font-bold">{title}</p>
+          {/* <p className="text-2xl font-bold">{title}</p> */}
         </div>
         <div className="w-1/3 flex flex-row justify-end-safe items-center gap-1">
           <div className="relative max-w-sm w-full">
@@ -342,7 +350,7 @@ export function OperatorTable({
               placeholder="Tìm kiếm"
               value={globalFilter}
               onChange={(e) => setGlobalFilter(e.target.value)}
-              className="pl-10 py-5"
+              className="pl-10 py-5.5"
             />
           </div>
 
@@ -350,7 +358,9 @@ export function OperatorTable({
             <Button
               variant="secondary"
               size="icon"
-              className="px-10 py-6 bg-[#074695] hover:bg-[#0754B4] cursor-pointer"
+              className="px-10 py-6  bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl rounded-[10px] shadow ] hover:bg-[#0754B4] cursor-pointer"
               onClick={onAdd}
             >
               <Plus size={60} strokeWidth={5} color="white" />
@@ -365,7 +375,9 @@ export function OperatorTable({
               onImportSuccess={handleImportSuccess}
               variant="outline"
               size="lg"
-              className="px-4 py-6 bg-green-600 hover:bg-green-700 cursor-pointer text-white hover:text-white"
+              className="px-4 py-6  bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl rounded-[10px] shadow  hover:bg-green-700 cursor-pointer text-white hover:text-white"
             />
           )}
         </div>
@@ -403,16 +415,16 @@ export function OperatorTable({
                 </TableRow>
               ))
             ) : table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row,index) => (
+              table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className={index % 2 === 0 ? "bg-gray-50" : ""}
+             
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="text-center font-medium text-[16px] text-[#888888] py-5"
+                      className="text-center font-medium text-[14px] text-[#ffffff] py-5"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

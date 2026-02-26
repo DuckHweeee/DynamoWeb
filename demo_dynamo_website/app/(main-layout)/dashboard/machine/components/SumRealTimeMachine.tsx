@@ -1,21 +1,15 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, LabelList, ReferenceLine, XAxis, YAxis } from "recharts"
 
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardFooter,
     CardHeader,
-    CardTitle,
 } from "@/components/ui/card"
 import {
     ChartConfig,
     ChartContainer,
-    ChartLegend,
-    ChartLegendContent,
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
@@ -24,31 +18,32 @@ import { MachineOverview } from "../lib/type"
 const chartConfig = {
     pgTime: {
         label: "Thực tế",
-        color: "#0077FF",
+        color: "url(#realGradient)",
     },
     pgTimeExpect: {
         label: "Dự kiến",
-        color: "#074695",
+        color: "url(#expectGradient)",
     },
 } satisfies ChartConfig
 const legendItems = [
-    { name: "Dự kiến", fill: "#074695" },
-    { name: "Thực tế", fill: "#0077FF" },
-    { name: "Mục tiêu", fill: "red" },
+    { name: "Dự kiến", gradient: "linear-gradient(to bottom, #08b37a, #397D54)" },
+    { name: "Thực tế", gradient: "linear-gradient(to bottom, #73C088, #A8E0B7)" },
+    { name: "Mục tiêu", color: "#1b1717" },
 ]
+
 const CustomRealLabel = (props: any) => {
     const { x, y, width, height, value } = props;
 
     const TEXT_HEIGHT = 14;     // fontSize
     const PADDING = 6;          // khoảng đệm
-    const canFitInside = height > TEXT_HEIGHT + PADDING;
+    // const canFitInside = height > TEXT_HEIGHT + PADDING;
 
     return (
         <text
             x={x + width / 2}
-            y={canFitInside ? y + TEXT_HEIGHT + 2 : y - 6}
+            y={y - 6}
             textAnchor="middle"
-            fill={canFitInside ? "#fff" : "#333"}
+            fill={"#fff"}
             fontSize={14}
             fontWeight={500}
         >
@@ -74,58 +69,75 @@ export function SumRealTimeMachine({
     }))
 
     return (
-        <Card className="shadow-md shadow-blue-200 border border-blue-300">
+        <Card className="shadow-md bg-white/20 backdrop-blur-lg border border-white/20 shadow-xl ">
             <CardHeader>
-                <p className="text-xl font-semibold">{title}</p>
-                <p className="text-lg text-gray-500 mb-4">{description}</p>
+                <p className="text-base font-semibold text-white">{title}</p>
+                <p className="text-sm text-white mb-4">{description}</p>
             </CardHeader>
             <CardContent>
-                <ChartContainer config={chartConfig} className="h-[350px] w-full px-6">
+                <ChartContainer config={chartConfig} className="h-[280px] sm:h-[350px] lg:h-[404px] w-full px-4 sm:px-6">
                     <BarChart
                         accessibilityLayer
                         data={roundedData}
                         margin={{
                             left: -5,
+                            top: 100
                         }}
                     >
+                        <defs>
+                            <linearGradient id="realGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#73C088" />
+                                <stop offset="100%" stopColor="#A8E0B7" />
+                            </linearGradient>
+
+                            <linearGradient id="expectGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#08b37a" />
+                                <stop offset="100%" stopColor="#397D54" />
+                            </linearGradient>
+                        </defs>
                         <CartesianGrid vertical={false} />
                         <XAxis
                             dataKey="machineName"
-                            tickLine={false}
+                            tickLine={true}
                             tickMargin={5}
                             axisLine={false}
-                            tick={{ fontSize: 18 }}
+                            tick={{
+                                fontSize: 14, fontWeight: 750, fill: "#fff",
+                                style: { fill: "#fff" },
+                            }}
                         />
-                        <YAxis tickLine={false} tick={{ fontSize: 0 }} />
+                        <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 0 }} />
                         <ChartTooltip
                             cursor={false}
                             content={<ChartTooltipContent indicator="dashed" />}
                         />
-                        <Bar dataKey="pgTime" fill="#0077FF" radius={4}>
+                        <Bar dataKey="pgTime" fill="url(#realGradient)" radius={4}>
                             <LabelList
                                 dataKey="pgTime"
                                 content={<CustomRealLabel />}
                                 offset={8}
                                 className="fill-white"
                                 fontSize={14}
+
                             />
                         </Bar>
-                        <Bar dataKey="pgTimeExpect" fill="#074695" radius={4}>
+                        <Bar dataKey="pgTimeExpect" fill="url(#expectGradient)" radius={4}>
                             <LabelList
                                 dataKey="pgTimeExpect"
                                 content={<CustomRealLabel />}
                                 offset={8}
                                 className="fill-white"
                                 fontSize={14}
+                                fontWeight={750}
                             />
                         </Bar>
                         <ReferenceLine
                             y={groupTarget} // 👈 chỉ lấy 1 giá trị
-                            stroke="red"
+                            stroke="#1b1717"
                             label={{
                                 value: groupTarget.toString(),
                                 position: "left",
-                                fontSize: 15,
+                                fontSize: 12,
                                 fill: "red",
                                 offset: 5,
                             }}
@@ -134,14 +146,18 @@ export function SumRealTimeMachine({
                 </ChartContainer>
 
                 {/* Legend */}
-                <div className="mx-6 flex items-center justify-center gap-6 bg-white p-3 ml-20">
+                <div className="mx-6 flex items-center justify-center gap-6  p-3 ml-20">
                     {legendItems.map((item, index) => (
                         <div key={index} className="flex items-center gap-2">
                             <div
                                 className="w-3 h-3 rounded-sm"
-                                style={{ backgroundColor: item.fill }}
+                                style={
+                                    item.gradient
+                                        ? { backgroundImage: item.gradient }
+                                        : { backgroundColor: item.color }
+                                }
                             />
-                            <span className="text-sm text-gray-800 font-medium">
+                            <span className="text-sm text-white font-medium">
                                 {item.name}
                             </span>
                         </div>
@@ -151,81 +167,3 @@ export function SumRealTimeMachine({
         </Card>
     )
 }
-
-// export function SumRealTimeMachine({ title, description, dataOverview }: { title: string; description: string; dataOverview: MachineOverview[] }) {
-//     return (
-//         <Card>
-//             <CardHeader>
-//                 {/* <CardTitle>Tổng Thời Gian Thực</CardTitle>
-//                 <CardDescription>PG Dự Kiến Của Từng Máy Trong Nhóm</CardDescription> */}
-//                 <p className="text-2xl font-bold">{title}</p>
-//                 <p className="text-xl text-gray-500 mb-4">{description}</p>
-//             </CardHeader>
-//             <CardContent>
-//                 <ChartContainer config={chartConfig} className="h-[350px] w-full">
-//                     <BarChart accessibilityLayer data={dataOverview}
-//                         margin={{
-//                             left: -30,
-//                         }}>
-//                         <CartesianGrid vertical={false} />
-//                         <XAxis
-//                             dataKey="name"
-//                             tickLine={false}
-//                             tickMargin={5}
-//                             axisLine={false}
-//                             tick={{ fontSize: 18 }}
-//                         />
-//                         <YAxis tickLine={false} tick={{ fontSize: 0 }} />
-//                         {/* <ChartLegend className="text-lg" content={<ChartLegendContent />} /> */}
-//                         <ChartTooltip
-//                             cursor={false}
-//                             content={<ChartTooltipContent indicator="dashed" />}
-//                         />
-//                         <Bar dataKey="pgTime" fill="var(--color-real)" radius={4}>
-//                             <LabelList
-//                                 dataKey="pgTime"
-//                                 position="insideTop"
-//                                 offset={8}
-//                                 className="fill-white"
-//                                 fontSize={14}
-//                             />
-//                         </Bar>
-//                         <Bar dataKey="pgTimeExpect" fill="var(--color-desirable)" radius={4} >
-//                             <LabelList
-//                                 dataKey="pgTimeExpect"
-//                                 position="insideTop"
-//                                 offset={8}
-//                                 className="fill-white"
-//                                 fontSize={14}
-//                             />
-//                         </Bar>
-//                         <ReferenceLine
-//                             y={groupTarget}   // 👈 truyền số vào đây
-//                             stroke="red"           // màu đường
-//                             label={{
-//                                 value: `${100}`,
-//                                 position: "left",
-//                                 fontSize: 15,
-//                                 fill: "red",
-//                                 offset: 5,
-//                             }}
-//                         />
-//                     </BarChart>
-//                 </ChartContainer>
-//                 <div className="mx-6 flex items-center justify-center gap-6 bg-white p-3 ml-20">
-//                     {legendItems.map((item, index) => (
-//                         <div key={index} className="flex items-center gap-2">
-//                             <div
-//                                 className="w-3 h-3 rounded-sm"
-//                                 style={{ backgroundColor: item.fill }}
-//                             />
-//                             <span className="text-sm text-gray-800 font-medium">
-//                                 {item.name}
-//                             </span>
-//                         </div>
-//                     ))}
-//                 </div>
-//             </CardContent>
-//         </Card>
-//     )
-// }

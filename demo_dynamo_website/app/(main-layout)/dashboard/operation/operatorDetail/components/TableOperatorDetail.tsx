@@ -42,7 +42,7 @@ const columns: ColumnDef<HistoryProcess>[] = [
         accessorKey: "startEndDate",
         header: ({ column }) => (
             <Button
-                className="text-lg"
+                className="text-base text-white"
                 variant="ghost"
                 onClick={() =>
                     column.toggleSorting(column.getIsSorted() === "asc")
@@ -57,8 +57,8 @@ const columns: ColumnDef<HistoryProcess>[] = [
 
             return (
                 <div className="flex flex-col">
-                    <div className="text-lg font-normal">{dayjs(start).format("DD-MM-YYYY HH:mm:ss")}</div>
-                    <div className="text-lg font-normal">{dayjs(end).format("DD-MM-YYYY HH:mm:ss")}</div>
+                    <div className="text-sm font-normal text-white">{dayjs(start).format("DD-MM-YYYY HH:mm:ss")}</div>
+                    <div className="text-sm font-normal text-white">{dayjs(end).format("DD-MM-YYYY HH:mm:ss")}</div>
                 </div>
             )
         },
@@ -67,7 +67,7 @@ const columns: ColumnDef<HistoryProcess>[] = [
         accessorKey: "orderCode",
         header: ({ column }) => (
             <Button
-                className="text-lg "
+                className="text-base text-white "
                 variant="ghost"
                 onClick={() =>
                     column.toggleSorting(column.getIsSorted() === "asc")
@@ -82,7 +82,7 @@ const columns: ColumnDef<HistoryProcess>[] = [
         accessorKey: "machineName",
         header: ({ column }) => (
             <Button
-                className="text-lg "
+                className="text-base text-white "
                 variant="ghost"
                 onClick={() =>
                     column.toggleSorting(column.getIsSorted() === "asc")
@@ -95,7 +95,7 @@ const columns: ColumnDef<HistoryProcess>[] = [
     },
     {
         accessorKey: "status",
-        header: () => <div className="text-lg ">Trạng thái</div>,
+        header: () => <div className="text-base text-white ">Trạng thái</div>,
         cell: ({ row }) => {
             const status = row.getValue("status") as string
 
@@ -176,13 +176,18 @@ export default function TableOperatorDetail({
             rowSelection,
             globalFilter,
         },
+        initialState: {
+            pagination: {
+                pageSize: 8,   // ⬅️ mỗi trang tối đa 7 dòng
+            },
+        },
     })
 
     return (
-        <div className="my-2 px-4 py-2 bg-white rounded-[10px] shadow shadow-purple-200 border border-purple-300">
+        <div className="my-2 px-4 py-2 rounded-[20px] bg-white/20 backdrop-blur-lg border border-white/20 shadow-xl  px-5 py-3 shadow-md w-full">
             <div className="flex flex-row items-center justify-between py-4">
                 <div className="w-2/3">
-                    <p className="text-2xl font-bold">{title}</p>
+                    <p className="text-base font-bold text-white">{title}</p>
                 </div>
             </div>
             <div className="rounded-md border">
@@ -219,7 +224,7 @@ export default function TableOperatorDetail({
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell
                                             key={cell.id}
-                                            className="font-medium text-[16px] text-[#555] text-center"
+                                            className="font-medium text-[14px] text-[#fff] text-center"
                                         >
                                             {flexRender(
                                                 cell.column.columnDef.cell,
@@ -250,6 +255,8 @@ export default function TableOperatorDetail({
                         size="sm"
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
+                        className="text-black"
+
                     >
                         Trước
                     </Button>
@@ -258,6 +265,8 @@ export default function TableOperatorDetail({
                         size="sm"
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
+                        className="text-black"
+
                     >
                         Tiếp
                     </Button>

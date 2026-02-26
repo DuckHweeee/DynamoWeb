@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Process } from "../lib/type";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-export function usePlannedProcess(pageSize = 10) {
+export function usePlannedProcess(pageSize = 8) {
     const [data, setData] = useState<any[]>([])
     const [page, setPage] = useState(0)
     const [totalPages, setTotalPages] = useState(0)

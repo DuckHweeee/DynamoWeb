@@ -15,16 +15,16 @@ export default function OrderCard({
     percent < 60
       ? "bg-red-200 text-red-700"
       : percent < 80
-      ? "bg-yellow-200 text-yellow-700"
-      : "bg-green-200 text-green-700";
+        ? "bg-yellow-200 text-yellow-700"
+        : "bg-green-200 text-green-700";
 
   return (
-    <Card className="p-4 rounded-xl shadow-md border w-full bg-white">
+    <Card className="p-4 bg-white/20 backdrop-blur border border-white/20 shadow-lg rounded-[10px] shadow">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-gray-700 font-semibold">
-          <ClipboardList size={20} />
-          {order.orderCode}
+          <span className="border px-3 py-1 bg-white rounded-md"> <ClipboardList size={21} /></span>
+          <span className="border px-3 py-1 bg-white rounded-md">{order.orderCode}</span>
         </div>
 
         <div
@@ -36,8 +36,8 @@ export default function OrderCard({
       <div className="w-full h-px bg-gray-300" />
       {/* Table header */}
       <div className="flex justify-between text-gray-600 text-sm font-medium">
-        <div className="w-1/4">Thứ tự</div>
-        <div className="w-full text-center">Trạng thái</div>
+        <div className="w-1/4 text-white">Thứ tự</div>
+        <div className="w-full text-center text-white">Trạng thái</div>
       </div>
 
       <div className="mt-2 space-y-3">
@@ -47,7 +47,7 @@ export default function OrderCard({
             <div key={index} className="flex items-between gap-3">
               {/* Circle number */}
               <div className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 text-gray-700 text-base mr-7">
-                {item.partNumber}
+                <span>{item.partNumber}</span>
               </div>
 
               {/* Progress section */}
@@ -55,19 +55,18 @@ export default function OrderCard({
                 <div className="w-full h-3 bg-  gray-200 rounded-full overflow-hidden">
                   <Progress
                     value={progress}
-                    className={`w-full ${
-                      progress < 50
-                        ? "[&>div]:!bg-red-500"
-                        : progress < 80
+                    className={`w-full ${progress < 50
+                      ? "[&>div]:!bg-red-500"
+                      : progress < 80
                         ? "[&>div]:!bg-yellow-500"
                         : "[&>div]:!bg-green-500"
-                    }`}
+                      }`}
                   />
                 </div>
-                <div className="flex justify-between text-base text-gray-500 mt-1 ">
-                  <span>
-                    {item.doneStep}/{item.totalStep} chi tiết
-                  </span>
+                <div className="flex justify-between text-base text-white mt-1 ">
+
+                  {item.doneStep}/{item.totalStep} chi tiết
+
                   <span>{item.doingStep} đang thực hiện</span>
                 </div>
               </div>
@@ -76,6 +75,6 @@ export default function OrderCard({
         })}
       </div>
     </Card>
-    
+
   );
 }

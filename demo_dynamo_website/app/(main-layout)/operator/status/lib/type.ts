@@ -11,6 +11,9 @@ export interface ListStaffStatus {
     startTime: number;
     time: string;
     status: string;
+    duration: number;
+    lastStatusChangeAt: number;
+
 }
 export interface MachineDto {
     machineName: string;

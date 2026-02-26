@@ -97,29 +97,29 @@ export default function DateRangeSelector({ onChange }: Props) {
     return (
         <div className="flex gap-3">
             <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-600 tracking-wide">Loại</label>
+                {/* <label className="text-sm font-medium text-gray-600 tracking-wide">Loại</label> */}
                 <Select value={mode} onValueChange={(val) => setMode(val as Mode)}>
-                    <SelectTrigger className="w-[150px] text-lg cursor-pointer">
+                    <SelectTrigger className="w-[175px] text-base cursor-pointer p-5  bg-white/20 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow text-white">
                         <SelectValue placeholder="Chọn chế độ" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="day" className="text-lg cursor-pointer">Ngày</SelectItem>
-                        <SelectItem value="week" className="text-lg cursor-pointer">Tuần</SelectItem>
-                        <SelectItem value="month" className="text-lg cursor-pointer">Tháng</SelectItem>
-                        <SelectItem value="year" className="text-lg cursor-pointer">Năm</SelectItem>
+                        <SelectItem value="day" className="text-base cursor-pointer">Ngày</SelectItem>
+                        <SelectItem value="week" className="text-base cursor-pointer">Tuần</SelectItem>
+                        <SelectItem value="month" className="text-base cursor-pointer">Tháng</SelectItem>
+                        <SelectItem value="year" className="text-base cursor-pointer">Năm</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
 
             <div className="flex-1 flex-col gap-2">
-                <label className="text-sm font-medium text-gray-600 tracking-wide">Thời gian</label>
+                {/* <label className="text-sm font-medium text-gray-600 tracking-wide">Thời gian</label> */}
                 {mode === "day" && (
                     <div className="flex flex-col gap-2">
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button
                                     variant="outline"
-                                    className="cursor-pointer w-auto justify-start text-right text-lg font-normal "                            >
+                                    className="w-[175px] text-base cursor-pointer p-5 text-white bg-white/20 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow justify-between text-right font-normal "                            >
                                     {selectedDate
                                         ? dayjs(selectedDate).format("DD/MM/YYYY")
                                         : "Chọn ngày"}
@@ -141,7 +141,7 @@ export default function DateRangeSelector({ onChange }: Props) {
 
                 {mode === "week" && (
                     <Select value={String(selectedWeek ?? "")} onValueChange={(val) => setSelectedWeek(Number(val))}>
-                        <SelectTrigger className="cursor-pointer text-xl ">
+                        <SelectTrigger className="w-auto text-base cursor-pointer p-5  bg-white/10 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow text-white">
                             <SelectValue placeholder="Chọn tuần" />
                         </SelectTrigger>
                         <SelectContent className="max-h-[300px]">
@@ -149,7 +149,7 @@ export default function DateRangeSelector({ onChange }: Props) {
                                 <SelectItem
                                     key={w.week}
                                     value={String(w.week)}
-                                    className={`text-lg cursor-pointer ${selectedWeek === w.week ? "bg-blue-100 text-blue-900" : ""}`}
+                                    className={`text-base cursor-pointer ${selectedWeek === w.week ? "bg-blue-100 text-blue-900" : ""}`}
                                 >
                                     Tuần {w.week}: {w.start} - {w.end}
                                 </SelectItem>
@@ -164,7 +164,7 @@ export default function DateRangeSelector({ onChange }: Props) {
                         value={String(selectedMonth ?? "")}
                         onValueChange={(val) => setSelectedMonth(Number(val))}
                     >
-                        <SelectTrigger className="cursor-pointer text-xl ">
+                        <SelectTrigger className="w-[175px] text-base cursor-pointer p-5 text-white  bg-white/10 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow">
                             <SelectValue placeholder="Chọn tháng" />
                         </SelectTrigger>
                         <SelectContent className="max-h-[300px]">
@@ -172,7 +172,7 @@ export default function DateRangeSelector({ onChange }: Props) {
                                 <SelectItem
                                     key={m}
                                     value={String(m)}
-                                    className={`text-lg cursor-pointer ${selectedMonth === m ? "bg-blue-100 text-blue-900" : ""}`}
+                                    className={`text-base cursor-pointer ${selectedMonth === m ? "bg-blue-100 text-blue-900" : ""}`}
                                 >
                                     Tháng {m}
                                 </SelectItem>
@@ -186,7 +186,7 @@ export default function DateRangeSelector({ onChange }: Props) {
                         value={String(selectedYear ?? "")}
                         onValueChange={(val) => setSelectedYear(Number(val))}
                     >
-                        <SelectTrigger className="cursor-pointer text-xl ">                            <SelectValue placeholder="Chọn năm" />
+                        <SelectTrigger className="w-[175px] text-base cursor-pointer p-5 text-white  bg-white/10 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow">                            <SelectValue placeholder="Chọn năm" />
                         </SelectTrigger>
                         {/* <SelectContent className="max-h-[300px]">
                             {Array.from({ length: 3 }, (_, i) => dayjs().year() - (2 - i)).map((year) => (
@@ -201,7 +201,7 @@ export default function DateRangeSelector({ onChange }: Props) {
                         </SelectContent> */}
                         <SelectContent className="max-h-[300px]">
                             {Array.from({ length: 3 }, (_, i) => dayjs().year() - 2 + i).map((year) => (
-                                <SelectItem key={year} value={String(year)} className="text-lg cursor-pointer">
+                                <SelectItem key={year} value={String(year)} className="text-base cursor-pointer">
                                     {year}
                                 </SelectItem>
                             ))}
@@ -210,22 +210,22 @@ export default function DateRangeSelector({ onChange }: Props) {
                 )}
             </div>
             <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-600 tracking-wide">Ca</label>
+                {/* <label className="text-sm font-medium text-gray-600 tracking-wide">Ca</label> */}
                 <Select
                     value={shiftCode}
                     onValueChange={(val) => setShiftType(val as ShiftCode)}
                 >
-                    <SelectTrigger className="w-[150px] text-lg cursor-pointer">
+                    <SelectTrigger className="w-[175px] text-base cursor-pointer p-5 text-white  bg-white/20 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow">
                         <SelectValue placeholder="Chọn ca" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="FULL" className="text-lg cursor-pointer">
+                        <SelectItem value="FULL" className="text-base cursor-pointer">
                             Cả ngày
                         </SelectItem>
-                        <SelectItem value="CA_NGAY" className="text-lg cursor-pointer">
+                        <SelectItem value="CA_NGAY" className="text-base cursor-pointer">
                             Ca ngày
                         </SelectItem>
-                        <SelectItem value="CA_DEM" className="text-lg cursor-pointer">
+                        <SelectItem value="CA_DEM" className="text-base cursor-pointer">
                             Ca đêm
                         </SelectItem>
                     </SelectContent>

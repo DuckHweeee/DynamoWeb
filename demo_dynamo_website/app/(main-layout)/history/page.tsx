@@ -158,7 +158,7 @@ export default function HistoryProcessTable() {
     })
 
     return (
-        <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
+        <div className="m-2 mt-4 px-4 py-3 bg-white rounded-[10px] shadow">
             <div className="flex flex-row items-center justify-between py-4">
                 <p className="text-2xl font-bold">Thống kê quá trình</p>
                 {/* <Input

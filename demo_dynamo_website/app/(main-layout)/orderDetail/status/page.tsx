@@ -39,12 +39,14 @@ export default function StatusMachine() {
 
 
     return (
-        <div className="m-2 px-4 py-3 bg-white rounded-[10px] shadow">
-            <div className="flex flex-row items-center justify-between py-4 border-b border-red-300">
+        <div className="m-2 px-4 py-3  bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl rounded-[10px] shadow ">
+            <div className="flex flex-row items-center justify-between py-4 ">
                 <div className="w-2/3">
-                    <p className="text-2xl font-bold pb-4 pl-2">Hiện Trạng Mã Hàng</p>
+                    {/* <p className="text-2xl font-bold pb-4 pl-2">Hiện Trạng Mã Hàng</p> */}
                 </div>
-                <div className="w-1/3 flex items-center justify-end gap-5">
+                <div className="w-1/3 flex items-center justify-end gap-2">
                     {/* <Input
                         placeholder="Tìm kiếm"
                         value={globalFilter}
@@ -61,7 +63,7 @@ export default function StatusMachine() {
                                 setKeyword(value);
                                 search(value); // 🔥 DÒNG QUYẾT ĐỊNH
                             }}
-                            className="pl-10"
+                            className="pl-10 py-5"
                         />
                     </div>
                     <div className="space-y-1">
@@ -70,7 +72,7 @@ export default function StatusMachine() {
                             value={selectedGroup ?? ""}
                             onValueChange={(val) => setSelectedGroup(val)}
                         >
-                            <SelectTrigger className="w-[180px] text-lg cursor-pointer">
+                            <SelectTrigger className="w-[180px] text-lg text-white cursor-pointer py-5.5 bg-white/10 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow ">
                                 <SelectValue placeholder="Nhóm" />
                             </SelectTrigger>
                             <SelectContent>
@@ -95,15 +97,15 @@ export default function StatusMachine() {
             </div>
             <OrderList data={data} />
             <div className="flex justify-center items-center gap-4 mt-6">
-                <Button onClick={prevPage} disabled={page === 0}>
+                <Button onClick={prevPage} disabled={page === 0} className="bg-white/10 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow">
                     Trước
                 </Button>
 
-                <span>
+                <span className="text-white">
                     Trang {page + 1} / {totalPages}
                 </span>
 
-                <Button onClick={nextPage} disabled={page + 1 >= totalPages}>
+                <Button onClick={nextPage} disabled={page + 1 >= totalPages} className="bg-white/10 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow">
                     Sau
                 </Button>
             </div>

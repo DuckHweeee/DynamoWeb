@@ -21,8 +21,8 @@ export interface StaffStatistic {
     groupId: string;
     groupName: string;
     staffCount: number;
-    workingHours: number;
-    workingRate: number;
+    pgHour: number;
+    pgRate: number;
     manufacturingPoints: number;
     mpRate: number;
     processCount: number;

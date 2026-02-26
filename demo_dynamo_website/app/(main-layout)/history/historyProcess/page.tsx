@@ -12,7 +12,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Search, Calendar, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, Search, Calendar, MoreHorizontal, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
@@ -63,37 +63,37 @@ function getColumns({
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="h-auto p-0 hover:bg-transparent"
         >
-          <span className="font-bold">ID Mã Hàng</span>
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <span className="font-bold text-white">ID Mã Hàng</span>
+          <ArrowUpDown color="white" className="ml-2 h-4 w-4" />
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="font-medium text-blue-600">
+        <div className="font-medium text-blue-600 inline-block w-auto border px-3 py-2 rounded-sm bg-white">
           {row.original.orderDetailDto?.orderCode}
         </div>
       ),
     },
     {
       accessorKey: "processType",
-      header: () => <div className="font-bold text-base">Đối tượng gia công</div>,
+      header: () => <div className="font-bold text-base text-white">Đối tượng gia công</div>,
       cell: ({ row }) => (
         <Badge className="py-2 px-4 bg-blue-50" variant="outline">{row.getValue("processType")}</Badge>
       ),
     },
     {
       accessorKey: "partNumber",
-      header: () => <div className="font-bold text-base">TT Gia công</div>,
+      header: () => <div className="font-bold text-base text-white">TT Gia công</div>,
       cell: ({ row }) => (
-        <div className="text-center font-medium">
+        <div className="text-center font-medium text-white">
           {row.getValue("partNumber")}
         </div>
       ),
     },
     {
       accessorKey: "stepNumber",
-      header: () => <div className="font-bold text-base">TT  Sản  phẩm</div>,
+      header: () => <div className="font-bold text-base text-white">TT  Sản  phẩm</div>,
       cell: ({ row }) => (
-        <div className="text-center font-medium">
+        <div className="text-center font-medium text-white">
           {row.getValue("stepNumber")}
         </div>
       ),
@@ -101,9 +101,9 @@ function getColumns({
 
     {
       accessorKey: "machineDto.machineName",
-      header: () => <div className="font-bold text-base">Máy</div>,
+      header: () => <div className="font-bold text-base text-white">Máy</div>,
       cell: ({ row }) => (
-        <div className="font-medium">
+        <div className="font-medium text-white">
           {row.original.machineDto?.machineName || "Chưa gán"}
         </div>
       ),
@@ -121,9 +121,9 @@ function getColumns({
     // },
     {
       accessorKey: "pgTime",
-      header: () => <div className="font-bold text-base">PG Dự kiến</div>,
+      header: () => <div className="font-bold text-base text-white">PG Dự kiến</div>,
       cell: ({ row }) => (
-        <div className="text-center">{row.getValue("pgTime")} phút</div>
+        <div className="text-center text-white">{row.getValue("pgTime")} phút</div>
       ),
     },
     {
@@ -136,7 +136,7 @@ function getColumns({
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
                 <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
+                <MoreHorizontal color="white" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -147,9 +147,10 @@ function getColumns({
                   setOpenDetail(true);
                 }}
               >
-                Xem chi tiết
+                <Eye className="mr-2 h-4 w-4" />
+                <span className="text-sm">Xem chi tiết</span>
               </DropdownMenuItem>
-              <DropdownMenuItem
+              {/* <DropdownMenuItem
                 className="text-lg cursor-pointer pr-6"
                 onClick={() => {
                   // setEditingOrderDetail(orderDetail);
@@ -157,7 +158,7 @@ function getColumns({
                 }}
               >
                 Chỉnh sửa
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               {/* {progress !== 2 && progress !== 3 && (
               <DropdownMenuItem
                 className="text-lg cursor-pointer pr-6"
@@ -318,16 +319,23 @@ export default function HistoryProcessPage() {
       rowSelection,
       globalFilter,
     },
+    initialState: {
+      pagination: {
+        pageSize: 7,   // ⬅️ mỗi trang tối đa 7 dòng
+      },
+    },
   });
   return (
-    <div className="m-2 py-3 bg-white rounded-[10px] shadow h-screen">
+    <div className="m-2 mt-4 py-3 bg-white/10 backdrop-blur
+            border border-white/20
+            shadow-xl rounded-2xl rounded-[10px] px-6 mt-6 h-full">
       {/* <div className="h-screen flex flex-col p-4 bg-gray-50"> */}
       {/* Filters Section */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4 mx-4 flex-shrink-0">
+      <div className="rounded-lg shadow-sm border border-gray-200 mb-4 p-4 flex-shrink-0">
         <div className="flex flex-col xl:flex-row gap-4 items-start xl:items-center">
           {/* Date Range Picker */}
           <div className="flex-1 min-w-0">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Thời gian
             </label>
             <Popover>
@@ -378,14 +386,14 @@ export default function HistoryProcessPage() {
 
           {/* Process Type Filter */}
           <div className="w-full xl:w-48">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Loại quy trình
             </label>
             <Select
               value={selectedProcessType}
               onValueChange={setSelectedProcessType}
             >
-              <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10">
+              <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10 py-5">
                 <SelectValue placeholder="Chọn loại quy trình" />
               </SelectTrigger>
               <SelectContent>
@@ -401,11 +409,11 @@ export default function HistoryProcessPage() {
 
           {/* Machine Filter */}
           <div className="w-full xl:w-48">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Máy
             </label>
             <Select value={selectedMachine} onValueChange={setSelectedMachine}>
-              <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10">
+              <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10 py-5">
                 <SelectValue placeholder="Chọn máy" />
               </SelectTrigger>
               <SelectContent>
@@ -421,11 +429,11 @@ export default function HistoryProcessPage() {
 
           {/* Staff Filter */}
           <div className="w-full xl:w-48">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Nhân viên
             </label>
             <Select value={selectedStaff} onValueChange={setSelectedStaff}>
-              <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10">
+              <SelectTrigger className="w-full bg-white border-gray-300 text-gray-900 h-10 py-5">
                 <SelectValue placeholder="Chọn nhân viên" />
               </SelectTrigger>
               <SelectContent>
@@ -458,9 +466,11 @@ export default function HistoryProcessPage() {
               <Button
                 variant="default"
                 size="sm"
-                className="h-10 flex-1"
+                className="h-10 flex-1 text-white py-5"
                 onClick={() => refetch()}
                 disabled={loading}
+
+
               >
                 {loading ? "Đang tải..." : "Làm mới"}
               </Button>
@@ -492,7 +502,7 @@ export default function HistoryProcessPage() {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className={index % 2 === 0 ? "bg-gray-50" : ""}
+
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -511,7 +521,7 @@ export default function HistoryProcessPage() {
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center text-white"
                 >
                   Không có kết quả.
                 </TableCell>
@@ -519,35 +529,35 @@ export default function HistoryProcessPage() {
             )}
           </TableBody>
         </Table>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <div className="space-x-2">
-            <Button
-              className="cursor-pointer"
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Trước
-            </Button>
-            <Button
-              className="cursor-pointer"
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Tiếp
-            </Button>
-          </div>
-        </div>
+
         <CompletedProcessDetail
           openDetail={openDetail}
           onClose={() => setOpenDetail(false)}
           process={detailOrderDetail}
         />
       </div>
-
+      <div className="flex items-center justify-end space-x-2 py-4 px-2">
+        <div className="space-x-2">
+          <Button
+            className="cursor-pointer"
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Trước
+          </Button>
+          <Button
+            className="cursor-pointer"
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Tiếp
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

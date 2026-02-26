@@ -1,4 +1,4 @@
-import { TrendingDown, TrendingUp, UserCog } from "lucide-react";
+import { TrendingDown, TrendingUp, User, UserCog } from "lucide-react";
 import { StaffStatistic } from "../lib/type";
 function convertHoursToHM(hours: number): string {
   const h = Math.floor(hours);
@@ -40,79 +40,95 @@ export function ReportTimeOperator({ data, type }: ReportTimeOperatorProps) {
 
   return (
     <>
-      <div className="my-5 flex gap-3 items-center justify-between">
-        <div className="inline-block rounded-lg bg-white px-5 py-4 shadow-md shadow-green-200 border border-green-300 w-full">
+      <div className="my-5 flex gap-6 items-center justify-between">
+        <div className="inline-block rounded-[20px] bg-white/20 backdrop-blur-lg border border-white/20 shadow-xl  px-5 py-3 shadow-md w-full">
           <div className="flex items-start justify-between">
-            <UserCog
-              size={24}
-              className={
-                  "text-green-500"   
-              }
-            />
-            <p
-              className={`text-lg font-medium ${
-                (data?.workingRate ?? 0) < 0
-                  ? "text-red-500"
-                  : (data?.workingRate ?? 0) > 0
+            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-linear-to-r from-[#D0E5A5] to-[#86E3C3]">
+              <UserCog size={19} style={{ fill: "white", stroke: "white" }} />
+            </div>
+
+            <div
+              className={`text-base font-medium ${(data?.pgRate ?? 0) < 0
+                ? "text-red-500"
+                : (data?.pgRate ?? 0) > 0
                   ? "text-green-500"
-                  : ""
-              }`}
+                  : "text-gray-400"
+                }`}
             >
-              {(data?.workingRate ?? 0) > 0
-                ? `+${data?.workingRate ?? 0}%`
-                : `${data?.workingRate ?? 0}%`}
-            </p>
+              <span
+                className={`flex justify-center items-center px-2 py-1 rounded-md ${(data?.pgRate ?? 0) < 0
+                  ? "bg-red-100 text-red-500"
+                  : (data?.pgRate ?? 0) > 0
+                    ? "bg-green-100 text-green-500"
+                    : "bg-gray-100 text-gray-400"
+                  }`}
+              >
+                {(data?.pgRate ?? 0) > 0
+                  ? `+${data?.pgRate.toFixed(2)}%`
+                  : `${data?.pgRate.toFixed(2)}%`}
+              </span>
+            </div>
           </div>
 
-          <p className="text-[30px] font-semibold text-green-700 leading-none mt-2">
-            {convertHoursToHM(data?.workingHours ?? 0)}
+          <p className="text-2xl font-semibold text-green-400 leading-none mt-2">
+            {convertHoursToHM(data?.pgHour ?? 0)}
           </p>
 
-          <div className="mt-2">
-            <p className="text-lg font-medium text-green-500 flex items-center">
+          <div className="mt-3">
+            <p className="text-base font-medium text-green-300 flex items-center">
               {/* Tổng Giờ Làm {typeDate[data.timeType]} */}
-              Tổng Giờ Làm {typeDate[type]}
-              {(data?.workingRate ?? 0) !== undefined &&
-                ((data?.workingRate ?? 0) >= 0 ? (
+              Tổng Giờ PG {typeDate[type]}
+              {(data?.pgRate ?? 0) !== undefined &&
+                ((data?.pgRate ?? 0) >= 0 ? (
                   <TrendingUp size={14} className="ml-1 text-green-500" />
                 ) : (
                   <TrendingDown size={14} className="ml-1 text-red-500" />
                 ))}
             </p>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-white">
               Trung bình:{" "}
               {data && data.staffCount > 0
-                ? formatHoursToHM((data?.workingHours ?? 0) / data.staffCount)
+                ? formatHoursToHM((data?.pgHour ?? 0) / data.staffCount)
                 : "0 giờ 0 phút"}{" "}
               / người
             </p>
           </div>
         </div>
 
-        <div className="inline-block rounded-lg bg-white px-6 py-4 shadow-md shadow-orange-200 border border-orange-300 w-full">
+        <div className="inline-block rounded-[20px] bg-white/20 backdrop-blur-lg border border-white/20 shadow-xl  px-5 py-3 shadow-md w-full">
           <div className="flex items-start justify-between">
-            <UserCog size={24} className={"text-orange-500"} />
-            <p
-              className={`text-lg font-medium ${
-                (data?.mpRate ?? 0) < 0
-                  ? "text-red-500"
-                  : (data?.mpRate ?? 0) > 0
+            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-linear-to-r from-[#ffdd94] to-[#fa897b]">
+              <UserCog size={19} style={{ fill: "white", stroke: "white" }} />
+            </div>
+            <div
+              className={`text-base font-medium ${(data?.mpRate ?? 0) < 0
+                ? "text-red-500"
+                : (data?.mpRate ?? 0) > 0
                   ? "text-green-500"
-                  : ""
-              }`}
+                  : "text-gray-400"
+                }`}
             >
-              {(data?.mpRate ?? 0) > 0
-                ? `+${data?.mpRate ?? 0}%`
-                : `${data?.mpRate ?? 0}%`}
-            </p>
+              <span
+                className={`flex justify-center items-center px-2 py-1 rounded-md ${(data?.mpRate ?? 0) < 0
+                  ? "bg-red-100 text-red-500"
+                  : (data?.mpRate ?? 0) > 0
+                    ? "bg-green-100 text-green-500"
+                    : "bg-gray-100 text-gray-400"
+                  }`}
+              >
+                {(data?.mpRate ?? 0) > 0
+                  ? `+${data?.mpRate.toFixed(2)}%`
+                  : `${data?.mpRate.toFixed(2)}%`}
+              </span>
+            </div>
           </div>
 
-          <p className="text-[30px] font-semibold text-orange-600 leading-none mt-2">
+          <p className="text-2xl font-semibold text-orange-400 leading-none mt-2">
             {data?.manufacturingPoints ?? 0}
           </p>
 
           <div className="mt-2">
-            <p className="text-lg font-medium text-orange-500 flex items-center">
+            <p className="text-base font-medium text-orange-300 flex items-center">
               {/* Tổng Điểm {typeDate[data.timeType]} */}
               Tổng Điểm {typeDate[type]}
               {(data?.mpRate ?? 0) !== undefined &&
@@ -122,7 +138,7 @@ export function ReportTimeOperator({ data, type }: ReportTimeOperatorProps) {
                   <TrendingDown size={14} className="ml-1 text-red-500" />
                 ))}
             </p>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-white">
               Trung bình:{" "}
               {data && data.manufacturingPoints > 0
                 ? ((data?.manufacturingPoints ?? 0) / data.staffCount).toFixed(1)
@@ -132,30 +148,40 @@ export function ReportTimeOperator({ data, type }: ReportTimeOperatorProps) {
           </div>
         </div>
 
-        <div className="inline-block rounded-lg bg-white px-6 py-4 shadow-md shadow-blue-200 border border-blue-300 w-full">
+        <div className="inline-block rounded-[20px] bg-white/20 backdrop-blur-lg border border-white/20 shadow-xl  px-5 py-3 shadow-md w-full">
           <div className="flex items-start justify-between">
-            <UserCog size={24} className={"text-blue-500"} />
-            <p
-              className={`text-lg font-medium ${
-                (data?.processRate ?? 0) < 0
-                  ? "text-red-500"
-                  : (data?.processRate ?? 0) > 0
+            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-linear-to-r from-[#4adede] to-[#1ca7ec]">
+              <UserCog size={20} style={{ fill: "white", stroke: "white" }} />
+            </div>
+            <div
+              className={`text-base font-medium ${(data?.processRate ?? 0) < 0
+                ? "text-red-500"
+                : (data?.processRate ?? 0) > 0
                   ? "text-green-500"
-                  : ""
-              }`}
+                  : "text-gray-400"
+                }`}
             >
-              {(data?.processRate ?? 0) > 0
-                ? `+${data?.processRate ?? 0}%`
-                : `${data?.processRate ?? 0}%`}
-            </p>
+              <span
+                className={`flex justify-center items-center px-2 py-1 rounded-md ${(data?.processRate ?? 0) < 0
+                  ? "bg-red-100 text-red-500"
+                  : (data?.processRate ?? 0) > 0
+                    ? "bg-green-100 text-green-500"
+                    : "bg-gray-100 text-gray-400"
+                  }`}
+              >
+                {(data?.processRate ?? 0) > 0
+                  ? `+${data?.processRate.toFixed(2)}%`
+                  : `${data?.processRate.toFixed(2)}%`}
+              </span>
+            </div>
           </div>
 
-          <p className="text-[30px] font-semibold text-blue-700 leading-none mt-2">
+          <p className="text-2xl font-semibold text-sky-300 leading-none mt-2">
             {data?.processCount ?? 0}
           </p>
 
           <div className="mt-2">
-            <p className="text-lg font-medium text-blue-500 flex items-center">
+            <p className="text-base font-medium text-sky-400 flex items-center">
               {/* Tổng Số Nguyên Công {typeDate[data.timeType]} */}
               Tổng Số Nguyên Công {typeDate[type]}
               {(data?.processRate ?? 0) !== undefined &&
@@ -165,7 +191,7 @@ export function ReportTimeOperator({ data, type }: ReportTimeOperatorProps) {
                   <TrendingDown size={14} className="ml-1 text-red-500" />
                 ))}
             </p>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-white">
               Trung bình:{" "}
               {data && data.processCount > 0
                 ? ((data?.processCount ?? 0) / data.staffCount).toFixed(1)
@@ -176,30 +202,40 @@ export function ReportTimeOperator({ data, type }: ReportTimeOperatorProps) {
         </div>
 
         {/*  */}
-        <div className="inline-block rounded-lg bg-white px-6 py-4 shadow-md shadow-purple-200 border border-purple-300 w-full">
+        <div className="inline-block rounded-[20px] bg-white/20 backdrop-blur-lg border border-white/20 shadow-xl px-5 py-3 shadow-md w-full">
           <div className="flex items-start justify-between">
-            <UserCog size={24} className={"text-purple-500"} />
-            <p
-              className={`text-lg font-medium ${
-                (data?.kpiRate ?? 0) < 0
-                  ? "text-red-500"
-                  : (data?.kpiRate ?? 0) > 0
+            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-linear-to-r from-[#faa2ae] to-[#ccabdb]">
+              <UserCog size={20} style={{ fill: "white", stroke: "white" }} />
+            </div>
+          <div
+              className={`text-base font-medium ${(data?.kpiRate ?? 0) < 0
+                ? "text-red-500"
+                : (data?.kpiRate?? 0) > 0
                   ? "text-green-500"
-                  : ""
-              }`}
+                  : "text-gray-400"
+                }`}
             >
-              {(data?.kpiRate ?? 0) > 0
-                ? `+${data?.kpiRate ?? 0}%`
-                : `${data?.kpiRate ?? 0}%`}
-            </p>
+              <span
+                className={`flex justify-center items-center px-2 py-1 rounded-md ${(data?.kpiRate ?? 0) < 0
+                  ? "bg-red-100 text-red-500"
+                  : (data?.kpiRate ?? 0) > 0
+                    ? "bg-green-100 text-green-500"
+                    : "bg-gray-100 text-gray-400"
+                  }`}
+              >
+                {(data?.kpiRate ?? 0) > 0
+                  ? `+${data?.kpiRate.toFixed(2)}%`
+                  : `${data?.kpiRate.toFixed(2)}%`}
+              </span>
+            </div>
           </div>
 
-          <p className="text-[30px] font-semibold text-purple-700 leading-none mt-2">
+          <p className="text-2xl font-semibold text-purple-400 leading-none mt-2">
             {data?.totalKpi ?? 0}
           </p>
 
           <div className="mt-2">
-            <p className="text-lg font-medium text-purple-500 flex items-center">
+            <p className="text-base font-medium text-purple-300 flex items-center">
               {/* Tổng KPI {typeDate[data.timeType]} */}
               Tổng KPI {typeDate[type]}
               {(data?.kpiRate ?? 0) !== undefined &&
@@ -209,7 +245,7 @@ export function ReportTimeOperator({ data, type }: ReportTimeOperatorProps) {
                   <TrendingDown size={14} className="ml-1 text-red-500" />
                 ))}
             </p>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-white">
               Trung bình:{" "}
               {data && data.totalKpi > 0
                 ? ((data?.totalKpi ?? 0) / data.staffCount).toFixed(1)

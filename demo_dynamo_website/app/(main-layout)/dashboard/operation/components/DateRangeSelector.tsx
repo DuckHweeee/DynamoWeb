@@ -97,9 +97,8 @@ export default function DateRangeSelector({ onChange }: Props) {
     return (
         <div className="flex gap-3">
             <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-600 tracking-wide">Loại</label>
                 <Select value={mode} onValueChange={(val) => setMode(val as Mode)}>
-                    <SelectTrigger className="w-[150px] text-lg cursor-pointer">
+                    <SelectTrigger className="w-[175px] text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
                         <SelectValue placeholder="Chọn chế độ" />
                     </SelectTrigger>
                     <SelectContent>
@@ -112,14 +111,13 @@ export default function DateRangeSelector({ onChange }: Props) {
             </div>
 
             <div className="flex-1 flex-col gap-2">
-                <label className="text-sm font-medium text-gray-600 tracking-wide">Thời gian</label>
                 {mode === "day" && (
                     <div className="flex flex-col gap-2">
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button
                                     variant="outline"
-                                    className="cursor-pointer w-auto justify-start text-right text-lg font-normal "                            >
+                                    className="w-[175px] text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white justify-between text-right font-normal "                            >
                                     {selectedDate
                                         ? dayjs(selectedDate).format("DD/MM/YYYY")
                                         : "Chọn ngày"}
@@ -141,7 +139,7 @@ export default function DateRangeSelector({ onChange }: Props) {
 
                 {mode === "week" && (
                     <Select value={String(selectedWeek ?? "")} onValueChange={(val) => setSelectedWeek(Number(val))}>
-                        <SelectTrigger className="cursor-pointer text-xl ">
+                        <SelectTrigger className="w-auto text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
                             <SelectValue placeholder="Chọn tuần" />
                         </SelectTrigger>
                         <SelectContent className="max-h-[300px]">
@@ -164,7 +162,7 @@ export default function DateRangeSelector({ onChange }: Props) {
                         value={String(selectedMonth ?? "")}
                         onValueChange={(val) => setSelectedMonth(Number(val))}
                     >
-                        <SelectTrigger className="cursor-pointer text-xl ">
+                        <SelectTrigger className="w-[175px] text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
                             <SelectValue placeholder="Chọn tháng" />
                         </SelectTrigger>
                         <SelectContent className="max-h-[300px]">
@@ -186,7 +184,8 @@ export default function DateRangeSelector({ onChange }: Props) {
                         value={String(selectedYear ?? "")}
                         onValueChange={(val) => setSelectedYear(Number(val))}
                     >
-                        <SelectTrigger className="cursor-pointer text-xl ">                            <SelectValue placeholder="Chọn năm" />
+                        <SelectTrigger className="w-[175px] text-base cursor-pointer p-5 bg-white/20 backdrop-blur border border-white/20 shadow-xl shadow text-white">
+                            <SelectValue placeholder="Chọn năm" />
                         </SelectTrigger>
                         {/* <SelectContent className="max-h-[300px]">
                             {Array.from({ length: 3 }, (_, i) => dayjs().year() - (2 - i)).map((year) => (
@@ -209,7 +208,7 @@ export default function DateRangeSelector({ onChange }: Props) {
                     </Select>
                 )}
             </div>
-            <div className="space-y-1">
+            {/* <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-600 tracking-wide">Ca</label>
                 <Select
                     value={shiftCode}
@@ -230,7 +229,7 @@ export default function DateRangeSelector({ onChange }: Props) {
                         </SelectItem>
                     </SelectContent>
                 </Select>
-            </div>
+            </div> */}
         </div>
     )
 }
