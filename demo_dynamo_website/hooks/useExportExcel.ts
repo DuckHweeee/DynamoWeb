@@ -24,7 +24,7 @@ export function useExportExcel(endpoint: string | undefined, groupId: string | u
         setError(null);
 
         try {
-            const response = await fetch(`${url}/api/${endpoint}`, {
+            const response = await fetch(`${url}/api${endpoint}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

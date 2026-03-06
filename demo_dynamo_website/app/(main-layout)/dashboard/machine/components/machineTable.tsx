@@ -136,6 +136,11 @@ export default function MachineTable({
             rowSelection,
             globalFilter,
         },
+            initialState: {
+            pagination: {
+                pageSize: 5,   // ⬅️ mỗi trang tối đa 7 dòng
+            },
+        },
     })
 
     return (

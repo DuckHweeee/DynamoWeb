@@ -28,7 +28,7 @@ const chartConfig = {
 const legendItems = [
     { name: "Dự kiến", gradient: "linear-gradient(to bottom, #08b37a, #397D54)" },
     { name: "Thực tế", gradient: "linear-gradient(to bottom, #73C088, #A8E0B7)" },
-    { name: "Mục tiêu", color: "#1b1717" },
+    { name: "Mục tiêu", color: "#04daf7" },
 ]
 
 const CustomRealLabel = (props: any) => {
@@ -68,6 +68,14 @@ export function SumRealTimeMachine({
         pgTimeExpect: Math.round(item.pgTimeExpect),
     }))
 
+    const maxDataValue = Math.max(
+        ...dataOverview.map(item =>
+            Math.max(item.pgTime, item.pgTimeExpect)
+        ),
+        Number(groupTarget)
+    );
+    console.log(groupTarget)
+
     return (
         <Card className="shadow-md bg-white/20 backdrop-blur-lg border border-white/20 shadow-xl ">
             <CardHeader>
@@ -106,7 +114,7 @@ export function SumRealTimeMachine({
                                 style: { fill: "#fff" },
                             }}
                         />
-                        <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 0 }} />
+                        <YAxis tickLine={false} axisLine={false} domain={[0, Math.ceil(maxDataValue)]} tick={{ fontSize: 0 }} />
                         <ChartTooltip
                             cursor={false}
                             content={<ChartTooltipContent indicator="dashed" />}
@@ -133,12 +141,13 @@ export function SumRealTimeMachine({
                         </Bar>
                         <ReferenceLine
                             y={groupTarget} // 👈 chỉ lấy 1 giá trị
-                            stroke="#1b1717"
+                            stroke="#04daf7"
+                            strokeWidth={3}
                             label={{
                                 value: groupTarget.toString(),
                                 position: "left",
                                 fontSize: 12,
-                                fill: "red",
+                                fill: "white",
                                 offset: 5,
                             }}
                         />

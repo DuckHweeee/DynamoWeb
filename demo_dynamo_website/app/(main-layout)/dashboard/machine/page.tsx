@@ -26,6 +26,7 @@ import { useGroupEfficiency } from "./hooks/useGroupEfficiency";
 import { useTopHighMachine, useTopLowMachine } from "./hooks/useTopMachine";
 import { useExportExcel } from "@/hooks/useExportExcel";
 import { MachinePieChart } from "./components/machinePieChart copy";
+import MachineTimeProgress from "./components/machineTimeProgress";
 
 export default function MachineOverview() {
   const router = useRouter();
@@ -266,22 +267,22 @@ export default function MachineOverview() {
           )}
           </div>
         </div>
-        <div className="my-6 grid grid-cols-3 gap-6">
-          <div className="col-span-1">
-            <MachineTable
-              title="Danh sách thống kê máy móc"
-              description="Tất cả các máy"
+
+        {/* <div className="col-span-1">
+            <MachineTimeProgress
               dataOverview={dataOverview}
+              title=""
+              description=""
+
             />
-          </div>
-          <div className="col-span-2">
-            <MachineTable
-              title="Danh sách thống kê máy móc"
-              description="Tất cả các máy"
-              dataOverview={dataOverview}
-            />
-          </div>
-        </div>
+          </div> */}
+
+        <MachineTable
+          title="Danh sách thống kê máy móc"
+          description="Tất cả các máy"
+          dataOverview={dataOverview}
+        />
+
 
 
       </div>

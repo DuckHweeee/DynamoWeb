@@ -229,7 +229,7 @@ export default function MachineHistoryTable({
     })
 
     return (
-        <div className="h-full px-4 py-2  bg-white/20 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow rounded-[10px] shadow-md max-h-[7px]">
+        <div className="h-full px-4 py-2  bg-white/20 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow rounded-[10px] shadow-md max-h-[760px]">
             <div className="flex flex-row items-center justify-between py-4">
                 <div className="w-2/3">
                     <p className="text-lg font-bold text-white">{title}</p>
@@ -283,7 +283,7 @@ export default function MachineHistoryTable({
                             <TableRow>
                                 <TableCell
                                     colSpan={columns.length}
-                                    className="h-24 text-center"
+                                    className="h-24 text-center text-white"
                                 >
                                     Không có dữ liệu.
                                 </TableCell>

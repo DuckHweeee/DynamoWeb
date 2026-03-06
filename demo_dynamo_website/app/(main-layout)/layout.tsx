@@ -218,22 +218,28 @@ export default function MainLayout({
 
   // Filter navigation items based on user role
   const getNavItemsForRole = () => {
+    console.log("user role: ", user?.role)
     if (user?.role === "Operator") {
-      return data.navMain.filter(item =>
+      const navBarForOperator = data.navMain.filter(item =>
         item.title === "Thống kê" || item.title === "Tablet"
       )
+      console.log("nav bar item for operator: ", navBarForOperator)
+      return navBarForOperator
     }
     // Admin sees all navigation items
     return data.navMain
   }
 
+  useEffect(() => {
+    getNavItemsForRole()
+  }, [user])
 
   return (
     <div
       className={`
     ${geistSans.variable} ${geistMono.variable} antialiased
     min-h-screen
-    bg-[url(/test.jpg)]
+    bg-[url(/test12.jpg)]
     bg-no-repeat bg-cover bg-fixed
   `}
     >

@@ -195,7 +195,7 @@ export function ReportTimeMachine({ data, type }: ReportTimeOperatorProps) {
                   <TrendingDown size={14} className="ml-1 text-red-500" />
                 ))}
             </p>
-            <p className="text-xs text-black">
+            <p className="text-xs text-white">
               Trung bình:{" "}
               {data && data.totalMachines > 0
                 ? formatHoursToHM(

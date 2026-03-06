@@ -134,7 +134,10 @@ export function DivergingBarChart({
                 }}
 
               />
-              <XAxis type="number" tickLine={true} axisLine={true} />
+              <XAxis type="number" tickLine={true} axisLine={true} tick={{
+                fill: "#ffffff",
+                style: { fill: "#fff" },
+              }} />
               <Bar
                 dataKey="real"
                 fill="url(#rankingGradient)"
@@ -203,7 +206,10 @@ export function DivergingBarChart({
                   style: { fill: "#fff" },
                 }}
               />
-              <XAxis type="number" tickLine={true} axisLine={true} />
+              <XAxis type="number" tickLine={true} axisLine={true}   tick={{
+                  fill: "#ffffff",
+                  style: { fill: "#fff" },
+                }} />
               <Bar
                 dataKey="target"
                 fill="url(#targetGradient)"
