@@ -26,7 +26,6 @@ import { useGroupEfficiency } from "./hooks/useGroupEfficiency";
 import { useTopHighMachine, useTopLowMachine } from "./hooks/useTopMachine";
 import { useExportExcel } from "@/hooks/useExportExcel";
 import { MachinePieChart } from "./components/machinePieChart copy";
-import MachineTimeProgress from "./components/machineTimeProgress";
 
 export default function MachineOverview() {
   const router = useRouter();
@@ -218,8 +217,10 @@ export default function MachineOverview() {
               <Button
                 variant="outline"
                 size="lg"
-                className="items-center cursor-pointer !text-white  bg-white/20 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow"
-                onClick={exportExcel}
+                className="items-center cursor-pointer !text-white hover:!text-black bg-white/20 backdrop-blur border border-white/20 shadow-xl rounded-[10px] shadow"
+                onClick={() => {
+                  exportExcel()
+                }}
               >
                 Xuất file
               </Button>

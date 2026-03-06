@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -37,7 +38,8 @@ export function useExportExcel(endpoint: string | undefined, groupId: string | u
             });
 
             if (!response.ok) {
-                throw new Error("Lỗi khi xuất file Excel");
+                // throw new Error("Lỗi khi xuất file Excel");
+                toast.error("Lỗi khi xuất file Excel")
             }
 
             const blob = await response.blob();
@@ -59,9 +61,11 @@ export function useExportExcel(endpoint: string | undefined, groupId: string | u
                     const writable = await fileHandle.createWritable();
                     await writable.write(blob);
                     await writable.close();
+                    toast.success("Xuất file Excel thành công!")
                 } catch (err: any) {
                     if (err.name !== 'AbortError') {
                         console.error('Save file error:', err);
+                        toast.error("Xuất file Excel thất bại!")
                         downloadFileDefault(blob, filename);
                     }
                 }
@@ -71,11 +75,13 @@ export function useExportExcel(endpoint: string | undefined, groupId: string | u
 
         } catch (err: any) {
             console.error("Export Excel error:", err);
+            toast.error("Lỗi khi xuất file Excel")
             setError(err.message || "Lỗi khi xuất file Excel");
         } finally {
             setLoading(false);
         }
     };
+
 
     return {
         exportExcel,

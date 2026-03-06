@@ -20,6 +20,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { Bounce, ToastContainer } from "react-toastify";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -251,6 +252,17 @@ export default function MainLayout({
             <ClientHeader title={currentTitle} />
             {children}
           </SidebarInset>
+          <ToastContainer position="bottom-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+            transition={Bounce} />
         </SidebarProvider>
       </ProtectedRoute>
     </div>
