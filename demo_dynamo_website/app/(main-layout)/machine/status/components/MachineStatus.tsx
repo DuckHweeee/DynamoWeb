@@ -4,11 +4,18 @@ import { Card } from "@/components/ui/card";
 import { useMemo, useState, useEffect } from "react";
 import { MachineStatusType } from "../lib/type";
 import { AlarmClockCheck, NotebookPen, User } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import MachineProcessHistoryTable from "@/app/(main-layout)/history/historyMachine/components/MachineProcessHistoryTable";
 
 type MachineStatus = "Đang Chạy" | "Dừng" | "Lỗi" | "Trống";
 
 export interface Machine {
-  id: string;
+  id: number;
   name: string;
   status: MachineStatus;
   drawingCode: string;
@@ -18,6 +25,7 @@ export interface Machine {
   lastStatusChangeAt: number | null; // ms
   startTime: number | null;
 }
+
 
 /* ===== MAP STATUS ===== */
 const machineStatusClasses: Record<
@@ -49,10 +57,11 @@ function mapStatus(code: string): MachineStatus {
   return "Trống";
 }
 
+
 /* ===== MAP API ===== */
 function mapApiDataToMachines(data: MachineStatusType[]): Machine[] {
   return data.map((d) => ({
-    id: d.id,
+    id: d.machineDto?.machineId ??"",
     name: d.machineDto?.machineName ?? "",
     status: mapStatus(d.status),
     drawingCode: d.drawingCodeName,
@@ -127,6 +136,12 @@ export default function MachineStatus({
     const timer = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(timer);
   }, []);
+  const [selectedMachine, setSelectedMachine] = useState<Machine | null>(null);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const openHistory = (machine: Machine) => {
+    setSelectedMachine(machine);
+    setIsHistoryOpen(true);
+  };
 
   /* ===== SUMMARY ===== */
   const summary = useMemo(() => {
@@ -160,7 +175,7 @@ export default function MachineStatus({
 
   /* ===== RENDER ===== */
   return (
-    <div className="mt-4">
+    <>
       {/* ===== SUMMARY ===== */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 ">
         {summaryItems.map((item, idx) => (
@@ -194,6 +209,7 @@ export default function MachineStatus({
                 className="relative bg-white/20 backdrop-blur-xl
                 border border-white/20
                 shadow-xl rounded-2xl shadow-md p-5 space-y-4 hover:shadow-lg transition"
+                onClick={() => openHistory(machine)}
               >
                 <div className="flex items-center gap-3 absolute -top-4 left-4">
                   <div
@@ -281,6 +297,17 @@ export default function MachineStatus({
           Sau
         </button>
       </div>
-    </div>
+      {isHistoryOpen && selectedMachine && (
+        <MachineProcessHistoryTable
+          isOpen={isHistoryOpen}
+          onClose={() => {
+            setIsHistoryOpen(false);
+            setSelectedMachine(null); // Reset lại khi đóng
+          }}
+          machineId={selectedMachine.id.toString()}
+          machineName={selectedMachine.name}
+        />
+      )}
+    </>
   );
 }

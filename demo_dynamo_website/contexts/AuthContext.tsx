@@ -40,7 +40,6 @@ function getUserRole(roles: Array<{ id: number; name: string }> = []): UserRole 
   if (hasAdmin) {
     return "Admin";
   }
-  
   return "Operator";
 }
 
@@ -77,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
-
+    
     try {
       const response = await fetch(`${urlLink}/api/auth/login`, {
         method: 'POST',

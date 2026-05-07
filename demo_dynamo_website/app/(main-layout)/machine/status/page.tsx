@@ -122,7 +122,7 @@ export default function StatusMachine() {
         [];
 
     return (
-        <div className="m-2 px-4 py-3 rounded-[10px]  bg-white/10 backdrop-blur
+        <div className="m-2 px-4 py-3 rounded-[10px]  bg-white/10
             border border-white/20
             shadow-xl">
             <div className="flex flex-row items-center justify-between py-4 border-b border-red-300">

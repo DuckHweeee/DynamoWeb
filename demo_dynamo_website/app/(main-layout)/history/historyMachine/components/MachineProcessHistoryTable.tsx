@@ -34,7 +34,7 @@ import {
 } from "@/components/ui/popover";
 import { Calendar as DatePicker } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, subDays } from "date-fns";
 import {
   Modal,
   ModalHeader,
@@ -74,8 +74,10 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [globalFilter, setGlobalFilter] = useState("");
-  const [startDate, setStartDate] = useState<Date>();
-  const [endDate, setEndDate] = useState<Date>();
+  const defaultEndDate = new Date();
+  const defaultStartDate = subDays(defaultEndDate, 7);
+  const [startDate, setStartDate] = useState<Date | undefined>(defaultStartDate);
+  const [endDate, setEndDate] = useState<Date | undefined>(defaultEndDate);
 
   // Format dates for API
   const startDateString = startDate ? format(startDate, "yyyy-MM-dd") : null;
@@ -88,6 +90,8 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
     error,
     refetch,
   } = useMachineProcessHistory(machineId, startDateString, endDateString);
+
+  console.log(processHistory)
 
   const columns: ColumnDef<DrawingCodeProcessHistory>[] = [
     {
@@ -138,13 +142,13 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
         return (
           <div className="flex flex-wrap gap-1">
             {staffList.length > 0 ? (
-              staffList.map((s: StaffDto, index:number) => (
+              staffList.map((s: StaffDto, index: number) => (
                 <Badge
                   key={index}
                   variant="outline"
                   className="text-xs px-2 py-1"
                 >
-                  {s.staffName  }
+                  {s.staffName}
                 </Badge>
               ))
             ) : (
@@ -176,7 +180,7 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
         );
       },
       size: 120,
-    },  
+    },
   ];
 
   const table = useReactTable({
@@ -199,6 +203,12 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
       rowSelection,
       globalFilter,
     },
+    initialState: {
+      pagination: {
+        pageSize: 7,   // ⬅️ mỗi trang tối đa 8 dòng
+      },
+    },
+
   });
 
   const handleRefresh = () => {
@@ -206,11 +216,14 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
   };
 
   const clearFilters = () => {
-    setStartDate(undefined);
-    setEndDate(undefined);
+    setStartDate(defaultStartDate);
+    setEndDate(defaultEndDate);
     setGlobalFilter("");
   };
-
+  const isFiltered =
+    globalFilter !== "" ||
+    startDate?.getTime() !== defaultStartDate.getTime() ||
+    endDate?.getTime() !== defaultEndDate.getTime();
   const hasFilters = startDate || endDate || globalFilter;
 
   return (
@@ -285,9 +298,10 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
 
             {/* Actions */}
             <div className="flex gap-2">
-              {hasFilters && (
+              {isFiltered && (
                 <Button variant="outline" size="sm" onClick={clearFilters}>
-                  Xóa bộ lọc
+                  <X className="h-4 w-4 mr-2" />
+                  Mặc định
                 </Button>
               )}
               <Button
@@ -322,9 +336,9 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
                           {header.isPlaceholder
                             ? null
                             : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
                         </TableHead>
                       ))}
                     </TableRow>
@@ -373,8 +387,8 @@ const MachineProcessHistoryTable: React.FC<MachineProcessHistoryTableProps> = ({
                             {error
                               ? "Có lỗi xảy ra khi tải dữ liệu"
                               : hasFilters
-                              ? "Không tìm thấy dữ liệu phù hợp"
-                              : "Chưa có lịch sử quy trình"}
+                                ? "Không tìm thấy dữ liệu phù hợp"
+                                : "Chưa có lịch sử quy trình"}
                           </p>
                         </div>
                       </TableCell>

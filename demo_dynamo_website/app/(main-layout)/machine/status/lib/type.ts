@@ -15,4 +15,5 @@ export interface StaffDto {
 }
 export interface MachineDto {
     machineName: string;
+    machineId: number;
 }
